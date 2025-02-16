@@ -1,0 +1,6 @@
+apiVersion: v2
+name: catalyst
+description: App of apps for Lab 53 cluster
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
