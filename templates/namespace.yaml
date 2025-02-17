@@ -1,9 +1,0 @@
-{{- range $app := .Values.apps }}
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: {{ default $app.name $app.namespace }}
-  labels:
-    name: {{ default $app.name $app.namespace }}
-{{- end}}
