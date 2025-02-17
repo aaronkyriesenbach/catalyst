@@ -13,7 +13,11 @@ spec:
     server: https://kubernetes.default.svc
   project: {{ default "default" $app.project }}
   source:
+    {{- if $app.chart }}
+    chart: {{ $app.chart }}
+    {{- else }}
     path: {{ default $app.name $app.path }}
+    {{- end }}
     repoURL: {{ default "https://github.com/aaronkyriesenbach/catalyst" $app.repoURL }}
     targetRevision: {{ default "HEAD" $app.targetRevision }}
   syncPolicy:

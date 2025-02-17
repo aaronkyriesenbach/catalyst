@@ -2,4 +2,7 @@ apps:
   - name: guestbook
     repoURL: https://github.com/argoproj/argocd-example-apps
   - name: traefik
+    chart: traefik
+    repoURL: https://traefik.github.io/charts
+    targetRevision: 34.3.0
   - name: whoami
