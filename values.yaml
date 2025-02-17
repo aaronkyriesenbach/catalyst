@@ -1,3 +1,4 @@
-spec:
-  destination:
-    server: https://kubernetes.default.svc
+apps:
+  - name: guestbook
+    repoURL: https://github.com/argoproj/argocd-example-apps
+  # - name: traefik
