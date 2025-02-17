@@ -5,4 +5,5 @@ apps:
     chart: traefik
     repoURL: https://traefik.github.io/charts
     targetRevision: 34.3.0
-  - name: whoami
+  - name: argo-ingress
+    namespace: argocd
