@@ -1,4 +1,5 @@
 apps:
   - name: guestbook
     repoURL: https://github.com/argoproj/argocd-example-apps
-  # - name: traefik
+  - name: traefik
+  - name: whoami
