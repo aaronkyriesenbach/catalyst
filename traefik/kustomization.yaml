@@ -1,0 +1,13 @@
+helmCharts:
+  - name: traefik
+    includeCRDs: true
+    valuesInline:
+      logs:
+        general:
+          level: DEBUG
+    releaseName: traefik
+    version: 34.3.0
+    repo: https://traefik.github.io/charts
+resources:
+  - insecuretransport.yaml
+  - argocd-svc.yaml
