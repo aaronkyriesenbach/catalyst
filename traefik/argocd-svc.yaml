@@ -1,0 +1,8 @@
+# This service is created during the Argo install, not by Traefik; however, we need to patch it to use the insecure transport
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    traefik.ingress.kubernetes.io/service.serverstransport: traefik-insecuretransport@kubernetescrd
+  name: argocd-server
+  namespace: argocd
