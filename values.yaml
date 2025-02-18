@@ -5,5 +5,10 @@ apps:
     chart: traefik
     repoURL: https://traefik.github.io/charts
     targetRevision: 34.3.0
+    helm:
+      valuesObject:
+        logs:
+          general:
+            level: DEBUG
   - name: argo-ingress
     namespace: argocd
