@@ -1,4 +1,4 @@
 apps:
   - name: traefik
-  - name: argo-ingress
+  - name: argo-config
     namespace: argocd
