@@ -1,5 +1,6 @@
 helmCharts:
   - name: traefik
+    namespace: traefik
     includeCRDs: true
     valuesInline:
       logs:
