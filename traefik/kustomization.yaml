@@ -18,4 +18,3 @@ helmCharts:
     repo: https://traefik.github.io/charts
 resources:
   - insecuretransport.yaml
-  - argocd-svc.yaml
