@@ -1,0 +1,15 @@
+# Currently giving up on this because I can't get it working
+#apiVersion: rbac.authorization.k8s.io/v1
+#kind: Role
+#metadata:
+#  name: argocd-server
+#  namespace: argocd
+#  annotations:
+#    argocd.argoproj.io/sync-options: ServerSideApply=true
+#rules:
+#  - apiGroups:
+#      - "*"
+#    resources:
+#      - pods/exec
+#    verbs:
+#      - create
