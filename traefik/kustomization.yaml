@@ -7,12 +7,17 @@ helmCharts:
         general:
           level: DEBUG
       certificatesResolvers:
-        default:
+        letsencrypt:
           acme:
+            tlsChallenge: true
             httpChallenge:
-              entryPoint: websecure
+              entryPoint: web
+            storage: /data/acme.json
             email: aaron@kyriesenba.ch
             caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+      providers:
+        kubernetesCRD:
+          allowCrossNamespace: true
     releaseName: traefik
     version: 34.3.0
     repo: https://traefik.github.io/charts

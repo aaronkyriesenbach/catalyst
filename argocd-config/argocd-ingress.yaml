@@ -12,4 +12,7 @@ spec:
       kind: Rule
       services:
         - name: argocd-server
+          serversTransport: traefik-insecuretransport@kubernetescrd
           port: 443
+  tls:
+    certResolver: letsencrypt
