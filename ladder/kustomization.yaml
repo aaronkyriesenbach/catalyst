@@ -1,0 +1,7 @@
+helmGlobals:
+  chartHome: ../app-charts
+helmCharts:
+  - name: base
+    releaseName: ladder
+    namespace: ladder
+    valuesFile: values.yaml
