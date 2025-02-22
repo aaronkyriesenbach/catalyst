@@ -6,7 +6,6 @@ metadata:
 spec:
   entryPoints:
     - websecure
-    - web
   routes:
     - match: Host(`argo.lab53.net`)
       kind: Rule

@@ -1,0 +1,18 @@
+container:
+  image: ghcr.io/everywall/ladder
+  port: 8080
+  env:
+    - name: USERPASS
+      valueFrom:
+        secretKeyRef:
+          name: ladder-user-pass
+          key: user-pass
+    - name: RULESET
+      value: https://raw.githubusercontent.com/everywall/ladder-rules/main/ruleset.yaml
+
+serversTransport: traefik-insecuretransport@kubernetescrd
+
+secrets:
+  - name: ladder-user-pass
+    key: user-pass
+    prefix: "admin:"

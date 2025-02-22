@@ -1,4 +1,3 @@
 apps:
   - name: traefik
-  - name: argocd-config
-    namespace: argocd
+  - name: ladder
