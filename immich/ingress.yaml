@@ -1,0 +1,17 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: immich
+  namespace: immich
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`immich.lab53.net`)
+      kind: Rule
+      services:
+        - name: immich-server
+          serversTransport: traefik-insecuretransport@kubernetescrd
+          port: 2283
+  tls:
+    certResolver: letsencrypt

@@ -1,3 +1,8 @@
 apps:
   - name: traefik
   - name: ladder
+  - name: local-path-provisioner
+  - name: cloud-native-postgres
+    namespace: cnpg-system
+    serverSideApply: true
+  - name: immich
