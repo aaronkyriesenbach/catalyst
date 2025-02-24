@@ -13,14 +13,10 @@ spec:
       postInitSQL:
         - ALTER SYSTEM SET search_path TO "$user", public, vectors;
         - CREATE EXTENSION IF NOT EXISTS "vectors";
+      database: immich
+      owner: immich
+      secret:
+        name: immich-user-creds
   instances: 3
   storage:
     size: 10Gi
-  managed:
-    roles:
-      - name: immich
-        connectionLimit: -1
-        ensure: present
-        inherit: true
-        passwordSecret:
-          name: immich-user-creds
