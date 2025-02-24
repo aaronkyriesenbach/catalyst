@@ -14,7 +14,8 @@ helmCharts:
               entryPoint: web
             storage: /data/acme.json
             email: aaron@kyriesenba.ch
-            caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+      persistence:
+        enabled: true
       providers:
         kubernetesCRD:
           allowCrossNamespace: true
