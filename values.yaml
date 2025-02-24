@@ -1,11 +1,10 @@
 apps:
-  - name: traefik
-  - name: troubleshooting
-  - name: reflector
-  - name: ladder
   - name: local-path-provisioner
+  - name: reflector
   - name: kubernetes-secret-generator
+  - name: traefik
   - name: cloud-native-postgres
     namespace: cnpg-system
     serverSideApply: true
   - name: immich
+  - name: ladder
