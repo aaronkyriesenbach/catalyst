@@ -6,4 +6,5 @@ helmCharts:
     version: 0.23.0
     repo: https://cloudnative-pg.github.io/charts
 resources:
+  - immich-user.yaml
   - cluster.yaml

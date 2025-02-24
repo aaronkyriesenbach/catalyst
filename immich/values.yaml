@@ -6,6 +6,12 @@ immich:
     library:
       existingClaim: immich-pvc
 
+postgresql:
+  global:
+    postgresql:
+      auth:
+        existingSecret: immich-user-creds
+
 image:
   tag: v1.119.0
 
