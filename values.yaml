@@ -1,5 +1,6 @@
 apps:
   - name: traefik
+  - name: troubleshooting
   - name: ladder
   - name: local-path-provisioner
   - name: kubernetes-secret-generator
