@@ -2,6 +2,7 @@ apps:
   - name: traefik
   - name: ladder
   - name: local-path-provisioner
+  - name: kubernetes-secret-generator
   - name: cloud-native-postgres
     namespace: cnpg-system
     serverSideApply: true
