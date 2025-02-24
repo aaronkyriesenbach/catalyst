@@ -6,7 +6,8 @@ metadata:
 spec:
   resources:
     requests:
-      storage: 500Gi
-  storageClassName: nfs
+      storage: 1Ti
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
+  storageClassName: nfs
+  volumeName: pictures-pv
