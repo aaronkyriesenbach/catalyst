@@ -1,0 +1,13 @@
+env:
+  DB_HOSTNAME: cnpg-cluster-rw.cnpg-system # Uses cluster DNS to resolve the RW service for Cloud Native Postgres
+
+immich:
+  persistence:
+    library:
+      existingClaim: immich-pvc
+
+image:
+  tag: v1.119.0
+
+redis:
+  enabled: true
