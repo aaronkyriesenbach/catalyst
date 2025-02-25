@@ -1,0 +1,10 @@
+helmCharts:
+  - name: authelia
+    namespace: authelia
+    includeCRDs: true
+    releaseName: authelia
+    version: 0.9.16
+    valuesFile: values.yaml
+    repo: https://charts.authelia.com
+resources:
+  - jwk-keypair.yaml

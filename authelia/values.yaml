@@ -1,0 +1,71 @@
+ingress:
+  enabled: true
+
+  tls:
+    enabled: true
+
+  traefikCRD:
+    enabled: true
+    entryPoints:
+      - websecure
+    tls:
+      certResolver: letsencrypt
+
+secret:
+  additionalSecrets:
+    lldap-secret:
+      items:
+        - key: admin-pass
+          path: lldap-admin-password
+    oidc-jwk-keypair:
+      items:
+        - key: ssh-privatekey
+          path: oidc-private-key
+
+configMap:
+  theme: dark
+
+  authentication_backend:
+    ldap:
+      enabled: true
+      implementation: lldap
+      address: ldap://lldap.lldap:3890
+
+      base_dn: "DC=lab53,DC=net"
+      additional_users_dn: 'OU=people'
+
+      user: "UID=admin,OU=people,DC=lab53,DC=net"
+      password:
+        secret_name: lldap-secret
+        path: lldap-admin-password
+
+  session:
+    cookies:
+      - subdomain: auth
+        domain: lab53.net
+
+  storage:
+    local:
+      enabled: true
+
+  notifier:
+    filesystem:
+      enabled: true
+
+  identity_providers:
+    oidc:
+      enabled: true
+      jwks:
+        - key:
+            path: /secrets/oidc-jwk-keypair/oidc-private-key
+
+      clients:
+        - client_id: tailscale
+          client_name: Tailscale SSO
+          client_secret: $pbkdf2-sha512$310000$RM0fzKMw38RxttTvALU3Tw$mWgP4QVLbQieihN99TfL8utB7VOpFof1Xfd70AoNBqlPlmxsTie9Xu53kyP/DQWMW3tZFXtZn57kKnzfW41YiQ
+          redirect_uris:
+            - https://login.tailscale.com/a/oauth_response
+          scopes:
+            - openid
+            - email
+            - profile
