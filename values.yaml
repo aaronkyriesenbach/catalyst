@@ -9,3 +9,4 @@ apps:
   - name: immich
   - name: ladder
   - name: lldap
+  - name: authelia
