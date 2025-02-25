@@ -8,3 +8,4 @@ apps:
     serverSideApply: true
   - name: immich
   - name: ladder
+  - name: lldap
