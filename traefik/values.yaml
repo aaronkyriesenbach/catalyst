@@ -1,3 +1,5 @@
+deployment:
+  revisionHistoryLimit: 1
 certificatesResolvers:
   letsencrypt:
     acme:
@@ -11,3 +13,4 @@ persistence:
 providers:
   kubernetesCRD:
     allowCrossNamespace: true
+    allowExternalNameServices: true

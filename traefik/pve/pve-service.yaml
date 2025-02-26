@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pve-service
+spec:
+  type: ExternalName
+  externalName: 192.168.4.81
+  ports:
+    - port: 8006

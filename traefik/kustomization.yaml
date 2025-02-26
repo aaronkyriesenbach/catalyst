@@ -9,3 +9,6 @@ helmCharts:
 resources:
   - insecuretransport.yaml
   - argocd-ingress.yaml
+# - pve/pve-service-endpoint.yaml
+  - pve/pve-service.yaml
+  - pve/pve-ingress.yaml
