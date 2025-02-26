@@ -2,23 +2,7 @@ helmCharts:
   - name: traefik
     namespace: traefik
     includeCRDs: true
-    valuesInline:
-      logs:
-        general:
-          level: DEBUG
-      certificatesResolvers:
-        letsencrypt:
-          acme:
-            tlsChallenge: true
-            httpChallenge:
-              entryPoint: web
-            storage: /data/acme.json
-            email: aaron@kyriesenba.ch
-      persistence:
-        enabled: true
-      providers:
-        kubernetesCRD:
-          allowCrossNamespace: true
+    valuesFile: values.yaml
     releaseName: traefik
     version: 34.3.0
     repo: https://traefik.github.io/charts

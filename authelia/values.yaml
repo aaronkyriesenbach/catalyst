@@ -11,6 +11,9 @@ ingress:
     tls:
       certResolver: letsencrypt
 
+pod:
+  kind: Deployment # This should be removed to default to a DaemonSet once storage and sessions are made persistent
+
 secret:
   additionalSecrets:
     lldap-secret:
@@ -47,6 +50,13 @@ configMap:
   storage:
     local:
       enabled: true
+
+  access_control:
+    rules:
+      - domain: "*.lab53.net"
+        policy: one_factor
+
+  default_2fa_method: totp
 
   notifier:
     filesystem:

@@ -1,0 +1,13 @@
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      tlsChallenge: true
+      httpChallenge:
+        entryPoint: web
+      storage: /data/acme.json
+      email: aaron@kyriesenba.ch
+persistence:
+  enabled: true
+providers:
+  kubernetesCRD:
+    allowCrossNamespace: true
