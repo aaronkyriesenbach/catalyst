@@ -15,6 +15,10 @@ spec:
       labels:
         app: lldap
     spec:
+      volumes:
+        - name: lldap-data
+          persistentVolumeClaim:
+            claimName: lldap-data
       containers:
         - name: lldap
           image: lldap/lldap:stable
@@ -41,3 +45,6 @@ spec:
                   key: admin-pass
             - name: LLDAP_LDAP_BASE_DN
               value: dc=lab53,dc=net
+          volumeMounts:
+            - mountPath: /data
+              name: lldap-data
