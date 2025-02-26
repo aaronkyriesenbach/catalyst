@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traefik-external
+  namespace: traefik-external
+  labels:
+    app: traefik-external
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: traefik-external
+  template:
+    metadata:
+      labels:
+        app: traefik-external
+    spec:
+      volumes:
+        - name: traefik-external-config
+          configMap:
+            name: traefik-external-config
+      containers:
+        - name: traefik-external
+          image: traefik:v3.3
+          ports:
+            - containerPort: 80
+              name: web
+            - containerPort: 443
+              name: websecure
+          volumeMounts:
+            - mountPath: /etc/traefik
+              name: traefik-external-config

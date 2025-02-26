@@ -10,3 +10,4 @@ apps:
   - name: ladder
   - name: lldap
   - name: authelia
+  - name: traefik-external
