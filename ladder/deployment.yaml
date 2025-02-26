@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ladder
+  namespace: ladder
+  labels:
+    app: ladder
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ladder
+  template:
+    metadata:
+      labels:
+        app: ladder
+    spec:
+      containers:
+        - name: ladder
+          image: ghcr.io/everywall/ladder:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: RULESET
+              value: https://raw.githubusercontent.com/everywall/ladder-rules/main/ruleset.yaml
