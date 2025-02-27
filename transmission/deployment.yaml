@@ -58,21 +58,17 @@ spec:
           restartPolicy: Always
           env:
             - name: GLUETUN_CONTROL_ENDPOINT
-              value: "http://gluetun:8000"
+              value: "http://localhost:8000"
             - name: GLUETUN_CONTROL_API_KEY
               value: insecure
             - name: GLUETUN_HEALTH_ENDPOINT
-              value: "http://gluetun:9999"
+              value: "http://localhost:9999"
             - name: TRANSMISSION_ENDPOINT
-              value: "http://transmission:9091/transmission/rpc"
+              value: "http://localhost:9091/transmission/rpc"
             - name: TRANSMISSION_USER
               value: transmission
             - name: TRANSMISSION_PASS
               value: transmission
-          readinessProbe:
-            httpGet:
-              port: 9999
-            initialDelaySeconds: 5
       containers:
         - name: transmission
           image: lscr.io/linuxserver/transmission:4.0.6-r2-ls281
