@@ -12,3 +12,4 @@ apps:
   - name: authelia
   - name: traefik-external
   - name: secretgen-controller
+  - name: transmission
