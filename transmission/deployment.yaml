@@ -86,4 +86,4 @@ spec:
           lifecycle:
             postStart:
               exec:
-                command: ["sleep", "30", "&&", "curl", "-c", "/config/mam.cookies", "-b", "/config/mam.cookies", "https://t.myanonamouse.net/json/dynamicSeedbox.php"]
+                command: ["/usr/bin/sleep", "30", "&&", "/usr/bin/curl", "-c", "/config/mam.cookies", "-b", "/config/mam.cookies", "https://t.myanonamouse.net/json/dynamicSeedbox.php"]
