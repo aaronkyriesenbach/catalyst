@@ -41,6 +41,11 @@ spec:
               value: "on"
             - name: VPN_PORT_FORWARDING
               value: "on"
+            - name: WIREGUARD_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: wireguard-private-key
+                  key: key
           volumeMounts:
             - mountPath: /gluetun/auth
               name: gluetun-role-config
