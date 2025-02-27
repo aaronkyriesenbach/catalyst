@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gluetun-role-config
+data:
+  config.toml: |
+    [[roles]]
+    name = "gluetrans"
+    routes = ["GET /v1/openvpn/portforwarded"]
+    auth = "apikey"
+    apikey = "insecure"

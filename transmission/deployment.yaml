@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transmission
+  namespace: transmission
+  labels:
+    app: transmission
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transmission
+  template:
+    metadata:
+      labels:
+        app: transmission
+    spec:
+      volumes:
+        - name: gluetun-role-config
+          configMap:
+            name: gluetun-role-config
+        - name: downloads
+          persistentVolumeClaim:
+            claimName: transmission-pvc
+      initContainers:
+        - name: gluetun
+          image: qmcgaw/gluetun:v3.40.0
+          restartPolicy: Always # This is a sidecar container that provides networking for Transmission
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+          env:
+            - name: VPN_SERVICE_PROVIDER
+              value: openvpn
+            - name: VPN_TYPE
+              value: wireguard
+            - name: SERVER_COUNTRIES
+              value: United States
+            - name: PORT_FORWARD_ONLY
+              value: on
+            - name: VPN_PORT_FORWARDING
+              value: on
+          volumeMounts:
+            - mountPath: /gluetun/auth
+              name: gluetun-role-config
+          readinessProbe:
+            httpGet:
+              port: 9999
+            initialDelaySeconds: 5
+        - name: gluetrans
+          image: qmcgaw/gluetun:v3.40.0
+          restartPolicy: Always # This is a sidecar container that provides networking for Transmission
+          env:
+            - name: GLUETUN_CONTROL_ENDPOINT
+              value: http://gluetun:8000
+            - name: GLUETUN_CONTROL_API_KEY
+              value: insecure
+            - name: GLUETUN_HEALTH_ENDPOINT
+              value: http://gluetun:9999
+            - name: TRANSMISSION_ENDPOINT
+              value: http://transmission:9091/transmission/rpc
+            - name: TRANSMISSION_USER
+              value: transmission
+            - name: TRANSMISSION_PASS
+              value: transmission
+          readinessProbe:
+            httpGet:
+              port: 9999
+            initialDelaySeconds: 5
+      containers:
+        - name: transmission
+          image: lscr.io/linuxserver/transmission:4.0.6-r2-ls281
+          restartPolicy: Always
+          volumeMounts:
+            - mountPath: /downloads
+              name: downloads
+              subPath: downloads

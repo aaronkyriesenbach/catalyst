@@ -11,3 +11,5 @@ apps:
   - name: lldap
   - name: authelia
   - name: traefik-external
+  - name: transmission
+    targetRevision: feature/transmission

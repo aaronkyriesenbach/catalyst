@@ -1,0 +1,20 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: transmission
+  namespace: transmission
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`transmission.lab53.net`)
+      kind: Rule
+      middlewares:
+        - name: forwardauth-authelia
+          namespace: authelia
+      services:
+        - name: transmission
+          serversTransport: traefik-insecuretransport@kubernetescrd
+          port: 9091
+  tls:
+    certResolver: letsencrypt
