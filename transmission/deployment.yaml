@@ -83,8 +83,8 @@ spec:
               subPath: downloads/watch
             - mountPath: /config
               name: config
-          readinessProbe:
-            exec:
-              command: ["/bin/sh", "-c", "curl -c /config/mam.cookies -b /config/mam.cookies https://t.myanonamouse.net/json/dynamicSeedbox.php"]
-              initialDelaySeconds: 120
-              periodSeconds: 300
+#          readinessProbe:
+#            exec:
+#              command: ["/bin/sh", "-c", "curl -c /config/mam.cookies -b /config/mam.cookies https://t.myanonamouse.net/json/dynamicSeedbox.php"]
+#              initialDelaySeconds: 120
+#              periodSeconds: 300
