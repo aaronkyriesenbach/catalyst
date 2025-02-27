@@ -86,5 +86,5 @@ spec:
           readinessProbe:
             exec:
               command: ["/bin/sh", "-c", "curl -c /config/mam.cookies -b /config/mam.cookies https://t.myanonamouse.net/json/dynamicSeedbox.php"]
-              initialDelaySeconds: 15
-              periodSeconds: 120
+              initialDelaySeconds: 120
+              periodSeconds: 300
