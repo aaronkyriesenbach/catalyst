@@ -53,13 +53,13 @@ spec:
           restartPolicy: Always # This is a sidecar container that provides networking for Transmission
           env:
             - name: GLUETUN_CONTROL_ENDPOINT
-              value: http://gluetun:8000
+              value: "http://gluetun:8000"
             - name: GLUETUN_CONTROL_API_KEY
               value: insecure
             - name: GLUETUN_HEALTH_ENDPOINT
-              value: http://gluetun:9999
+              value: "http://gluetun:9999"
             - name: TRANSMISSION_ENDPOINT
-              value: http://transmission:9091/transmission/rpc
+              value: "http://transmission:9091/transmission/rpc"
             - name: TRANSMISSION_USER
               value: transmission
             - name: TRANSMISSION_PASS
