@@ -22,9 +22,9 @@ spec:
         - name: downloads
           persistentVolumeClaim:
             claimName: transmission-downloads-pvc
-        - name: transmission-config
+        - name: config
           persistentVolumeClaim:
-            claimName: transmission-config-pvc
+            claimName: config-pvc
       initContainers:
         - name: gluetun
           image: qmcgaw/gluetun:v3.40.0
@@ -52,10 +52,8 @@ spec:
           volumeMounts:
             - mountPath: /gluetun/auth
               name: gluetun-role-config
-          readinessProbe:
-            httpGet:
-              port: 9999
-            initialDelaySeconds: 5
+            - mountPath: /gluetun
+              name: config
         - name: gluetrans
           image: miklosbagi/gluetrans:v0.3.5
           restartPolicy: Always
@@ -83,4 +81,4 @@ spec:
               name: downloads
               subPath: downloads/incomplete
             - mountPath: /config
-              name: transmission-config
+              name: config
