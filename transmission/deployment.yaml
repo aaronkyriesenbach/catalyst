@@ -15,6 +15,7 @@ spec:
       labels:
         app: transmission
     spec:
+      revisionHistoryLimit: 1
       volumes:
         - name: gluetun-role-config
           configMap:
