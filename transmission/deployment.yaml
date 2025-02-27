@@ -86,4 +86,4 @@ spec:
           lifecycle:
             postStart:
               exec:
-                command: ["/bin/sh", "-c", "curl --retry 20 --retry-all-errors -c /config/mam.cookies -b /config/mam.cookies https://t.myanonamouse.net/json/dynamicSeedbox.php 2> /config/mam.startup.log"]
+                command: ["/bin/sh", "-c", "sleep 15 && curl --retry 20 --retry-all-errors -c /config/mam.cookies -b /config/mam.cookies https://t.myanonamouse.net/json/dynamicSeedbox.php 2> /config/mam.startup.log"]
