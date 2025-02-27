@@ -83,7 +83,8 @@ spec:
               subPath: downloads/watch
             - mountPath: /config
               name: config
-          lifecycle:
-            postStart:
-              exec:
-                command: ["/bin/sh", "-c", "sleep 15 && curl --retry 20 --retry-all-errors -c /config/mam.cookies -b /config/mam.cookies t.myanonamouse.net/json/dynamicSeedbox.php 2> /config/mam.startup.log"]
+          readinessProbe:
+            exec:
+              command: ["/bin/sh", "-c", "curl -c /config/mam.cookies -b /config/mam.cookies https://t.myanonamouse.net/json/dynamicSeedbox.php"]
+              initialDelaySeconds: 15
+              periodSeconds: 15
