@@ -54,8 +54,8 @@ spec:
               port: 9999
             initialDelaySeconds: 5
         - name: gluetrans
-          image: qmcgaw/gluetun:v3.40.0
-          restartPolicy: Always # This is a sidecar container that provides networking for Transmission
+          image: miklosbagi/gluetrans:v0.3.5
+          restartPolicy: Always
           env:
             - name: GLUETUN_CONTROL_ENDPOINT
               value: "http://gluetun:8000"
