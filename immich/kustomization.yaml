@@ -7,6 +7,6 @@ helmCharts:
     valuesFile: values.yaml
     repo: https://immich-app.github.io/immich-charts
 resources:
-  - pv.yaml
-  - pvc.yaml
+  - transmission-downloads-pv.yaml
+  - transmission-downloads-pvc.yaml
   - ingress.yaml

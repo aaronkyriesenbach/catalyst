@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transmission
+  namespace: transmission
+  labels:
+    app: transmission
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: transmission
+  template:
+    metadata:
+      labels:
+        app: transmission
+    spec:
+      volumes:
+        - name: gluetun-role-config
+          secret:
+            secretName: gluetun-role-config
+        - name: downloads
+          persistentVolumeClaim:
+            claimName: transmission-downloads-pvc
+        - name: config
+          persistentVolumeClaim:
+            claimName: config-pvc
+      initContainers:
+        - name: gluetun
+          image: qmcgaw/gluetun:v3.40.0
+          restartPolicy: Always # This is a sidecar container that provides networking for Transmission
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+          env:
+            - name: VPN_SERVICE_PROVIDER
+              value: protonvpn
+            - name: VPN_TYPE
+              value: wireguard
+            - name: SERVER_COUNTRIES
+              value: United States
+            - name: PORT_FORWARD_ONLY
+              value: "on"
+            - name: VPN_PORT_FORWARDING
+              value: "on"
+            - name: WIREGUARD_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: wireguard-private-key
+                  key: key
+          volumeMounts:
+            - mountPath: /gluetun/auth
+              name: gluetun-role-config
+            - mountPath: /gluetun
+              name: config
+        - name: gluetrans
+          image: miklosbagi/gluetrans:v0.3.5
+          restartPolicy: Always
+          env:
+            - name: GLUETUN_CONTROL_ENDPOINT
+              value: "http://localhost:8000"
+            - name: GLUETUN_CONTROL_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: gluetun-role-config
+                  key: key
+            - name: GLUETUN_HEALTH_ENDPOINT
+              value: "http://localhost:9999"
+            - name: TRANSMISSION_ENDPOINT
+              value: "http://localhost:9091/transmission/rpc"
+            - name: TRANSMISSION_USER
+              value: transmission
+            - name: TRANSMISSION_PASS
+              value: transmission
+      containers:
+        - name: transmission
+          image: lscr.io/linuxserver/transmission:4.0.6-r2-ls281
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+          volumeMounts:
+            - mountPath: /downloads
+              name: downloads
+              subPath: downloads
+            - mountPath: /watch
+              name: downloads
+              subPath: downloads/watch
+            - mountPath: /config
+              name: config
+#          readinessProbe:
+#            exec:
+#              command: ["/bin/sh", "-c", "curl -c /config/mam.cookies -b /config/mam.cookies https://t.myanonamouse.net/json/dynamicSeedbox.php"]
+#              initialDelaySeconds: 120
+#              periodSeconds: 300
