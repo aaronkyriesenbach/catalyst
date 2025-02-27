@@ -82,3 +82,7 @@ spec:
               subPath: downloads/watch
             - mountPath: /config
               name: config
+          lifecycle:
+            postStart:
+              exec:
+                command: ["sleep", "30", "&&", "curl", "-c", "/config/mam.cookies", "-b", "/config/mam.cookies", "https://t.myanonamouse.net/json/dynamicSeedbox.php"]
