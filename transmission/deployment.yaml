@@ -79,6 +79,6 @@ spec:
               subPath: downloads
             - mountPath: /watch
               name: downloads
-              subPath: downloads/incomplete
+              subPath: downloads/watch
             - mountPath: /config
               name: config
