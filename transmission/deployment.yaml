@@ -38,9 +38,9 @@ spec:
             - name: SERVER_COUNTRIES
               value: United States
             - name: PORT_FORWARD_ONLY
-              value: on
+              value: "on"
             - name: VPN_PORT_FORWARDING
-              value: on
+              value: "on"
           volumeMounts:
             - mountPath: /gluetun/auth
               name: gluetun-role-config
