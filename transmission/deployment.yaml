@@ -21,7 +21,10 @@ spec:
             name: gluetun-role-config
         - name: downloads
           persistentVolumeClaim:
-            claimName: transmission-pvc
+            claimName: transmission-downloads-pvc
+        - name: transmission-config
+          persistentVolumeClaim:
+            claimName: transmission-config-pvc
       initContainers:
         - name: gluetun
           image: qmcgaw/gluetun:v3.40.0
@@ -76,3 +79,8 @@ spec:
             - mountPath: /downloads
               name: downloads
               subPath: downloads
+            - mountPath: /watch
+              name: downloads
+              subPath: downloads/incomplete
+            - mountPath: /config
+              name: transmission-config
