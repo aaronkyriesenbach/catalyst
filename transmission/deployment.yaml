@@ -74,6 +74,11 @@ spec:
       containers:
         - name: transmission
           image: lscr.io/linuxserver/transmission:4.0.6-r2-ls281
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
           volumeMounts:
             - mountPath: /downloads
               name: downloads
