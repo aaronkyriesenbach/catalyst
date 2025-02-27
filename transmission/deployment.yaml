@@ -32,7 +32,7 @@ spec:
                 - NET_ADMIN
           env:
             - name: VPN_SERVICE_PROVIDER
-              value: openvpn
+              value: protonvpn
             - name: VPN_TYPE
               value: wireguard
             - name: SERVER_COUNTRIES
