@@ -1,0 +1,2 @@
+resources:
+  - https://github.com/carvel-dev/secretgen-controller/releases/latest/download/release.yml
