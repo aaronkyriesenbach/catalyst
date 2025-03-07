@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kbld.k14s.io/images: |
+      - origins:
+        - local:
+            path: /home/runner/work/secretgen-controller/secretgen-controller
+        - git:
+            dirty: true
+            remoteURL: https://github.com/carvel-dev/secretgen-controller
+            sha: f79507d39bdb9c57047b143e6e29dbdc95a482c3
+            tags:
+            - v0.19.1
+        url: ghcr.io/carvel-dev/secretgen-controller@sha256:35d97c76c1f0b4b2915fc6672a1f40b895181d52cc13562098e916fa55f3ff7a
+    secretgen-controller.carvel.dev/version: v0.19.1
+  name: secretgen-controller
+  namespace: secretgen-controller
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  selector:
+    matchLabels:
+      app: secretgen-controller
+  template:
+    metadata:
+      labels:
+        app: secretgen-controller
+    spec:
+      containers:
+        - image: ghcr.io/carvel-dev/secretgen-controller@sha256:35d97c76c1f0b4b2915fc6672a1f40b895181d52cc13562098e916fa55f3ff7a
+          name: secretgen-controller
+          resources:
+            requests:
+              cpu: 120m
+              memory: 100Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+      serviceAccount: secretgen-controller-sa
