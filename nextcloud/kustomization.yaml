@@ -1,0 +1,13 @@
+helmCharts:
+  - name: nextcloud
+    namespace: nextcloud
+    includeCRDs: true
+    releaseName: nextcloud
+    version: 6.6.6
+    valuesFile: values.yaml
+    repo: https://nextcloud.github.io/helm/
+resources:
+  - pgcluster.yaml
+  - admin-secret.yaml
+  - db-secret.yaml
+  - ingress.yaml

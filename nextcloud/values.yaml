@@ -1,0 +1,40 @@
+image:
+  tag: 31.0.0-apache
+
+nextcloud:
+  host: nextcloud.lab53.net
+  existingSecret:
+    enabled: true
+    secretName: nextcloud-admin-creds
+
+  phpConfigs:
+    pgsql.ini: |
+      [PostgreSQL]
+      pgsql.allow_persistent = On
+      pgsql.auto_reset_persistent = Off
+      pgsql.max_persistent = -1
+      pgsql.max_links = -1
+      pgsql.ignore_notice = 0
+      pgsql.log_notice = 0
+
+  extraVolumes:
+    - name: nfs
+      nfs:
+        server: "192.168.4.84"
+        path: "/mnt/rpool/data"
+  extraVolumeMounts:
+    - name: nfs
+      mountPath: "/data"
+
+internalDatabase:
+  enabled: false
+
+externalDatabase:
+  enabled: true
+  type: postgresql
+  host: nextcloud-cluster-rw
+  existingSecret:
+    enabled: true
+    secretName: nextcloud-db-creds
+    usernameKey: username
+    passwordKey: password

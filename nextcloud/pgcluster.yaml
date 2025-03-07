@@ -1,0 +1,21 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: nextcloud-cluster
+spec:
+  bootstrap:
+    initdb:
+      database: nextcloud
+      owner: nextcloud
+      secret:
+        name: nextcloud-db-creds
+  managed:
+    roles:
+      - name: nextcloud
+        connectionLimit: -1
+        ensure: present
+        inherit: true
+        login: true
+  instances: 3
+  storage:
+    size: 10Gi
