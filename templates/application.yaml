@@ -24,8 +24,6 @@ spec:
     helm: {{- toYaml $app.helm | nindent 6 }}
     {{- end }}
   syncPolicy:
-    automated:
-      prune: true
     syncOptions:
       - CreateNamespace=true
       {{- if $app.serverSideApply }}
