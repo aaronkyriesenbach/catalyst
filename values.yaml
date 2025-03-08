@@ -13,3 +13,5 @@ apps:
   - name: traefik-external
   - name: secretgen-controller
   - name: transmission
+  - name: calibre-web-automated
+    namespace: cwa
