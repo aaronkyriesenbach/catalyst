@@ -18,8 +18,8 @@ spec:
     spec:
       volumes:
         - name: gluetun-role-config
-          configMap:
-            name: gluetun-role-config
+          secret:
+            secretName: gluetun-role-config
         - name: downloads
           persistentVolumeClaim:
             claimName: transmission-downloads-pvc
@@ -62,7 +62,10 @@ spec:
             - name: GLUETUN_CONTROL_ENDPOINT
               value: "http://localhost:8000"
             - name: GLUETUN_CONTROL_API_KEY
-              value: insecure
+              valueFrom:
+                secretKeyRef:
+                  name: gluetun-role-config
+                  key: key
             - name: GLUETUN_HEALTH_ENDPOINT
               value: "http://localhost:9999"
             - name: TRANSMISSION_ENDPOINT

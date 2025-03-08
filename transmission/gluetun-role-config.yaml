@@ -1,11 +1,15 @@
-apiVersion: v1
-kind: ConfigMap
+apiVersion: secretgen.k14s.io/v1alpha1
+kind: Password
 metadata:
   name: gluetun-role-config
-data:
-  config.toml: |
-    [[roles]]
-    name = "gluetrans"
-    routes = ["GET /v1/openvpn/portforwarded"]
-    auth = "apikey"
-    apikey = "insecure"
+spec:
+  secretTemplate:
+    type: Opaque
+    stringData:
+      config.toml: |
+        [[roles]]
+        name = "gluetrans"
+        routes = ["GET /v1/openvpn/portforwarded"]
+        auth = "apikey"
+        apikey = "$(value)"
+      key: $(value)
