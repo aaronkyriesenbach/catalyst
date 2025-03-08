@@ -15,10 +15,6 @@ spec:
       labels:
         app: lldap
     spec:
-      volumes:
-        - name: lldap-data
-          persistentVolumeClaim:
-            claimName: lldap-data
       containers:
         - name: lldap
           image: lldap/lldap:stable
@@ -31,20 +27,17 @@ spec:
             - name: LLDAP_JWT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: lldap-secret
-                  key: jwt-secret
+                  name: jwt-secret
+                  key: password
             - name: LLDAP_KEY_SEED
               valueFrom:
                 secretKeyRef:
-                  name: lldap-secret
-                  key: key-seed
+                  name: key-seed
+                  key: password
             - name: LLDAP_LDAP_USER_PASS
               valueFrom:
                 secretKeyRef:
-                  name: lldap-secret
-                  key: admin-pass
+                  name: admin-pass
+                  key: password
             - name: LLDAP_LDAP_BASE_DN
               value: dc=lab53,dc=net
-          volumeMounts:
-            - mountPath: /data
-              name: lldap-data
