@@ -8,4 +8,4 @@ helmCharts:
     repo: https://charts.authelia.com
 resources:
   - jwk-keypair.yaml
-  - lldap-secret.yaml
+  - ldap-admin-secret-import.yaml

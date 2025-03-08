@@ -16,9 +16,9 @@ pod:
 
 secret:
   additionalSecrets:
-    lldap-secret:
+    admin-pass:
       items:
-        - key: admin-pass
+        - key: password
           path: lldap-admin-password
     oidc-jwk-keypair:
       items:
@@ -39,7 +39,7 @@ configMap:
 
       user: "UID=admin,OU=people,DC=lab53,DC=net"
       password:
-        secret_name: lldap-secret
+        secret_name: admin-pass
         path: lldap-admin-password
 
   session:
@@ -54,7 +54,7 @@ configMap:
   access_control:
     rules:
       - domain: "*.lab53.net"
-        policy: one_factor
+        policy: two_factor
 
   default_2fa_method: totp
 
