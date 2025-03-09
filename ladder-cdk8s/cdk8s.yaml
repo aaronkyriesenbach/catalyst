@@ -1,0 +1,4 @@
+language: typescript
+app: npx ts-node ../shared/BasicApp.ts main.ts
+imports:
+  - k8s
