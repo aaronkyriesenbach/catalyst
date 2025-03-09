@@ -26,7 +26,8 @@ export default class BasicApp extends Construct {
         if (webPort) {
             new IngressRoute(this, 'ingress', {
                 serviceName: service.name,
-                port: webPort.port
+                port: webPort.port,
+                hostPrefix: id
             })
         }
     }

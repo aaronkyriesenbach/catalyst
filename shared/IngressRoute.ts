@@ -1,4 +1,3 @@
-import { Chart, ChartProps } from "cdk8s";
 import { Construct } from "constructs";
 
 import {
@@ -8,11 +7,11 @@ import {
 } from "./imports/traefik.io";
 
 
-export default class IngressRoute extends Chart {
+export default class IngressRoute extends Construct {
     constructor(scope: Construct, id: string, props: IngressRouteProps) {
-        super(scope, id, props);
+        super(scope, id);
 
-        const { serviceName, port, useForwardAuth = true, useInsecureTransport = false, customHostPrefix } = props;
+        const { serviceName, port, hostPrefix, useForwardAuth = true, useInsecureTransport = false } = props;
 
         new TraefikIngressRoute(this, id, {
             metadata: {
@@ -21,7 +20,7 @@ export default class IngressRoute extends Chart {
             spec: {
                 entryPoints: ["websecure"],
                 routes: [{
-                    match: `Host(\`${ customHostPrefix ?? id }.lab53.net\`)`,
+                    match: `Host(\`${hostPrefix}.lab53.net\`)`,
                     kind: IngressRouteSpecRoutesKind.RULE,
                     middlewares: useForwardAuth ? [{ name: "forwardauth-authelia", namespace: "authelia" }] : undefined,
                     services: [{
@@ -35,10 +34,10 @@ export default class IngressRoute extends Chart {
     }
 }
 
-type IngressRouteProps = ChartProps & {
+type IngressRouteProps = {
     serviceName: string,
     port: number,
+    hostPrefix: string,
     useForwardAuth?: boolean,
-    useInsecureTransport?: boolean,
-    customHostPrefix?: string
+    useInsecureTransport?: boolean
 };
