@@ -15,3 +15,5 @@ apps:
   - name: transmission
   - name: calibre-web-automated
     namespace: cwa
+  - name: ladder-cdk8s
+    targetRevision: feature/cdk8s
