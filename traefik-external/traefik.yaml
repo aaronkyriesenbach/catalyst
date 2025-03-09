@@ -1,0 +1,7 @@
+log:
+  level: INFO
+
+providers:
+  file:
+    filename: /etc/traefik/dynamic.yaml
+    watch: true

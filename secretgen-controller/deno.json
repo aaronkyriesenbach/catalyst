@@ -1,0 +1,9 @@
+{
+  "imports": {
+    "cdk8s": "npm:cdk8s@^2.69.54",
+    "constructs": "npm:constructs@^10.4.2"
+  },
+  "tasks": {
+    "synth": "deno install && deno run --allow-env --allow-write --allow-read --allow-run main.ts && cat dist/*"
+  }
+}

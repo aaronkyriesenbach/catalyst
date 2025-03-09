@@ -1,0 +1,5 @@
+{
+  "id": "aaron",
+  "email": "aaron@lab53.net",
+  "password": "$(value)"
+}

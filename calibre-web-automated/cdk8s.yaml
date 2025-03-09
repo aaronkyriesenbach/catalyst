@@ -1,0 +1,4 @@
+language: typescript
+app: npx ts-node main.ts
+imports:
+  - https://raw.githubusercontent.com/traefik/traefik-helm-chart/refs/heads/master/traefik-crds/crds-files/traefik/traefik.io_middlewares.yaml
