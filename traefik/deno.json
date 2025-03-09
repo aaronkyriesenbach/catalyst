@@ -1,0 +1,6 @@
+{
+  "tasks": {
+    "synth": "deno install && deno run --allow-env --allow-write --allow-read --allow-run main.ts && cat dist/*",
+    "clean": "rm -rf dist/ node_modules/"
+  }
+}

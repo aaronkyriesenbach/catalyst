@@ -1,0 +1,3 @@
+language: typescript
+imports:
+  - helm:https://immich-app.github.io/immich-charts/immich@0.9.1

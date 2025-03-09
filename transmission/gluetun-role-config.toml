@@ -1,0 +1,5 @@
+[[roles]]
+name = "gluetrans"
+routes = ["GET /v1/openvpn/portforwarded"]
+auth = "apikey"
+apikey = "$(value)"

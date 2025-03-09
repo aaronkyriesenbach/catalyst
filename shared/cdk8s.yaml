@@ -1,0 +1,6 @@
+language: typescript
+imports:
+  - k8s@1.32.0
+  - https://raw.githubusercontent.com/traefik/traefik-helm-chart/refs/heads/master/traefik-crds/crds-files/traefik/traefik.io_ingressroutes.yaml
+  - https://raw.githubusercontent.com/carvel-dev/secretgen-controller/refs/heads/develop/config/package-bundle/config/crds.yml
+  - https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/heads/main/config/crd/bases/postgresql.cnpg.io_clusters.yaml

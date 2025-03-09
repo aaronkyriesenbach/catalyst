@@ -1,0 +1,4 @@
+language: typescript
+imports:
+  - helm:https://charts.authelia.com/authelia@0.10.3
+  - https://raw.githubusercontent.com/carvel-dev/secretgen-controller/refs/heads/develop/config/package-bundle/config/crds.yml
