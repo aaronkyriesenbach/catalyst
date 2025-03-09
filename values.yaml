@@ -8,10 +8,14 @@ apps:
     serverSideApply: true
   - name: immich
   - name: ladder
+    targetRevision: feature/deno
   - name: lldap
+    targetRevision: feature/deno
   - name: authelia
   - name: traefik-external
+    targetRevision: feature/deno
   - name: secretgen-controller
   - name: transmission
   - name: calibre-web-automated
     namespace: cwa
+    targetRevision: feature/deno

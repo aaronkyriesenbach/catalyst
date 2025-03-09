@@ -1,6 +1,0 @@
-apiVersion: secretgen.carvel.dev/v1alpha1
-kind: SecretExport
-metadata:
-  name: admin-pass
-spec:
-  toNamespace: authelia
