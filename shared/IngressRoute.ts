@@ -1,6 +1,7 @@
 import {
     IngressRoute as TraefikIngressRoute,
     IngressRouteSpecRoutesKind,
+    IngressRouteSpecRoutesMiddlewares,
     IngressRouteSpecRoutesServicesPort
 } from "./imports/traefik.io";
 import { Construct } from "constructs";
@@ -15,10 +16,15 @@ export default class IngressRoute extends TraefikIngressRoute {
             customHostPrefix,
             useForwardAuth = true,
             useInsecureTransport,
-            customPort
+            customPort,
+            middlewares = []
         } = props;
 
         const ports = getPorts(containers);
+        const createMiddlewares = useForwardAuth ? [{
+            name: "forwardauth-authelia",
+            namespace: "authelia"
+        }, ...middlewares] : middlewares;
 
         super(scope, id, {
             metadata: { name: appName }, spec: {
@@ -26,7 +32,7 @@ export default class IngressRoute extends TraefikIngressRoute {
                 routes: [{
                     match: `Host(\`${ customHostPrefix ?? appName }.lab53.net\`)`,
                     kind: IngressRouteSpecRoutesKind.RULE,
-                    middlewares: useForwardAuth ? [{ name: "forwardauth-authelia", namespace: "authelia" }] : undefined,
+                    middlewares: createMiddlewares,
                     services: [{
                         name: appName,
                         serversTransport: useInsecureTransport ? "traefik-insecuretransport@kubernetescrd" : undefined,
@@ -45,5 +51,6 @@ export type IngressRouteProps = AppProps & {
     customPort?: number,
     customHostPrefix?: string,
     useForwardAuth?: boolean,
-    useInsecureTransport?: boolean
+    useInsecureTransport?: boolean,
+    middlewares?: IngressRouteSpecRoutesMiddlewares[]
 };
