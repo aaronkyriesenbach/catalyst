@@ -5,6 +5,7 @@ import { RsaKey } from "./imports/secretgen.k14s.io.ts";
 import { SecretImport } from "./imports/secretgen.carvel.dev.ts";
 import CNPGCluster from "../shared/CNPGCluster.ts";
 import GeneratedPassword from "../shared/GeneratedPassword.ts";
+import { Redis } from "./imports/redis.ts";
 
 export class Authelia extends Chart {
     constructor(scope: Construct, id: string) {
@@ -30,6 +31,10 @@ export class Authelia extends Chart {
             name: "storage-encryption-key"
         });
 
+        const sessionEncryptionKey = new GeneratedPassword(this, "session-encryption-key", {
+            name: "session-encryption-key"
+        });
+
         const postgresCreds = new GeneratedPassword(this, "postgresuser", {
             name: "postgres-creds",
             secretTemplate: {
@@ -37,6 +42,30 @@ export class Authelia extends Chart {
                 stringData: {
                     username: "authelia",
                     password: "$(value)"
+                }
+            }
+        });
+
+        const redisPassword = new GeneratedPassword(this, "redispassword", {
+            name: "redis-password",
+            secretTemplate: {
+                type: "Opaque",
+                stringData: {
+                    "redis-password": "$(value)"
+                }
+            }
+        });
+
+        new Redis(this, "redis", {
+            releaseName: "redis",
+            namespace: "authelia",
+            values: {
+                resourcesPreset: "micro",
+                auth: {
+                    existingSecret: redisPassword.name
+                },
+                sentinel: {
+                    enabled: true
                 }
             }
         });
@@ -66,10 +95,6 @@ export class Authelia extends Chart {
                         }
                     }
                 },
-                pod: {
-                    kind: "Deployment", // This should be removed to default to a DaemonSet once storage and sessions are made persistent
-                    revisionHistoryLimit: 1
-                },
                 secret: {
                     additionalSecrets: {
                         "admin-pass": {
@@ -84,6 +109,12 @@ export class Authelia extends Chart {
                                 path: "oidc-private-key"
                             }]
                         },
+                        [sessionEncryptionKey.name]: {
+                            items: [{
+                                key: "password",
+                                path: "encryption-key"
+                            }]
+                        },
                         [storageEncryptionKey.name]: {
                             items: [{
                                 key: "password",
@@ -94,6 +125,12 @@ export class Authelia extends Chart {
                             items: [{
                                 key: "password",
                                 path: "postgres-password"
+                            }]
+                        },
+                        [redisPassword.name]: {
+                            items: [{
+                                key: "redis-password",
+                                path: "redis-password"
                             }]
                         }
                     }
@@ -115,10 +152,22 @@ export class Authelia extends Chart {
                         }
                     },
                     session: {
+                        encryption_key: {
+                            secret_name: sessionEncryptionKey.name,
+                            path: "encryption-key"
+                        },
                         cookies: [{
                             subdomain: "auth",
                             domain: "lab53.net"
-                        }]
+                        }],
+                        redis: {
+                            enabled: true,
+                            host: "redis",
+                            password: {
+                                secret_name: redisPassword.name,
+                                path: "redis-password"
+                            }
+                        }
                     },
                     storage: {
                         encryption_key: {
