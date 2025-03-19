@@ -3,6 +3,8 @@ import { App, Chart } from "npm:cdk8s";
 import { Authelia as AutheliaChart } from "./imports/authelia.ts";
 import { RsaKey } from "./imports/secretgen.k14s.io.ts";
 import { SecretImport } from "./imports/secretgen.carvel.dev.ts";
+import CNPGCluster from "../shared/CNPGCluster.ts";
+import GeneratedPassword from "../shared/GeneratedPassword.ts";
 
 export class Authelia extends Chart {
     constructor(scope: Construct, id: string) {
@@ -24,6 +26,29 @@ export class Authelia extends Chart {
             }
         });
 
+        const storageEncryptionKey = new GeneratedPassword(this, "storage-encryption-key", {
+            name: "storage-encryption-key"
+        });
+
+        const postgresCreds = new GeneratedPassword(this, "postgresuser", {
+            name: "postgres-creds",
+            secretTemplate: {
+                type: "Opaque",
+                stringData: {
+                    username: "authelia",
+                    password: "$(value)"
+                }
+            }
+        });
+
+        new CNPGCluster(this, "cluster", {
+            appName: "authelia",
+            passwordSecret: {
+                name: postgresCreds.name,
+                key: "password"
+            }
+        });
+
         new AutheliaChart(this, "chart", {
             namespace: "authelia",
             releaseName: "authelia",
@@ -42,7 +67,8 @@ export class Authelia extends Chart {
                     }
                 },
                 pod: {
-                    kind: "Deployment" // This should be removed to default to a DaemonSet once storage and sessions are made persistent
+                    kind: "Deployment", // This should be removed to default to a DaemonSet once storage and sessions are made persistent
+                    revisionHistoryLimit: 1
                 },
                 secret: {
                     additionalSecrets: {
@@ -56,6 +82,18 @@ export class Authelia extends Chart {
                             items: [{
                                 key: "key.pem",
                                 path: "oidc-private-key"
+                            }]
+                        },
+                        [storageEncryptionKey.name]: {
+                            items: [{
+                                key: "password",
+                                path: "encryption-key"
+                            }]
+                        },
+                        [postgresCreds.name]: {
+                            items: [{
+                                key: "password",
+                                path: "postgres-password"
                             }]
                         }
                     }
@@ -83,8 +121,17 @@ export class Authelia extends Chart {
                         }]
                     },
                     storage: {
-                        local: {
-                            enabled: true
+                        encryption_key: {
+                            secret_name: storageEncryptionKey.name,
+                            path: "encryption-key"
+                        },
+                        postgres: {
+                            enabled: true,
+                            address: "tcp://authelia-cluster-rw:5432",
+                            password: {
+                                secret_name: postgresCreds.name,
+                                path: "postgres-password"
+                            }
                         }
                     },
                     access_control: {
