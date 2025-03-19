@@ -4,6 +4,7 @@
     "constructs": "npm:constructs@^10.4.2"
   },
   "tasks": {
-    "synth": "deno run --allow-env --allow-write --allow-read main.ts && cat dist/*"
+    "synth": "deno run --allow-env --allow-write --allow-read main.ts && cat dist/*",
+    "fix-imports": "sed -i \"s/from 'cdk8s'/from 'npm:cdk8s'/g\" imports/* && sed -i \"s/from 'constructs'/from 'npm:constructs'/g\" imports/*"
   }
 }
