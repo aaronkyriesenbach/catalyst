@@ -17,4 +17,4 @@ export const DEFAULT_LSCR_ENV: EnvVar[] = [
 ];
 
 export const NAS_IP = "192.168.4.84";
-export const NAS_PATH = "/mnt/rpool/data";
+export const NAS_PATH = "/mnt/tank/data";

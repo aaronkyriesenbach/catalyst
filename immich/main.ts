@@ -35,7 +35,7 @@ export class Immich extends Chart {
 
         const nasVolume = new NASVolume(this, "nasvolume", {
             size: "1Ti",
-            customNASPath: "/mnt/rpool/data/pictures"
+            customNASPath: "/mnt/tank/data/pictures"
         });
 
         const chart = new ImmichChart(this, "chart", {

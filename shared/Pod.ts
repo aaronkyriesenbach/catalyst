@@ -20,7 +20,7 @@ export function getPodSpec(props: AppProps): KubePodProps {
         : DEFAULT_NAS_VOLUME_NAME),
       nfs: {
         server: "192.168.4.84",
-        path: "/mnt/rpool/data",
+        path: "/mnt/tank/data",
       },
     }
     : undefined;
