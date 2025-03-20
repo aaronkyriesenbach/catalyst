@@ -14,7 +14,7 @@ apps:
         jsonPointers:
           - /data
       - group: apps
-        kind: Deployment
+        kind: DaemonSet
         name: authelia
         jsonPointers:
           - /spec/template/metadata/annotations/authelia.com~1checksum-secret
