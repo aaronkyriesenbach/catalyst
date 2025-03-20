@@ -23,3 +23,4 @@ apps:
   - name: transmission
   - name: calibre-web-automated
     namespace: cwa
+  - name: dynamic-dns
