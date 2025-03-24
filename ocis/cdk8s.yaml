@@ -1,0 +1,3 @@
+language: typescript
+imports:
+  - helm:https://jacobcolvin.com/helm-charts/ocis@0.7.0

@@ -24,3 +24,5 @@ apps:
   - name: calibre-web-automated
     namespace: cwa
   - name: dynamic-dns
+  - name: ocis
+    targetRevision: feat/ocis
