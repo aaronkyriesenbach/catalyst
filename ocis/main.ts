@@ -24,6 +24,10 @@ export class OCIS extends Chart {
       releaseName: "ocis",
       values: {
         externalDomain: "ocis.lab53.net",
+        insecure: {
+          oidcIdpInsecure: true,
+          ocisHttpApiInsecure: true
+        },
         secretRefs: {
           adminUserSecretRef: adminPass.name,
         },
