@@ -7,7 +7,9 @@ apps:
   - name: immich
   - name: ladder
   - name: lldap
+    targetRevision: feat/ocis
   - name: authelia
+    targetRevision: feat/ocis
     ignoreDifferences:
       - kind: Secret
         name: authelia

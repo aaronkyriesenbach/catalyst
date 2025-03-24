@@ -4,93 +4,120 @@ import { Construct } from "npm:constructs";
 import { Chart } from "npm:cdk8s";
 import { AppProps } from "../shared/AppProps.ts";
 import { getPodSpec } from "../shared/Pod.ts";
+import GeneratedPassword from "../shared/GeneratedPassword.ts";
 
 export class LLDAPBootstrap extends Chart {
-    constructor(scope: Construct, id: string) {
-        super(scope, id);
+  constructor(scope: Construct, id: string) {
+    super(scope, id);
 
-        const emptyConfigMap = new KubeConfigMap(
-            this,
-            "emptycm",
-            {
-                metadata: {
-                    name: "empty-config"
-                },
-                data: {
-                    "empty.json": "{}"
-                }
-            }
-        );
+    const emptyConfigMap = new KubeConfigMap(
+      this,
+      "emptycm",
+      {
+        metadata: {
+          name: "empty-config",
+        },
+        data: {
+          "empty.json": "{}",
+        },
+      },
+    );
 
-        const emptyVolumeMounts = [
-            "/bootstrap/group-configs",
-            "/bootstrap/user-schemas",
-            "/bootstrap/group-schemas"
-        ].map((path): VolumeMount => ({
-            name: emptyConfigMap.name,
-            mountPath: path
-        }));
+    const emptyVolumeMounts = [
+      "/bootstrap/group-configs",
+      "/bootstrap/user-schemas",
+      "/bootstrap/group-schemas",
+    ].map((path): VolumeMount => ({
+      name: emptyConfigMap.name,
+      mountPath: path,
+    }));
 
-        const userConfigSecret = new Password(this, "user-config", {
-            metadata: {
-                name: "user-config"
+    const userConfigSecret = new Password(this, "user-config", {
+      metadata: {
+        name: "user-config",
+      },
+      spec: {
+        secretTemplate: {
+          type: "Opaque",
+          stringData: {
+            password: "$(value)",
+            "user.json": Deno.readTextFileSync("user.json"),
+          },
+        },
+      },
+    });
+
+    const ocisUserConfigSecret = new GeneratedPassword(
+      this,
+      "ocis-user-secret",
+      {
+        name: "ocis-user-secret",
+        exportNamespaces: ["ocis"],
+        secretTemplate: {
+          type: "Opaque",
+          stringData: {
+            password: "$(value)",
+            "ocis-user.json": Deno.readTextFileSync("ocis-user.json"),
+            "reva-ldap-bind-password": "$(value)",
+          },
+        },
+      },
+    );
+
+    const bootstrapAppProps: AppProps = {
+      appName: "lldap-bootstrap",
+      podRestartPolicy: "OnFailure",
+      containers: [{
+        name: "lldap-bootstrap",
+        image: "lldap/lldap:stable",
+        command: ["/app/bootstrap.sh"],
+        env: [
+          {
+            name: "LLDAP_URL",
+            value: "http://lldap:17170",
+          },
+          {
+            name: "LLDAP_ADMIN_PASSWORD",
+            valueFrom: {
+              secretKeyRef: {
+                name: "admin-pass",
+                key: "password",
+              },
             },
-            spec: {
-                secretTemplate: {
-                    type: "Opaque",
-                    stringData: {
-                        password: "$(value)",
-                        "user.json": Deno.readTextFileSync("user.json")
-                    }
-                }
-            }
-        });
+          },
+          {
+            name: "DO_CLEANUP",
+            value: "true",
+          },
+        ],
+        volumeMounts: [{
+          name: userConfigSecret.name,
+          mountPath: "/bootstrap/user-configs/aaron-user.json",
+          subPath: "user.json",
+        }, {
+          name: ocisUserConfigSecret.name,
+          mountPath: "/bootstrap/user-configs/ocis-user.json",
+          subPath: "ocis-user.json",
+        }, ...emptyVolumeMounts],
+      }],
+      volumes: [
+        {
+          name: userConfigSecret.name,
+          secret: { secretName: userConfigSecret.name },
+        },
+        {
+          name: ocisUserConfigSecret.name,
+          secret: { secretName: ocisUserConfigSecret.name },
+        },
+        {
+          name: emptyConfigMap.name,
+          configMap: {
+            name: emptyConfigMap.name,
+          },
+        },
+      ],
+    };
 
-        const bootstrapAppProps: AppProps = {
-            appName: "lldap-bootstrap",
-            podRestartPolicy: "OnFailure",
-            containers: [{
-                name: "lldap-bootstrap",
-                image: "lldap/lldap:stable",
-                command: ["/app/bootstrap.sh"],
-                env: [
-                    {
-                        name: "LLDAP_URL",
-                        value: "http://lldap:17170"
-                    },
-                    {
-                        name: "LLDAP_ADMIN_PASSWORD",
-                        valueFrom: {
-                            secretKeyRef: {
-                                name: "admin-pass",
-                                key: "password"
-                            }
-                        }
-                    },
-                    {
-                        name: "DO_CLEANUP",
-                        value: "true"
-                    }
-                ],
-                volumeMounts: [{
-                    name: userConfigSecret.name,
-                    mountPath: "/bootstrap/user-configs"
-                }, ...emptyVolumeMounts]
-            }],
-            volumes: [
-                {
-                    name: userConfigSecret.name,
-                    secret: { secretName: userConfigSecret.name }
-                },
-                {
-                    name: emptyConfigMap.name,
-                    configMap: {
-                        name: emptyConfigMap.name
-                    }
-                }
-            ]
-        };
-
-        new KubePod(this, "bootstrap-pod", getPodSpec(bootstrapAppProps));
-    }
+    new KubePod(this, "bootstrap-pod", getPodSpec(bootstrapAppProps));
+  }
 }

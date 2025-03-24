@@ -2,21 +2,15 @@ import { Construct } from "npm:constructs";
 import { App, Chart } from "npm:cdk8s";
 import { Ocis as OCISChart } from "./imports/ocis.ts";
 import IngressRoute from "../shared/IngressRoute.ts";
-import GeneratedPassword from "../shared/GeneratedPassword.ts";
+import SecretImport from "../shared/SecretImport.ts";
 
 export class OCIS extends Chart {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    const adminPass = new GeneratedPassword(this, "adminpass", {
-      name: "admin-pass",
-      secretTemplate: {
-        type: "Opaque",
-        stringData: {
-          password: "$(value)",
-          "user-id": crypto.randomUUID(),
-        },
-      },
+    const ldapUserSecret = new SecretImport(this, "ldap-user-secret", {
+      name: "ocis-user-secret",
+      fromNamespace: "lldap",
     });
 
     new OCISChart(this, "ocis", {
@@ -26,10 +20,39 @@ export class OCIS extends Chart {
         externalDomain: "ocis.lab53.net",
         insecure: {
           oidcIdpInsecure: true,
-          ocisHttpApiInsecure: true
+          ocisHttpApiInsecure: true,
+        },
+        features: {
+          externalUserManagement: {
+            enabled: true,
+            oidc: {
+              issuerURI: "https://auth.lab53.net",
+            },
+            ldap: {
+              writeable: false,
+              uri: "ldap://lldap.lldap:3890",
+              bindDN: "UID=ocis,OU=people,DC=lab53,DC=net",
+              user: {
+                baseDN: "OU=people,DC=lab53,DC=net",
+              },
+            },
+          },
         },
         secretRefs: {
-          adminUserSecretRef: adminPass.name,
+          ldapSecretRef: ldapUserSecret.name,
+        },
+        services: {
+          web: {
+            config: {
+              oidc: {
+                additionalValues: {
+                  webClientID:
+                    "c6206bc285517cb78fd8c827e99205a00747b3be281348ec",
+                  loginURL: "https://auth.lab53.net",
+                },
+              },
+            },
+          },
         },
       },
     });
