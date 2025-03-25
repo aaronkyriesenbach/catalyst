@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "cdk8s": "^2.69.54",
+    "constructs": "^10.4.2"
+  }
+}
