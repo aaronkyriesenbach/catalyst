@@ -27,6 +27,7 @@ export class OCIS extends Chart {
             enabled: true,
             oidc: {
               issuerURI: "https://auth.lab53.net",
+              accessTokenVerifyMethod: "none"
             },
             ldap: {
               writeable: false,
