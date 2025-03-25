@@ -1,5 +1,0 @@
-language: typescript
-app: npx ts-node main.ts
-imports:
-  - helm:https://traefik.github.io/charts/traefik@34.4.1
-  - https://github.com/traefik/traefik-helm-chart/raw/refs/heads/master/traefik/crds/traefik.io_serverstransports.yaml

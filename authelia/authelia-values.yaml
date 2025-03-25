@@ -1,0 +1,114 @@
+ingress:
+  enabled: true
+  tls:
+    enabled: true
+  traefikCRD:
+    enabled: true
+    entryPoints: [ "websecure" ]
+    tls:
+      certResolver: "letsencrypt"
+
+secret:
+  additionalSecrets:
+    admin-pass:
+      items:
+        - key: "password"
+          path: "lldap-admin-password"
+    oidc-jwk-keypair:
+      items:
+        - key: "key.pem"
+          path: "oidc-private-key"
+    session-encryption-key:
+      items:
+        - key: "password"
+          path: "encryption-key"
+    storage-encryption-key:
+      items:
+        - key: "password"
+          path: "encryption-key"
+    postgres-creds:
+      items:
+        - key: "password"
+          path: "postgres-password"
+    redis-password:
+      items:
+        - key: "redis-password"
+          path: "redis-password"
+    oidc-hmac-secret:
+      items:
+        - key: "password"
+          path: "oidc-hmac-secret"
+    jwt-hmac-secret:
+      items:
+        - key: "password"
+          path: "jwt-hmac-secret"
+
+configMap:
+  theme: "dark"
+  identity_validation:
+    reset_password:
+      secret:
+        secret_name: "jwt-hmac-secret"
+        path: "jwt-hmac-secret"
+  default_2fa_method: "totp"
+  authentication_backend:
+    ldap:
+      enabled: true,
+      implementation: "lldap"
+      address: "ldap://lldap.lldap:3890"
+      base_dn: "DC=lab53,DC=net"
+      additional_users_dn: "OU=people"
+      user: "UID=admin,OU=people,DC=lab53,DC=net"
+      password:
+        secret_name: "admin-pass"
+        path: "lldap-admin-password"
+
+  session:
+    encryption_key:
+      secret_name: "session-encryption-key"
+      path: "encryption-key"
+    cookies:
+      - subdomain: "auth"
+        domain: "lab53.net"
+    redis:
+      enabled: true
+      host: "redis-master"
+      password:
+        secret_name: "redis-password"
+        path: "redis-password"
+
+  storage:
+    encryption_key:
+      secret_name: "storage-encryption-key"
+      path: "encryption-key"
+    postgres:
+      enabled: true
+      address: "tcp://authelia-cluster-rw:5432"
+      password:
+        secret_name: "postgres-creds"
+        path: "postgres-password"
+
+  access_control:
+    rules:
+      - domain: "*.lab53.net"
+        policy: "two_factor"
+
+  notifier:
+    filesystem:
+      enabled: true
+
+  identity_providers:
+    oidc:
+      enabled: true
+      hmac_secret:
+        secret_name: "oidc-hmac-secret"
+        path: "oidc-hmac-secret"
+      jwks:
+        - key:
+            path: "/secrets/oidc-jwk-keypair/oidc-private-key"
+      clients:
+        - client_id: "tailscale"
+          client_name: "Tailscale SSO"
+          client_secret: "$pbkdf2-sha512$310000$RM0fzKMw38RxttTvALU3Tw$mWgP4QVLbQieihN99TfL8utB7VOpFof1Xfd70AoNBqlPlmxsTie9Xu53kyP/DQWMW3tZFXtZn57kKnzfW41YiQ"
+          redirect_uris: [ "https://login.tailscale.com/a/oauth_response" ]
+          scopes: [ "openid", "email", "profile" ]

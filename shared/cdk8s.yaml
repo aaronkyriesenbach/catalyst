@@ -1,6 +1,8 @@
 language: typescript
 imports:
   - k8s@1.32.0
-  - https://raw.githubusercontent.com/traefik/traefik-helm-chart/refs/heads/master/traefik-crds/crds-files/traefik/traefik.io_ingressroutes.yaml
+  - ingressroute:=https://raw.githubusercontent.com/traefik/traefik-helm-chart/refs/heads/master/traefik-crds/crds-files/traefik/traefik.io_ingressroutes.yaml
+  - middleware:=https://raw.githubusercontent.com/traefik/traefik-helm-chart/refs/heads/master/traefik-crds/crds-files/traefik/traefik.io_middlewares.yaml
+  - serverstransport:=https://github.com/traefik/traefik-helm-chart/raw/refs/heads/master/traefik-crds/crds-files/traefik/traefik.io_serverstransports.yaml
   - https://raw.githubusercontent.com/carvel-dev/secretgen-controller/refs/heads/develop/config/package-bundle/config/crds.yml
   - https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/heads/main/config/crd/bases/postgresql.cnpg.io_clusters.yaml

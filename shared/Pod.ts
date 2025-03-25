@@ -1,50 +1,63 @@
-import { KubePod, KubePodProps, Volume } from "./imports/k8s.ts";
+import { KubePod, PodSpec, Volume } from "./imports/k8s.ts";
 import { Construct } from "npm:constructs";
-import { AppProps } from "./AppProps.ts";
-import { DEFAULT_NAS_VOLUME_NAME } from "./constants.ts";
+import { NAS_VOLUME_SPEC } from "./constants.ts";
+import { injectContainers } from "./helpers.ts";
 
-export function getPodSpec(props: AppProps): KubePodProps {
+export function getPodSpec(props: PodSpecProps): PodSpec {
   const {
-    appName,
     containers,
     initContainers,
     volumes,
-    createNASVolume,
-    podRestartPolicy,
+    nasVolumeMounts,
   } = props;
 
-  const nasVolume: Volume | undefined = createNASVolume
-    ? {
-      name: (typeof createNASVolume === "string"
-        ? createNASVolume
-        : DEFAULT_NAS_VOLUME_NAME),
-      nfs: {
-        server: "192.168.4.84",
-        path: "/mnt/tank/data",
-      },
-    }
-    : undefined;
+  const createVolumes = nasVolumeMounts
+    ? [NAS_VOLUME_SPEC as Volume, ...(volumes ?? [])]
+    : volumes;
 
-  const createVolumes = nasVolume ? [nasVolume, ...(volumes ?? [])] : volumes;
+  const injectedContainers = injectContainers(containers, nasVolumeMounts);
+  const injectedInitContainers = injectContainers(
+    initContainers,
+    nasVolumeMounts,
+  );
 
   return {
-    metadata: {
-      name: appName,
-      labels: { app: appName },
-    },
-    spec: {
-      volumes: createVolumes,
-      containers: containers,
-      initContainers: initContainers,
-      restartPolicy: podRestartPolicy,
-    },
+    ...props,
+    volumes: createVolumes,
+    containers: injectedContainers!, // We know that containers will be defined because they must be defined as inputs to this function
+    initContainers: injectedInitContainers,
   };
 }
 
 export default class Pod extends KubePod {
-  constructor(scope: Construct, id: string, props: AppProps) {
-    const podSpec: KubePodProps = getPodSpec(props);
+  constructor(scope: Construct, props: PodProps) {
+    const { name, podSpecProps } = props;
 
-    super(scope, id, podSpec);
+    const podSpec = getPodSpec(podSpecProps);
+
+    super(scope, crypto.randomUUID(), {
+      metadata: {
+        name: name,
+      },
+      spec: podSpec,
+    });
   }
 }
+
+export type PodProps = {
+  name: string;
+  podSpecProps: PodSpecProps;
+};
+
+export type PodSpecProps = PodSpec & {
+  nasVolumeMounts?: NasVolumeMountMap;
+};
+
+export type NasVolumeMountMap = {
+  [containerName: string]: NasVolumeMount[];
+};
+
+export type NasVolumeMount = {
+  mountPath: string;
+  subPath?: string;
+};
