@@ -9,7 +9,7 @@ export class Plex extends Chart {
     super(scope, id);
 
     new IngressRoute(this, "ingress", {
-      appName: "plex-plex-media-server",
+      appName: "pms",
       customHostPrefix: "plex",
       customPort: 32400,
     });
@@ -18,6 +18,7 @@ export class Plex extends Chart {
       releaseName: "plex",
       namespace: "plex",
       values: {
+        fullnameOverride: "pms",
         extraEnv: {
           TZ: "America/New_York",
           HOSTNAME: "plex",
