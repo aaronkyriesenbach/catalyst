@@ -8,19 +8,11 @@ apps:
   - name: ladder
   - name: lldap
   - name: authelia
-    ignoreDifferences:
-      - kind: Secret
-        name: authelia
-        jsonPointers:
-          - /data
-      - group: apps
-        kind: DaemonSet
-        name: authelia
-        jsonPointers:
-          - /spec/template/metadata/annotations/authelia.com~1checksum-secret
   - name: traefik-external
   - name: secretgen-controller
   - name: transmission
   - name: calibre-web-automated
     namespace: cwa
   - name: dynamic-dns
+  - name: jellyfin
+  - name: argo-config

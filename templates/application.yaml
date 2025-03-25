@@ -15,7 +15,7 @@ spec:
   source:
     path: {{ default $app.name $app.path }}
     repoURL: {{ default "https://github.com/aaronkyriesenbach/catalyst" $app.repoURL }}
-    targetRevision: {{ default "HEAD" $app.targetRevision }}
+    targetRevision: {{ default "master" $app.targetRevision }}
   syncPolicy:
     syncOptions:
       - CreateNamespace=true

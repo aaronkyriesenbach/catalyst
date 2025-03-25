@@ -1,0 +1,30 @@
+deployment:
+  revisionHistoryLimit: 1
+
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      tlsChallenge: true
+      httpChallenge:
+        entryPoint: web
+      storage: /data/acme.json
+      email: aaron@kyriesenba.ch
+
+persistence:
+  enabled: true
+
+providers:
+  kubernetesCRD:
+    allowCrossNamespace: true
+
+ingressRoute:
+  dashboard:
+    enabled: true
+    matchRule: Host(`traefik.lab53.net`)
+    entryPoints:
+      - websecure
+    middlewares:
+      - name: forwardauth-authelia
+        namespace: authelia
+    tls:
+      certResolver: letsencrypt
