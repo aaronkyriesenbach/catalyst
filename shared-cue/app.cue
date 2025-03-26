@@ -1,0 +1,3 @@
+package shared
+
+#name: string
