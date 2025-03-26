@@ -1,3 +1,0 @@
-language: typescript
-imports:
-  - helm:https://raw.githubusercontent.com/plexinc/pms-docker/gh-pages/plex-media-server@0.9.1

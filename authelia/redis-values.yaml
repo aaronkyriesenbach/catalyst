@@ -1,0 +1,5 @@
+resourcesPreset: micro
+auth:
+  existingSecret: redis-password
+sentinel:
+  enabled: true

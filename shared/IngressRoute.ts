@@ -3,25 +3,24 @@ import {
   IngressRouteSpecRoutesKind,
   IngressRouteSpecRoutesMiddlewares,
   IngressRouteSpecRoutesServicesPort
-} from "./imports/traefik.io.ts";
+} from "./imports/ingressroute-traefik.io.ts";
 import { Construct } from "npm:constructs";
-import { getPorts } from "./Service.ts";
-import { AppProps } from "./AppProps.ts";
 
 export default class IngressRoute extends TraefikIngressRoute {
-  constructor(scope: Construct, id: string, props: IngressRouteProps) {
+  constructor(scope: Construct, props: IngressRouteProps) {
     const {
-      appName,
-      containers = [],
-      initContainers = [],
-      customHostPrefix,
-      useForwardAuth = true,
-      useInsecureTransport,
-      customPort,
-      middlewares,
+      name,
+      service,
+      ingressRouteSpec,
     } = props;
 
-    const ports = getPorts([...containers, ...initContainers]);
+    const {
+      customHostPrefix,
+      useForwardAuth = true,
+      useInsecureTransport = false,
+      middlewares,
+    } = ingressRouteSpec ?? {};
+
     const createMiddlewares = useForwardAuth
       ? [{
         name: "forwardauth-authelia",
@@ -29,26 +28,22 @@ export default class IngressRoute extends TraefikIngressRoute {
       }, ...(middlewares ?? [])]
       : middlewares;
 
-    super(scope, id, {
+    super(scope, crypto.randomUUID(), {
       metadata: {
-        name: `${appName ?? id}${
-          customHostPrefix ? `-${customHostPrefix}` : ""
-        }`,
+        name: name,
       },
       spec: {
         entryPoints: ["websecure"],
         routes: [{
-          match: `Host(\`${customHostPrefix ?? appName}.lab53.net\`)`,
+          match: `Host(\`${customHostPrefix ?? name}.lab53.net\`)`,
           kind: IngressRouteSpecRoutesKind.RULE,
           middlewares: createMiddlewares,
           services: [{
-            name: appName,
+            name: service.name,
             serversTransport: useInsecureTransport
               ? "traefik-insecuretransport@kubernetescrd"
               : undefined,
-            port: IngressRouteSpecRoutesServicesPort.fromNumber(
-              customPort ?? ports[0].port,
-            ),
+            port: IngressRouteSpecRoutesServicesPort.fromNumber(service.port),
           }],
         }],
         tls: {
@@ -59,8 +54,16 @@ export default class IngressRoute extends TraefikIngressRoute {
   }
 }
 
-export type IngressRouteProps = AppProps & {
-  customPort?: number;
+export type IngressRouteProps = {
+  name: string;
+  service: {
+    name: string;
+    port: number;
+  };
+  ingressRouteSpec?: IngressRouteSpec;
+};
+
+export type IngressRouteSpec = {
   customHostPrefix?: string;
   useForwardAuth?: boolean;
   useInsecureTransport?: boolean;

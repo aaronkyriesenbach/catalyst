@@ -1,0 +1,60 @@
+{
+  "version": "4",
+  "specifiers": {
+    "jsr:@eemeli/yaml@*": "2.7.1",
+    "jsr:@eemeli/yaml@^2.7.1": "2.7.1",
+    "jsr:@std/path@*": "1.0.8",
+    "jsr:@std/path@^1.0.8": "1.0.8",
+    "jsr:@std/yaml@*": "1.0.5",
+    "npm:cdk8s@*": "2.69.58_constructs@10.4.2",
+    "npm:cdk8s@^2.69.58": "2.69.58_constructs@10.4.2",
+    "npm:construct@*": "1.0.0",
+    "npm:constructs@*": "10.4.2",
+    "npm:constructs@^10.4.2": "10.4.2"
+  },
+  "jsr": {
+    "@eemeli/yaml@2.7.1": {
+      "integrity": "a06ce11988c2fe2136090add47f183a68860d5da2cd6619239a54bf0a364d327"
+    },
+    "@std/path@1.0.8": {
+      "integrity": "548fa456bb6a04d3c1a1e7477986b6cffbce95102d0bb447c67c4ee70e0364be"
+    },
+    "@std/yaml@1.0.5": {
+      "integrity": "71ba3d334305ee2149391931508b2c293a8490f94a337eef3a09cade1a2a2742"
+    }
+  },
+  "npm": {
+    "cdk8s@2.69.58_constructs@10.4.2": {
+      "integrity": "sha512-JF2xc61hxycOUWgpoUG7hlm354HEdqu5qcDoxoeoyM+FY9H/oid64BpUf+seIKbFyrlg/uKI74YxJ9TiCToyuw==",
+      "dependencies": [
+        "constructs",
+        "fast-json-patch",
+        "follow-redirects",
+        "yaml"
+      ]
+    },
+    "construct@1.0.0": {
+      "integrity": "sha512-AGU/GtcAyDLIToOmzth6/dfynQq7EJuhY4t3nK6Z8aYU+k3/SHOouD1S40q2rALxZN8glMN07jdFsMdVUpomjQ=="
+    },
+    "constructs@10.4.2": {
+      "integrity": "sha512-wsNxBlAott2qg8Zv87q3eYZYgheb9lchtBfjHzzLHtXbttwSrHPs1NNQbBrmbb1YZvYg2+Vh0Dor76w4mFxJkA=="
+    },
+    "fast-json-patch@3.1.1": {
+      "integrity": "sha512-vf6IHUX2SBcA+5/+4883dsIjpBTqmfBjmYiWK1savxQmFk4JfBMLa7ynTYOs1Rolp/T1betJxHiGD3g1Mn8lUQ=="
+    },
+    "follow-redirects@1.15.9": {
+      "integrity": "sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ=="
+    },
+    "yaml@2.7.1": {
+      "integrity": "sha512-10ULxpnOCQXxJvBgxsn9ptjq6uviG/htZKk9veJGhlqn3w/DxQ631zFF+nlQXLwmImeS5amR2dl2U8sg6U9jsQ=="
+    }
+  },
+  "workspace": {
+    "dependencies": [
+      "jsr:@eemeli/yaml@^2.7.1",
+      "jsr:@std/path@^1.0.8",
+      "npm:cdk8s@^2.69.58",
+      "npm:constructs@^10.4.2"
+    ]
+  }
+}

@@ -1,8 +1,4 @@
-import {
-  KubePersistentVolume,
-  KubePersistentVolumeClaim,
-  Quantity,
-} from "./imports/k8s.ts";
+import { KubePersistentVolume, KubePersistentVolumeClaim, Quantity } from "./imports/k8s.ts";
 import { Construct } from "npm:constructs";
 import { NAS_IP, NAS_PATH } from "./constants.ts";
 
@@ -11,7 +7,7 @@ const STORAGE_CLASS_NAME = "nfs";
 export default class NASVolume extends KubePersistentVolume {
   pvc: KubePersistentVolumeClaim;
 
-  constructor(scope: Construct, id: string, props: NASVolumeProps) {
+  constructor(scope: Construct, props: NASVolumeProps) {
     const {
       volumeName = "nas-volume",
       size = "10Gi",
@@ -22,7 +18,7 @@ export default class NASVolume extends KubePersistentVolume {
 
     const sizeQuantity: Quantity = Quantity.fromString(size);
 
-    super(scope, id, {
+    super(scope, crypto.randomUUID(), {
       metadata: {
         name: volumeName,
       },
