@@ -25,3 +25,5 @@ apps:
     namespace: cwa
   - name: dynamic-dns
   - name: plex
+  - name: ladder-cue
+    targetRevision: test/cue
