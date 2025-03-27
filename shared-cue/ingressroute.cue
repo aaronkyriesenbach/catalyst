@@ -30,5 +30,8 @@ package shared
 				port: #port
 			}]
 		}]
+		tls: {
+			certResolver: "letsencrypt"
+		}
 	}
 }
