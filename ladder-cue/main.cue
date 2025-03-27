@@ -14,6 +14,7 @@ _ladder: shared.#application & {
 		}]
 	}]
 	#webPort: 8080
+	#hostPrefix: "ladder-cue"
 }
 
 yaml.MarshalStream([for o in _ladder {o}])
