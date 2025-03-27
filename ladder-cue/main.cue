@@ -1,8 +1,8 @@
 package ladder
 
-import "lab53.net/shared-cue:shared"
+import ("lab53.net/shared-cue:shared", "encoding/yaml")
 
-ladder: shared.#application & {
+_ladder: shared.#application & {
 	#name: "ladder"
 	deployment: spec: template: spec: containers: [{
 		name:  "ladder"
@@ -15,3 +15,5 @@ ladder: shared.#application & {
 	}]
 	#webPort: 8080
 }
+
+yaml.MarshalStream([for o in _ladder {o}])
