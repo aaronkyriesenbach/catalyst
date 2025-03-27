@@ -7,7 +7,7 @@ package shared
 	#middlewares: [...{name: string, namespace?: string}] | *[]
 	_middlewares: [if #useForwardAuth == true {
 		name: "forwardauth-authelia"
-		namespaces: "authelia"
+		namespace: "authelia"
 	}, for _m in #middlewares {_m}]
 	#serviceName: string | *_n
 	#useInsecureTransport: bool | *false
