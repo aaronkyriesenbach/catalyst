@@ -19,7 +19,7 @@ package shared
 	spec: {
 		entryPoints: ["websecure"]
 		routes: [{
-			match: "`Host(\(#hostPrefix).lab53.net)`"
+			match: "Host(`\(#hostPrefix).lab53.net`)"
 			kind: "Rule"
 			middlewares: _middlewares
 			services: [{
