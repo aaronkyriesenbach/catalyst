@@ -1,17 +1,17 @@
 package shared
 
-_containerPorts: [for c in #containers for port in c {port}]
+import (
+	core_v1 "k8s.io/api/core/v1"
+)
 
-#servicespec: {
-	selector: #metadata.labels.app
-//	ports: [...{
-//		port: #webport
-//	}]
-}
+#service: core_v1.#Service & {
+	_n=#name: string
+	#expose: [...number]
 
-#service: {
 	apiVersion: "v1"
-	kind: "Service"
-	metadata: #metadata
-	spec: #servicespec
+	kind:       "Service"
+	metadata: #metadata & {#name: _n}
+	spec: {
+		ports: [for p in #expose {port: p}]
+	}
 }
