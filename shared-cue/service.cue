@@ -12,6 +12,7 @@ import (
 	kind:       "Service"
 	metadata: #metadata & {#name: _n}
 	spec: {
+		selector: app: _n
 		ports: [for p in #expose {port: p}]
 	}
 }
