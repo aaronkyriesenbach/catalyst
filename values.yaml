@@ -6,6 +6,7 @@ apps:
     serverSideApply: true
   - name: immich
   - name: ladder
+    targetRevision: test/cue
   - name: lldap
   - name: authelia
     ignoreDifferences:
@@ -25,5 +26,3 @@ apps:
     namespace: cwa
   - name: dynamic-dns
   - name: plex
-  - name: ladder-cue
-    targetRevision: test/cue
