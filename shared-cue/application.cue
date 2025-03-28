@@ -4,6 +4,7 @@ package shared
 	_n=#name: string
 	_hp=#hostPrefix: string | *_n
 	#webPort: number
+	_ufa=#useForwardAuth: bool | *true
 
 	deployment: #deployment & {
 		#name: _n
@@ -21,5 +22,6 @@ package shared
 		#name: _n
 		#hostPrefix: _hp
 		#port: #webPort
+		#useForwardAuth: _ufa
 	}
 }

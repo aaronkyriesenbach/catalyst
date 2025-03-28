@@ -21,7 +21,9 @@ package shared
 		routes: [{
 			match: "Host(`\(#hostPrefix).lab53.net`)"
 			kind: "Rule"
-			middlewares: _middlewares
+			if _middlewares != [] {
+				middlewares: _middlewares
+			}
 			services: [{
 				name: #serviceName
 				if #useInsecureTransport {

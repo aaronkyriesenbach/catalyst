@@ -1,6 +1,9 @@
 package ladder
 
-import ("lab53.net/shared-cue:shared", "encoding/yaml")
+import (
+	"lab53.net/shared-cue:shared"
+	"encoding/yaml"
+)
 
 _ladder: shared.#application & {
 	#name: "ladder"
@@ -13,7 +16,7 @@ _ladder: shared.#application & {
 			value: "https://raw.githubusercontent.com/everywall/ladder-rules/main/ruleset.yaml"
 		}]
 	}]
-	#webPort: 8080
+	#webPort:    8080
 	#hostPrefix: "ladder-cue"
 }
 

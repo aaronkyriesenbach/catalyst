@@ -26,3 +26,5 @@ apps:
     namespace: cwa
   - name: dynamic-dns
   - name: plex
+  - name: jellyfin
+    targetRevision: test/cue

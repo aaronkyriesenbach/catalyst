@@ -9,7 +9,7 @@ import (
 
 	apiVersion: "apps/v1"
 	kind:       "Deployment"
-	depMeta=metadata: #metadata & { #name: _n }
+	depMeta=metadata: #metadata & {#name: _n}
 	spec: {
 		replicas: number | *1
 		selector: {
