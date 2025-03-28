@@ -16,6 +16,14 @@ _app: shared.#application & {
 				ports: [{containerPort: 8096}]
 				volumeMounts: [{
 					name:      shared.#NAS_VOLUME_NAME
+					mountPath: "/config"
+					subPath:   "jellyfin/config"
+				}, {
+					name:      shared.#NAS_VOLUME_NAME
+					mountPath: "/cache"
+					subPath:   "jellyfin/cache"
+				}, {
+					name:      shared.#NAS_VOLUME_NAME
 					mountPath: "/movies"
 					subPath:   "movies"
 				}, {
@@ -24,7 +32,7 @@ _app: shared.#application & {
 					subPath:   "tv"
 				}]
 			}]}}
-	#webPort: 8096
+	#webPort:        8096
 	#useForwardAuth: false
 }
 
