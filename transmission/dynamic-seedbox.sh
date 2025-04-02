@@ -4,6 +4,8 @@ config_dir=${CONFIG_DIR:-/config}
 last_run_file=$config_dir/mam.last-update
 cookie_file=$config_dir/mam.cookies
 
+sleep 30 # Allow time for VPN to connect before first run
+
 while true; do
   if ! test -f $last_run_file; then
     last_run_time=0
