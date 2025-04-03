@@ -2,12 +2,11 @@ import { Construct } from "npm:constructs";
 import { Chart } from "npm:cdk8s";
 import ConfigPVC from "../shared/ConfigPVC.ts";
 import { KubeNamespace } from "../shared/imports/k8s.ts";
-import GeneratedPassword from "../shared/GeneratedPassword.ts";
 import { Lab53App, readTextFileSync } from "../shared/helpers.ts";
 import Application from "../shared/Application.ts";
+// import { Reader } from "./reader.ts";
+import ConfigMap from "../shared/ConfigMap.ts";
 import { getTransmissionPodSpec } from "./constants.ts";
-import { Reader } from "./reader.ts";
-import { PodSpecProps } from "../shared/Pod.ts";
 
 export class Writer extends Chart {
   constructor(scope: Construct, id: string) {
@@ -23,38 +22,19 @@ export class Writer extends Chart {
     });
 
     const writerConfig = new ConfigPVC(this, { name: "writer-config" });
-    const writerGluetunConfig = new GeneratedPassword(
-      this,
-      {
-        name: "writer-gluetun-config",
-        secretTemplate: {
-          type: "Opaque",
-          stringData: {
-            "config.toml": readTextFileSync("gluetun-role-config.toml"),
-            key: "$(value)",
-          },
-        },
+    new ConfigMap(this, {
+      name: "port-forward-script",
+      data: {
+        "update-port.sh": readTextFileSync("update-port.sh"),
       },
-    );
-
-    const baseWriterSpec = getTransmissionPodSpec(
-      writerConfig.name,
-      writerGluetunConfig.name,
-    );
-
-    const writerPodSpec: PodSpecProps = {
-      ...baseWriterSpec,
-      nasVolumeMounts: {
-        transmission: [{
-          mountPath: "/downloads",
-          subPath: "downloads"
-        }]
-      }
-    }
+    });
 
     new Application(this, {
       name: "writer",
-      podSpecProps: writerPodSpec,
+      podSpecProps: getTransmissionPodSpec(
+        writerConfig.name,
+        "proton-openvpn-creds",
+      ),
       webPort: 9091,
       ingressRouteSpec: {
         useInsecureTransport: true,
@@ -65,5 +45,5 @@ export class Writer extends Chart {
 
 const app = new Lab53App();
 new Writer(app, "writer");
-new Reader(app, "reader");
+// new Reader(app, "reader");
 app.synth();
