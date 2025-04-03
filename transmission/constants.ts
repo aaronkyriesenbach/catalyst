@@ -15,6 +15,11 @@ export function getTransmissionPodSpec(
       secret: {
         secretName: protonSecretName,
       },
+    }, {
+      name: "port-forward-script",
+      configMap: {
+        name: "port-forward-script",
+      },
     }],
     nasVolumeMounts: {
       "transmission-openvpn": [{
@@ -23,7 +28,7 @@ export function getTransmissionPodSpec(
       }],
     },
     securityContext: {
-      fsGroup: 1000
+      fsGroup: 1000,
     },
     containers: [{
       name: "transmission-openvpn",
@@ -31,7 +36,7 @@ export function getTransmissionPodSpec(
       securityContext: {
         capabilities: {
           add: ["NET_ADMIN"],
-        }
+        },
       },
       ports: [{ containerPort: 9091, name: "web" }],
       env: [{
@@ -55,15 +60,29 @@ export function getTransmissionPodSpec(
         },
       }, {
         name: "PGID",
-        value: "1000"
+        value: "1000",
       }],
       volumeMounts: [{
         name: "config",
         mountPath: "/config",
       }, {
         name: "vpn-creds",
-        mountPath: "/etc/openvpn/custom",
+        mountPath: "/creds",
+      }, {
+        name: "port-forward-script",
+        mountPath: "/portforward",
       }],
+      lifecycle: {
+        postStart: {
+          exec: {
+            command: [
+              "/bin/sh",
+              "-c",
+              "cp /creds/default.ovpn /etc/openvpn/custom/default.ovpn && cp /portforward/update-port.sh /etc/openvpn/custom/update-port.sh",
+            ],
+          },
+        },
+      },
     }],
   };
 }
