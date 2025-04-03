@@ -3,15 +3,17 @@ import { Construct } from "npm:constructs";
 import ConfigPVC from "../shared/ConfigPVC.ts";
 import ConfigMap from "../shared/ConfigMap.ts";
 import { readTextFileSync } from "../shared/helpers.ts";
+import { LifecycleHandler } from "../shared/imports/k8s.ts";
 
 export default class TransmissionApp extends Application {
   constructor(scope: Construct, props: TransmissionAppProps) {
-    const { name, protonSecretName, downloadSubpath } = props;
+    const { name, protonSecretName, downloadSubpath, postStartHook } = props;
 
-    const portForwardCM = new ConfigMap(scope, {
-      name: `${name}-port-forward-script`,
+    const scriptsCM = new ConfigMap(scope, {
+      name: `${name}-scripts`,
       data: {
         "update-port.sh": readTextFileSync("update-port.sh"),
+        "update-seedbox.sh": readTextFileSync("update-seedbox.sh"),
       },
     });
 
@@ -37,9 +39,9 @@ export default class TransmissionApp extends Application {
             secretName: protonSecretName,
           },
         }, {
-          name: portForwardCM.name,
+          name: scriptsCM.name,
           configMap: {
-            name: portForwardCM.name,
+            name: scriptsCM.name,
           },
         }, {
           name: vpnPVC.name,
@@ -92,6 +94,11 @@ export default class TransmissionApp extends Application {
             name: vpnPVC.name,
             mountPath: "/etc/openvpn/custom",
           }],
+          lifecycle: postStartHook
+            ? {
+              postStart: postStartHook,
+            }
+            : undefined,
         }],
         initContainers: [{
           name: "copy-openvpn-config",
@@ -99,13 +106,13 @@ export default class TransmissionApp extends Application {
           command: [
             "/bin/sh",
             "-c",
-            "cp /openvpn/ma.ovpn /pvc/default.ovpn && cp /portforwarding/update-port.sh /pvc/update-port.sh && chmod +x /pvc/update-port.sh",
+            "cp /openvpn/ma.ovpn /pvc/default.ovpn && cp /portforwarding/*.sh /pvc/ && chmod +x /pvc/*.sh",
           ],
           volumeMounts: [{
             name: protonSecretName,
             mountPath: "/openvpn",
           }, {
-            name: portForwardCM.name,
+            name: scriptsCM.name,
             mountPath: "/portforwarding",
           }, {
             name: vpnPVC.name,
@@ -122,4 +129,5 @@ export type TransmissionAppProps = {
   name: string;
   protonSecretName: string;
   downloadSubpath: string;
+  postStartHook?: LifecycleHandler;
 };

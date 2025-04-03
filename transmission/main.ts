@@ -22,6 +22,17 @@ export class Transmission extends Chart {
       protonSecretName: "proton-openvpn-creds",
       downloadSubpath: "downloads",
     });
+
+    new TransmissionApp(this, {
+      name: "reader",
+      protonSecretName: "proton-openvpn-creds",
+      downloadSubpath: "downloads/reader",
+      postStartHook: {
+        exec: {
+          command: ["/bin/sh", "/etc/openvpn/custom/update-seedbox.sh"],
+        },
+      },
+    });
   }
 }
 
