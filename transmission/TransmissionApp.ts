@@ -81,6 +81,9 @@ export default class TransmissionApp extends Application {
                 key: "password",
               },
             },
+          }, {
+            name: "OPENVPN_OPTS",
+            value: "--inactive 3600 --ping 10 --ping-exit 60",
           }],
           volumeMounts: [{
             name: configPVC.name,
