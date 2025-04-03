@@ -28,12 +28,14 @@ export class Writer extends Chart {
         "update-port.sh": readTextFileSync("update-port.sh"),
       },
     });
+    const openvpnPVC = new ConfigPVC(this, { name: "openvpn-config" });
 
     new Application(this, {
       name: "writer",
       podSpecProps: getTransmissionPodSpec(
         writerConfig.name,
         "proton-openvpn-creds",
+        openvpnPVC.name,
       ),
       webPort: 9091,
       ingressRouteSpec: {

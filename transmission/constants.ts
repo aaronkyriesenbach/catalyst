@@ -3,6 +3,7 @@ import { PodSpecProps } from "../shared/Pod.ts";
 export function getTransmissionPodSpec(
   configPVCName: string,
   protonSecretName: string,
+  openvpnPVCName: string,
 ): PodSpecProps {
   return {
     volumes: [{
@@ -19,6 +20,11 @@ export function getTransmissionPodSpec(
       name: "port-forward-script",
       configMap: {
         name: "port-forward-script",
+      },
+    }, {
+      name: openvpnPVCName,
+      persistentVolumeClaim: {
+        claimName: openvpnPVCName,
       },
     }],
     nasVolumeMounts: {
@@ -58,31 +64,33 @@ export function getTransmissionPodSpec(
             key: "password",
           },
         },
-      }, {
-        name: "PGID",
-        value: "1000",
       }],
       volumeMounts: [{
         name: "config",
         mountPath: "/config",
       }, {
+        name: openvpnPVCName,
+        mountPath: "/etc/openvpn/custom",
+      }],
+    }],
+    initContainers: [{
+      name: "copy-openvpn-config",
+      image: "busybox:stable",
+      command: [
+        "/bin/sh",
+        "-c",
+        "cp /openvpn/default.ovpn /pvc/default.ovpn && cp /portforwarding/update-port.sh /pvc/update-port.sh",
+      ],
+      volumeMounts: [{
         name: "vpn-creds",
-        mountPath: "/creds",
+        mountPath: "/openvpn",
       }, {
         name: "port-forward-script",
-        mountPath: "/portforward",
+        mountPath: "/portforwarding",
+      }, {
+        name: openvpnPVCName,
+        mountPath: "/pvc",
       }],
-      lifecycle: {
-        postStart: {
-          exec: {
-            command: [
-              "/bin/sh",
-              "-c",
-              "cp /creds/default.ovpn /etc/openvpn/custom/default.ovpn && cp /portforward/update-port.sh /etc/openvpn/custom/update-port.sh",
-            ],
-          },
-        },
-      },
     }],
   };
 }
