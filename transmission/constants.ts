@@ -79,7 +79,7 @@ export function getTransmissionPodSpec(
       command: [
         "/bin/sh",
         "-c",
-        "cp /openvpn/default.ovpn /pvc/default.ovpn && cp /portforwarding/update-port.sh /pvc/update-port.sh",
+        "cp /openvpn/default.ovpn /pvc/default.ovpn && cp /portforwarding/update-port.sh /pvc/update-port.sh && chmod +x /pvc/update-port.sh",
       ],
       volumeMounts: [{
         name: "vpn-creds",
