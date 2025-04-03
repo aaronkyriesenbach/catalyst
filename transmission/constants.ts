@@ -22,13 +22,16 @@ export function getTransmissionPodSpec(
         subPath: "downloads",
       }],
     },
+    securityContext: {
+      fsGroup: 1000
+    },
     containers: [{
       name: "transmission-openvpn",
       image: "haugene/transmission-openvpn:5.3.1",
       securityContext: {
         capabilities: {
           add: ["NET_ADMIN"],
-        },
+        }
       },
       ports: [{ containerPort: 9091, name: "web" }],
       env: [{
@@ -50,6 +53,9 @@ export function getTransmissionPodSpec(
             key: "password",
           },
         },
+      }, {
+        name: "PGID",
+        value: "1000"
       }],
       volumeMounts: [{
         name: "config",
