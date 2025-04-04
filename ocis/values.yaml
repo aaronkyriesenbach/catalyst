@@ -12,6 +12,7 @@ features:
       issuerURI: "https://auth.lab53.net"
       accessTokenVerifyMethod: "none" # Authelia does not issue JWT-based access tokens
       userIDClaim: "email"
+      userIDClaimAttributeMapping: "mail"
     ldap:
       writeable: false
       uri: "ldap://lldap.lldap:3890"
