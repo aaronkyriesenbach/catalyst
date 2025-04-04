@@ -22,7 +22,7 @@ metadata:
   name: auth-service
   labels:
 data:
-  service-account-id: "c5bb9230-86a8-4998-96a7-cfadb5c706ff"
+  service-account-id: "3f6a3ea1-21be-475b-bfb0-4c6f2050c3d5"
 ---
 # Source: ocis/templates/frontend/config.yaml
 apiVersion: v1
@@ -46,7 +46,7 @@ metadata:
   name: graph
   labels:
 data:
-  application-id: "4ed85de2-35d8-43fc-9efb-08a2bb70fee7"
+  application-id: "c0af02c5-ba00-4f74-ad27-50dae16d6e51"
 ---
 # Source: ocis/templates/proxy/config.yaml
 apiVersion: v1
@@ -124,7 +124,7 @@ metadata:
   name: storage-users
   labels:
 data:
-  storage-uuid: "161d318b-a00a-486f-ab20-5abd5d8606ff"
+  storage-uuid: "d25d39fc-2a9a-49c1-8ec5-05f0b84cc942"
 ---
 # Source: ocis/templates/web/config.yaml
 apiVersion: v1
@@ -3198,7 +3198,7 @@ spec:
               value: "true"
 
             - name: PROXY_USER_OIDC_CLAIM
-              value: "id"
+              value: "email"
             - name: PROXY_USER_CS3_CLAIM
               value: "userid"
 
