@@ -1,3 +1,4 @@
+---
 # Source: ocis/templates/appregistry/config.yaml
 apiVersion: v1
 kind: ConfigMap
@@ -21,7 +22,7 @@ metadata:
   name: auth-service
   labels:
 data:
-  service-account-id: "22fe37b2-ddcf-4c22-92d4-ffc590a828a2"
+  service-account-id: "e3c36987-5277-441d-b170-39f276c3ecef"
 ---
 # Source: ocis/templates/frontend/config.yaml
 apiVersion: v1
@@ -45,7 +46,7 @@ metadata:
   name: graph
   labels:
 data:
-  application-id: "037d9534-34e2-4953-a73b-6e387d4828cc"
+  application-id: "3c8c0641-34c3-4d97-b860-d7b2530c1f1c"
 ---
 # Source: ocis/templates/proxy/config.yaml
 apiVersion: v1
@@ -123,7 +124,7 @@ metadata:
   name: storage-users
   labels:
 data:
-  storage-uuid: "40c7254f-524f-4791-a0de-96c98ee8cf13"
+  storage-uuid: "28dd6249-5b53-4a3e-9547-8cb3e4d7f403"
 ---
 # Source: ocis/templates/web/config.yaml
 apiVersion: v1
@@ -3202,7 +3203,7 @@ spec:
               value: "userid"
 
             - name: PROXY_OIDC_ACCESS_TOKEN_VERIFY_METHOD
-              value: "jwt"
+              value: "none"
 
             - name: PROXY_OIDC_SKIP_USER_INFO
               value: "false"
