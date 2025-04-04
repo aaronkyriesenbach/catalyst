@@ -231,7 +231,7 @@ data:
             use: 'sig'
             key: {{ secret "/secrets/oidc-jwk-keypair/oidc-private-key" | mindent 10 "|" | msquote }}
         cors:
-          allowed_origins_from_client_redirect_uris: false
+          allowed_origins_from_client_redirect_uris: true
         clients:
           - client_id: 'tailscale'
             client_name: 'Tailscale SSO'
@@ -407,7 +407,7 @@ spec:
         app.kubernetes.io/managed-by: Helm
         helm.sh/chart: authelia-0.10.4
       annotations:
-        authelia.com/checksum-config: 969662ebf95ab923965f350331527a3b797647a36980697117708bfef11b0ada
+        authelia.com/checksum-config: aa1c372e5819c2c4ed7227c1df290c7d95d11aaeb5db181552f2e0b840e82e98
         authelia.com/checksum-secret: e840301a49a6e60da06d51b8fb7aba2c021117a2d2911fa8c92d758f9259fc1d
     spec:
       hostNetwork: false
