@@ -1,0 +1,54 @@
+externalDomain: "ocis.lab53.net"
+
+logging:
+  level: debug
+  pretty: true
+  color: true
+
+insecure:
+  oidcIdpInsecure: true
+  ocisHttpApiInsecure: true
+
+features:
+  externalUserManagement:
+    enabled: true
+    adminUUID: "8a3bc66d-b738-3cdc-9108-f9b0dd90ff1d"
+    oidc:
+      issuerURI: "https://auth.lab53.net"
+      accessTokenVerifyMethod: "none" # Authelia does not issue JWT-based access tokens
+      userIDClaim: "email"
+      userIDClaimAttributeMapping: "mail"
+    ldap:
+      writeable: false
+      uri: "ldap://lldap.lldap:3890"
+      bindDN: "UID=ocis,OU=people,DC=lab53,DC=net"
+      user:
+        schema:
+          id: uuid
+          userName: user_id
+        baseDN: "OU=people,DC=lab53,DC=net"
+        objectClass: person
+      group:
+        schema:
+          id: uuid
+          displayName: display_name
+          groupName: display_name
+        baseDN: "OU=groups,DC=lab53,DC=net"
+
+secretRefs:
+  ldapSecretRef: "ocis-user-config"
+  machineAuthApiKeySecretRef: "machine-auth-api-key"
+  serviceAccountSecretRef: "service-account-secret"
+  jwtSecretRef: "jwt-secret"
+  storagesystemJwtSecretRef: "storage-system-jwt-secret"
+  transferSecretSecretRef: "transfer-secret"
+  thumbnailsSecretRef: "thumbnails-transfer-secret"
+  collaborationWopiSecret: "collaboration-wopi-secret"
+  storagesystemSecretRef: "storage-system-secret"
+
+services:
+  web:
+    config:
+      oidc:
+        webClientID: "c6206bc285517cb78fd8c827e99205a00747b3be281348ec"
+        loginURL: "https://ocis.lab53.net"

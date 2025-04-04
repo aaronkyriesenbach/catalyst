@@ -7,7 +7,13 @@ import { LifecycleHandler } from "../shared/imports/k8s.ts";
 
 export default class TransmissionApp extends Application {
   constructor(scope: Construct, props: TransmissionAppProps) {
-    const { name, protonSecretName, downloadSubpath, postStartHook } = props;
+    const {
+      name,
+      protonSecretName,
+      downloadSubpath,
+      transmissionPasswordSecret,
+      postStartHook,
+    } = props;
 
     const scriptsCM = new ConfigMap(scope, {
       name: `${name}-scripts`,
@@ -86,6 +92,14 @@ export default class TransmissionApp extends Application {
           }, {
             name: "OPENVPN_OPTS",
             value: "--inactive 3600 --ping 10 --ping-exit 60",
+          }, {
+            name: "TRANSMISSION_RPC_PASSWORD",
+            valueFrom: {
+              secretKeyRef: {
+                name: transmissionPasswordSecret,
+                key: "password",
+              },
+            },
           }],
           volumeMounts: [{
             name: configPVC.name,
@@ -129,5 +143,6 @@ export type TransmissionAppProps = {
   name: string;
   protonSecretName: string;
   downloadSubpath: string;
+  transmissionPasswordSecret: string;
   postStartHook?: LifecycleHandler;
 };

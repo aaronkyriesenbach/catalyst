@@ -7,7 +7,9 @@ apps:
   - name: immich
   - name: ladder
   - name: lldap
+    targetRevision: feat/ocis
   - name: authelia
+    targetRevision: feat/ocis
   - name: traefik-external
   - name: secretgen-controller
   - name: transmission
@@ -29,3 +31,5 @@ apps:
         name: addresspools.metallb.io
         jsonPointers:
           - /spec/conversion/webhook/clientConfig/caBundle
+  - name: ocis
+    targetRevision: feat/ocis
