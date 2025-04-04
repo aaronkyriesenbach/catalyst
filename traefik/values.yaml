@@ -1,6 +1,10 @@
 deployment:
   revisionHistoryLimit: 1
 
+#service:
+#  spec:
+#    externalTrafficPolicy: Local # TODO: Figure out why this breaks configuration
+
 certificatesResolvers:
   letsencrypt:
     acme:
@@ -9,6 +13,10 @@ certificatesResolvers:
         entryPoint: web
       storage: /data/acme.json
       email: aaron@kyriesenba.ch
+
+logs:
+  access:
+    enabled: true
 
 persistence:
   enabled: true

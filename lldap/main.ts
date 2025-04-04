@@ -1,14 +1,57 @@
 import { Construct } from "npm:constructs";
 import { Chart } from "npm:cdk8s";
 import GeneratedPassword from "../shared/GeneratedPassword.ts";
-import { EnvVar } from "../shared/imports/k8s.ts";
-import { LLDAPBootstrap } from "./bootstrap.ts";
-import { Lab53App } from "../shared/helpers.ts";
+import { EnvVar, VolumeMount } from "../shared/imports/k8s.ts";
+import { Lab53App, readTextFileSync } from "../shared/helpers.ts";
 import Application from "../shared/Application.ts";
+import ConfigMap from "../shared/ConfigMap.ts";
 
 export class LLDAP extends Chart {
   constructor(scope: Construct, id: string) {
     super(scope, id);
+
+    const emptyConfigMap = new ConfigMap(
+      this,
+      {
+        name: "empty-config",
+        data: {
+          "empty.json": "{}",
+        },
+      },
+    );
+
+    const emptyVolumeMounts = [
+      "/bootstrap/group-configs",
+      "/bootstrap/user-schemas",
+      "/bootstrap/group-schemas",
+    ].map((path): VolumeMount => ({
+      name: emptyConfigMap.name,
+      mountPath: path,
+    }));
+
+    const userConfigSecret = new GeneratedPassword(this, {
+      name: "aaron-user-config",
+      secretTemplate: {
+        type: "Opaque",
+        stringData: {
+          password: "$(value)",
+          "aaron-user.json": readTextFileSync("aaron-user.json"),
+        },
+      },
+    });
+
+    const ocisUserSecret = new GeneratedPassword(this, {
+      name: "ocis-user-config",
+      exportNamespaces: ["ocis"],
+      secretTemplate: {
+        type: "Opaque",
+        stringData: {
+          password: "$(value)",
+          "ocis-user.json": readTextFileSync("ocis-user.json"),
+          "reva-ldap-bind-password": "$(value)",
+        },
+      },
+    });
 
     // ENV_VAR_NAME: secret_spec
     const secrets = new Map(Object.entries({
@@ -58,7 +101,59 @@ export class LLDAP extends Chart {
             },
             ...secretEnvVars,
           ],
+        }, {
+          name: "lldap-bootstrap",
+          image: "lldap/lldap:stable",
+          command: [
+            "/bin/bash",
+            "-c",
+            "/app/bootstrap.sh && echo 'Bootstrap complete, sleeping' && while true; do sleep 1000; done",
+          ],
+          env: [
+            {
+              name: "LLDAP_URL",
+              value: "http://lldap:17170",
+            },
+            {
+              name: "LLDAP_ADMIN_PASSWORD",
+              valueFrom: {
+                secretKeyRef: {
+                  name: "admin-pass",
+                  key: "password",
+                },
+              },
+            },
+            {
+              name: "DO_CLEANUP",
+              value: "true",
+            },
+          ],
+          volumeMounts: [{
+            name: userConfigSecret.name,
+            mountPath: "/bootstrap/user-configs/aaron-user.json",
+            subPath: "aaron-user.json",
+          }, {
+            name: ocisUserSecret.name,
+            mountPath: "/bootstrap/user-configs/ocis-user.json",
+            subPath: "ocis-user.json",
+          }, ...emptyVolumeMounts],
         }],
+        volumes: [
+          {
+            name: userConfigSecret.name,
+            secret: { secretName: userConfigSecret.name },
+          },
+          {
+            name: ocisUserSecret.name,
+            secret: { secretName: ocisUserSecret.name },
+          },
+          {
+            name: emptyConfigMap.name,
+            configMap: {
+              name: emptyConfigMap.name,
+            },
+          },
+        ],
       },
       ingressRouteSpec: {
         useForwardAuth: false,
@@ -70,5 +165,4 @@ export class LLDAP extends Chart {
 
 const app = new Lab53App();
 new LLDAP(app, "lldap");
-new LLDAPBootstrap(app, "lldap-bootstrap");
 app.synth();

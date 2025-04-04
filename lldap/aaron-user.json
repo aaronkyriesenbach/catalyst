@@ -1,5 +1,7 @@
 {
   "id": "aaron",
+  "firstName": "Aaron",
+  "lastName": "Ky-Riesenbach",
   "email": "aaron@lab53.net",
   "password": "$(value)"
 }
