@@ -90,6 +90,12 @@ configMap:
 
   access_control:
     rules:
+      - policy: bypass
+        domain:
+          - 'writer.lab53.net'
+          - 'reader.lab53.net'
+        resources:
+          - '/transmission/rpc'
       - domain: "*.lab53.net"
         policy: "two_factor"
 
@@ -100,6 +106,11 @@ configMap:
   identity_providers:
     oidc:
       enabled: true
+      cors:
+        allowed_origins_from_client_redirect_uris: true
+        endpoints:
+          - token
+          - userinfo
       hmac_secret:
         secret_name: "oidc-hmac-secret"
         path: "oidc-hmac-secret"
@@ -110,5 +121,23 @@ configMap:
         - client_id: "tailscale"
           client_name: "Tailscale SSO"
           client_secret: "$pbkdf2-sha512$310000$RM0fzKMw38RxttTvALU3Tw$mWgP4QVLbQieihN99TfL8utB7VOpFof1Xfd70AoNBqlPlmxsTie9Xu53kyP/DQWMW3tZFXtZn57kKnzfW41YiQ"
-          redirect_uris: [ "https://login.tailscale.com/a/oauth_response" ]
-          scopes: [ "openid", "email", "profile" ]
+          redirect_uris:
+            - "https://login.tailscale.com/a/oauth_response"
+          scopes:
+            - "openid"
+            - "email"
+            - "profile"
+        - client_id: "c6206bc285517cb78fd8c827e99205a00747b3be281348ec"
+          client_name: "ownCloud Infinite Scale"
+          public: true
+          revocation_endpoint_auth_method: none
+          introspection_endpoint_auth_method: none
+          pushed_authorization_request_endpoint_auth_method: none
+          redirect_uris:
+            - "https://ocis.lab53.net"
+            - "https://ocis.lab53.net/oidc-callback.html"
+            - "https://ocis.lab53.net/oidc-silent-redirect.html"
+          scopes:
+            - "openid"
+            - "email"
+            - "profile"
