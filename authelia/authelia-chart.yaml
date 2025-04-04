@@ -292,8 +292,7 @@ data:
             pushed_authorization_request_endpoint_auth_signing_alg: 'RS256'
           - client_id: 'c6206bc285517cb78fd8c827e99205a00747b3be281348ec'
             client_name: 'ownCloud Infinite Scale'
-            client_secret: '$pbkdf2-sha512$310000$yqBE734t.arH5qCEfsT3Jw$aYcuStJ8zaNCNVtEu9YIiTfCHCEiZMFORPqu1eL48ErGkNlqqeHpDOlUhUaPOoNMs.PdGPS1AF4.Ich6qnOgYg'
-            public: false
+            public: true
             redirect_uris:
               - 'https://ocis.lab53.net'
               - 'https://ocis.lab53.net/oidc-callback.html'
@@ -341,7 +340,7 @@ data:
             request_object_signing_alg: ''
             request_object_encryption_alg: 'none'
             request_object_encryption_enc: ''
-            token_endpoint_auth_method: 'client_secret_basic'
+            token_endpoint_auth_method: 'none'
             token_endpoint_auth_signing_alg: ''
             revocation_endpoint_auth_method: 'client_secret_basic'
             revocation_endpoint_auth_signing_alg: 'RS256'
@@ -409,7 +408,7 @@ spec:
         app.kubernetes.io/managed-by: Helm
         helm.sh/chart: authelia-0.10.4
       annotations:
-        authelia.com/checksum-config: dad03644f8e722d5a1d2b01dfb34dc0edcecf952bfde08e950ffb06237f24cc9
+        authelia.com/checksum-config: 1d9b4b74e6eed3917701fc9d04c506570c4396683cff010566629d5e11805151
         authelia.com/checksum-secret: e840301a49a6e60da06d51b8fb7aba2c021117a2d2911fa8c92d758f9259fc1d
     spec:
       hostNetwork: false

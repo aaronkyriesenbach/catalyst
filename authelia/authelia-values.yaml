@@ -122,7 +122,7 @@ configMap:
             - "profile"
         - client_id: "c6206bc285517cb78fd8c827e99205a00747b3be281348ec"
           client_name: "ownCloud Infinite Scale"
-          client_secret: "$pbkdf2-sha512$310000$yqBE734t.arH5qCEfsT3Jw$aYcuStJ8zaNCNVtEu9YIiTfCHCEiZMFORPqu1eL48ErGkNlqqeHpDOlUhUaPOoNMs.PdGPS1AF4.Ich6qnOgYg"
+          public: true
           redirect_uris:
             - "https://ocis.lab53.net"
             - "https://ocis.lab53.net/oidc-callback.html"
