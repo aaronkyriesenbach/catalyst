@@ -335,16 +335,16 @@ data:
             introspection_encrypted_response_key_id: ''
             introspection_encrypted_response_alg: ''
             introspection_encrypted_response_enc: ''
-            introspection_endpoint_auth_method: 'client_secret_basic'
+            introspection_endpoint_auth_method: 'none'
             introspection_endpoint_auth_signing_alg: 'RS256'
             request_object_signing_alg: ''
             request_object_encryption_alg: 'none'
             request_object_encryption_enc: ''
             token_endpoint_auth_method: 'none'
             token_endpoint_auth_signing_alg: ''
-            revocation_endpoint_auth_method: 'client_secret_basic'
+            revocation_endpoint_auth_method: 'none'
             revocation_endpoint_auth_signing_alg: 'RS256'
-            pushed_authorization_request_endpoint_auth_method: 'client_secret_basic'
+            pushed_authorization_request_endpoint_auth_method: 'none'
             pushed_authorization_request_endpoint_auth_signing_alg: 'RS256'
     access_control:
       default_policy: 'deny'
@@ -408,7 +408,7 @@ spec:
         app.kubernetes.io/managed-by: Helm
         helm.sh/chart: authelia-0.10.4
       annotations:
-        authelia.com/checksum-config: 1d9b4b74e6eed3917701fc9d04c506570c4396683cff010566629d5e11805151
+        authelia.com/checksum-config: b6fafc342388df14f6a956c922e0508bf6f21ee72f68fc667e522866adba3169
         authelia.com/checksum-secret: e840301a49a6e60da06d51b8fb7aba2c021117a2d2911fa8c92d758f9259fc1d
     spec:
       hostNetwork: false
