@@ -22,7 +22,7 @@ metadata:
   name: auth-service
   labels:
 data:
-  service-account-id: "e3c36987-5277-441d-b170-39f276c3ecef"
+  service-account-id: "7ab7ad30-8925-4706-afa9-91a03916d51b"
 ---
 # Source: ocis/templates/frontend/config.yaml
 apiVersion: v1
@@ -46,7 +46,7 @@ metadata:
   name: graph
   labels:
 data:
-  application-id: "3c8c0641-34c3-4d97-b860-d7b2530c1f1c"
+  application-id: "d7345ccb-9d64-47e6-b9e9-40a63c8c9240"
 ---
 # Source: ocis/templates/proxy/config.yaml
 apiVersion: v1
@@ -124,7 +124,7 @@ metadata:
   name: storage-users
   labels:
 data:
-  storage-uuid: "28dd6249-5b53-4a3e-9547-8cb3e4d7f403"
+  storage-uuid: "1edfd1a5-9941-423d-9aad-f99b597100f7"
 ---
 # Source: ocis/templates/web/config.yaml
 apiVersion: v1
@@ -3198,7 +3198,7 @@ spec:
               value: "true"
 
             - name: PROXY_USER_OIDC_CLAIM
-              value: "ocis.user.uuid"
+              value: "email"
             - name: PROXY_USER_CS3_CLAIM
               value: "userid"
 
@@ -3509,7 +3509,7 @@ spec:
             - name: SETTINGS_DEBUG_ADDR
               value: 0.0.0.0:9194
             - name: SETTINGS_ADMIN_USER_ID
-              value: 
+              value: "aaron@lab53.net"
             - name: SETTINGS_JWT_SECRET
               valueFrom:
                 secretKeyRef:
