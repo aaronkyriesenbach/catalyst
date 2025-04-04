@@ -233,6 +233,7 @@ data:
         cors:
           endpoints:
           - 'token'
+          - 'userinfo'
           allowed_origins_from_client_redirect_uris: true
         clients:
           - client_id: 'tailscale'
@@ -408,7 +409,7 @@ spec:
         app.kubernetes.io/managed-by: Helm
         helm.sh/chart: authelia-0.10.4
       annotations:
-        authelia.com/checksum-config: b6fafc342388df14f6a956c922e0508bf6f21ee72f68fc667e522866adba3169
+        authelia.com/checksum-config: c3d1149c563f1b962d625265ab86dd707de84ce33637a9a92fbbd8074314d049
         authelia.com/checksum-secret: e840301a49a6e60da06d51b8fb7aba2c021117a2d2911fa8c92d758f9259fc1d
     spec:
       hostNetwork: false

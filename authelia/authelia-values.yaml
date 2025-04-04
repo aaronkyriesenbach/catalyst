@@ -104,6 +104,7 @@ configMap:
         allowed_origins_from_client_redirect_uris: true
         endpoints:
           - token
+          - userinfo
       hmac_secret:
         secret_name: "oidc-hmac-secret"
         path: "oidc-hmac-secret"
