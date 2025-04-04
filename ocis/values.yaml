@@ -11,12 +11,14 @@ features:
     oidc:
       issuerURI: "https://auth.lab53.net"
       accessTokenVerifyMethod: "none" # Authelia does not issue JWT-based access tokens
-      userIDClaim: "mail"
+      userIDClaim: "email"
     ldap:
       writeable: false
       uri: "ldap://lldap.lldap:3890"
       bindDN: "UID=ocis,OU=people,DC=lab53,DC=net"
       user:
+        schema:
+          id: id
         baseDN: "OU=people,DC=lab53,DC=net"
 
 secretRefs:

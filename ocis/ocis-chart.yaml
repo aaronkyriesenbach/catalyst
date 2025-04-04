@@ -22,7 +22,7 @@ metadata:
   name: auth-service
   labels:
 data:
-  service-account-id: "fbe2b0cb-6768-4437-ad70-b2b1f73b5778"
+  service-account-id: "a6f8edfe-e27d-4ecf-b6c2-acdbb6642077"
 ---
 # Source: ocis/templates/frontend/config.yaml
 apiVersion: v1
@@ -46,7 +46,7 @@ metadata:
   name: graph
   labels:
 data:
-  application-id: "d6530be5-c4d4-463b-bc7c-3f52628c4a0a"
+  application-id: "00ecf2f9-4250-42b6-885d-64a6b5bd426a"
 ---
 # Source: ocis/templates/proxy/config.yaml
 apiVersion: v1
@@ -124,7 +124,7 @@ metadata:
   name: storage-users
   labels:
 data:
-  storage-uuid: "870e6c99-e77e-47b2-9aa0-1e49d6bf27f5"
+  storage-uuid: "58231a9e-767d-4c78-b833-457b448de8fb"
 ---
 # Source: ocis/templates/web/config.yaml
 apiVersion: v1
@@ -2328,7 +2328,7 @@ spec:
               value: "groupOfNames"
 
             - name: GRAPH_LDAP_USER_UID_ATTRIBUTE
-              value: "ownclouduuid"
+              value: "id"
             - name: GRAPH_LDAP_GROUP_ID_ATTRIBUTE
               value: "ownclouduuid"
 
@@ -2534,7 +2534,7 @@ spec:
               value: "groupOfNames"
 
             - name: GROUPS_LDAP_USER_SCHEMA_ID
-              value: "ownclouduuid"
+              value: "id"
             - name: GROUPS_LDAP_GROUP_SCHEMA_ID
               value: "ownclouduuid"
 
@@ -3198,7 +3198,7 @@ spec:
               value: "true"
 
             - name: PROXY_USER_OIDC_CLAIM
-              value: "mail"
+              value: "email"
             - name: PROXY_USER_CS3_CLAIM
               value: "userid"
 
@@ -4844,7 +4844,7 @@ spec:
               value: "groupOfNames"
 
             - name: USERS_LDAP_USER_SCHEMA_ID
-              value: "ownclouduuid"
+              value: "id"
             - name: USERS_LDAP_GROUP_SCHEMA_ID
               value: "ownclouduuid"
 
