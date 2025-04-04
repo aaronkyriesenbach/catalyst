@@ -1,0 +1,36 @@
+externalDomain: "ocis.lab53.net"
+
+insecure:
+  oidcIdpInsecure: true
+  ocisHttpApiInsecure: true
+
+features:
+  externalUserManagement:
+    enabled: true
+    oidc:
+      issuerURI: "https://auth.lab53.net"
+      accessTokenVerifyMethod: "none"
+    ldap:
+      writeable: false
+      uri: "ldap://lldap.lldap:3890"
+      bindDN: "UID=ocis,OU=people,DC=lab53,DC=net"
+      user:
+        baseDN: "OU=people,DC=lab53,DC=net"
+
+secretRefs:
+  ldapSecretRef: "ocis-user-config"
+  machineAuthApiKeySecretRef: "machine-auth-api-key"
+  serviceAccountSecretRef: "service-account-secret"
+  jwtSecretRef: "jwt-secret"
+  storagesystemJwtSecretRef: "storage-system-jwt-secret"
+  transferSecretSecretRef: "transfer-secret"
+  thumbnailsSecretRef: "thumbnails-transfer-secret"
+  collaborationWopiSecret: "collaboration-wopi-secret"
+  storagesystemSecretRef: "storage-system-secret"
+
+services:
+  web:
+    config:
+      oidc:
+        webClientID: "c6206bc285517cb78fd8c827e99205a00747b3be281348ec"
+        loginURL: "https://auth.lab53.net"

@@ -110,5 +110,20 @@ configMap:
         - client_id: "tailscale"
           client_name: "Tailscale SSO"
           client_secret: "$pbkdf2-sha512$310000$RM0fzKMw38RxttTvALU3Tw$mWgP4QVLbQieihN99TfL8utB7VOpFof1Xfd70AoNBqlPlmxsTie9Xu53kyP/DQWMW3tZFXtZn57kKnzfW41YiQ"
-          redirect_uris: [ "https://login.tailscale.com/a/oauth_response" ]
-          scopes: [ "openid", "email", "profile" ]
+          redirect_uris:
+            - "https://login.tailscale.com/a/oauth_response"
+          scopes:
+            - "openid"
+            - "email"
+            - "profile"
+        - client_id: "c6206bc285517cb78fd8c827e99205a00747b3be281348ec"
+          client_name: "ownCloud Infinite Scale"
+          client_secret: "$pbkdf2-sha512$310000$yqBE734t.arH5qCEfsT3Jw$aYcuStJ8zaNCNVtEu9YIiTfCHCEiZMFORPqu1eL48ErGkNlqqeHpDOlUhUaPOoNMs.PdGPS1AF4.Ich6qnOgYg"
+          redirect_uris:
+            - "https://ocis.lab53.net"
+            - "https://ocis.lab53.net/oidc-callback.html"
+            - "https://ocis.lab53.net/oidc-silent-redirect.html"
+          scopes:
+            - "openid"
+            - "email"
+            - "profile"

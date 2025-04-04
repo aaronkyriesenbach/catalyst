@@ -7,7 +7,9 @@ apps:
   - name: immich
   - name: ladder
   - name: lldap
+    targetRevision: feat/ocis
   - name: authelia
+    targetRevision: feat/ocis
   - name: traefik-external
   - name: secretgen-controller
   - name: transmission
@@ -16,3 +18,5 @@ apps:
   - name: dynamic-dns
   - name: jellyfin
   - name: argo-config
+  - name: ocis
+    targetRevision: feat/ocis
