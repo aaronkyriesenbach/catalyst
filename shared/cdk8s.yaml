@@ -6,3 +6,5 @@ imports:
   - serverstransport:=https://github.com/traefik/traefik-helm-chart/raw/refs/heads/master/traefik-crds/crds-files/traefik/traefik.io_serverstransports.yaml
   - https://raw.githubusercontent.com/carvel-dev/secretgen-controller/refs/heads/develop/config/package-bundle/config/crds.yml
   - https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/refs/heads/main/config/crd/bases/postgresql.cnpg.io_clusters.yaml
+  - ipaddresspool:=https://raw.githubusercontent.com/metallb/metallb/refs/heads/main/config/crd/bases/metallb.io_ipaddresspools.yaml
+  - l2advertisement:=https://raw.githubusercontent.com/metallb/metallb/refs/heads/main/config/crd/bases/metallb.io_l2advertisements.yaml
