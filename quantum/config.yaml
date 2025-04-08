@@ -1,0 +1,22 @@
+server:
+  baseURL: quantum.lab53.net
+  database: /database/database.db
+  externalURL: https://quantum.lab53.net
+  sources:
+    - path: "/data"
+      defaultEnabled: true
+      createUserDir: true
+
+auth:
+  signup: false
+  methods:
+    noauth: false
+    password:
+      enabled: false
+    proxy:
+      enabled: true
+      header: "Remote-User"
+      createUser: true
+
+userDefaults:
+  darkMode: true

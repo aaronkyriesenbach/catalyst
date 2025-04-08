@@ -40,19 +40,6 @@ export class LLDAP extends Chart {
       },
     });
 
-    const ocisUserSecret = new GeneratedPassword(this, {
-      name: "ocis-user-config",
-      exportNamespaces: ["ocis"],
-      secretTemplate: {
-        type: "Opaque",
-        stringData: {
-          password: "$(value)",
-          "ocis-user.json": readTextFileSync("ocis-user.json"),
-          "reva-ldap-bind-password": "$(value)",
-        },
-      },
-    });
-
     // ENV_VAR_NAME: secret_spec
     const secrets = new Map(Object.entries({
       LLDAP_LDAP_USER_PASS: {
@@ -132,20 +119,12 @@ export class LLDAP extends Chart {
             name: userConfigSecret.name,
             mountPath: "/bootstrap/user-configs/aaron-user.json",
             subPath: "aaron-user.json",
-          }, {
-            name: ocisUserSecret.name,
-            mountPath: "/bootstrap/user-configs/ocis-user.json",
-            subPath: "ocis-user.json",
-          }, ...emptyVolumeMounts],
+          }],
         }],
         volumes: [
           {
             name: userConfigSecret.name,
             secret: { secretName: userConfigSecret.name },
-          },
-          {
-            name: ocisUserSecret.name,
-            secret: { secretName: ocisUserSecret.name },
           },
           {
             name: emptyConfigMap.name,

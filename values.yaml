@@ -29,4 +29,5 @@ apps:
         name: addresspools.metallb.io
         jsonPointers:
           - /spec/conversion/webhook/clientConfig/caBundle
-  - name: ocis
+  - name: quantum
+    targetRevision: feat/quantum
