@@ -1,0 +1,7 @@
+collabora:
+  server_name: collabora.lab53.net
+  existingSecret:
+    enabled: true
+    secretName: "admin-secret"
+    usernameKey: "username"
+    passwordKey: "password"
