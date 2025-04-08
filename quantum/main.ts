@@ -25,6 +25,10 @@ export class Quantum extends Chart {
     new Application(this, {
       name: "quantum",
       podSpecProps: {
+        securityContext: {
+          runAsNonRoot: true,
+          runAsUser: 1000
+        },
         nasVolumeMounts: {
           quantum: [{
             mountPath: "/data",
