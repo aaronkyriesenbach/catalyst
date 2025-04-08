@@ -1,5 +1,6 @@
 server:
   baseURL: quantum.lab53.net
+  cacheDir: /tmp
   database: /database/database.db
   externalURL: https://quantum.lab53.net
   internalURL: https://quantum.lab53.net
