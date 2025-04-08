@@ -37,7 +37,7 @@ export class Quantum extends Chart {
         },
         containers: [{
           name: "quantum",
-          image: "gtstef/filebrowser:0.6.7-beta",
+          image: "ghcr.io/aaronkyriesenbach/filebrowser:0.6.8-beta",
           ports: [{ containerPort: 80, name: "web" }],
           env: [{
             name: "FILEBROWSER_CONFIG",
