@@ -1,6 +1,7 @@
 server:
   cacheDir: /tmp
   database: /database/database.db
+  internalURL: http://quantum
   sources:
     - path: "/data"
       config:
@@ -8,6 +9,7 @@ server:
 
 auth:
   signup: false
+  adminUsername: aaron
   methods:
     proxy:
       enabled: true
