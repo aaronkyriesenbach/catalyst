@@ -1,19 +1,14 @@
 server:
   cacheDir: /tmp
   database: /database/database.db
-  CreateUserDir: true
-  UserHomeBasePath: "/data"
   sources:
     - path: "/data"
       config:
         defaultEnabled: true
-        createUserDir: true
 
 auth:
   signup: false
-  adminUsername: aaron
   methods:
-    noauth: false
     proxy:
       enabled: true
       header: "Remote-User"
