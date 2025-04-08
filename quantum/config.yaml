@@ -3,8 +3,9 @@ server:
   database: /database/database.db
   sources:
     - path: "/data"
-      defaultEnabled: true
-      createUserDir: true
+      config:
+        defaultEnabled: true
+        createUserDir: true
 
 auth:
   signup: false
