@@ -5,6 +5,7 @@ import * as path from "jsr:@std/path";
 import { Container, VolumeMount } from "./imports/k8s.ts";
 import { NasVolumeMount, NasVolumeMountMap } from "./Pod.ts";
 import { NAS_VOLUME_NAME } from "./constants.ts";
+import { ArgoCDApplication, ArgoCDApplicationSpec } from "./ArgoCDApplication.ts";
 
 export function readTextFileSync(filename: string) {
   return Deno.readTextFileSync(
@@ -74,4 +75,21 @@ export class Lab53App extends App {
       ...props,
     });
   }
+}
+
+export function generateArgoCDApps(
+  scope: Construct,
+  overrides: { [name: string]: ArgoCDApplicationSpec },
+) {
+  const apps = Deno.readDirSync(".")
+    .filter((d) => d.isDirectory)
+    .filter((d) =>
+      d.name.substring(0, 1) !== "." && d.name !== "shared" &&
+      d.name !== "dist"
+    )
+    .map((d) => d.name);
+
+  apps.forEach((app) =>
+    new ArgoCDApplication(scope, { name: app, spec: overrides[app] })
+  );
 }
