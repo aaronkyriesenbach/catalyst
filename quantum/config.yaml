@@ -16,3 +16,7 @@ auth:
 
 userDefaults:
   darkMode: true
+
+integrations:
+  office:
+    url: https://onlyoffice.lab53.net

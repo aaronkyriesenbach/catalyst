@@ -5,6 +5,7 @@ import Application from "../shared/Application.ts";
 import ConfigMap from "../shared/ConfigMap.ts";
 import ConfigPVC from "../shared/ConfigPVC.ts";
 import { Quantity } from "../shared/imports/k8s.ts";
+import GeneratedPassword from "../shared/GeneratedPassword.ts";
 
 export class Quantum extends Chart {
   constructor(scope: Construct, id: string) {
@@ -22,12 +23,14 @@ export class Quantum extends Chart {
       size: Quantity.fromString("1Gi"),
     });
 
+    const officeSecret = new GeneratedPassword(this, { name: "office-secret" });
+
     new Application(this, {
       name: "quantum",
       podSpecProps: {
         securityContext: {
           runAsNonRoot: true,
-          runAsUser: 1000
+          runAsUser: 1000,
         },
         nasVolumeMounts: {
           quantum: [{
@@ -42,6 +45,14 @@ export class Quantum extends Chart {
           env: [{
             name: "FILEBROWSER_CONFIG",
             value: "/config/config.yaml",
+          }, {
+            name: "FILEBROWSER_ONLYOFFICE_SECRET",
+            valueFrom: {
+              secretKeyRef: {
+                name: officeSecret.name,
+                key: "password",
+              },
+            },
           }],
           volumeMounts: [{
             name: config.name,
@@ -64,6 +75,30 @@ export class Quantum extends Chart {
         }],
       },
       webPort: 80,
+    });
+
+    new Application(this, {
+      name: "onlyoffice",
+      podSpecProps: {
+        containers: [{
+          name: "onlyoffice",
+          image: "onlyoffice/documentserver:8.3.2",
+          ports: [{ containerPort: 80, name: "web" }],
+          env: [{
+            name: "JWT_SECRET",
+            valueFrom: {
+              secretKeyRef: {
+                name: officeSecret.name,
+                key: "password",
+              },
+            },
+          }],
+        }],
+      },
+      webPort: 80,
+      ingressRouteSpec: {
+        useForwardAuth: false,
+      },
     });
   }
 }
