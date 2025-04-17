@@ -1,0 +1,6 @@
+{
+  "id": "carpal",
+  "email": "carpal@lab53.net",
+  "password": "$(value)",
+  "groups": ["lldap_strict_readonly"]
+}
