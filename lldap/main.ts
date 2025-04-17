@@ -29,13 +29,26 @@ export class LLDAP extends Chart {
       mountPath: path,
     }));
 
-    const userConfigSecret = new GeneratedPassword(this, {
+    const aaronUserConfig = new GeneratedPassword(this, {
       name: "aaron-user-config",
       secretTemplate: {
         type: "Opaque",
         stringData: {
           password: "$(value)",
           "aaron-user.json": readTextFileSync("aaron-user.json"),
+        },
+      },
+    });
+
+    const carpalUserConfig = new GeneratedPassword(this, {
+      name: "carpal-user-config",
+      exportNamespaces: ["carpal"],
+      secretTemplate: {
+        type: "Opaque",
+        stringData: {
+          password: "$(value)",
+          "carpal-user.json": readTextFileSync("carpal-user.json"),
+          "config.yml": readTextFileSync("../carpal/config.yaml"),
         },
       },
     });
@@ -116,23 +129,27 @@ export class LLDAP extends Chart {
             },
           ],
           volumeMounts: [{
-            name: userConfigSecret.name,
+            name: aaronUserConfig.name,
             mountPath: "/bootstrap/user-configs/aaron-user.json",
             subPath: "aaron-user.json",
-          }],
+          }, {
+            name: carpalUserConfig.name,
+            mountPath: "/bootstrap/user-configs/carpal-user.json",
+            subPath: "carpal-user.json",
+          }, ...emptyVolumeMounts],
         }],
-        volumes: [
-          {
-            name: userConfigSecret.name,
-            secret: { secretName: userConfigSecret.name },
-          },
-          {
+        volumes: [{
+          name: aaronUserConfig.name,
+          secret: { secretName: aaronUserConfig.name },
+        }, {
+          name: carpalUserConfig.name,
+          secret: { secretName: carpalUserConfig.name },
+        }, {
+          name: emptyConfigMap.name,
+          configMap: {
             name: emptyConfigMap.name,
-            configMap: {
-              name: emptyConfigMap.name,
-            },
           },
-        ],
+        }],
       },
       ingressRouteSpec: {
         useForwardAuth: false,

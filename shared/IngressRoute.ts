@@ -16,6 +16,7 @@ export default class IngressRoute extends TraefikIngressRoute {
 
     const {
       customHostPrefix,
+      matchOverride,
       useForwardAuth = true,
       useInsecureTransport = false,
       middlewares,
@@ -35,7 +36,8 @@ export default class IngressRoute extends TraefikIngressRoute {
       spec: {
         entryPoints: ["websecure"],
         routes: [{
-          match: `Host(\`${customHostPrefix ?? name}.lab53.net\`)`,
+          match: matchOverride ??
+            `Host(\`${customHostPrefix ?? name}.lab53.net\`)`,
           kind: IngressRouteSpecRoutesKind.RULE,
           middlewares: createMiddlewares,
           services: [{
@@ -65,6 +67,7 @@ export type IngressRouteProps = {
 
 export type IngressRouteSpec = {
   customHostPrefix?: string;
+  matchOverride?: string;
   useForwardAuth?: boolean;
   useInsecureTransport?: boolean;
   middlewares?: IngressRouteSpecRoutesMiddlewares[];
