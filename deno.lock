@@ -6,8 +6,7 @@
     "jsr:@std/path@*": "1.0.8",
     "jsr:@std/path@^1.0.8": "1.0.8",
     "jsr:@std/yaml@*": "1.0.5",
-    "npm:cdk8s@*": "2.69.58_constructs@10.4.2",
-    "npm:cdk8s@^2.69.58": "2.69.58_constructs@10.4.2",
+    "npm:cdk8s@^2.69.63": "2.69.63_constructs@10.4.2",
     "npm:construct@*": "1.0.0",
     "npm:constructs@*": "10.4.2",
     "npm:constructs@^10.4.2": "10.4.2"
@@ -24,8 +23,8 @@
     }
   },
   "npm": {
-    "cdk8s@2.69.58_constructs@10.4.2": {
-      "integrity": "sha512-JF2xc61hxycOUWgpoUG7hlm354HEdqu5qcDoxoeoyM+FY9H/oid64BpUf+seIKbFyrlg/uKI74YxJ9TiCToyuw==",
+    "cdk8s@2.69.63_constructs@10.4.2": {
+      "integrity": "sha512-LJmYuJnJtwCDAFYt+oe04ADe/sf+Ho9F/L5MQTc51sSmPKICjzVZAdEVnAMndO4n3vlN/lnZiLcKDesNbLEu3w==",
       "dependencies": [
         "constructs",
         "fast-json-patch",
@@ -53,7 +52,7 @@
     "dependencies": [
       "jsr:@eemeli/yaml@^2.7.1",
       "jsr:@std/path@^1.0.8",
-      "npm:cdk8s@^2.69.58",
+      "npm:cdk8s@^2.69.63",
       "npm:constructs@^10.4.2"
     ]
   }
