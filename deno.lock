@@ -6,6 +6,7 @@
     "jsr:@std/path@*": "1.0.8",
     "jsr:@std/path@^1.0.8": "1.0.8",
     "jsr:@std/yaml@*": "1.0.5",
+    "npm:cdk8s@*": "2.69.63_constructs@10.4.2",
     "npm:cdk8s@^2.69.63": "2.69.63_constructs@10.4.2",
     "npm:construct@*": "1.0.0",
     "npm:constructs@*": "10.4.2",

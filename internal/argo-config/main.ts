@@ -1,9 +1,9 @@
 import { Chart } from "npm:cdk8s";
 import { Construct } from "npm:constructs";
 import { Lab53App } from "../../shared/helpers.ts";
-import IngressRoute from "../../shared/IngressRoute.ts";
-import Role from "../../shared/Role.ts";
-import RoleBinding from "../../shared/RoleBinding.ts";
+import IngressRoute from "../../shared/traefik/IngressRoute.ts";
+import Role from "../../shared/k8s/Role.ts";
+import RoleBinding from "../../shared/k8s/RoleBinding.ts";
 
 export class ArgoConfig extends Chart {
   constructor(scope: Construct, id: string) {

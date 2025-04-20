@@ -1,10 +1,10 @@
 import { Construct } from "npm:constructs";
 import { Chart } from "npm:cdk8s";
 import CNPGCluster from "../../shared/CNPGCluster.ts";
-import GeneratedPassword from "../../shared/GeneratedPassword.ts";
+import GeneratedPassword from "../../shared/secretgen/GeneratedPassword.ts";
 import { createResourcesFromYaml, Lab53App } from "../../shared/helpers.ts";
-import GeneratedRSAKeypair from "../../shared/GeneratedRSAKeypair.ts";
-import SecretImport from "../../shared/SecretImport.ts";
+import GeneratedRSAKeypair from "../../shared/secretgen/GeneratedRSAKeypair.ts";
+import SecretImport from "../../shared/secretgen/SecretImport.ts";
 
 export class Authelia extends Chart {
   constructor(scope: Construct, id: string) {

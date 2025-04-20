@@ -1,9 +1,9 @@
 import { Construct } from "npm:constructs";
-import { PodSpecProps } from "./Pod.ts";
+import { PodSpecProps } from "./k8s/Pod.ts";
 import { ServiceSpec } from "./imports/k8s.ts";
-import IngressRoute, { IngressRouteSpec } from "./IngressRoute.ts";
-import Deployment from "./Deployment.ts";
-import Service from "./Service.ts";
+import IngressRoute, { IngressRouteSpec } from "./traefik/IngressRoute.ts";
+import Deployment from "./k8s/Deployment.ts";
+import Service from "./k8s/Service.ts";
 
 export default class Application extends Construct {
   constructor(scope: Construct, props: ApplicationProps) {

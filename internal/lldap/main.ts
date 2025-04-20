@@ -1,10 +1,10 @@
 import { Construct } from "npm:constructs";
 import { Chart } from "npm:cdk8s";
-import GeneratedPassword from "../../shared/GeneratedPassword.ts";
+import GeneratedPassword from "../../shared/secretgen/GeneratedPassword.ts";
 import { EnvVar, VolumeMount } from "../../shared/imports/k8s.ts";
-import { Lab53App, readTextFileSync } from "../../shared/helpers.ts";
+import { Lab53App, readTextFileFromInitCwd } from "../../shared/helpers.ts";
 import Application from "../../shared/Application.ts";
-import ConfigMap from "../../shared/ConfigMap.ts";
+import ConfigMap from "../../shared/k8s/ConfigMap.ts";
 
 export class LLDAP extends Chart {
   constructor(scope: Construct, id: string) {
@@ -35,7 +35,7 @@ export class LLDAP extends Chart {
         type: "Opaque",
         stringData: {
           password: "$(value)",
-          "aaron-user.json": readTextFileSync("aaron-user.json"),
+          "aaron-user.json": readTextFileFromInitCwd("aaron-user.json"),
         },
       },
     });
@@ -47,8 +47,8 @@ export class LLDAP extends Chart {
         type: "Opaque",
         stringData: {
           password: "$(value)",
-          "carpal-user.json": readTextFileSync("carpal-user.json"),
-          "config.yml": readTextFileSync("../../external/carpal/config.yaml"),
+          "carpal-user.json": readTextFileFromInitCwd("carpal-user.json"),
+          "config.yml": readTextFileFromInitCwd("../../external/carpal/config.yaml"),
         },
       },
     });

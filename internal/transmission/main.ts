@@ -3,7 +3,7 @@ import { Chart } from "npm:cdk8s";
 import { KubeNamespace } from "../../shared/imports/k8s.ts";
 import { Lab53App } from "../../shared/helpers.ts";
 import TransmissionApp from "./TransmissionApp.ts";
-import GeneratedPassword from "../../shared/GeneratedPassword.ts";
+import GeneratedPassword from "../../shared/secretgen/GeneratedPassword.ts";
 
 export class Transmission extends Chart {
   constructor(scope: Construct, id: string) {

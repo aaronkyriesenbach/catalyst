@@ -1,8 +1,8 @@
 import { Construct } from "npm:constructs";
 import { Chart } from "npm:cdk8s";
-import IngressRoute from "../../shared/IngressRoute.ts";
+import IngressRoute from "../../shared/traefik/IngressRoute.ts";
 import CNPGCluster from "../../shared/CNPGCluster.ts";
-import GeneratedPassword from "../../shared/GeneratedPassword.ts";
+import GeneratedPassword from "../../shared/secretgen/GeneratedPassword.ts";
 import NASVolume from "../../shared/NASVolume.ts";
 import { createResourcesFromYaml, Lab53App } from "../../shared/helpers.ts";
 
@@ -28,7 +28,6 @@ export class Immich extends Chart {
       },
       passwordSecret: {
         name: postgresSecret.name,
-        key: "password",
       },
       superuser: true, // Immich requires superuser access for database administration and automatic backups
     });
