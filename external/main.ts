@@ -1,6 +1,6 @@
 import { Chart } from "npm:cdk8s";
 import { Construct } from "npm:constructs";
-import { ArgoCDApplicationSpec } from "../shared/ArgoCDApplication.ts";
+import { ArgoCDApplicationSpec } from "../shared/argocd/ArgoCDApplication.ts";
 import { generateArgoCDApps, Lab53App } from "../shared/helpers.ts";
 
 export class CatalystExternal extends Chart {

@@ -3,11 +3,11 @@ import { Construct } from "npm:constructs";
 import { parseAllDocuments } from "jsr:@eemeli/yaml";
 import * as path from "jsr:@std/path";
 import { Container, VolumeMount } from "./imports/k8s.ts";
-import { NasVolumeMount, NasVolumeMountMap } from "./Pod.ts";
+import { NasVolumeMount, NasVolumeMountMap } from "./k8s/Pod.ts";
 import { NAS_VOLUME_NAME } from "./constants.ts";
-import { ArgoCDApplication, ArgoCDApplicationSpec } from "./ArgoCDApplication.ts";
+import { ArgoCDApplication, ArgoCDApplicationSpec } from "./argocd/ArgoCDApplication.ts";
 
-export function readTextFileSync(filename: string) {
+export function readTextFileFromInitCwd(filename: string) {
   return Deno.readTextFileSync(
     path.resolve(Deno.env.get("INIT_CWD")!, filename),
   );
@@ -18,15 +18,24 @@ export function createResourcesFromYaml(
   filename: string,
   useYaml11?: boolean,
 ): ApiObject[] {
-  const resourceYaml = readTextFileSync(filename);
+  const resourceYaml = readTextFileFromInitCwd(filename);
   const resources = parseAllDocuments(
     resourceYaml,
     useYaml11 ? { version: "1.1" } : undefined,
   );
 
-  return resources.map((r) =>
-    new ApiObject(scope, crypto.randomUUID(), r.toJS())
-  );
+  const objects: ApiObject[] = [];
+  resources.forEach((r) => {
+    try {
+      const o = new ApiObject(scope, crypto.randomUUID(), r.toJS());
+      objects.push(o);
+    } catch (err) {
+      console.log(r.toJS());
+      throw err;
+    }
+  });
+
+  return objects;
 }
 
 export function getInjectedVolumeMount(
@@ -79,10 +88,9 @@ export class Lab53App extends App {
 
 export function generateArgoCDApps(
   scope: Construct,
-  subPath?: string,
-  overrides: { [name: string]: ArgoCDApplicationSpec } = {},
+  overrides: { [name: string]: ArgoCDApplicationSpec },
 ) {
-  const apps = Deno.readDirSync(Deno.env.get("INIT_CWD")!)
+  const apps = Deno.readDirSync(".")
     .filter((d) => d.isDirectory)
     .filter((d) =>
       d.name.substring(0, 1) !== "." && d.name !== "shared" &&
@@ -91,9 +99,6 @@ export function generateArgoCDApps(
     .map((d) => d.name);
 
   apps.forEach((app) =>
-    new ArgoCDApplication(scope, {
-      name: app,
-      spec: { ...overrides[app], subPath: subPath },
-    })
+    new ArgoCDApplication(scope, { name: app, spec: overrides[app] })
   );
 }

@@ -1,9 +1,9 @@
 import { Construct } from "npm:constructs";
-import { Lab53App, readTextFileSync } from "../../shared/helpers.ts";
+import { Lab53App, readTextFileFromInitCwd } from "../../shared/helpers.ts";
 import { Chart } from "npm:cdk8s";
 import Application from "../../shared/Application.ts";
-import SecretImport from "../../shared/SecretImport.ts";
-import ConfigMap from "../../shared/ConfigMap.ts";
+import SecretImport from "../../shared/secretgen/SecretImport.ts";
+import ConfigMap from "../../shared/k8s/ConfigMap.ts";
 
 export class Carpal extends Chart {
   constructor(scope: Construct, id: string) {
@@ -12,7 +12,7 @@ export class Carpal extends Chart {
     const config = new ConfigMap(this, {
       name: "config",
       data: {
-        "oidc.gotempl": readTextFileSync("oidc.gotempl"),
+        "oidc.gotempl": readTextFileFromInitCwd("oidc.gotempl"),
       },
     });
 

@@ -1,8 +1,8 @@
 import { Construct } from "npm:constructs";
 import { Chart } from "npm:cdk8s";
-import ConfigMap from "../../shared/ConfigMap.ts";
-import Deployment from "../../shared/Deployment.ts";
-import { Lab53App, readTextFileSync } from "../../shared/helpers.ts";
+import ConfigMap from "../../shared/k8s/ConfigMap.ts";
+import Deployment from "../../shared/k8s/Deployment.ts";
+import { Lab53App, readTextFileFromInitCwd } from "../../shared/helpers.ts";
 
 export class DynamicDNS extends Chart {
   constructor(scope: Construct, id: string) {
@@ -11,7 +11,7 @@ export class DynamicDNS extends Chart {
     const cm = new ConfigMap(this, {
       name: "update-dns-script",
       data: {
-        "update-dns.sh": readTextFileSync("update-dns.sh"),
+        "update-dns.sh": readTextFileFromInitCwd("update-dns.sh"),
       },
     });
 
