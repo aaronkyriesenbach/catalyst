@@ -3,9 +3,9 @@ import { Construct } from "npm:constructs";
 import { parseAllDocuments } from "jsr:@eemeli/yaml";
 import * as path from "jsr:@std/path";
 import { Container, VolumeMount } from "./imports/k8s.ts";
-import { NasVolumeMount, NasVolumeMountMap } from "./Pod.ts";
+import { NasVolumeMount, NasVolumeMountMap } from "./k8s/Pod.ts";
 import { NAS_VOLUME_NAME } from "./constants.ts";
-import { ArgoCDApplication, ArgoCDApplicationSpec } from "./ArgoCDApplication.ts";
+import { ArgoCDApplication, ArgoCDApplicationSpec } from "./argocd/ArgoCDApplication.ts";
 
 export function readTextFileSync(filename: string) {
   return Deno.readTextFileSync(
@@ -24,9 +24,18 @@ export function createResourcesFromYaml(
     useYaml11 ? { version: "1.1" } : undefined,
   );
 
-  return resources.map((r) =>
-    new ApiObject(scope, crypto.randomUUID(), r.toJS())
-  );
+  const objects: ApiObject[] = [];
+  resources.forEach((r) => {
+    try {
+      const o = new ApiObject(scope, crypto.randomUUID(), r.toJS());
+      objects.push(o);
+    } catch (err) {
+      console.log(r.toJS());
+      throw err;
+    }
+  });
+
+  return objects;
 }
 
 export function getInjectedVolumeMount(

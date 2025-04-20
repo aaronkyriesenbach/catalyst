@@ -1,5 +1,5 @@
 import { Construct } from "npm:constructs";
-import { KubeConfigMap } from "./imports/k8s.ts";
+import { KubeConfigMap } from "../imports/k8s.ts";
 
 export default class ConfigMap extends KubeConfigMap {
   constructor(scope: Construct, props: ConfigMapProps) {

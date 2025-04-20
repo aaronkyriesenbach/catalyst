@@ -1,8 +1,8 @@
 import { Chart } from "npm:cdk8s";
 import { createResourcesFromYaml, Lab53App } from "../shared/helpers.ts";
 import { Construct } from "npm:constructs";
-import IPAddressPool from "../shared/IPAddressPool.ts";
-import L2Advertisement from "../shared/L2Advertisement.ts";
+import IPAddressPool from "../shared/metallb/IPAddressPool.ts";
+import L2Advertisement from "../shared/metallb/L2Advertisement.ts";
 
 export class MetalLB extends Chart {
   constructor(scope: Construct, id: string) {

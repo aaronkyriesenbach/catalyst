@@ -1,4 +1,4 @@
-import { RsaKey } from "./imports/secretgen.k14s.io.ts";
+import { RsaKey } from "../imports/secretgen.k14s.io.ts";
 import { Construct } from "npm:constructs";
 
 export default class GeneratedRSAKeypair extends RsaKey {

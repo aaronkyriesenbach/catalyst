@@ -1,7 +1,7 @@
 import { Construct } from "npm:constructs";
 import { Chart } from "npm:cdk8s";
-import ConfigMap from "../shared/ConfigMap.ts";
-import Deployment from "../shared/Deployment.ts";
+import ConfigMap from "../shared/k8s/ConfigMap.ts";
+import Deployment from "../shared/k8s/Deployment.ts";
 import { Lab53App, readTextFileSync } from "../shared/helpers.ts";
 
 export class DynamicDNS extends Chart {

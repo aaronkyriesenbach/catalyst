@@ -1,4 +1,4 @@
-import { Application, ApplicationSpecIgnoreDifferences } from "./imports/argoproj.io.ts";
+import { Application, ApplicationSpecIgnoreDifferences } from "../imports/argoproj.io.ts";
 import { Construct } from "npm:constructs";
 
 export class ArgoCDApplication extends Application {

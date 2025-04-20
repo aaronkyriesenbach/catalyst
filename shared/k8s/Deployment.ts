@@ -1,4 +1,4 @@
-import { KubeDeployment } from "./imports/k8s.ts";
+import { KubeDeployment } from "../imports/k8s.ts";
 import { Construct } from "npm:constructs";
 import { getPodSpec, PodSpecProps } from "./Pod.ts";
 

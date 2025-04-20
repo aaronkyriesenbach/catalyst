@@ -1,7 +1,7 @@
 import Application from "../shared/Application.ts";
 import { Construct } from "npm:constructs";
 import ConfigPVC from "../shared/ConfigPVC.ts";
-import ConfigMap from "../shared/ConfigMap.ts";
+import ConfigMap from "../shared/k8s/ConfigMap.ts";
 import { readTextFileSync } from "../shared/helpers.ts";
 import { LifecycleHandler } from "../shared/imports/k8s.ts";
 

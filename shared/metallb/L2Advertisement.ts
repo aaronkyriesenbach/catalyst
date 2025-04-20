@@ -1,4 +1,4 @@
-import { L2Advertisement as MetalLBL2Advertisement } from "./imports/l2advertisement-metallb.io.ts";
+import { L2Advertisement as MetalLBL2Advertisement } from "../imports/l2advertisement-metallb.io.ts";
 import { Construct } from "npm:constructs";
 
 export default class L2Advertisement extends MetalLBL2Advertisement {

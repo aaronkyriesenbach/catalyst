@@ -1,4 +1,4 @@
-import { IpAddressPool as MetalLBIPAddressPool } from "./imports/ipaddresspool-metallb.io.ts";
+import { IpAddressPool as MetalLBIPAddressPool } from "../imports/ipaddresspool-metallb.io.ts";
 import { Construct } from "npm:constructs";
 
 export default class IPAddressPool extends MetalLBIPAddressPool {

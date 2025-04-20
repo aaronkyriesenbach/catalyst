@@ -2,7 +2,7 @@ import { Chart } from "npm:cdk8s";
 import { Construct } from "npm:constructs";
 import { Lab53App, readTextFileSync } from "../shared/helpers.ts";
 import Application from "../shared/Application.ts";
-import ConfigMap from "../shared/ConfigMap.ts";
+import ConfigMap from "../shared/k8s/ConfigMap.ts";
 import ConfigPVC from "../shared/ConfigPVC.ts";
 import { Quantity } from "../shared/imports/k8s.ts";
 

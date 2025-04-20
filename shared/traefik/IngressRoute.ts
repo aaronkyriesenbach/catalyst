@@ -3,7 +3,7 @@ import {
   IngressRouteSpecRoutesKind,
   IngressRouteSpecRoutesMiddlewares,
   IngressRouteSpecRoutesServicesPort
-} from "./imports/ingressroute-traefik.io.ts";
+} from "../imports/ingressroute-traefik.io.ts";
 import { Construct } from "npm:constructs";
 
 export default class IngressRoute extends TraefikIngressRoute {

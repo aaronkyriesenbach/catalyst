@@ -1,4 +1,4 @@
-import { KubeRoleBinding, RoleRef, Subject } from "./imports/k8s.ts";
+import { KubeRoleBinding, RoleRef, Subject } from "../imports/k8s.ts";
 import { Construct } from "npm:constructs";
 
 export default class RoleBinding extends KubeRoleBinding {

@@ -1,10 +1,10 @@
 import { Construct } from "npm:constructs";
 import { Chart } from "npm:cdk8s";
-import GeneratedPassword from "../shared/GeneratedPassword.ts";
+import GeneratedPassword from "../shared/secretgen/GeneratedPassword.ts";
 import { EnvVar, VolumeMount } from "../shared/imports/k8s.ts";
 import { Lab53App, readTextFileSync } from "../shared/helpers.ts";
 import Application from "../shared/Application.ts";
-import ConfigMap from "../shared/ConfigMap.ts";
+import ConfigMap from "../shared/k8s/ConfigMap.ts";
 
 export class LLDAP extends Chart {
   constructor(scope: Construct, id: string) {

@@ -2,8 +2,8 @@ import { Construct } from "npm:constructs";
 import { Lab53App, readTextFileSync } from "../shared/helpers.ts";
 import { Chart } from "npm:cdk8s";
 import Application from "../shared/Application.ts";
-import SecretImport from "../shared/SecretImport.ts";
-import ConfigMap from "../shared/ConfigMap.ts";
+import SecretImport from "../shared/secretgen/SecretImport.ts";
+import ConfigMap from "../shared/k8s/ConfigMap.ts";
 
 export class Carpal extends Chart {
   constructor(scope: Construct, id: string) {

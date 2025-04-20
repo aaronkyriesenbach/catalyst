@@ -1,6 +1,6 @@
-import { Password, PasswordSpecSecretTemplate } from "./imports/secretgen.k14s.io.ts";
+import { Password, PasswordSpecSecretTemplate } from "../imports/secretgen.k14s.io.ts";
 import { Construct } from "npm:constructs";
-import { SecretExport } from "./imports/secretgen.carvel.dev.ts";
+import { SecretExport } from "../imports/secretgen.carvel.dev.ts";
 
 export default class GeneratedPassword extends Password {
   constructor(scope: Construct, props: GeneratedPasswordProps) {

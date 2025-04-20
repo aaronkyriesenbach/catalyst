@@ -1,4 +1,4 @@
-import { KubeRole, PolicyRule } from "./imports/k8s.ts";
+import { KubeRole, PolicyRule } from "../imports/k8s.ts";
 import { Construct } from "npm:constructs";
 
 export default class Role extends KubeRole {

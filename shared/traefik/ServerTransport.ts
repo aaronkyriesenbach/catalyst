@@ -1,4 +1,4 @@
-import { ServersTransport, ServersTransportSpec } from "./imports/serverstransport-traefik.io.ts";
+import { ServersTransport, ServersTransportSpec } from "../imports/serverstransport-traefik.io.ts";
 import { Construct } from "npm:constructs";
 
 export default class ServerTransport extends ServersTransport {

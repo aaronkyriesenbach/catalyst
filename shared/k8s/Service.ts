@@ -1,5 +1,5 @@
 import { Construct } from "npm:constructs";
-import { KubeService, ServiceSpec } from "./imports/k8s.ts";
+import { KubeService, ServiceSpec } from "../imports/k8s.ts";
 
 export default class Service extends KubeService {
   constructor(scope: Construct, props: ServiceProps) {

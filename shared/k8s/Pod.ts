@@ -1,7 +1,7 @@
-import { KubePod, PodSpec, Volume } from "./imports/k8s.ts";
+import { KubePod, PodSpec, Volume } from "../imports/k8s.ts";
 import { Construct } from "npm:constructs";
-import { NAS_VOLUME_SPEC } from "./constants.ts";
-import { injectContainers } from "./helpers.ts";
+import { NAS_VOLUME_SPEC } from "../constants.ts";
+import { injectContainers } from "../helpers.ts";
 
 export function getPodSpec(props: PodSpecProps): PodSpec {
   const {

@@ -1,8 +1,8 @@
 import { Construct } from "npm:constructs";
 import { Chart } from "npm:cdk8s";
-import IngressRoute from "../shared/IngressRoute.ts";
+import IngressRoute from "../shared/traefik/IngressRoute.ts";
 import { Lab53App, readTextFileSync } from "../shared/helpers.ts";
-import ConfigMap from "../shared/ConfigMap.ts";
+import ConfigMap from "../shared/k8s/ConfigMap.ts";
 import Application from "../shared/Application.ts";
 
 export class TraefikExternal extends Chart {

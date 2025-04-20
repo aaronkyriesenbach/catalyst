@@ -1,4 +1,4 @@
-import { SecretImport as SecretImportResource } from "./imports/secretgen.carvel.dev.ts";
+import { SecretImport as SecretImportResource } from "../imports/secretgen.carvel.dev.ts";
 import { Construct } from "npm:constructs";
 
 export default class SecretImport extends SecretImportResource {
