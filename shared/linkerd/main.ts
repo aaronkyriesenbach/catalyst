@@ -72,9 +72,17 @@ export class Linkerd extends Chart {
       },
     });
 
-    createResourcesFromYaml(this, "cert-manager-rbac.yaml");
-    createResourcesFromYaml(this, "linkerd-crds.yaml");
-    createResourcesFromYaml(this, "linkerd2-cni-edge-25.4.3.yaml");
-    createResourcesFromYaml(this, "linkerd-edge-25.4.3.yaml");
+    createResourcesFromYaml(this, "./linkerd/cert-manager-rbac.yaml", {
+      readFromShared: true,
+    });
+    createResourcesFromYaml(this, "./linkerd/linkerd-crds.yaml", {
+      readFromShared: true,
+    });
+    createResourcesFromYaml(this, "./linkerd/linkerd2-cni-edge-25.4.3.yaml", {
+      readFromShared: true,
+    });
+    createResourcesFromYaml(this, "./linkerd/linkerd-edge-25.4.3.yaml", {
+      readFromShared: true,
+    });
   }
 }

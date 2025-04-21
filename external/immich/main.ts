@@ -49,7 +49,7 @@ export class Immich extends Chart {
       },
     });
 
-    createResourcesFromYaml(this, "immich-chart.yaml", true);
+    createResourcesFromYaml(this, "immich-chart.yaml", { useYaml11: true });
   }
 }
 

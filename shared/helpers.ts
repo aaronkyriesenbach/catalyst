@@ -13,12 +13,20 @@ export function readTextFileFromInitCwd(filename: string) {
   );
 }
 
+export function readTextFileFromSharedDir(filename: string) {
+  return Deno.readTextFileSync(new URL(filename, import.meta.url));
+}
+
 export function createResourcesFromYaml(
   scope: Construct,
   filename: string,
-  useYaml11?: boolean,
+  options?: CreateResourceFromYamlOptions,
 ): ApiObject[] {
-  const resourceYaml = readTextFileFromInitCwd(filename);
+  const { useYaml11, readFromShared } = options ?? {};
+  const resourceYaml = readFromShared
+    ? readTextFileFromSharedDir(filename)
+    : readTextFileFromInitCwd(filename);
+
   const resources = parseAllDocuments(
     resourceYaml,
     useYaml11 ? { version: "1.1" } : undefined,
@@ -37,6 +45,11 @@ export function createResourcesFromYaml(
 
   return objects;
 }
+
+export type CreateResourceFromYamlOptions = {
+  useYaml11?: boolean;
+  readFromShared?: boolean;
+};
 
 export function getInjectedVolumeMount(
   nasVolumeMount: NasVolumeMount,
