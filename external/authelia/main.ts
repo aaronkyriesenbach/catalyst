@@ -14,9 +14,12 @@ export class Authelia extends Chart {
 
     new SecretImport(this, { name: "admin-pass", fromNamespace: "lldap" });
 
-    ["storage-encryption-key", "session-encryption-key", "jwt-hmac-secret", "oidc-hmac-secret"].map((name) =>
-      new GeneratedPassword(this, { name: name })
-    );
+    [
+      "storage-encryption-key",
+      "session-encryption-key",
+      "jwt-hmac-secret",
+      "oidc-hmac-secret",
+    ].map((name) => new GeneratedPassword(this, { name: name }));
 
     new GeneratedPassword(this, {
       name: "postgres-creds",
@@ -43,11 +46,10 @@ export class Authelia extends Chart {
       appName: "authelia",
       passwordSecret: {
         name: "postgres-creds",
-        key: "password",
       },
     });
 
-    createResourcesFromYaml(this, "redis-chart.yaml", true);
+    createResourcesFromYaml(this, "redis-chart.yaml", { useYaml11: true });
     createResourcesFromYaml(this, "authelia-chart.yaml");
   }
 }

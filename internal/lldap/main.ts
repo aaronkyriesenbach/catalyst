@@ -48,7 +48,20 @@ export class LLDAP extends Chart {
         stringData: {
           password: "$(value)",
           "carpal-user.json": readTextFileFromInitCwd("carpal-user.json"),
-          "config.yml": readTextFileFromInitCwd("../../external/carpal/config.yaml"),
+          "config.yml": readTextFileFromInitCwd(
+            "../../external/carpal/config.yaml",
+          ),
+        },
+      },
+    });
+
+    const radicaleUserConfig = new GeneratedPassword(this, {
+      name: "radicale-user-password",
+      secretTemplate: {
+        type: "Opaque",
+        stringData: {
+          password: "$(value)",
+          "radicale-user.json": readTextFileFromInitCwd("radicale-user.json"),
         },
       },
     });

@@ -54,7 +54,11 @@ export class CertManager extends Chart {
       },
     });
 
-    createResourcesFromYaml(this, "cert-manager-v1.17.1.yaml");
-    createResourcesFromYaml(this, "trust-manager-v0.16.0.yaml");
+    createResourcesFromYaml(this, "./cert-manager/cert-manager-v1.17.1.yaml", {
+      readFromShared: true,
+    });
+    createResourcesFromYaml(this, "./cert-manager/trust-manager-v0.16.0.yaml", {
+      readFromShared: true,
+    });
   }
 }
