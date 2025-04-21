@@ -1,6 +1,6 @@
 import { Chart } from "npm:cdk8s";
 import { Construct } from "npm:constructs";
-import { createResourcesFromYaml } from "../helpers.ts";
+import { createResourcesFromYaml } from "../../shared/helpers.ts";
 
 export class Reloader extends Chart {
   constructor(scope: Construct, id: string) {

@@ -13,8 +13,8 @@ export function readTextFileFromInitCwd(filename: string) {
   );
 }
 
-export function readTextFileFromSharedDir(filename: string) {
-  return Deno.readTextFileSync(new URL(filename, import.meta.url));
+export function readTextFileFromBaseDir(filename: string) {
+  return Deno.readTextFileSync(new URL(`../base/${filename}`, import.meta.url));
 }
 
 export function createResourcesFromYaml(
@@ -24,7 +24,7 @@ export function createResourcesFromYaml(
 ): ApiObject[] {
   const { useYaml11, readFromShared } = options ?? {};
   const resourceYaml = readFromShared
-    ? readTextFileFromSharedDir(filename)
+    ? readTextFileFromBaseDir(filename)
     : readTextFileFromInitCwd(filename);
 
   const resources = parseAllDocuments(

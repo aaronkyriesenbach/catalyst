@@ -1,12 +1,12 @@
 import { Construct } from "npm:constructs";
-import { createResourcesFromYaml } from "../helpers.ts";
+import { createResourcesFromYaml } from "../../shared/helpers.ts";
 import {
   Certificate,
   CertificateSpecPrivateKeyAlgorithm,
   CertificateSpecPrivateKeyRotationPolicy,
   ClusterIssuer,
   Issuer
-} from "../imports/cert-manager.io.ts";
+} from "../../shared/imports/cert-manager.io.ts";
 import { Chart } from "npm:cdk8s";
 
 export class CertManager extends Chart {
