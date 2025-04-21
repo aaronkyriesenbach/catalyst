@@ -3,10 +3,10 @@ import {
   Certificate,
   CertificateSpecPrivateKeyAlgorithm,
   CertificateSpecPrivateKeyRotationPolicy
-} from "../imports/cert-manager.io.ts";
-import { Bundle } from "../imports/trust.cert-manager.io.ts";
-import { createResourcesFromYaml } from "../helpers.ts";
-import { KubeNamespace } from "../imports/k8s.ts";
+} from "../../shared/imports/cert-manager.io.ts";
+import { Bundle } from "../../shared/imports/trust.cert-manager.io.ts";
+import { createResourcesFromYaml } from "../../shared/helpers.ts";
+import { KubeNamespace } from "../../shared/imports/k8s.ts";
 import { Chart } from "npm:cdk8s";
 
 export class Linkerd extends Chart {
