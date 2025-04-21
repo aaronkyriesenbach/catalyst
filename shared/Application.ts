@@ -34,21 +34,23 @@ export default class Application extends Construct {
       });
     }
 
-    new IngressRoute(this, {
-      name: name,
-      service: {
+    if (webPort) {
+      new IngressRoute(this, {
         name: name,
-        port: webPort,
-      },
-      ingressRouteSpec: ingressRouteSpec,
-    });
+        service: {
+          name: name,
+          port: webPort,
+        },
+        ingressRouteSpec: ingressRouteSpec,
+      });
+    }
   }
 }
 
 export type ApplicationProps = {
   name: string;
   podSpecProps: PodSpecProps;
-  webPort: number;
+  webPort?: number;
   serviceSpec?: ServiceSpec;
   ingressRouteSpec?: IngressRouteSpec;
 };
