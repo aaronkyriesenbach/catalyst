@@ -101,17 +101,23 @@ export class Lab53App extends App {
 
 export function generateArgoCDApps(
   scope: Construct,
-  overrides: { [name: string]: ArgoCDApplicationSpec },
+  subPath: string,
+  overrides?: { [name: string]: ArgoCDApplicationSpec },
 ) {
-  const apps = Deno.readDirSync(Deno.env.get("INIT_CWD"))
+  const apps = Deno.readDirSync(Deno.env.get("INIT_CWD")!)
     .filter((d) => d.isDirectory)
     .filter((d) =>
-      d.name.substring(0, 1) !== "." && d.name !== "shared" && d.name !== "bootstrap" &&
+      d.name.substring(0, 1) !== "." && d.name !== "shared" &&
+      d.name !== "bootstrap" &&
       d.name !== "dist"
     )
     .map((d) => d.name);
 
   apps.forEach((app) =>
-    new ArgoCDApplication(scope, { name: app, spec: overrides[app] })
+    new ArgoCDApplication(scope, {
+      name: app,
+      subPath: subPath,
+      spec: (overrides ?? {})[app],
+    })
   );
 }

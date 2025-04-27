@@ -39,6 +39,8 @@ spec:
               subPath: deno-cmp.yaml
             - name: cmp-tmp
               mountPath: /tmp
+            - name: cmp-tmp
+              mountPath: /deno-dir
       volumes:
         - name: argocd-cmp-cm
           configMap:

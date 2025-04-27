@@ -5,13 +5,13 @@ export class ArgoCDApplication extends Application {
   constructor(scope: Construct, props: ArgoCDApplicationProps) {
     const {
       name,
+      subPath,
       spec,
     } = props;
 
     const {
       namespace = name,
       project = "default",
-      subPath,
       serverSideApply,
       ignoreDifferences,
     } = spec ?? {};
@@ -28,7 +28,7 @@ export class ArgoCDApplication extends Application {
         },
         project: project,
         source: {
-          path: subPath ? `${subPath}/${name}` : name,
+          path: `${subPath}/${name}`,
           repoUrl: "https://github.com/aaronkyriesenbach/catalyst",
           targetRevision: Deno.env.get("ARGOCD_APP_SOURCE_TARGET_REVISION") ??
             "master",
@@ -48,12 +48,12 @@ export class ArgoCDApplication extends Application {
 export type ArgoCDApplicationSpec = {
   namespace?: string;
   project?: string;
-  subPath?: string;
   serverSideApply?: boolean;
   ignoreDifferences?: ApplicationSpecIgnoreDifferences[];
 };
 
 export type ArgoCDApplicationProps = {
   name: string;
+  subPath: string;
   spec?: ArgoCDApplicationSpec;
 };
