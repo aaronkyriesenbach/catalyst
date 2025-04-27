@@ -103,10 +103,10 @@ export function generateArgoCDApps(
   scope: Construct,
   overrides: { [name: string]: ArgoCDApplicationSpec },
 ) {
-  const apps = Deno.readDirSync(".")
+  const apps = Deno.readDirSync(Deno.env.get("INIT_CWD"))
     .filter((d) => d.isDirectory)
     .filter((d) =>
-      d.name.substring(0, 1) !== "." && d.name !== "shared" &&
+      d.name.substring(0, 1) !== "." && d.name !== "shared" && d.name !== "bootstrap" &&
       d.name !== "dist"
     )
     .map((d) => d.name);
