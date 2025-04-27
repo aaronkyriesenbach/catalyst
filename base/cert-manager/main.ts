@@ -16,6 +16,7 @@ export class CertManager extends Chart {
     new HelmChart(this, {
       name: "cert-manager",
       repo: "https://charts.jetstack.io",
+      values: "crds.enabled: true"
     });
 
     new HelmChart(this, {
