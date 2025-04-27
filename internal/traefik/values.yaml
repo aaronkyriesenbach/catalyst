@@ -1,11 +1,11 @@
 deployment:
   revisionHistoryLimit: 1
 
-#service:
+service:
 #  externalIPs:
 #    - 192.168.53.100
-#  spec:
-#    externalTrafficPolicy: Local
+  spec:
+    externalTrafficPolicy: Local
 
 logs:
   access:
