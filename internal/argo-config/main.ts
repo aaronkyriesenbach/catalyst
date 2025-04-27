@@ -16,7 +16,7 @@ export class ArgoConfig extends Chart {
         port: 443,
       },
       ingressRouteSpec: {
-        customHostPrefix: "argo",
+        customHostPrefix: "argo.int",
         useForwardAuth: false,
         useInsecureTransport: true,
       },
