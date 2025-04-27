@@ -371,6 +371,8 @@ export interface BundleSpecTargetAdditionalFormats {
    * JKS requests a JKS-formatted binary trust bundle to be written to the target.
    * The bundle has "changeit" as the default password.
    * For more information refer to this link https://cert-manager.io/docs/faq/#keystore-passwords
+   * Deprecated: Writing JKS is subject for removal. Please migrate to PKCS12.
+   * PKCS#12 trust stores created by trust-manager are compatible with Java.
    *
    * @schema BundleSpecTargetAdditionalFormats#jks
    */
@@ -378,7 +380,9 @@ export interface BundleSpecTargetAdditionalFormats {
 
   /**
    * PKCS12 requests a PKCS12-formatted binary trust bundle to be written to the target.
+   *
    * The bundle is by default created without a password.
+   * For more information refer to this link https://cert-manager.io/docs/faq/#keystore-passwords
    *
    * @schema BundleSpecTargetAdditionalFormats#pkcs12
    */
@@ -415,6 +419,13 @@ export interface BundleSpecTargetConfigMap {
    */
   readonly key: string;
 
+  /**
+   * Metadata is an optional set of labels and annotations to be copied to the target.
+   *
+   * @schema BundleSpecTargetConfigMap#metadata
+   */
+  readonly metadata?: BundleSpecTargetConfigMapMetadata;
+
 }
 
 /**
@@ -425,6 +436,7 @@ export function toJson_BundleSpecTargetConfigMap(obj: BundleSpecTargetConfigMap 
   if (obj === undefined) { return undefined; }
   const result = {
     'key': obj.key,
+    'metadata': toJson_BundleSpecTargetConfigMapMetadata(obj.metadata),
   };
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
@@ -486,6 +498,13 @@ export interface BundleSpecTargetSecret {
    */
   readonly key: string;
 
+  /**
+   * Metadata is an optional set of labels and annotations to be copied to the target.
+   *
+   * @schema BundleSpecTargetSecret#metadata
+   */
+  readonly metadata?: BundleSpecTargetSecretMetadata;
+
 }
 
 /**
@@ -496,6 +515,7 @@ export function toJson_BundleSpecTargetSecret(obj: BundleSpecTargetSecret | unde
   if (obj === undefined) { return undefined; }
   const result = {
     'key': obj.key,
+    'metadata': toJson_BundleSpecTargetSecretMetadata(obj.metadata),
   };
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
@@ -586,6 +606,8 @@ export function toJson_BundleSpecSourcesSecretSelector(obj: BundleSpecSourcesSec
  * JKS requests a JKS-formatted binary trust bundle to be written to the target.
  * The bundle has "changeit" as the default password.
  * For more information refer to this link https://cert-manager.io/docs/faq/#keystore-passwords
+ * Deprecated: Writing JKS is subject for removal. Please migrate to PKCS12.
+ * PKCS#12 trust stores created by trust-manager are compatible with Java.
  *
  * @schema BundleSpecTargetAdditionalFormatsJks
  */
@@ -623,7 +645,9 @@ export function toJson_BundleSpecTargetAdditionalFormatsJks(obj: BundleSpecTarge
 
 /**
  * PKCS12 requests a PKCS12-formatted binary trust bundle to be written to the target.
+ *
  * The bundle is by default created without a password.
+ * For more information refer to this link https://cert-manager.io/docs/faq/#keystore-passwords
  *
  * @schema BundleSpecTargetAdditionalFormatsPkcs12
  */
@@ -676,6 +700,43 @@ export function toJson_BundleSpecTargetAdditionalFormatsPkcs12(obj: BundleSpecTa
 /* eslint-enable max-len, quote-props */
 
 /**
+ * Metadata is an optional set of labels and annotations to be copied to the target.
+ *
+ * @schema BundleSpecTargetConfigMapMetadata
+ */
+export interface BundleSpecTargetConfigMapMetadata {
+  /**
+   * Annotations is a key value map to be copied to the target.
+   *
+   * @schema BundleSpecTargetConfigMapMetadata#annotations
+   */
+  readonly annotations?: { [key: string]: string };
+
+  /**
+   * Labels is a key value map to be copied to the target.
+   *
+   * @schema BundleSpecTargetConfigMapMetadata#labels
+   */
+  readonly labels?: { [key: string]: string };
+
+}
+
+/**
+ * Converts an object of type 'BundleSpecTargetConfigMapMetadata' to JSON representation.
+ */
+/* eslint-disable max-len, quote-props */
+export function toJson_BundleSpecTargetConfigMapMetadata(obj: BundleSpecTargetConfigMapMetadata | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'annotations': ((obj.annotations) === undefined) ? undefined : (Object.entries(obj.annotations).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {})),
+    'labels': ((obj.labels) === undefined) ? undefined : (Object.entries(obj.labels).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {})),
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, quote-props */
+
+/**
  * A label selector requirement is a selector that contains values, a key, and an operator that
  * relates the key and values.
  *
@@ -719,6 +780,43 @@ export function toJson_BundleSpecTargetNamespaceSelectorMatchExpressions(obj: Bu
     'key': obj.key,
     'operator': obj.operator,
     'values': obj.values?.map(y => y),
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, quote-props */
+
+/**
+ * Metadata is an optional set of labels and annotations to be copied to the target.
+ *
+ * @schema BundleSpecTargetSecretMetadata
+ */
+export interface BundleSpecTargetSecretMetadata {
+  /**
+   * Annotations is a key value map to be copied to the target.
+   *
+   * @schema BundleSpecTargetSecretMetadata#annotations
+   */
+  readonly annotations?: { [key: string]: string };
+
+  /**
+   * Labels is a key value map to be copied to the target.
+   *
+   * @schema BundleSpecTargetSecretMetadata#labels
+   */
+  readonly labels?: { [key: string]: string };
+
+}
+
+/**
+ * Converts an object of type 'BundleSpecTargetSecretMetadata' to JSON representation.
+ */
+/* eslint-disable max-len, quote-props */
+export function toJson_BundleSpecTargetSecretMetadata(obj: BundleSpecTargetSecretMetadata | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'annotations': ((obj.annotations) === undefined) ? undefined : (Object.entries(obj.annotations).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {})),
+    'labels': ((obj.labels) === undefined) ? undefined : (Object.entries(obj.labels).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {})),
   };
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});

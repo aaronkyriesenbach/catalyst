@@ -2698,7 +2698,7 @@ export enum ClusterSpecBackupTarget {
   /** primary */
   PRIMARY = "primary",
   /** prefer-standby */
-  PREFER_HYPHEN_STANDBY = "prefer-standby",
+  PREFER_STANDBY = "prefer-standby",
 }
 
 /**
@@ -7603,26 +7603,48 @@ export enum ClusterSpecManagedServicesDisabledDefaultServices {
 export enum ClusterSpecMonitoringPodMonitorMetricRelabelingsAction {
   /** replace */
   REPLACE = "replace",
+  /** Replace */
+  REPLACE = "Replace",
   /** keep */
   KEEP = "keep",
+  /** Keep */
+  KEEP = "Keep",
   /** drop */
   DROP = "drop",
+  /** Drop */
+  DROP = "Drop",
   /** hashmod */
   HASHMOD = "hashmod",
+  /** HashMod */
+  HASH_MOD = "HashMod",
   /** labelmap */
   LABELMAP = "labelmap",
+  /** LabelMap */
+  LABEL_MAP = "LabelMap",
   /** labeldrop */
   LABELDROP = "labeldrop",
+  /** LabelDrop */
+  LABEL_DROP = "LabelDrop",
   /** labelkeep */
   LABELKEEP = "labelkeep",
+  /** LabelKeep */
+  LABEL_KEEP = "LabelKeep",
   /** lowercase */
   LOWERCASE = "lowercase",
+  /** Lowercase */
+  LOWERCASE = "Lowercase",
   /** uppercase */
   UPPERCASE = "uppercase",
+  /** Uppercase */
+  UPPERCASE = "Uppercase",
   /** keepequal */
   KEEPEQUAL = "keepequal",
+  /** KeepEqual */
+  KEEP_EQUAL = "KeepEqual",
   /** dropequal */
   DROPEQUAL = "dropequal",
+  /** DropEqual */
+  DROP_EQUAL = "DropEqual",
 }
 
 /**
@@ -7638,26 +7660,48 @@ export enum ClusterSpecMonitoringPodMonitorMetricRelabelingsAction {
 export enum ClusterSpecMonitoringPodMonitorRelabelingsAction {
   /** replace */
   REPLACE = "replace",
+  /** Replace */
+  REPLACE = "Replace",
   /** keep */
   KEEP = "keep",
+  /** Keep */
+  KEEP = "Keep",
   /** drop */
   DROP = "drop",
+  /** Drop */
+  DROP = "Drop",
   /** hashmod */
   HASHMOD = "hashmod",
+  /** HashMod */
+  HASH_MOD = "HashMod",
   /** labelmap */
   LABELMAP = "labelmap",
+  /** LabelMap */
+  LABEL_MAP = "LabelMap",
   /** labeldrop */
   LABELDROP = "labeldrop",
+  /** LabelDrop */
+  LABEL_DROP = "LabelDrop",
   /** labelkeep */
   LABELKEEP = "labelkeep",
+  /** LabelKeep */
+  LABEL_KEEP = "LabelKeep",
   /** lowercase */
   LOWERCASE = "lowercase",
+  /** Lowercase */
+  LOWERCASE = "Lowercase",
   /** uppercase */
   UPPERCASE = "uppercase",
+  /** Uppercase */
+  UPPERCASE = "Uppercase",
   /** keepequal */
   KEEPEQUAL = "keepequal",
+  /** KeepEqual */
+  KEEP_EQUAL = "KeepEqual",
   /** dropequal */
   DROPEQUAL = "dropequal",
+  /** DropEqual */
+  DROP_EQUAL = "DropEqual",
 }
 
 /**
@@ -7826,7 +7870,7 @@ export class ClusterSpecProbesReadinessMaximumLag {
  */
 export enum ClusterSpecProbesReadinessType {
   /** pg_isready */
-  PG_UNDERSCORE_ISREADY = "pg_isready",
+  PG_ISREADY = "pg_isready",
   /** streaming */
   STREAMING = "streaming",
   /** query */
@@ -7856,7 +7900,7 @@ export class ClusterSpecProbesStartupMaximumLag {
  */
 export enum ClusterSpecProbesStartupType {
   /** pg_isready */
-  PG_UNDERSCORE_ISREADY = "pg_isready",
+  PG_ISREADY = "pg_isready",
   /** streaming */
   STREAMING = "streaming",
   /** query */

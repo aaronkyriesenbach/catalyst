@@ -8448,7 +8448,7 @@ export enum ClusterSecretStoreSpecProviderDopplerFormat {
   /** json */
   JSON = "json",
   /** dotnet-json */
-  DOTNET_HYPHEN_JSON = "dotnet-json",
+  DOTNET_JSON = "dotnet-json",
   /** env */
   ENV = "env",
   /** yaml */
@@ -8464,17 +8464,17 @@ export enum ClusterSecretStoreSpecProviderDopplerFormat {
  */
 export enum ClusterSecretStoreSpecProviderDopplerNameTransformer {
   /** upper-camel */
-  UPPER_HYPHEN_CAMEL = "upper-camel",
+  UPPER_CAMEL = "upper-camel",
   /** camel */
   CAMEL = "camel",
   /** lower-snake */
-  LOWER_HYPHEN_SNAKE = "lower-snake",
+  LOWER_SNAKE = "lower-snake",
   /** tf-var */
-  TF_HYPHEN_VAR = "tf-var",
+  TF_VAR = "tf-var",
   /** dotnet-env */
-  DOTNET_HYPHEN_ENV = "dotnet-env",
+  DOTNET_ENV = "dotnet-env",
   /** lower-kebab */
-  LOWER_HYPHEN_KEBAB = "lower-kebab",
+  LOWER_KEBAB = "lower-kebab",
 }
 
 /**
@@ -9065,6 +9065,8 @@ export function toJson_ClusterSecretStoreSpecProviderOracleAuth(obj: ClusterSecr
  * @schema ClusterSecretStoreSpecProviderOraclePrincipalType
  */
 export enum ClusterSecretStoreSpecProviderOraclePrincipalType {
+  /**  */
+  VALUE_ = "",
   /** UserPrincipal */
   USER_PRINCIPAL = "UserPrincipal",
   /** InstancePrincipal */
@@ -19018,7 +19020,7 @@ export enum ClusterSecretStoreV1Beta1SpecProviderDopplerFormat {
   /** json */
   JSON = "json",
   /** dotnet-json */
-  DOTNET_HYPHEN_JSON = "dotnet-json",
+  DOTNET_JSON = "dotnet-json",
   /** env */
   ENV = "env",
   /** yaml */
@@ -19034,17 +19036,17 @@ export enum ClusterSecretStoreV1Beta1SpecProviderDopplerFormat {
  */
 export enum ClusterSecretStoreV1Beta1SpecProviderDopplerNameTransformer {
   /** upper-camel */
-  UPPER_HYPHEN_CAMEL = "upper-camel",
+  UPPER_CAMEL = "upper-camel",
   /** camel */
   CAMEL = "camel",
   /** lower-snake */
-  LOWER_HYPHEN_SNAKE = "lower-snake",
+  LOWER_SNAKE = "lower-snake",
   /** tf-var */
-  TF_HYPHEN_VAR = "tf-var",
+  TF_VAR = "tf-var",
   /** dotnet-env */
-  DOTNET_HYPHEN_ENV = "dotnet-env",
+  DOTNET_ENV = "dotnet-env",
   /** lower-kebab */
-  LOWER_HYPHEN_KEBAB = "lower-kebab",
+  LOWER_KEBAB = "lower-kebab",
 }
 
 /**
@@ -19635,6 +19637,8 @@ export function toJson_ClusterSecretStoreV1Beta1SpecProviderOracleAuth(obj: Clus
  * @schema ClusterSecretStoreV1Beta1SpecProviderOraclePrincipalType
  */
 export enum ClusterSecretStoreV1Beta1SpecProviderOraclePrincipalType {
+  /**  */
+  VALUE_ = "",
   /** UserPrincipal */
   USER_PRINCIPAL = "UserPrincipal",
   /** InstancePrincipal */
@@ -33775,7 +33779,7 @@ export enum SecretStoreSpecProviderDopplerFormat {
   /** json */
   JSON = "json",
   /** dotnet-json */
-  DOTNET_HYPHEN_JSON = "dotnet-json",
+  DOTNET_JSON = "dotnet-json",
   /** env */
   ENV = "env",
   /** yaml */
@@ -33791,17 +33795,17 @@ export enum SecretStoreSpecProviderDopplerFormat {
  */
 export enum SecretStoreSpecProviderDopplerNameTransformer {
   /** upper-camel */
-  UPPER_HYPHEN_CAMEL = "upper-camel",
+  UPPER_CAMEL = "upper-camel",
   /** camel */
   CAMEL = "camel",
   /** lower-snake */
-  LOWER_HYPHEN_SNAKE = "lower-snake",
+  LOWER_SNAKE = "lower-snake",
   /** tf-var */
-  TF_HYPHEN_VAR = "tf-var",
+  TF_VAR = "tf-var",
   /** dotnet-env */
-  DOTNET_HYPHEN_ENV = "dotnet-env",
+  DOTNET_ENV = "dotnet-env",
   /** lower-kebab */
-  LOWER_HYPHEN_KEBAB = "lower-kebab",
+  LOWER_KEBAB = "lower-kebab",
 }
 
 /**
@@ -34392,6 +34396,8 @@ export function toJson_SecretStoreSpecProviderOracleAuth(obj: SecretStoreSpecPro
  * @schema SecretStoreSpecProviderOraclePrincipalType
  */
 export enum SecretStoreSpecProviderOraclePrincipalType {
+  /**  */
+  VALUE_ = "",
   /** UserPrincipal */
   USER_PRINCIPAL = "UserPrincipal",
   /** InstancePrincipal */
@@ -44345,7 +44351,7 @@ export enum SecretStoreV1Beta1SpecProviderDopplerFormat {
   /** json */
   JSON = "json",
   /** dotnet-json */
-  DOTNET_HYPHEN_JSON = "dotnet-json",
+  DOTNET_JSON = "dotnet-json",
   /** env */
   ENV = "env",
   /** yaml */
@@ -44361,17 +44367,17 @@ export enum SecretStoreV1Beta1SpecProviderDopplerFormat {
  */
 export enum SecretStoreV1Beta1SpecProviderDopplerNameTransformer {
   /** upper-camel */
-  UPPER_HYPHEN_CAMEL = "upper-camel",
+  UPPER_CAMEL = "upper-camel",
   /** camel */
   CAMEL = "camel",
   /** lower-snake */
-  LOWER_HYPHEN_SNAKE = "lower-snake",
+  LOWER_SNAKE = "lower-snake",
   /** tf-var */
-  TF_HYPHEN_VAR = "tf-var",
+  TF_VAR = "tf-var",
   /** dotnet-env */
-  DOTNET_HYPHEN_ENV = "dotnet-env",
+  DOTNET_ENV = "dotnet-env",
   /** lower-kebab */
-  LOWER_HYPHEN_KEBAB = "lower-kebab",
+  LOWER_KEBAB = "lower-kebab",
 }
 
 /**
@@ -44962,6 +44968,8 @@ export function toJson_SecretStoreV1Beta1SpecProviderOracleAuth(obj: SecretStore
  * @schema SecretStoreV1Beta1SpecProviderOraclePrincipalType
  */
 export enum SecretStoreV1Beta1SpecProviderOraclePrincipalType {
+  /**  */
+  VALUE_ = "",
   /** UserPrincipal */
   USER_PRINCIPAL = "UserPrincipal",
   /** InstancePrincipal */
