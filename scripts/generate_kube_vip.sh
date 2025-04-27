@@ -9,5 +9,5 @@ if [ -f kube-vip.yaml ]; then
   rm kube-vip.yaml
 fi
 
-docker run --rm --network host ghcr.io/kube-vip/kube-vip:$KVVERSION manifest daemonset --interface $INTERFACE --address $VIP --inCluster --taint --controlplane --services --arp --leaderElection > kube-vip.yaml
+docker run --rm --network host ghcr.io/kube-vip/kube-vip:$KVVERSION manifest daemonset --interface $INTERFACE --address $VIP --inCluster --taint --services --arp --leaderElection > kube-vip.yaml
 docker run --rm --network host ghcr.io/kube-vip/kube-vip:$KVVERSION manifest rbac >> kube-vip.yaml
