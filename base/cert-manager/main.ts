@@ -1,5 +1,4 @@
 import { Construct } from "npm:constructs";
-import { createResourcesFromYaml } from "../../shared/helpers.ts";
 import {
   Certificate,
   CertificateSpecPrivateKeyAlgorithm,
@@ -8,10 +7,52 @@ import {
   Issuer
 } from "../../shared/imports/cert-manager.io.ts";
 import { Chart } from "npm:cdk8s";
+import { HelmChart } from "../../shared/HelmChart.ts";
 
 export class CertManager extends Chart {
   constructor(scope: Construct, id: string) {
     super(scope, id);
+
+    new HelmChart(this, {
+      name: "cert-manager",
+      repo: "https://charts.jetstack.io",
+    });
+
+    new HelmChart(this, {
+      name: "trust-manager",
+      namespace: "cert-manager",
+      repo: "https://charts.jetstack.io",
+    });
+
+    new ClusterIssuer(this, crypto.randomUUID(), {
+      metadata: {
+        name: "lab53-cluster-issuer",
+      },
+      spec: {
+        acme: {
+          email: "aaron@kyriesenba.ch",
+          server: "https://acme-staging-v02.api.letsencrypt.org/directory",
+          privateKeySecretRef: {
+            name: "le-private-key",
+          },
+          solvers: [{
+            dns01: {
+              route53: {
+                region: "us-east-1",
+                accessKeyIdSecretRef: {
+                  name: "aws-creds",
+                  key: "access-key-id",
+                },
+                secretAccessKeySecretRef: {
+                  name: "aws-creds",
+                  key: "secret-access-key",
+                },
+              },
+            },
+          }],
+        },
+      },
+    });
 
     const issuer = new Issuer(this, crypto.randomUUID(), {
       metadata: {
@@ -52,13 +93,6 @@ export class CertManager extends Chart {
           secretName: "linkerd-trust-anchor",
         },
       },
-    });
-
-    createResourcesFromYaml(this, "./cert-manager/cert-manager-v1.17.1.yaml", {
-      readFromShared: true,
-    });
-    createResourcesFromYaml(this, "./cert-manager/trust-manager-v0.16.0.yaml", {
-      readFromShared: true,
     });
   }
 }
