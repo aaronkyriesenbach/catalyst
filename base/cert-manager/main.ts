@@ -8,6 +8,7 @@ import {
 } from "../../shared/imports/cert-manager.io.ts";
 import { Chart } from "npm:cdk8s";
 import { HelmChart } from "../../shared/HelmChart.ts";
+import { readTextFileFromBaseDir } from "../../shared/helpers.ts";
 
 export class CertManager extends Chart {
   constructor(scope: Construct, id: string) {
@@ -16,7 +17,7 @@ export class CertManager extends Chart {
     new HelmChart(this, {
       name: "cert-manager",
       repo: "https://charts.jetstack.io",
-      values: "crds.enabled: true"
+      values: readTextFileFromBaseDir("cert-manager/values.yaml")
     });
 
     new HelmChart(this, {
