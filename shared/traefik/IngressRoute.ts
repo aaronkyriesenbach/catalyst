@@ -47,10 +47,7 @@ export default class IngressRoute extends TraefikIngressRoute {
               : undefined,
             port: IngressRouteSpecRoutesServicesPort.fromNumber(service.port),
           }],
-        }],
-        tls: {
-          certResolver: "letsencrypt",
-        },
+        }]
       },
     });
   }
