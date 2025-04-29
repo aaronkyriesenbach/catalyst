@@ -11,7 +11,7 @@ import { HelmChart } from "../../shared/HelmChart.ts";
 import { readTextFileFromBaseDir } from "../../shared/helpers.ts";
 
 export class CertManager extends Chart {
-  constructor(scope: Construct, id: string) {
+  constructor(scope: Construct, id: string, useStagingServer?: boolean) {
     super(scope, id);
 
     new HelmChart(this, {
@@ -33,7 +33,7 @@ export class CertManager extends Chart {
       spec: {
         acme: {
           email: "aaron@kyriesenba.ch",
-          server: "https://acme-staging-v02.api.letsencrypt.org/directory",
+          server: useStagingServer ? "https://acme-staging-v02.api.letsencrypt.org/directory" : "https://acme-v02.api.letsencrypt.org/",
           privateKeySecretRef: {
             name: "le-private-key",
           },
