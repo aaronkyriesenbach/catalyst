@@ -16,7 +16,7 @@ export const DEFAULT_LSCR_ENV: EnvVar[] = [
 ];
 
 export const NAS_VOLUME_NAME = "nas-volume";
-export const NAS_IP = "192.168.4.84";
+export const NAS_IP = "192.168.53.40";
 export const NAS_PATH = "/mnt/tank/data";
 export const NAS_VOLUME_SPEC = {
   name: NAS_VOLUME_NAME,

@@ -23,6 +23,10 @@ export class TraefikInternal extends Chart {
     });
 
     new Lab53WildcardCert(this, {
+      issuerRef: {
+        kind: "ClusterIssuer",
+        name: "letsencrypt-staging",
+      },
       subdomain: "int", // *.int.lab53.net
     });
   }
