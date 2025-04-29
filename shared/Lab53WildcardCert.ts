@@ -16,10 +16,7 @@ export class Lab53WildcardCert extends Certificate {
       spec: {
         secretName: secretName,
         dnsNames: [baseDomain, `*.${baseDomain}`],
-        issuerRef: issuerRef ?? {
-          kind: "ClusterIssuer",
-          name: "lab53-cluster-issuer",
-        },
+        issuerRef: issuerRef
       },
     });
 
@@ -37,6 +34,6 @@ export class Lab53WildcardCert extends Certificate {
 }
 
 export type Lab53WildcardCertProps = {
+  issuerRef: CertificateSpecIssuerRef;
   subdomain?: string;
-  issuerRef?: CertificateSpecIssuerRef;
 };
