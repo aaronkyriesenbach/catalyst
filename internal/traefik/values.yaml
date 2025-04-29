@@ -1,9 +1,9 @@
 deployment:
   revisionHistoryLimit: 1
 
-#service:
-#  spec:
-#    externalTrafficPolicy: Local
+service:
+  spec:
+    externalTrafficPolicy: Local
 
 logs:
   access:
