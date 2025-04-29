@@ -104,7 +104,6 @@ rules:
 - apiGroups:
   - ""
   resources:
-  - services
   - services/status
   verbs:
   - update
@@ -117,7 +116,7 @@ rules:
   - list
   - get
   - watch
-  - endoints
+  - update
 - apiGroups:
   - ""
   resources:
