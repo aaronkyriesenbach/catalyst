@@ -15,7 +15,7 @@ export default class ConfigPVC extends KubePersistentVolumeClaim {
             storage: size ?? Quantity.fromString("100Mi"),
           },
         },
-        accessModes: [accessMode ?? "ReadWriteOnce"],
+        accessModes: [accessMode ?? "ReadWriteMany"],
       },
     });
   }
