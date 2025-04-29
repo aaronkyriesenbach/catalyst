@@ -104,7 +104,7 @@ rules:
 - apiGroups:
   - ""
   resources:
-  - services/status
+  - services
   verbs:
   - update
 - apiGroups:
