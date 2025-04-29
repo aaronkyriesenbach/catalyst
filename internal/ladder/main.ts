@@ -8,7 +8,7 @@ export class Ladder extends Chart {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    const testPVC = new ConfigPVC(this, { name: "test" });
+    const testPVC = new ConfigPVC(this, { name: "test", accessMode: "ReadWriteMany" });
 
     new Application(this, {
       name: "ladder",
