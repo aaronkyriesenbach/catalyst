@@ -1,18 +1,4 @@
-cniEnabled: true
-
 identity:
+  externalCA: true
   issuer:
     scheme: kubernetes.io/tls
-  externalCA: true
-
-proxyInjector:
-  externalSecret: true
-  injectCaFromSecret: linkerd-identity-issuer
-
-profileValidator:
-  externalSecret: true
-  injectCaFromSecret: linkerd-identity-issuer
-
-policyValidator:
-  externalSecret: true
-  injectCaFromSecret: linkerd-identity-issuer

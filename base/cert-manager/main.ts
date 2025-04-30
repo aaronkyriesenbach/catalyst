@@ -85,46 +85,5 @@ export class CertManager extends Chart {
         },
       },
     });
-
-    const issuer = new Issuer(this, crypto.randomUUID(), {
-      metadata: {
-        name: "linkerd-trust-root-issuer",
-      },
-      spec: {
-        selfSigned: {},
-      },
-    });
-
-    new Certificate(this, crypto.randomUUID(), {
-      metadata: {
-        name: "linkerd-trust-anchor",
-      },
-      spec: {
-        issuerRef: {
-          kind: "Issuer",
-          name: issuer.name,
-        },
-        secretName: "linkerd-trust-anchor",
-        isCa: true,
-        commonName: "root.linkerd.cluster.local",
-        duration: "8760h0m0s",
-        renewBefore: "7320h0m0s",
-        privateKey: {
-          rotationPolicy: CertificateSpecPrivateKeyRotationPolicy.ALWAYS,
-          algorithm: CertificateSpecPrivateKeyAlgorithm.ECDSA,
-        },
-      },
-    });
-
-    new ClusterIssuer(this, crypto.randomUUID(), {
-      metadata: {
-        name: "linkerd-identity-issuer",
-      },
-      spec: {
-        ca: {
-          secretName: "linkerd-trust-anchor",
-        },
-      },
-    });
   }
 }
