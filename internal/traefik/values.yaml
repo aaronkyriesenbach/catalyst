@@ -3,7 +3,7 @@ deployment:
 
 #service:
 #  spec:
-#    externalTrafficPolicy: Local
+#    externalTrafficPolicy: Local # TODO: Figure out why this breaks things
 
 logs:
   access:
