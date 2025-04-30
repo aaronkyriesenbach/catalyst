@@ -1,67 +1,57 @@
 import { Chart } from "npm:cdk8s";
 import { Construct } from "npm:constructs";
-import { createResourcesFromYaml } from "../../shared/helpers.ts";
 import { ClusterGenerator, ClusterGeneratorSpecKind } from "../../shared/imports/generators.external-secrets.io.ts";
-import Application from "../../shared/Application.ts";
+import {
+  ClusterSecretStore,
+  ClusterSecretStoreSpecProviderAwsService
+} from "../../shared/imports/external-secrets.io.ts";
+import { HelmChart } from "../../shared/HelmChart.ts";
 
 export class ExternalSecrets extends Chart {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    createResourcesFromYaml(this, "external-secrets/crds.yaml", {
-      readFromShared: true,
-    });
-    createResourcesFromYaml(
-      this,
-      "external-secrets/external-secrets-v0.16.1.yaml",
-      {
-        readFromShared: true,
-      },
-    );
-
-    new Application(this, {
-      name: "secretgen",
-      podSpecProps: {
-        containers: [{
-          name: "secretgen",
-          image: "ghcr.io/aaronkyriesenbach/secretgen:v0.0.1",
-          ports: [{ name: "api", containerPort: 8080 }],
-        }],
-      },
+    new HelmChart(this, {
+      name: "external-secrets",
+      repo: "https://charts.external-secrets.io",
     });
 
-    let passwordWebhookUrl = "http://secretgen/password?";
-    for (let i = 0; i < 10; i++) {
-      passwordWebhookUrl += `names[]=secretKey${i}&`;
-    }
     new ClusterGenerator(this, crypto.randomUUID(), {
       metadata: {
-        name: "password-generator",
+        name: "password-gen",
       },
       spec: {
-        kind: ClusterGeneratorSpecKind.WEBHOOK,
+        kind: ClusterGeneratorSpecKind.PASSWORD,
         generator: {
-          webhookSpec: {
-            url: passwordWebhookUrl,
-            result: {
-              jsonPath: "$.args",
-            },
+          passwordSpec: {
+            length: 64,
+            allowRepeat: true,
+            noUpper: false,
           },
         },
       },
     });
 
-    new ClusterGenerator(this, crypto.randomUUID(), {
+    new ClusterSecretStore(this, crypto.randomUUID(), {
       metadata: {
-        name: "private-key-generator",
+        name: "lab53-secret-store",
       },
       spec: {
-        kind: ClusterGeneratorSpecKind.WEBHOOK,
-        generator: {
-          webhookSpec: {
-            url: "http://secretgen/ecdsa",
-            result: {
-              jsonPath: "$.args",
+        provider: {
+          aws: {
+            service: ClusterSecretStoreSpecProviderAwsService.SECRETS_MANAGER,
+            region: "us-east-1",
+            auth: {
+              secretRef: {
+                accessKeyIdSecretRef: {
+                  name: "aws-creds",
+                  key: "access-key-id",
+                },
+                secretAccessKeySecretRef: {
+                  name: "aws-creds",
+                  key: "secret-access-key",
+                },
+              },
             },
           },
         },
