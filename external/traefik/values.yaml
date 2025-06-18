@@ -5,14 +5,14 @@ deployment:
 #  spec:
 #    externalTrafficPolicy: Local # TODO: Figure out why this breaks configuration
 
-certificatesResolvers:
-  letsencrypt:
-    acme:
-      tlsChallenge: true
-      httpChallenge:
-        entryPoint: web
-      storage: /data/acme.json
-      email: aaron@kyriesenba.ch
+#certificatesResolvers:
+#  letsencrypt:
+#    acme:
+#      tlsChallenge: true
+#      httpChallenge:
+#        entryPoint: web
+#      storage: /data/acme.json
+#      email: aaron@kyriesenba.ch
 
 logs:
   access:
@@ -31,8 +31,5 @@ ingressRoute:
     matchRule: Host(`traefik.lab53.net`)
     entryPoints:
       - websecure
-    middlewares:
-      - name: forwardauth-authelia
-        namespace: authelia
-    tls:
-      certResolver: letsencrypt
+#    tls:
+#      certResolver: letsencrypt

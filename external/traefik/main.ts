@@ -1,11 +1,18 @@
 import { Construct } from "constructs";
 import { Chart } from "cdk8s";
 import ServerTransport from "../../shared/traefik/ServerTransport.ts";
-import { createResourcesFromYaml, Lab53App } from "../../shared/helpers.ts";
+import { Lab53App, readTextFileFromInitCwd } from "../../shared/helpers.ts";
+import { HelmChart } from "../../shared/HelmChart.ts";
 
 export class Traefik extends Chart {
   constructor(scope: Construct, id: string) {
     super(scope, id, { namespace: "traefik" });
+
+    new HelmChart(this, {
+      name: "traefik",
+      repo: "https://traefik.github.io/charts",
+      values: readTextFileFromInitCwd("values.yaml"),
+    });
 
     new ServerTransport(this, {
       name: "insecuretransport",
@@ -13,8 +20,6 @@ export class Traefik extends Chart {
         insecureSkipVerify: true,
       },
     });
-
-    createResourcesFromYaml(this, "traefik-chart.yaml");
   }
 }
 
