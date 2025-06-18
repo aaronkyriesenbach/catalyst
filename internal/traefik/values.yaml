@@ -12,6 +12,7 @@ logs:
 providers:
   kubernetesCRD:
     allowCrossNamespace: true
+    allowExternalNameServices: true
 
 ingressRoute:
   dashboard:

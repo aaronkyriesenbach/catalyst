@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pve
+spec:
+  ports:
+  - port: 8006
+  type: ExternalName
+  externalName: 192.168.53.60
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: pve
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`pve.int.lab53.net`)
+      services:
+        - name: pve
+          port: 8006
+          serversTransport: traefik-insecuretransport@kubernetescrd
