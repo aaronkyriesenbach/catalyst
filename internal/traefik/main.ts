@@ -2,7 +2,6 @@ import { Chart } from "npm:cdk8s";
 import { Construct } from "npm:constructs";
 import { Lab53App, readTextFileFromInitCwd } from "../../shared/helpers.ts";
 import { HelmChart } from "../../shared/HelmChart.ts";
-import { Lab53WildcardCert } from "../../shared/Lab53WildcardCert.ts";
 import ServerTransport from "../../shared/traefik/ServerTransport.ts";
 
 export class TraefikInternal extends Chart {
@@ -20,14 +19,6 @@ export class TraefikInternal extends Chart {
       spec: {
         insecureSkipVerify: true,
       },
-    });
-
-    new Lab53WildcardCert(this, {
-      issuerRef: {
-        kind: "ClusterIssuer",
-        name: "letsencrypt-staging",
-      },
-      subdomain: "int", // *.int.lab53.net
     });
   }
 }

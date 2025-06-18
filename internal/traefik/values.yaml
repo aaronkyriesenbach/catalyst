@@ -19,6 +19,3 @@ ingressRoute:
     matchRule: Host(`traefik.int.lab53.net`)
     entryPoints:
       - websecure
-#    middlewares:
-#      - name: forwardauth-authelia
-#        namespace: authelia
