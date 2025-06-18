@@ -2,7 +2,7 @@ import { Chart } from "npm:cdk8s";
 import { Construct } from "npm:constructs";
 import { Lab53App } from "../../shared/helpers.ts";
 import Application from "../../shared/Application.ts";
-import { IntOrString } from "../../shared/imports/k8s.d.ts";
+import { IntOrString } from "../../shared/imports/k8s.ts";
 
 export class Radicale extends Chart {
   constructor(scope: Construct, id: string) {
