@@ -24,6 +24,7 @@ export class Ladder extends Chart {
       webPort: 8080,
       ingressRouteSpec: {
         customHostPrefix: "ladder.int",
+        useForwardAuth: false,
         useInsecureTransport: true,
       },
     });
