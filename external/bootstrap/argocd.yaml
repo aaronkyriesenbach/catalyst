@@ -1,0 +1,49 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: argocd
+  namespace: argocd
+spec:
+  repo: https://argoproj.github.io/argo-helm
+  chart: argo-cd
+  targetNamespace: argocd
+  valuesContent: |-
+    global:
+      domain: argo.lab53.net
+    configs:
+      cm:
+        exec.enabled: true
+      cmp:
+        create: true
+        plugins:
+          deno-cmp:
+            generate:
+              command: ["deno", "task", "synth"]
+            discover:
+              fileName: "main.ts"
+    repoServer:
+      extraContainers:
+        - name: deno-cmp
+          image: denoland/deno:2.2.12
+          command: ["/var/run/argocd/argocd-cmp-server"]
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 999
+          volumeMounts:
+            - name: var-files
+              mountPath: /var/run/argocd
+            - name: plugins
+              mountPath: /home/argocd/cmp-server/plugins
+            - name: argocd-cmp-cm
+              mountPath: /home/argocd/cmp-server/config/plugin.yaml
+              subPath: deno-cmp.yaml
+            - name: cmp-tmp
+              mountPath: /tmp
+            - name: cmp-tmp
+              mountPath: /deno-dir
+      volumes:
+        - name: argocd-cmp-cm
+          configMap:
+            name: argocd-cmp-cm
+        - name: cmp-tmp
+          emptyDir: {}
