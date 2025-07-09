@@ -18,9 +18,12 @@ export class Radicale extends Chart {
         },
         nasVolumeMounts: {
           radicale: [{
+            mountPath: "/config",
+            subPath: "radicale/config",
+          }, {
             mountPath: "/data",
-            subPath: "radicale"
-          }]
+            subPath: "radicale/data",
+          }],
         },
         containers: [{
           name: "radicale",
