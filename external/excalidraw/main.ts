@@ -18,7 +18,7 @@ export class Excalidraw extends Chart {
       },
       webPort: 80,
       ingressRouteSpec: {
-        customHostPrefix: "draw",
+        customHostname: "draw",
       },
     });
   }

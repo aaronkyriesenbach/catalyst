@@ -2,6 +2,7 @@ import { Construct } from "npm:constructs";
 import { Chart } from "npm:cdk8s";
 import { Lab53App } from "../../shared/helpers.ts";
 import Application from "../../shared/Application.ts";
+import { INTERNAL_SUBDOMAIN } from "../../shared/constants.ts";
 
 export class Ladder extends Chart {
   constructor(scope: Construct, id: string) {
@@ -23,9 +24,7 @@ export class Ladder extends Chart {
       },
       webPort: 8080,
       ingressRouteSpec: {
-        customHostPrefix: "ladder.int",
-        useForwardAuth: false,
-        useInsecureTransport: true,
+        subdomain: INTERNAL_SUBDOMAIN,
       },
     });
   }

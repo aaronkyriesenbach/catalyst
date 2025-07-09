@@ -15,19 +15,12 @@ export default class IngressRoute extends TraefikIngressRoute {
     } = props;
 
     const {
-      customHostPrefix,
+      subdomain,
+      customHostname,
       matchOverride,
-      useForwardAuth = true,
-      useInsecureTransport = false,
+      useInsecureTransport = true,
       middlewares,
     } = ingressRouteSpec ?? {};
-
-    const createMiddlewares = useForwardAuth
-      ? [{
-        name: "forwardauth-authelia",
-        namespace: "authelia",
-      }, ...(middlewares ?? [])]
-      : middlewares;
 
     super(scope, crypto.randomUUID(), {
       metadata: {
@@ -37,9 +30,12 @@ export default class IngressRoute extends TraefikIngressRoute {
         entryPoints: ["websecure"],
         routes: [{
           match: matchOverride ??
-            `Host(\`${customHostPrefix ?? name}.lab53.net\`)`,
+            `Host(\`${
+              [customHostname ?? name, subdomain, "lab53.net"].filter(Boolean)
+                .join(".")
+            }\`)`,
           kind: IngressRouteSpecRoutesKind.RULE,
-          middlewares: createMiddlewares,
+          middlewares: middlewares,
           services: [{
             name: service.name,
             serversTransport: useInsecureTransport
@@ -47,7 +43,7 @@ export default class IngressRoute extends TraefikIngressRoute {
               : undefined,
             port: IngressRouteSpecRoutesServicesPort.fromNumber(service.port),
           }],
-        }]
+        }],
       },
     });
   }
@@ -63,9 +59,9 @@ export type IngressRouteProps = {
 };
 
 export type IngressRouteSpec = {
-  customHostPrefix?: string;
+  subdomain?: string;
+  customHostname?: string;
   matchOverride?: string;
-  useForwardAuth?: boolean;
   useInsecureTransport?: boolean;
   middlewares?: IngressRouteSpecRoutesMiddlewares[];
 };

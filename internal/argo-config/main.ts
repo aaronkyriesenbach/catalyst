@@ -4,6 +4,7 @@ import { Lab53App } from "../../shared/helpers.ts";
 import IngressRoute from "../../shared/traefik/IngressRoute.ts";
 import Role from "../../shared/k8s/Role.ts";
 import RoleBinding from "../../shared/k8s/RoleBinding.ts";
+import { INTERNAL_SUBDOMAIN } from "../../shared/constants.ts";
 
 export class ArgoConfig extends Chart {
   constructor(scope: Construct, id: string) {
@@ -16,9 +17,8 @@ export class ArgoConfig extends Chart {
         port: 443,
       },
       ingressRouteSpec: {
-        customHostPrefix: "argo.int",
-        useForwardAuth: false,
-        useInsecureTransport: true,
+        customHostname: "argo",
+        subdomain: INTERNAL_SUBDOMAIN,
       },
     });
 
