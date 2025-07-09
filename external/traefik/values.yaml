@@ -3,27 +3,16 @@ deployment:
 
 #service:
 #  spec:
-#    externalTrafficPolicy: Local # TODO: Figure out why this breaks configuration
-
-#certificatesResolvers:
-#  letsencrypt:
-#    acme:
-#      tlsChallenge: true
-#      httpChallenge:
-#        entryPoint: web
-#      storage: /data/acme.json
-#      email: aaron@kyriesenba.ch
+#    externalTrafficPolicy: Local # TODO: Figure out why this breaks things
 
 logs:
   access:
     enabled: true
 
-persistence:
-  enabled: true
-
 providers:
   kubernetesCRD:
     allowCrossNamespace: true
+    allowExternalNameServices: true
 
 ingressRoute:
   dashboard:
@@ -31,5 +20,3 @@ ingressRoute:
     matchRule: Host(`traefik.lab53.net`)
     entryPoints:
       - websecure
-#    tls:
-#      certResolver: letsencrypt

@@ -21,10 +21,7 @@ export class Ladder extends Chart {
           }],
         }],
       },
-      webPort: 8080,
-      ingressRouteSpec: {
-        useInsecureTransport: true,
-      },
+      webPort: 8080
     });
   }
 }
