@@ -25,3 +25,5 @@ export const NAS_VOLUME_SPEC = {
     path: NAS_PATH,
   },
 };
+
+export const INTERNAL_SUBDOMAIN = "int";
