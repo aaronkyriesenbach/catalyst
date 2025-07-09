@@ -3,7 +3,7 @@
 export VIP=192.168.53.100
 export INTERFACE=eth0
 
-export KVVERSION=v0.9.1
+export KVVERSION=v0.9.2
 
 if [ -f kube-vip.yaml ]; then
   rm kube-vip.yaml
