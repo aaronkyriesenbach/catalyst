@@ -13,7 +13,7 @@ export class Jellyfin extends Chart {
       podSpecProps: {
         containers: [{
           name: "jellyfin",
-          image: "jellyfin/jellyfin:latest",
+          image: "registry.int.lab53.net/jellyfin/jellyfin:latest",
           ports: [{ containerPort: 8096 }],
         }],
         nasVolumeMounts: {
