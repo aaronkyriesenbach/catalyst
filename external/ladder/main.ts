@@ -12,7 +12,7 @@ export class Ladder extends Chart {
       podSpecProps: {
         containers: [{
           name: "ladder",
-          image: "ghcr.io/everywall/ladder:latest",
+          image: "ghcr.int.lab53.net/everywall/ladder:latest",
           ports: [{ containerPort: 8080 }],
           env: [{
             name: "RULESET",

@@ -1,5 +1,8 @@
+image:
+  registry: hub.int.lab53.net
+
 deployment:
-  revisionHistoryLimit: 1
+  kind: DaemonSet
 
 #service:
 #  spec:

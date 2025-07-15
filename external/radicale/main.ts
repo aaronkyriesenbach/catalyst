@@ -27,7 +27,7 @@ export class Radicale extends Chart {
         },
         containers: [{
           name: "radicale",
-          image: "registry.int.lab53.net/tomsquest/docker-radicale:3.5.4.0",
+          image: "hub.int.lab53.net/tomsquest/docker-radicale:3.5.4.0",
           ports: [{ name: "web", containerPort: 5232 }],
           livenessProbe: {
             httpGet: {
