@@ -24,7 +24,7 @@ spec:
     repoServer:
       extraContainers:
         - name: deno-cmp
-          image: denoland/deno:2.2.12
+          image: hub.int.lab53.net/denoland/deno:2.4.1
           command: ["/var/run/argocd/argocd-cmp-server"]
           securityContext:
             runAsNonRoot: true

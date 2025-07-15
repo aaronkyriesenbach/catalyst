@@ -12,7 +12,7 @@ export class Excalidraw extends Chart {
       podSpecProps: {
         containers: [{
           name: "excalidraw",
-          image: "registry.int.lab53.net/excalidraw/excalidraw:latest",
+          image: "hub.int.lab53.net/excalidraw/excalidraw:latest",
           ports: [{ containerPort: 80, name: "web" }],
         }],
       },
