@@ -1,5 +1,5 @@
 image:
-  registry: hub.int.lab53.net
+  registry: hub.int.lab53.net/library
 
 deployment:
   kind: DaemonSet
