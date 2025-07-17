@@ -87,7 +87,7 @@ export interface ApplicationProps {
 /**
  * Converts an object of type 'ApplicationProps' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationProps(obj: ApplicationProps | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -98,7 +98,7 @@ export function toJson_ApplicationProps(obj: ApplicationProps | undefined): Reco
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Operation contains information about a requested or running operation
@@ -139,7 +139,7 @@ export interface ApplicationOperation {
 /**
  * Converts an object of type 'ApplicationOperation' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperation(obj: ApplicationOperation | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -151,7 +151,7 @@ export function toJson_ApplicationOperation(obj: ApplicationOperation | undefine
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * ApplicationSpec represents desired application state. Contains link to repository with application definition and additional parameters link definition revision.
@@ -233,7 +233,7 @@ export interface ApplicationSpec {
 /**
  * Converts an object of type 'ApplicationSpec' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpec(obj: ApplicationSpec | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -250,7 +250,7 @@ export function toJson_ApplicationSpec(obj: ApplicationSpec | undefined): Record
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema ApplicationOperationInfo
@@ -271,7 +271,7 @@ export interface ApplicationOperationInfo {
 /**
  * Converts an object of type 'ApplicationOperationInfo' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationInfo(obj: ApplicationOperationInfo | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -281,7 +281,7 @@ export function toJson_ApplicationOperationInfo(obj: ApplicationOperationInfo | 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * InitiatedBy contains information about who initiated the operations
@@ -308,7 +308,7 @@ export interface ApplicationOperationInitiatedBy {
 /**
  * Converts an object of type 'ApplicationOperationInitiatedBy' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationInitiatedBy(obj: ApplicationOperationInitiatedBy | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -318,7 +318,7 @@ export function toJson_ApplicationOperationInitiatedBy(obj: ApplicationOperation
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Retry controls the strategy to apply if a sync fails
@@ -345,7 +345,7 @@ export interface ApplicationOperationRetry {
 /**
  * Converts an object of type 'ApplicationOperationRetry' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationRetry(obj: ApplicationOperationRetry | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -355,7 +355,7 @@ export function toJson_ApplicationOperationRetry(obj: ApplicationOperationRetry 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Sync contains parameters for the operation
@@ -449,7 +449,7 @@ export interface ApplicationOperationSync {
 /**
  * Converts an object of type 'ApplicationOperationSync' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSync(obj: ApplicationOperationSync | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -468,7 +468,7 @@ export function toJson_ApplicationOperationSync(obj: ApplicationOperationSync | 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Destination is a reference to the target Kubernetes server and namespace
@@ -503,7 +503,7 @@ export interface ApplicationSpecDestination {
 /**
  * Converts an object of type 'ApplicationSpecDestination' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecDestination(obj: ApplicationSpecDestination | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -514,7 +514,7 @@ export function toJson_ApplicationSpecDestination(obj: ApplicationSpecDestinatio
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * ResourceIgnoreDifferences contains resource filter and list of json paths which should be ignored during comparison with live state.
@@ -565,7 +565,7 @@ export interface ApplicationSpecIgnoreDifferences {
 /**
  * Converts an object of type 'ApplicationSpecIgnoreDifferences' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecIgnoreDifferences(obj: ApplicationSpecIgnoreDifferences | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -580,7 +580,7 @@ export function toJson_ApplicationSpecIgnoreDifferences(obj: ApplicationSpecIgno
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema ApplicationSpecInfo
@@ -601,7 +601,7 @@ export interface ApplicationSpecInfo {
 /**
  * Converts an object of type 'ApplicationSpecInfo' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecInfo(obj: ApplicationSpecInfo | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -611,7 +611,7 @@ export function toJson_ApplicationSpecInfo(obj: ApplicationSpecInfo | undefined)
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Source is a reference to the location of the application's manifests or chart
@@ -696,7 +696,7 @@ export interface ApplicationSpecSource {
 /**
  * Converts an object of type 'ApplicationSpecSource' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSource(obj: ApplicationSpecSource | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -714,7 +714,7 @@ export function toJson_ApplicationSpecSource(obj: ApplicationSpecSource | undefi
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * SourceHydrator provides a way to push hydrated manifests back to git before syncing them to the cluster.
@@ -749,7 +749,7 @@ export interface ApplicationSpecSourceHydrator {
 /**
  * Converts an object of type 'ApplicationSpecSourceHydrator' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourceHydrator(obj: ApplicationSpecSourceHydrator | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -760,7 +760,7 @@ export function toJson_ApplicationSpecSourceHydrator(obj: ApplicationSpecSourceH
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * ApplicationSource contains all required information about the source of an application
@@ -845,7 +845,7 @@ export interface ApplicationSpecSources {
 /**
  * Converts an object of type 'ApplicationSpecSources' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSources(obj: ApplicationSpecSources | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -863,7 +863,7 @@ export function toJson_ApplicationSpecSources(obj: ApplicationSpecSources | unde
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * SyncPolicy controls when and how a sync will be performed
@@ -904,7 +904,7 @@ export interface ApplicationSpecSyncPolicy {
 /**
  * Converts an object of type 'ApplicationSpecSyncPolicy' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSyncPolicy(obj: ApplicationSpecSyncPolicy | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -916,7 +916,7 @@ export function toJson_ApplicationSpecSyncPolicy(obj: ApplicationSpecSyncPolicy 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Backoff controls how to backoff on subsequent retries of failed syncs
@@ -950,7 +950,7 @@ export interface ApplicationOperationRetryBackoff {
 /**
  * Converts an object of type 'ApplicationOperationRetryBackoff' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationRetryBackoff(obj: ApplicationOperationRetryBackoff | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -961,7 +961,7 @@ export function toJson_ApplicationOperationRetryBackoff(obj: ApplicationOperatio
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * SyncOperationResource contains resources to sync.
@@ -994,7 +994,7 @@ export interface ApplicationOperationSyncResources {
 /**
  * Converts an object of type 'ApplicationOperationSyncResources' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncResources(obj: ApplicationOperationSyncResources | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1006,7 +1006,7 @@ export function toJson_ApplicationOperationSyncResources(obj: ApplicationOperati
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Source overrides the source definition set in the application.
@@ -1092,7 +1092,7 @@ export interface ApplicationOperationSyncSource {
 /**
  * Converts an object of type 'ApplicationOperationSyncSource' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSource(obj: ApplicationOperationSyncSource | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1110,7 +1110,7 @@ export function toJson_ApplicationOperationSyncSource(obj: ApplicationOperationS
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * ApplicationSource contains all required information about the source of an application
@@ -1195,7 +1195,7 @@ export interface ApplicationOperationSyncSources {
 /**
  * Converts an object of type 'ApplicationOperationSyncSources' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSources(obj: ApplicationOperationSyncSources | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1213,7 +1213,7 @@ export function toJson_ApplicationOperationSyncSources(obj: ApplicationOperation
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * SyncStrategy describes how to perform the sync
@@ -1240,7 +1240,7 @@ export interface ApplicationOperationSyncSyncStrategy {
 /**
  * Converts an object of type 'ApplicationOperationSyncSyncStrategy' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSyncStrategy(obj: ApplicationOperationSyncSyncStrategy | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1250,7 +1250,7 @@ export function toJson_ApplicationOperationSyncSyncStrategy(obj: ApplicationOper
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Directory holds path/directory specific options
@@ -1291,7 +1291,7 @@ export interface ApplicationSpecSourceDirectory {
 /**
  * Converts an object of type 'ApplicationSpecSourceDirectory' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourceDirectory(obj: ApplicationSpecSourceDirectory | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1303,7 +1303,7 @@ export function toJson_ApplicationSpecSourceDirectory(obj: ApplicationSpecSource
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Helm holds helm specific options
@@ -1423,7 +1423,7 @@ export interface ApplicationSpecSourceHelm {
 /**
  * Converts an object of type 'ApplicationSpecSourceHelm' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourceHelm(obj: ApplicationSpecSourceHelm | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1446,7 +1446,7 @@ export function toJson_ApplicationSpecSourceHelm(obj: ApplicationSpecSourceHelm 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Kustomize holds kustomize specific options
@@ -1587,7 +1587,7 @@ export interface ApplicationSpecSourceKustomize {
 /**
  * Converts an object of type 'ApplicationSpecSourceKustomize' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourceKustomize(obj: ApplicationSpecSourceKustomize | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1613,7 +1613,7 @@ export function toJson_ApplicationSpecSourceKustomize(obj: ApplicationSpecSource
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Plugin holds config management plugin specific options
@@ -1643,7 +1643,7 @@ export interface ApplicationSpecSourcePlugin {
 /**
  * Converts an object of type 'ApplicationSpecSourcePlugin' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourcePlugin(obj: ApplicationSpecSourcePlugin | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1654,7 +1654,7 @@ export function toJson_ApplicationSpecSourcePlugin(obj: ApplicationSpecSourcePlu
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * DrySource specifies where the dry "don't repeat yourself" manifest source lives.
@@ -1688,7 +1688,7 @@ export interface ApplicationSpecSourceHydratorDrySource {
 /**
  * Converts an object of type 'ApplicationSpecSourceHydratorDrySource' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourceHydratorDrySource(obj: ApplicationSpecSourceHydratorDrySource | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1699,7 +1699,7 @@ export function toJson_ApplicationSpecSourceHydratorDrySource(obj: ApplicationSp
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * HydrateTo specifies an optional "staging" location to push hydrated manifests to. An external system would then
@@ -1720,7 +1720,7 @@ export interface ApplicationSpecSourceHydratorHydrateTo {
 /**
  * Converts an object of type 'ApplicationSpecSourceHydratorHydrateTo' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourceHydratorHydrateTo(obj: ApplicationSpecSourceHydratorHydrateTo | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1729,7 +1729,7 @@ export function toJson_ApplicationSpecSourceHydratorHydrateTo(obj: ApplicationSp
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * SyncSource specifies where to sync hydrated manifests from.
@@ -1757,7 +1757,7 @@ export interface ApplicationSpecSourceHydratorSyncSource {
 /**
  * Converts an object of type 'ApplicationSpecSourceHydratorSyncSource' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourceHydratorSyncSource(obj: ApplicationSpecSourceHydratorSyncSource | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1767,7 +1767,7 @@ export function toJson_ApplicationSpecSourceHydratorSyncSource(obj: ApplicationS
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Directory holds path/directory specific options
@@ -1808,7 +1808,7 @@ export interface ApplicationSpecSourcesDirectory {
 /**
  * Converts an object of type 'ApplicationSpecSourcesDirectory' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourcesDirectory(obj: ApplicationSpecSourcesDirectory | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1820,7 +1820,7 @@ export function toJson_ApplicationSpecSourcesDirectory(obj: ApplicationSpecSourc
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Helm holds helm specific options
@@ -1940,7 +1940,7 @@ export interface ApplicationSpecSourcesHelm {
 /**
  * Converts an object of type 'ApplicationSpecSourcesHelm' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourcesHelm(obj: ApplicationSpecSourcesHelm | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1963,7 +1963,7 @@ export function toJson_ApplicationSpecSourcesHelm(obj: ApplicationSpecSourcesHel
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Kustomize holds kustomize specific options
@@ -2104,7 +2104,7 @@ export interface ApplicationSpecSourcesKustomize {
 /**
  * Converts an object of type 'ApplicationSpecSourcesKustomize' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourcesKustomize(obj: ApplicationSpecSourcesKustomize | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2130,7 +2130,7 @@ export function toJson_ApplicationSpecSourcesKustomize(obj: ApplicationSpecSourc
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Plugin holds config management plugin specific options
@@ -2160,7 +2160,7 @@ export interface ApplicationSpecSourcesPlugin {
 /**
  * Converts an object of type 'ApplicationSpecSourcesPlugin' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourcesPlugin(obj: ApplicationSpecSourcesPlugin | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2171,7 +2171,7 @@ export function toJson_ApplicationSpecSourcesPlugin(obj: ApplicationSpecSourcesP
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Automated will keep an application synced to the target revision
@@ -2212,7 +2212,7 @@ export interface ApplicationSpecSyncPolicyAutomated {
 /**
  * Converts an object of type 'ApplicationSpecSyncPolicyAutomated' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSyncPolicyAutomated(obj: ApplicationSpecSyncPolicyAutomated | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2224,7 +2224,7 @@ export function toJson_ApplicationSpecSyncPolicyAutomated(obj: ApplicationSpecSy
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * ManagedNamespaceMetadata controls metadata in the given namespace (if CreateNamespace=true)
@@ -2247,7 +2247,7 @@ export interface ApplicationSpecSyncPolicyManagedNamespaceMetadata {
 /**
  * Converts an object of type 'ApplicationSpecSyncPolicyManagedNamespaceMetadata' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSyncPolicyManagedNamespaceMetadata(obj: ApplicationSpecSyncPolicyManagedNamespaceMetadata | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2257,7 +2257,7 @@ export function toJson_ApplicationSpecSyncPolicyManagedNamespaceMetadata(obj: Ap
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Retry controls failed sync retry behavior
@@ -2284,7 +2284,7 @@ export interface ApplicationSpecSyncPolicyRetry {
 /**
  * Converts an object of type 'ApplicationSpecSyncPolicyRetry' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSyncPolicyRetry(obj: ApplicationSpecSyncPolicyRetry | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2294,7 +2294,7 @@ export function toJson_ApplicationSpecSyncPolicyRetry(obj: ApplicationSpecSyncPo
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Directory holds path/directory specific options
@@ -2335,7 +2335,7 @@ export interface ApplicationOperationSyncSourceDirectory {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourceDirectory' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourceDirectory(obj: ApplicationOperationSyncSourceDirectory | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2347,7 +2347,7 @@ export function toJson_ApplicationOperationSyncSourceDirectory(obj: ApplicationO
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Helm holds helm specific options
@@ -2467,7 +2467,7 @@ export interface ApplicationOperationSyncSourceHelm {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourceHelm' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourceHelm(obj: ApplicationOperationSyncSourceHelm | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2490,7 +2490,7 @@ export function toJson_ApplicationOperationSyncSourceHelm(obj: ApplicationOperat
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Kustomize holds kustomize specific options
@@ -2631,7 +2631,7 @@ export interface ApplicationOperationSyncSourceKustomize {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourceKustomize' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourceKustomize(obj: ApplicationOperationSyncSourceKustomize | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2657,7 +2657,7 @@ export function toJson_ApplicationOperationSyncSourceKustomize(obj: ApplicationO
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Plugin holds config management plugin specific options
@@ -2687,7 +2687,7 @@ export interface ApplicationOperationSyncSourcePlugin {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourcePlugin' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourcePlugin(obj: ApplicationOperationSyncSourcePlugin | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2698,7 +2698,7 @@ export function toJson_ApplicationOperationSyncSourcePlugin(obj: ApplicationOper
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Directory holds path/directory specific options
@@ -2739,7 +2739,7 @@ export interface ApplicationOperationSyncSourcesDirectory {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourcesDirectory' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourcesDirectory(obj: ApplicationOperationSyncSourcesDirectory | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2751,7 +2751,7 @@ export function toJson_ApplicationOperationSyncSourcesDirectory(obj: Application
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Helm holds helm specific options
@@ -2871,7 +2871,7 @@ export interface ApplicationOperationSyncSourcesHelm {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourcesHelm' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourcesHelm(obj: ApplicationOperationSyncSourcesHelm | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2894,7 +2894,7 @@ export function toJson_ApplicationOperationSyncSourcesHelm(obj: ApplicationOpera
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Kustomize holds kustomize specific options
@@ -3035,7 +3035,7 @@ export interface ApplicationOperationSyncSourcesKustomize {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourcesKustomize' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourcesKustomize(obj: ApplicationOperationSyncSourcesKustomize | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3061,7 +3061,7 @@ export function toJson_ApplicationOperationSyncSourcesKustomize(obj: Application
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Plugin holds config management plugin specific options
@@ -3091,7 +3091,7 @@ export interface ApplicationOperationSyncSourcesPlugin {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourcesPlugin' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourcesPlugin(obj: ApplicationOperationSyncSourcesPlugin | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3102,7 +3102,7 @@ export function toJson_ApplicationOperationSyncSourcesPlugin(obj: ApplicationOpe
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Apply will perform a `kubectl apply` to perform the sync.
@@ -3124,7 +3124,7 @@ export interface ApplicationOperationSyncSyncStrategyApply {
 /**
  * Converts an object of type 'ApplicationOperationSyncSyncStrategyApply' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSyncStrategyApply(obj: ApplicationOperationSyncSyncStrategyApply | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3133,7 +3133,7 @@ export function toJson_ApplicationOperationSyncSyncStrategyApply(obj: Applicatio
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Hook will submit any referenced resources to perform the sync. This is the default strategy
@@ -3155,7 +3155,7 @@ export interface ApplicationOperationSyncSyncStrategyHook {
 /**
  * Converts an object of type 'ApplicationOperationSyncSyncStrategyHook' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSyncStrategyHook(obj: ApplicationOperationSyncSyncStrategyHook | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3164,7 +3164,7 @@ export function toJson_ApplicationOperationSyncSyncStrategyHook(obj: Application
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Jsonnet holds options specific to Jsonnet
@@ -3198,7 +3198,7 @@ export interface ApplicationSpecSourceDirectoryJsonnet {
 /**
  * Converts an object of type 'ApplicationSpecSourceDirectoryJsonnet' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourceDirectoryJsonnet(obj: ApplicationSpecSourceDirectoryJsonnet | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3209,7 +3209,7 @@ export function toJson_ApplicationSpecSourceDirectoryJsonnet(obj: ApplicationSpe
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * HelmFileParameter is a file parameter that's passed to helm template during manifest generation
@@ -3236,7 +3236,7 @@ export interface ApplicationSpecSourceHelmFileParameters {
 /**
  * Converts an object of type 'ApplicationSpecSourceHelmFileParameters' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourceHelmFileParameters(obj: ApplicationSpecSourceHelmFileParameters | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3246,7 +3246,7 @@ export function toJson_ApplicationSpecSourceHelmFileParameters(obj: ApplicationS
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * HelmParameter is a parameter that's passed to helm template during manifest generation
@@ -3280,7 +3280,7 @@ export interface ApplicationSpecSourceHelmParameters {
 /**
  * Converts an object of type 'ApplicationSpecSourceHelmParameters' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourceHelmParameters(obj: ApplicationSpecSourceHelmParameters | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3291,7 +3291,7 @@ export function toJson_ApplicationSpecSourceHelmParameters(obj: ApplicationSpecS
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema ApplicationSpecSourceKustomizePatches
@@ -3322,7 +3322,7 @@ export interface ApplicationSpecSourceKustomizePatches {
 /**
  * Converts an object of type 'ApplicationSpecSourceKustomizePatches' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourceKustomizePatches(obj: ApplicationSpecSourceKustomizePatches | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3334,7 +3334,7 @@ export function toJson_ApplicationSpecSourceKustomizePatches(obj: ApplicationSpe
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema ApplicationSpecSourceKustomizeReplicas
@@ -3359,7 +3359,7 @@ export interface ApplicationSpecSourceKustomizeReplicas {
 /**
  * Converts an object of type 'ApplicationSpecSourceKustomizeReplicas' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourceKustomizeReplicas(obj: ApplicationSpecSourceKustomizeReplicas | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3369,7 +3369,7 @@ export function toJson_ApplicationSpecSourceKustomizeReplicas(obj: ApplicationSp
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * EnvEntry represents an entry in the application's environment
@@ -3396,7 +3396,7 @@ export interface ApplicationSpecSourcePluginEnv {
 /**
  * Converts an object of type 'ApplicationSpecSourcePluginEnv' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourcePluginEnv(obj: ApplicationSpecSourcePluginEnv | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3406,7 +3406,7 @@ export function toJson_ApplicationSpecSourcePluginEnv(obj: ApplicationSpecSource
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema ApplicationSpecSourcePluginParameters
@@ -3445,7 +3445,7 @@ export interface ApplicationSpecSourcePluginParameters {
 /**
  * Converts an object of type 'ApplicationSpecSourcePluginParameters' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourcePluginParameters(obj: ApplicationSpecSourcePluginParameters | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3457,7 +3457,7 @@ export function toJson_ApplicationSpecSourcePluginParameters(obj: ApplicationSpe
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Jsonnet holds options specific to Jsonnet
@@ -3491,7 +3491,7 @@ export interface ApplicationSpecSourcesDirectoryJsonnet {
 /**
  * Converts an object of type 'ApplicationSpecSourcesDirectoryJsonnet' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourcesDirectoryJsonnet(obj: ApplicationSpecSourcesDirectoryJsonnet | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3502,7 +3502,7 @@ export function toJson_ApplicationSpecSourcesDirectoryJsonnet(obj: ApplicationSp
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * HelmFileParameter is a file parameter that's passed to helm template during manifest generation
@@ -3529,7 +3529,7 @@ export interface ApplicationSpecSourcesHelmFileParameters {
 /**
  * Converts an object of type 'ApplicationSpecSourcesHelmFileParameters' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourcesHelmFileParameters(obj: ApplicationSpecSourcesHelmFileParameters | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3539,7 +3539,7 @@ export function toJson_ApplicationSpecSourcesHelmFileParameters(obj: Application
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * HelmParameter is a parameter that's passed to helm template during manifest generation
@@ -3573,7 +3573,7 @@ export interface ApplicationSpecSourcesHelmParameters {
 /**
  * Converts an object of type 'ApplicationSpecSourcesHelmParameters' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourcesHelmParameters(obj: ApplicationSpecSourcesHelmParameters | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3584,7 +3584,7 @@ export function toJson_ApplicationSpecSourcesHelmParameters(obj: ApplicationSpec
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema ApplicationSpecSourcesKustomizePatches
@@ -3615,7 +3615,7 @@ export interface ApplicationSpecSourcesKustomizePatches {
 /**
  * Converts an object of type 'ApplicationSpecSourcesKustomizePatches' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourcesKustomizePatches(obj: ApplicationSpecSourcesKustomizePatches | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3627,7 +3627,7 @@ export function toJson_ApplicationSpecSourcesKustomizePatches(obj: ApplicationSp
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema ApplicationSpecSourcesKustomizeReplicas
@@ -3652,7 +3652,7 @@ export interface ApplicationSpecSourcesKustomizeReplicas {
 /**
  * Converts an object of type 'ApplicationSpecSourcesKustomizeReplicas' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourcesKustomizeReplicas(obj: ApplicationSpecSourcesKustomizeReplicas | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3662,7 +3662,7 @@ export function toJson_ApplicationSpecSourcesKustomizeReplicas(obj: ApplicationS
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * EnvEntry represents an entry in the application's environment
@@ -3689,7 +3689,7 @@ export interface ApplicationSpecSourcesPluginEnv {
 /**
  * Converts an object of type 'ApplicationSpecSourcesPluginEnv' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourcesPluginEnv(obj: ApplicationSpecSourcesPluginEnv | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3699,7 +3699,7 @@ export function toJson_ApplicationSpecSourcesPluginEnv(obj: ApplicationSpecSourc
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema ApplicationSpecSourcesPluginParameters
@@ -3738,7 +3738,7 @@ export interface ApplicationSpecSourcesPluginParameters {
 /**
  * Converts an object of type 'ApplicationSpecSourcesPluginParameters' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourcesPluginParameters(obj: ApplicationSpecSourcesPluginParameters | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3750,7 +3750,7 @@ export function toJson_ApplicationSpecSourcesPluginParameters(obj: ApplicationSp
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Backoff controls how to backoff on subsequent retries of failed syncs
@@ -3784,7 +3784,7 @@ export interface ApplicationSpecSyncPolicyRetryBackoff {
 /**
  * Converts an object of type 'ApplicationSpecSyncPolicyRetryBackoff' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSyncPolicyRetryBackoff(obj: ApplicationSpecSyncPolicyRetryBackoff | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3795,7 +3795,7 @@ export function toJson_ApplicationSpecSyncPolicyRetryBackoff(obj: ApplicationSpe
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Jsonnet holds options specific to Jsonnet
@@ -3829,7 +3829,7 @@ export interface ApplicationOperationSyncSourceDirectoryJsonnet {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourceDirectoryJsonnet' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourceDirectoryJsonnet(obj: ApplicationOperationSyncSourceDirectoryJsonnet | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3840,7 +3840,7 @@ export function toJson_ApplicationOperationSyncSourceDirectoryJsonnet(obj: Appli
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * HelmFileParameter is a file parameter that's passed to helm template during manifest generation
@@ -3867,7 +3867,7 @@ export interface ApplicationOperationSyncSourceHelmFileParameters {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourceHelmFileParameters' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourceHelmFileParameters(obj: ApplicationOperationSyncSourceHelmFileParameters | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3877,7 +3877,7 @@ export function toJson_ApplicationOperationSyncSourceHelmFileParameters(obj: App
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * HelmParameter is a parameter that's passed to helm template during manifest generation
@@ -3911,7 +3911,7 @@ export interface ApplicationOperationSyncSourceHelmParameters {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourceHelmParameters' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourceHelmParameters(obj: ApplicationOperationSyncSourceHelmParameters | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3922,7 +3922,7 @@ export function toJson_ApplicationOperationSyncSourceHelmParameters(obj: Applica
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema ApplicationOperationSyncSourceKustomizePatches
@@ -3953,7 +3953,7 @@ export interface ApplicationOperationSyncSourceKustomizePatches {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourceKustomizePatches' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourceKustomizePatches(obj: ApplicationOperationSyncSourceKustomizePatches | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3965,7 +3965,7 @@ export function toJson_ApplicationOperationSyncSourceKustomizePatches(obj: Appli
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema ApplicationOperationSyncSourceKustomizeReplicas
@@ -3990,7 +3990,7 @@ export interface ApplicationOperationSyncSourceKustomizeReplicas {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourceKustomizeReplicas' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourceKustomizeReplicas(obj: ApplicationOperationSyncSourceKustomizeReplicas | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4000,7 +4000,7 @@ export function toJson_ApplicationOperationSyncSourceKustomizeReplicas(obj: Appl
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * EnvEntry represents an entry in the application's environment
@@ -4027,7 +4027,7 @@ export interface ApplicationOperationSyncSourcePluginEnv {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourcePluginEnv' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourcePluginEnv(obj: ApplicationOperationSyncSourcePluginEnv | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4037,7 +4037,7 @@ export function toJson_ApplicationOperationSyncSourcePluginEnv(obj: ApplicationO
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema ApplicationOperationSyncSourcePluginParameters
@@ -4076,7 +4076,7 @@ export interface ApplicationOperationSyncSourcePluginParameters {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourcePluginParameters' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourcePluginParameters(obj: ApplicationOperationSyncSourcePluginParameters | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4088,7 +4088,7 @@ export function toJson_ApplicationOperationSyncSourcePluginParameters(obj: Appli
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Jsonnet holds options specific to Jsonnet
@@ -4122,7 +4122,7 @@ export interface ApplicationOperationSyncSourcesDirectoryJsonnet {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourcesDirectoryJsonnet' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourcesDirectoryJsonnet(obj: ApplicationOperationSyncSourcesDirectoryJsonnet | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4133,7 +4133,7 @@ export function toJson_ApplicationOperationSyncSourcesDirectoryJsonnet(obj: Appl
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * HelmFileParameter is a file parameter that's passed to helm template during manifest generation
@@ -4160,7 +4160,7 @@ export interface ApplicationOperationSyncSourcesHelmFileParameters {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourcesHelmFileParameters' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourcesHelmFileParameters(obj: ApplicationOperationSyncSourcesHelmFileParameters | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4170,7 +4170,7 @@ export function toJson_ApplicationOperationSyncSourcesHelmFileParameters(obj: Ap
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * HelmParameter is a parameter that's passed to helm template during manifest generation
@@ -4204,7 +4204,7 @@ export interface ApplicationOperationSyncSourcesHelmParameters {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourcesHelmParameters' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourcesHelmParameters(obj: ApplicationOperationSyncSourcesHelmParameters | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4215,7 +4215,7 @@ export function toJson_ApplicationOperationSyncSourcesHelmParameters(obj: Applic
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema ApplicationOperationSyncSourcesKustomizePatches
@@ -4246,7 +4246,7 @@ export interface ApplicationOperationSyncSourcesKustomizePatches {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourcesKustomizePatches' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourcesKustomizePatches(obj: ApplicationOperationSyncSourcesKustomizePatches | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4258,7 +4258,7 @@ export function toJson_ApplicationOperationSyncSourcesKustomizePatches(obj: Appl
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema ApplicationOperationSyncSourcesKustomizeReplicas
@@ -4283,7 +4283,7 @@ export interface ApplicationOperationSyncSourcesKustomizeReplicas {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourcesKustomizeReplicas' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourcesKustomizeReplicas(obj: ApplicationOperationSyncSourcesKustomizeReplicas | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4293,7 +4293,7 @@ export function toJson_ApplicationOperationSyncSourcesKustomizeReplicas(obj: App
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * EnvEntry represents an entry in the application's environment
@@ -4320,7 +4320,7 @@ export interface ApplicationOperationSyncSourcesPluginEnv {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourcesPluginEnv' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourcesPluginEnv(obj: ApplicationOperationSyncSourcesPluginEnv | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4330,7 +4330,7 @@ export function toJson_ApplicationOperationSyncSourcesPluginEnv(obj: Application
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema ApplicationOperationSyncSourcesPluginParameters
@@ -4369,7 +4369,7 @@ export interface ApplicationOperationSyncSourcesPluginParameters {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourcesPluginParameters' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourcesPluginParameters(obj: ApplicationOperationSyncSourcesPluginParameters | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4381,7 +4381,7 @@ export function toJson_ApplicationOperationSyncSourcesPluginParameters(obj: Appl
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * JsonnetVar represents a variable to be passed to jsonnet during manifest generation
@@ -4409,7 +4409,7 @@ export interface ApplicationSpecSourceDirectoryJsonnetExtVars {
 /**
  * Converts an object of type 'ApplicationSpecSourceDirectoryJsonnetExtVars' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourceDirectoryJsonnetExtVars(obj: ApplicationSpecSourceDirectoryJsonnetExtVars | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4420,7 +4420,7 @@ export function toJson_ApplicationSpecSourceDirectoryJsonnetExtVars(obj: Applica
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * JsonnetVar represents a variable to be passed to jsonnet during manifest generation
@@ -4448,7 +4448,7 @@ export interface ApplicationSpecSourceDirectoryJsonnetTlas {
 /**
  * Converts an object of type 'ApplicationSpecSourceDirectoryJsonnetTlas' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourceDirectoryJsonnetTlas(obj: ApplicationSpecSourceDirectoryJsonnetTlas | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4459,7 +4459,7 @@ export function toJson_ApplicationSpecSourceDirectoryJsonnetTlas(obj: Applicatio
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema ApplicationSpecSourceKustomizePatchesTarget
@@ -4505,7 +4505,7 @@ export interface ApplicationSpecSourceKustomizePatchesTarget {
 /**
  * Converts an object of type 'ApplicationSpecSourceKustomizePatchesTarget' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourceKustomizePatchesTarget(obj: ApplicationSpecSourceKustomizePatchesTarget | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4520,7 +4520,7 @@ export function toJson_ApplicationSpecSourceKustomizePatchesTarget(obj: Applicat
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Number of replicas
@@ -4564,7 +4564,7 @@ export interface ApplicationSpecSourcesDirectoryJsonnetExtVars {
 /**
  * Converts an object of type 'ApplicationSpecSourcesDirectoryJsonnetExtVars' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourcesDirectoryJsonnetExtVars(obj: ApplicationSpecSourcesDirectoryJsonnetExtVars | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4575,7 +4575,7 @@ export function toJson_ApplicationSpecSourcesDirectoryJsonnetExtVars(obj: Applic
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * JsonnetVar represents a variable to be passed to jsonnet during manifest generation
@@ -4603,7 +4603,7 @@ export interface ApplicationSpecSourcesDirectoryJsonnetTlas {
 /**
  * Converts an object of type 'ApplicationSpecSourcesDirectoryJsonnetTlas' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourcesDirectoryJsonnetTlas(obj: ApplicationSpecSourcesDirectoryJsonnetTlas | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4614,7 +4614,7 @@ export function toJson_ApplicationSpecSourcesDirectoryJsonnetTlas(obj: Applicati
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema ApplicationSpecSourcesKustomizePatchesTarget
@@ -4660,7 +4660,7 @@ export interface ApplicationSpecSourcesKustomizePatchesTarget {
 /**
  * Converts an object of type 'ApplicationSpecSourcesKustomizePatchesTarget' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationSpecSourcesKustomizePatchesTarget(obj: ApplicationSpecSourcesKustomizePatchesTarget | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4675,7 +4675,7 @@ export function toJson_ApplicationSpecSourcesKustomizePatchesTarget(obj: Applica
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Number of replicas
@@ -4719,7 +4719,7 @@ export interface ApplicationOperationSyncSourceDirectoryJsonnetExtVars {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourceDirectoryJsonnetExtVars' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourceDirectoryJsonnetExtVars(obj: ApplicationOperationSyncSourceDirectoryJsonnetExtVars | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4730,7 +4730,7 @@ export function toJson_ApplicationOperationSyncSourceDirectoryJsonnetExtVars(obj
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * JsonnetVar represents a variable to be passed to jsonnet during manifest generation
@@ -4758,7 +4758,7 @@ export interface ApplicationOperationSyncSourceDirectoryJsonnetTlas {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourceDirectoryJsonnetTlas' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourceDirectoryJsonnetTlas(obj: ApplicationOperationSyncSourceDirectoryJsonnetTlas | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4769,7 +4769,7 @@ export function toJson_ApplicationOperationSyncSourceDirectoryJsonnetTlas(obj: A
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema ApplicationOperationSyncSourceKustomizePatchesTarget
@@ -4815,7 +4815,7 @@ export interface ApplicationOperationSyncSourceKustomizePatchesTarget {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourceKustomizePatchesTarget' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourceKustomizePatchesTarget(obj: ApplicationOperationSyncSourceKustomizePatchesTarget | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4830,7 +4830,7 @@ export function toJson_ApplicationOperationSyncSourceKustomizePatchesTarget(obj:
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Number of replicas
@@ -4874,7 +4874,7 @@ export interface ApplicationOperationSyncSourcesDirectoryJsonnetExtVars {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourcesDirectoryJsonnetExtVars' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourcesDirectoryJsonnetExtVars(obj: ApplicationOperationSyncSourcesDirectoryJsonnetExtVars | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4885,7 +4885,7 @@ export function toJson_ApplicationOperationSyncSourcesDirectoryJsonnetExtVars(ob
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * JsonnetVar represents a variable to be passed to jsonnet during manifest generation
@@ -4913,7 +4913,7 @@ export interface ApplicationOperationSyncSourcesDirectoryJsonnetTlas {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourcesDirectoryJsonnetTlas' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourcesDirectoryJsonnetTlas(obj: ApplicationOperationSyncSourcesDirectoryJsonnetTlas | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4924,7 +4924,7 @@ export function toJson_ApplicationOperationSyncSourcesDirectoryJsonnetTlas(obj: 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema ApplicationOperationSyncSourcesKustomizePatchesTarget
@@ -4970,7 +4970,7 @@ export interface ApplicationOperationSyncSourcesKustomizePatchesTarget {
 /**
  * Converts an object of type 'ApplicationOperationSyncSourcesKustomizePatchesTarget' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ApplicationOperationSyncSourcesKustomizePatchesTarget(obj: ApplicationOperationSyncSourcesKustomizePatchesTarget | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4985,7 +4985,7 @@ export function toJson_ApplicationOperationSyncSourcesKustomizePatchesTarget(obj
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Number of replicas

@@ -78,7 +78,7 @@ export interface BundleProps {
 /**
  * Converts an object of type 'BundleProps' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_BundleProps(obj: BundleProps | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -88,7 +88,7 @@ export function toJson_BundleProps(obj: BundleProps | undefined): Record<string,
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Desired state of the Bundle resource.
@@ -115,7 +115,7 @@ export interface BundleSpec {
 /**
  * Converts an object of type 'BundleSpec' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_BundleSpec(obj: BundleSpec | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -125,7 +125,7 @@ export function toJson_BundleSpec(obj: BundleSpec | undefined): Record<string, a
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * BundleSource is the set of sources whose data will be appended and synced to
@@ -176,7 +176,7 @@ export interface BundleSpecSources {
 /**
  * Converts an object of type 'BundleSpecSources' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_BundleSpecSources(obj: BundleSpecSources | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -188,7 +188,7 @@ export function toJson_BundleSpecSources(obj: BundleSpecSources | undefined): Re
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Target is the target location in all namespaces to sync source data to.
@@ -233,7 +233,7 @@ export interface BundleSpecTarget {
 /**
  * Converts an object of type 'BundleSpecTarget' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_BundleSpecTarget(obj: BundleSpecTarget | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -245,7 +245,7 @@ export function toJson_BundleSpecTarget(obj: BundleSpecTarget | undefined): Reco
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * ConfigMap is a reference (by name) to a ConfigMap's `data` key(s), or to a
@@ -290,7 +290,7 @@ export interface BundleSpecSourcesConfigMap {
 /**
  * Converts an object of type 'BundleSpecSourcesConfigMap' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_BundleSpecSourcesConfigMap(obj: BundleSpecSourcesConfigMap | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -302,7 +302,7 @@ export function toJson_BundleSpecSourcesConfigMap(obj: BundleSpecSourcesConfigMa
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Secret is a reference (by name) to a Secret's `data` key(s), or to a
@@ -347,7 +347,7 @@ export interface BundleSpecSourcesSecret {
 /**
  * Converts an object of type 'BundleSpecSourcesSecret' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_BundleSpecSourcesSecret(obj: BundleSpecSourcesSecret | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -359,7 +359,7 @@ export function toJson_BundleSpecSourcesSecret(obj: BundleSpecSourcesSecret | un
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * AdditionalFormats specifies any additional formats to write to the target
@@ -393,7 +393,7 @@ export interface BundleSpecTargetAdditionalFormats {
 /**
  * Converts an object of type 'BundleSpecTargetAdditionalFormats' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_BundleSpecTargetAdditionalFormats(obj: BundleSpecTargetAdditionalFormats | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -403,7 +403,7 @@ export function toJson_BundleSpecTargetAdditionalFormats(obj: BundleSpecTargetAd
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * ConfigMap is the target ConfigMap in Namespaces that all Bundle source
@@ -431,7 +431,7 @@ export interface BundleSpecTargetConfigMap {
 /**
  * Converts an object of type 'BundleSpecTargetConfigMap' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_BundleSpecTargetConfigMap(obj: BundleSpecTargetConfigMap | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -441,7 +441,7 @@ export function toJson_BundleSpecTargetConfigMap(obj: BundleSpecTargetConfigMap 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * NamespaceSelector will, if set, only sync the target resource in
@@ -471,7 +471,7 @@ export interface BundleSpecTargetNamespaceSelector {
 /**
  * Converts an object of type 'BundleSpecTargetNamespaceSelector' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_BundleSpecTargetNamespaceSelector(obj: BundleSpecTargetNamespaceSelector | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -481,7 +481,7 @@ export function toJson_BundleSpecTargetNamespaceSelector(obj: BundleSpecTargetNa
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Secret is the target Secret that all Bundle source data will be synced to.
@@ -510,7 +510,7 @@ export interface BundleSpecTargetSecret {
 /**
  * Converts an object of type 'BundleSpecTargetSecret' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_BundleSpecTargetSecret(obj: BundleSpecTargetSecret | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -520,7 +520,7 @@ export function toJson_BundleSpecTargetSecret(obj: BundleSpecTargetSecret | unde
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Selector is the label selector to use to fetch a list of objects. Must not be set
@@ -550,7 +550,7 @@ export interface BundleSpecSourcesConfigMapSelector {
 /**
  * Converts an object of type 'BundleSpecSourcesConfigMapSelector' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_BundleSpecSourcesConfigMapSelector(obj: BundleSpecSourcesConfigMapSelector | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -560,7 +560,7 @@ export function toJson_BundleSpecSourcesConfigMapSelector(obj: BundleSpecSources
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Selector is the label selector to use to fetch a list of objects. Must not be set
@@ -590,7 +590,7 @@ export interface BundleSpecSourcesSecretSelector {
 /**
  * Converts an object of type 'BundleSpecSourcesSecretSelector' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_BundleSpecSourcesSecretSelector(obj: BundleSpecSourcesSecretSelector | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -600,7 +600,7 @@ export function toJson_BundleSpecSourcesSecretSelector(obj: BundleSpecSourcesSec
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * JKS requests a JKS-formatted binary trust bundle to be written to the target.
@@ -631,7 +631,7 @@ export interface BundleSpecTargetAdditionalFormatsJks {
 /**
  * Converts an object of type 'BundleSpecTargetAdditionalFormatsJks' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_BundleSpecTargetAdditionalFormatsJks(obj: BundleSpecTargetAdditionalFormatsJks | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -641,7 +641,7 @@ export function toJson_BundleSpecTargetAdditionalFormatsJks(obj: BundleSpecTarge
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * PKCS12 requests a PKCS12-formatted binary trust bundle to be written to the target.
@@ -686,7 +686,7 @@ export interface BundleSpecTargetAdditionalFormatsPkcs12 {
 /**
  * Converts an object of type 'BundleSpecTargetAdditionalFormatsPkcs12' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_BundleSpecTargetAdditionalFormatsPkcs12(obj: BundleSpecTargetAdditionalFormatsPkcs12 | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -697,7 +697,7 @@ export function toJson_BundleSpecTargetAdditionalFormatsPkcs12(obj: BundleSpecTa
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Metadata is an optional set of labels and annotations to be copied to the target.
@@ -724,7 +724,7 @@ export interface BundleSpecTargetConfigMapMetadata {
 /**
  * Converts an object of type 'BundleSpecTargetConfigMapMetadata' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_BundleSpecTargetConfigMapMetadata(obj: BundleSpecTargetConfigMapMetadata | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -734,7 +734,7 @@ export function toJson_BundleSpecTargetConfigMapMetadata(obj: BundleSpecTargetCo
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label selector requirement is a selector that contains values, a key, and an operator that
@@ -773,7 +773,7 @@ export interface BundleSpecTargetNamespaceSelectorMatchExpressions {
 /**
  * Converts an object of type 'BundleSpecTargetNamespaceSelectorMatchExpressions' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_BundleSpecTargetNamespaceSelectorMatchExpressions(obj: BundleSpecTargetNamespaceSelectorMatchExpressions | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -784,7 +784,7 @@ export function toJson_BundleSpecTargetNamespaceSelectorMatchExpressions(obj: Bu
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Metadata is an optional set of labels and annotations to be copied to the target.
@@ -811,7 +811,7 @@ export interface BundleSpecTargetSecretMetadata {
 /**
  * Converts an object of type 'BundleSpecTargetSecretMetadata' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_BundleSpecTargetSecretMetadata(obj: BundleSpecTargetSecretMetadata | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -821,7 +821,7 @@ export function toJson_BundleSpecTargetSecretMetadata(obj: BundleSpecTargetSecre
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label selector requirement is a selector that contains values, a key, and an operator that
@@ -860,7 +860,7 @@ export interface BundleSpecSourcesConfigMapSelectorMatchExpressions {
 /**
  * Converts an object of type 'BundleSpecSourcesConfigMapSelectorMatchExpressions' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_BundleSpecSourcesConfigMapSelectorMatchExpressions(obj: BundleSpecSourcesConfigMapSelectorMatchExpressions | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -871,7 +871,7 @@ export function toJson_BundleSpecSourcesConfigMapSelectorMatchExpressions(obj: B
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label selector requirement is a selector that contains values, a key, and an operator that
@@ -910,7 +910,7 @@ export interface BundleSpecSourcesSecretSelectorMatchExpressions {
 /**
  * Converts an object of type 'BundleSpecSourcesSecretSelectorMatchExpressions' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_BundleSpecSourcesSecretSelectorMatchExpressions(obj: BundleSpecSourcesSecretSelectorMatchExpressions | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -921,7 +921,7 @@ export function toJson_BundleSpecSourcesSecretSelectorMatchExpressions(obj: Bund
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Profile specifies the certificate encryption algorithms and the HMAC algorithm

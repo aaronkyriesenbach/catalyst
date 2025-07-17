@@ -7,7 +7,7 @@ import { Construct } from 'constructs';
  * ServersTransport is the CRD implementation of a ServersTransport.
 If no serversTransport is specified, the default@internal will be used.
 The default@internal serversTransport is created from the static configuration.
-More info: https://doc.traefik.io/traefik/v3.3/routing/services/#serverstransport_1
+More info: https://doc.traefik.io/traefik/v3.4/routing/services/#serverstransport_1
  *
  * @schema ServersTransport
  */
@@ -64,7 +64,7 @@ export class ServersTransport extends ApiObject {
  * ServersTransport is the CRD implementation of a ServersTransport.
  * If no serversTransport is specified, the default@internal will be used.
  * The default@internal serversTransport is created from the static configuration.
- * More info: https://doc.traefik.io/traefik/v3.3/routing/services/#serverstransport_1
+ * More info: https://doc.traefik.io/traefik/v3.4/routing/services/#serverstransport_1
  *
  * @schema ServersTransport
  */
@@ -86,7 +86,7 @@ export interface ServersTransportProps {
 /**
  * Converts an object of type 'ServersTransportProps' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ServersTransportProps(obj: ServersTransportProps | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -96,7 +96,7 @@ export function toJson_ServersTransportProps(obj: ServersTransportProps | undefi
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * ServersTransportSpec defines the desired state of a ServersTransport.
@@ -147,7 +147,15 @@ export interface ServersTransportSpec {
   readonly peerCertUri?: string;
 
   /**
+   * RootCAs defines a list of CA certificate Secrets or ConfigMaps used to validate server certificates.
+   *
+   * @schema ServersTransportSpec#rootCAs
+   */
+  readonly rootCAs?: ServersTransportSpecRootCAs[];
+
+  /**
    * RootCAsSecrets defines a list of CA secret used to validate self-signed certificate.
+   * Deprecated: RootCAsSecrets is deprecated, please use the RootCAs option instead.
    *
    * @schema ServersTransportSpec#rootCAsSecrets
    */
@@ -172,7 +180,7 @@ export interface ServersTransportSpec {
 /**
  * Converts an object of type 'ServersTransportSpec' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ServersTransportSpec(obj: ServersTransportSpec | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -182,6 +190,7 @@ export function toJson_ServersTransportSpec(obj: ServersTransportSpec | undefine
     'insecureSkipVerify': obj.insecureSkipVerify,
     'maxIdleConnsPerHost': obj.maxIdleConnsPerHost,
     'peerCertURI': obj.peerCertUri,
+    'rootCAs': obj.rootCAs?.map(y => toJson_ServersTransportSpecRootCAs(y)),
     'rootCAsSecrets': obj.rootCAsSecrets?.map(y => y),
     'serverName': obj.serverName,
     'spiffe': toJson_ServersTransportSpecSpiffe(obj.spiffe),
@@ -189,7 +198,7 @@ export function toJson_ServersTransportSpec(obj: ServersTransportSpec | undefine
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * ForwardingTimeouts defines the timeouts for requests forwarded to the backend servers.
@@ -237,7 +246,7 @@ export interface ServersTransportSpecForwardingTimeouts {
 /**
  * Converts an object of type 'ServersTransportSpecForwardingTimeouts' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ServersTransportSpecForwardingTimeouts(obj: ServersTransportSpecForwardingTimeouts | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -250,7 +259,47 @@ export function toJson_ServersTransportSpecForwardingTimeouts(obj: ServersTransp
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * RootCA defines a reference to a Secret or a ConfigMap that holds a CA certificate.
+ * If both a Secret and a ConfigMap reference are defined, the Secret reference takes precedence.
+ *
+ * @schema ServersTransportSpecRootCAs
+ */
+export interface ServersTransportSpecRootCAs {
+  /**
+   * ConfigMap defines the name of a ConfigMap that holds a CA certificate.
+   * The referenced ConfigMap must contain a certificate under either a tls.ca or a ca.crt key.
+   *
+   * @schema ServersTransportSpecRootCAs#configMap
+   */
+  readonly configMap?: string;
+
+  /**
+   * Secret defines the name of a Secret that holds a CA certificate.
+   * The referenced Secret must contain a certificate under either a tls.ca or a ca.crt key.
+   *
+   * @schema ServersTransportSpecRootCAs#secret
+   */
+  readonly secret?: string;
+
+}
+
+/**
+ * Converts an object of type 'ServersTransportSpecRootCAs' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ServersTransportSpecRootCAs(obj: ServersTransportSpecRootCAs | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'configMap': obj.configMap,
+    'secret': obj.secret,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Spiffe defines the SPIFFE configuration.
@@ -277,7 +326,7 @@ export interface ServersTransportSpecSpiffe {
 /**
  * Converts an object of type 'ServersTransportSpecSpiffe' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ServersTransportSpecSpiffe(obj: ServersTransportSpecSpiffe | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -287,7 +336,7 @@ export function toJson_ServersTransportSpecSpiffe(obj: ServersTransportSpecSpiff
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * DialTimeout is the amount of time to wait until a connection to a backend server can be established.

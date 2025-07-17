@@ -87,7 +87,7 @@ export interface CertificateProps {
 /**
  * Converts an object of type 'CertificateProps' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_CertificateProps(obj: CertificateProps | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -97,7 +97,7 @@ export function toJson_CertificateProps(obj: CertificateProps | undefined): Reco
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Specification of the desired state of the Certificate resource.
@@ -109,10 +109,6 @@ export interface CertificateSpec {
   /**
    * Defines extra output formats of the private key and signed certificate chain
    * to be written to this Certificate's target Secret.
-   *
-   * This is a Beta Feature enabled by default. It can be disabled with the
-   * `--feature-gates=AdditionalCertificateOutputFormats=false` option set on both
-   * the controller and webhook components.
    *
    * @schema CertificateSpec#additionalOutputFormats
    */
@@ -301,8 +297,7 @@ export interface CertificateSpec {
    * revisions exceeds this number.
    *
    * If set, revisionHistoryLimit must be a value of `1` or greater.
-   * If unset (`nil`), revisions will not be garbage collected.
-   * Default value is `nil`.
+   * Default value is `1`.
    *
    * @schema CertificateSpec#revisionHistoryLimit
    */
@@ -330,7 +325,7 @@ export interface CertificateSpec {
   readonly secretTemplate?: CertificateSpecSecretTemplate;
 
   /**
-   * Signature algorith to use.
+   * Signature algorithm to use.
    * Allowed values for RSA keys: SHA256WithRSA, SHA384WithRSA, SHA512WithRSA.
    * Allowed values for ECDSA keys: ECDSAWithSHA256, ECDSAWithSHA384, ECDSAWithSHA512.
    * Allowed values for Ed25519 keys: PureEd25519.
@@ -374,7 +369,7 @@ export interface CertificateSpec {
 /**
  * Converts an object of type 'CertificateSpec' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_CertificateSpec(obj: CertificateSpec | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -405,7 +400,7 @@ export function toJson_CertificateSpec(obj: CertificateSpec | undefined): Record
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * CertificateAdditionalOutputFormat defines an additional output format of a
@@ -428,7 +423,7 @@ export interface CertificateSpecAdditionalOutputFormats {
 /**
  * Converts an object of type 'CertificateSpecAdditionalOutputFormats' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_CertificateSpecAdditionalOutputFormats(obj: CertificateSpecAdditionalOutputFormats | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -437,7 +432,7 @@ export function toJson_CertificateSpecAdditionalOutputFormats(obj: CertificateSp
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Reference to the issuer responsible for issuing the certificate.
@@ -476,7 +471,7 @@ export interface CertificateSpecIssuerRef {
 /**
  * Converts an object of type 'CertificateSpecIssuerRef' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_CertificateSpecIssuerRef(obj: CertificateSpecIssuerRef | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -487,7 +482,7 @@ export function toJson_CertificateSpecIssuerRef(obj: CertificateSpecIssuerRef | 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Additional keystore output formats to be stored in the Certificate's Secret.
@@ -516,7 +511,7 @@ export interface CertificateSpecKeystores {
 /**
  * Converts an object of type 'CertificateSpecKeystores' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_CertificateSpecKeystores(obj: CertificateSpecKeystores | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -526,7 +521,7 @@ export function toJson_CertificateSpecKeystores(obj: CertificateSpecKeystores | 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * x.509 certificate NameConstraint extension which MUST NOT be used in a non-CA certificate.
@@ -567,7 +562,7 @@ export interface CertificateSpecNameConstraints {
 /**
  * Converts an object of type 'CertificateSpecNameConstraints' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_CertificateSpecNameConstraints(obj: CertificateSpecNameConstraints | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -578,7 +573,7 @@ export function toJson_CertificateSpecNameConstraints(obj: CertificateSpecNameCo
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema CertificateSpecOtherNames
@@ -606,7 +601,7 @@ export interface CertificateSpecOtherNames {
 /**
  * Converts an object of type 'CertificateSpecOtherNames' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_CertificateSpecOtherNames(obj: CertificateSpecOtherNames | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -616,7 +611,7 @@ export function toJson_CertificateSpecOtherNames(obj: CertificateSpecOtherNames 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Private key options. These include the key algorithm and size, the used
@@ -662,9 +657,13 @@ export interface CertificateSpecPrivateKey {
    * to await user intervention.
    * If set to `Always`, a private key matching the specified requirements
    * will be generated whenever a re-issuance occurs.
-   * Default is `Never` for backward compatibility.
+   * Default is `Always`.
+   * The default was changed from `Never` to `Always` in cert-manager >=v1.18.0.
+   * The new default can be disabled by setting the
+   * `--feature-gates=DefaultPrivateKeyRotationPolicyAlways=false` option on
+   * the controller component.
    *
-   * @default Never` for backward compatibility.
+   * @default Always`.
    * @schema CertificateSpecPrivateKey#rotationPolicy
    */
   readonly rotationPolicy?: CertificateSpecPrivateKeyRotationPolicy;
@@ -688,7 +687,7 @@ export interface CertificateSpecPrivateKey {
 /**
  * Converts an object of type 'CertificateSpecPrivateKey' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_CertificateSpecPrivateKey(obj: CertificateSpecPrivateKey | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -700,7 +699,7 @@ export function toJson_CertificateSpecPrivateKey(obj: CertificateSpecPrivateKey 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Defines annotations and labels to be copied to the Certificate's Secret.
@@ -731,7 +730,7 @@ export interface CertificateSpecSecretTemplate {
 /**
  * Converts an object of type 'CertificateSpecSecretTemplate' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_CertificateSpecSecretTemplate(obj: CertificateSpecSecretTemplate | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -741,10 +740,10 @@ export function toJson_CertificateSpecSecretTemplate(obj: CertificateSpecSecretT
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
- * Signature algorith to use.
+ * Signature algorithm to use.
  * Allowed values for RSA keys: SHA256WithRSA, SHA384WithRSA, SHA512WithRSA.
  * Allowed values for ECDSA keys: ECDSAWithSHA256, ECDSAWithSHA384, ECDSAWithSHA512.
  * Allowed values for Ed25519 keys: PureEd25519.
@@ -839,7 +838,7 @@ export interface CertificateSpecSubject {
 /**
  * Converts an object of type 'CertificateSpecSubject' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_CertificateSpecSubject(obj: CertificateSpecSubject | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -855,7 +854,7 @@ export function toJson_CertificateSpecSubject(obj: CertificateSpecSubject | unde
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * KeyUsage specifies valid usage contexts for keys.
@@ -922,7 +921,7 @@ export enum CertificateSpecUsages {
   /** email protection */
   EMAIL_PROTECTION = "email protection",
   /** s/mime */
-  S_MIME = "s/mime",
+  S_FORWARD_SLASH_MIME = "s/mime",
   /** ipsec end system */
   IPSEC_END_SYSTEM = "ipsec end system",
   /** ipsec tunnel */
@@ -1006,7 +1005,7 @@ export interface CertificateSpecKeystoresJks {
 /**
  * Converts an object of type 'CertificateSpecKeystoresJks' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_CertificateSpecKeystoresJks(obj: CertificateSpecKeystoresJks | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1018,7 +1017,7 @@ export function toJson_CertificateSpecKeystoresJks(obj: CertificateSpecKeystores
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * PKCS12 configures options for storing a PKCS12 keystore in the
@@ -1069,7 +1068,7 @@ export interface CertificateSpecKeystoresPkcs12 {
    * `LegacyRC2`: Deprecated. Not supported by default in OpenSSL 3 or Java 20.
    * `LegacyDES`: Less secure algorithm. Use this option for maximal compatibility.
    * `Modern2023`: Secure algorithm. Use this option in case you have to always use secure algorithms
-   * (eg. because of company policy). Please note that the security of the algorithm is not that important
+   * (e.g., because of company policy). Please note that the security of the algorithm is not that important
    * in reality, because the unencrypted certificate and private key are also stored in the Secret.
    *
    * @schema CertificateSpecKeystoresPkcs12#profile
@@ -1081,7 +1080,7 @@ export interface CertificateSpecKeystoresPkcs12 {
 /**
  * Converts an object of type 'CertificateSpecKeystoresPkcs12' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_CertificateSpecKeystoresPkcs12(obj: CertificateSpecKeystoresPkcs12 | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1093,7 +1092,7 @@ export function toJson_CertificateSpecKeystoresPkcs12(obj: CertificateSpecKeysto
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Excluded contains the constraints which must be disallowed. Any name matching a
@@ -1137,7 +1136,7 @@ export interface CertificateSpecNameConstraintsExcluded {
 /**
  * Converts an object of type 'CertificateSpecNameConstraintsExcluded' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_CertificateSpecNameConstraintsExcluded(obj: CertificateSpecNameConstraintsExcluded | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1149,7 +1148,7 @@ export function toJson_CertificateSpecNameConstraintsExcluded(obj: CertificateSp
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Permitted contains the constraints in which the names must be located.
@@ -1191,7 +1190,7 @@ export interface CertificateSpecNameConstraintsPermitted {
 /**
  * Converts an object of type 'CertificateSpecNameConstraintsPermitted' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_CertificateSpecNameConstraintsPermitted(obj: CertificateSpecNameConstraintsPermitted | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1203,7 +1202,7 @@ export function toJson_CertificateSpecNameConstraintsPermitted(obj: CertificateS
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Algorithm is the private key algorithm of the corresponding private key
@@ -1254,9 +1253,13 @@ export enum CertificateSpecPrivateKeyEncoding {
  * to await user intervention.
  * If set to `Always`, a private key matching the specified requirements
  * will be generated whenever a re-issuance occurs.
- * Default is `Never` for backward compatibility.
+ * Default is `Always`.
+ * The default was changed from `Never` to `Always` in cert-manager >=v1.18.0.
+ * The new default can be disabled by setting the
+ * `--feature-gates=DefaultPrivateKeyRotationPolicyAlways=false` option on
+ * the controller component.
  *
- * @default Never` for backward compatibility.
+ * @default Always`.
  * @schema CertificateSpecPrivateKeyRotationPolicy
  */
 export enum CertificateSpecPrivateKeyRotationPolicy {
@@ -1297,7 +1300,7 @@ export interface CertificateSpecKeystoresJksPasswordSecretRef {
 /**
  * Converts an object of type 'CertificateSpecKeystoresJksPasswordSecretRef' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_CertificateSpecKeystoresJksPasswordSecretRef(obj: CertificateSpecKeystoresJksPasswordSecretRef | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1307,7 +1310,7 @@ export function toJson_CertificateSpecKeystoresJksPasswordSecretRef(obj: Certifi
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * PasswordSecretRef is a reference to a non-empty key in a Secret resource
@@ -1340,7 +1343,7 @@ export interface CertificateSpecKeystoresPkcs12PasswordSecretRef {
 /**
  * Converts an object of type 'CertificateSpecKeystoresPkcs12PasswordSecretRef' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_CertificateSpecKeystoresPkcs12PasswordSecretRef(obj: CertificateSpecKeystoresPkcs12PasswordSecretRef | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1350,7 +1353,7 @@ export function toJson_CertificateSpecKeystoresPkcs12PasswordSecretRef(obj: Cert
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Profile specifies the key and certificate encryption algorithms and the HMAC algorithm
@@ -1360,7 +1363,7 @@ export function toJson_CertificateSpecKeystoresPkcs12PasswordSecretRef(obj: Cert
  * `LegacyRC2`: Deprecated. Not supported by default in OpenSSL 3 or Java 20.
  * `LegacyDES`: Less secure algorithm. Use this option for maximal compatibility.
  * `Modern2023`: Secure algorithm. Use this option in case you have to always use secure algorithms
- * (eg. because of company policy). Please note that the security of the algorithm is not that important
+ * (e.g., because of company policy). Please note that the security of the algorithm is not that important
  * in reality, because the unencrypted certificate and private key are also stored in the Secret.
  *
  * @schema CertificateSpecKeystoresPkcs12Profile

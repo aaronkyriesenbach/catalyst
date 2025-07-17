@@ -82,7 +82,7 @@ export interface IpAddressPoolProps {
 /**
  * Converts an object of type 'IpAddressPoolProps' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_IpAddressPoolProps(obj: IpAddressPoolProps | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -92,7 +92,7 @@ export function toJson_IpAddressPoolProps(obj: IpAddressPoolProps | undefined): 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * IPAddressPoolSpec defines the desired state of IPAddressPool.
@@ -144,7 +144,7 @@ export interface IpAddressPoolSpec {
 /**
  * Converts an object of type 'IpAddressPoolSpec' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_IpAddressPoolSpec(obj: IpAddressPoolSpec | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -156,7 +156,7 @@ export function toJson_IpAddressPoolSpec(obj: IpAddressPoolSpec | undefined): Re
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * AllocateTo makes ip pool allocation to specific namespace and/or service.
@@ -205,7 +205,7 @@ export interface IpAddressPoolSpecServiceAllocation {
 /**
  * Converts an object of type 'IpAddressPoolSpecServiceAllocation' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_IpAddressPoolSpecServiceAllocation(obj: IpAddressPoolSpecServiceAllocation | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -217,7 +217,7 @@ export function toJson_IpAddressPoolSpecServiceAllocation(obj: IpAddressPoolSpec
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label selector is a label query over a set of resources. The result of matchLabels and
@@ -248,7 +248,7 @@ export interface IpAddressPoolSpecServiceAllocationNamespaceSelectors {
 /**
  * Converts an object of type 'IpAddressPoolSpecServiceAllocationNamespaceSelectors' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_IpAddressPoolSpecServiceAllocationNamespaceSelectors(obj: IpAddressPoolSpecServiceAllocationNamespaceSelectors | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -258,7 +258,7 @@ export function toJson_IpAddressPoolSpecServiceAllocationNamespaceSelectors(obj:
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label selector is a label query over a set of resources. The result of matchLabels and
@@ -289,7 +289,7 @@ export interface IpAddressPoolSpecServiceAllocationServiceSelectors {
 /**
  * Converts an object of type 'IpAddressPoolSpecServiceAllocationServiceSelectors' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_IpAddressPoolSpecServiceAllocationServiceSelectors(obj: IpAddressPoolSpecServiceAllocationServiceSelectors | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -299,7 +299,7 @@ export function toJson_IpAddressPoolSpecServiceAllocationServiceSelectors(obj: I
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label selector requirement is a selector that contains values, a key, and an operator that
@@ -338,7 +338,7 @@ export interface IpAddressPoolSpecServiceAllocationNamespaceSelectorsMatchExpres
 /**
  * Converts an object of type 'IpAddressPoolSpecServiceAllocationNamespaceSelectorsMatchExpressions' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_IpAddressPoolSpecServiceAllocationNamespaceSelectorsMatchExpressions(obj: IpAddressPoolSpecServiceAllocationNamespaceSelectorsMatchExpressions | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -349,7 +349,7 @@ export function toJson_IpAddressPoolSpecServiceAllocationNamespaceSelectorsMatch
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label selector requirement is a selector that contains values, a key, and an operator that
@@ -388,7 +388,7 @@ export interface IpAddressPoolSpecServiceAllocationServiceSelectorsMatchExpressi
 /**
  * Converts an object of type 'IpAddressPoolSpecServiceAllocationServiceSelectorsMatchExpressions' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_IpAddressPoolSpecServiceAllocationServiceSelectorsMatchExpressions(obj: IpAddressPoolSpecServiceAllocationServiceSelectorsMatchExpressions | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -399,5 +399,5 @@ export function toJson_IpAddressPoolSpecServiceAllocationServiceSelectorsMatchEx
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 

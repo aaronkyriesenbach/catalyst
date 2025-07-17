@@ -82,7 +82,7 @@ export interface L2AdvertisementProps {
 /**
  * Converts an object of type 'L2AdvertisementProps' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_L2AdvertisementProps(obj: L2AdvertisementProps | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -92,7 +92,7 @@ export function toJson_L2AdvertisementProps(obj: L2AdvertisementProps | undefine
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * L2AdvertisementSpec defines the desired state of L2Advertisement.
@@ -135,7 +135,7 @@ export interface L2AdvertisementSpec {
 /**
  * Converts an object of type 'L2AdvertisementSpec' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_L2AdvertisementSpec(obj: L2AdvertisementSpec | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -147,7 +147,7 @@ export function toJson_L2AdvertisementSpec(obj: L2AdvertisementSpec | undefined)
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label selector is a label query over a set of resources. The result of matchLabels and
@@ -178,7 +178,7 @@ export interface L2AdvertisementSpecIpAddressPoolSelectors {
 /**
  * Converts an object of type 'L2AdvertisementSpecIpAddressPoolSelectors' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_L2AdvertisementSpecIpAddressPoolSelectors(obj: L2AdvertisementSpecIpAddressPoolSelectors | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -188,7 +188,7 @@ export function toJson_L2AdvertisementSpecIpAddressPoolSelectors(obj: L2Advertis
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label selector is a label query over a set of resources. The result of matchLabels and
@@ -219,7 +219,7 @@ export interface L2AdvertisementSpecNodeSelectors {
 /**
  * Converts an object of type 'L2AdvertisementSpecNodeSelectors' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_L2AdvertisementSpecNodeSelectors(obj: L2AdvertisementSpecNodeSelectors | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -229,7 +229,7 @@ export function toJson_L2AdvertisementSpecNodeSelectors(obj: L2AdvertisementSpec
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label selector requirement is a selector that contains values, a key, and an operator that
@@ -268,7 +268,7 @@ export interface L2AdvertisementSpecIpAddressPoolSelectorsMatchExpressions {
 /**
  * Converts an object of type 'L2AdvertisementSpecIpAddressPoolSelectorsMatchExpressions' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_L2AdvertisementSpecIpAddressPoolSelectorsMatchExpressions(obj: L2AdvertisementSpecIpAddressPoolSelectorsMatchExpressions | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -279,7 +279,7 @@ export function toJson_L2AdvertisementSpecIpAddressPoolSelectorsMatchExpressions
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label selector requirement is a selector that contains values, a key, and an operator that
@@ -318,7 +318,7 @@ export interface L2AdvertisementSpecNodeSelectorsMatchExpressions {
 /**
  * Converts an object of type 'L2AdvertisementSpecNodeSelectorsMatchExpressions' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_L2AdvertisementSpecNodeSelectorsMatchExpressions(obj: L2AdvertisementSpecNodeSelectorsMatchExpressions | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -329,5 +329,5 @@ export function toJson_L2AdvertisementSpecNodeSelectorsMatchExpressions(obj: L2A
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
