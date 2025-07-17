@@ -76,7 +76,7 @@ export interface SecretExportProps {
 /**
  * Converts an object of type 'SecretExportProps' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_SecretExportProps(obj: SecretExportProps | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -86,7 +86,7 @@ export function toJson_SecretExportProps(obj: SecretExportProps | undefined): Re
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema SecretExportSpec
@@ -112,7 +112,7 @@ export interface SecretExportSpec {
 /**
  * Converts an object of type 'SecretExportSpec' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_SecretExportSpec(obj: SecretExportSpec | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -123,7 +123,7 @@ export function toJson_SecretExportSpec(obj: SecretExportSpec | undefined): Reco
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema SecretExportSpecDangerousToNamespacesSelector
@@ -155,7 +155,7 @@ export interface SecretExportSpecDangerousToNamespacesSelector {
 /**
  * Converts an object of type 'SecretExportSpecDangerousToNamespacesSelector' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_SecretExportSpecDangerousToNamespacesSelector(obj: SecretExportSpecDangerousToNamespacesSelector | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -166,7 +166,7 @@ export function toJson_SecretExportSpecDangerousToNamespacesSelector(obj: Secret
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Type of comparison.
@@ -258,7 +258,7 @@ export interface SecretImportProps {
 /**
  * Converts an object of type 'SecretImportProps' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_SecretImportProps(obj: SecretImportProps | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -268,7 +268,7 @@ export function toJson_SecretImportProps(obj: SecretImportProps | undefined): Re
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema SecretImportSpec
@@ -284,7 +284,7 @@ export interface SecretImportSpec {
 /**
  * Converts an object of type 'SecretImportSpec' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_SecretImportSpec(obj: SecretImportSpec | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -293,7 +293,7 @@ export function toJson_SecretImportSpec(obj: SecretImportSpec | undefined): Reco
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 
 /**
@@ -373,7 +373,7 @@ export interface SecretTemplateProps {
 /**
  * Converts an object of type 'SecretTemplateProps' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_SecretTemplateProps(obj: SecretTemplateProps | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -383,7 +383,7 @@ export function toJson_SecretTemplateProps(obj: SecretTemplateProps | undefined)
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * SecretTemplateSpec contains spec information
@@ -417,7 +417,7 @@ export interface SecretTemplateSpec {
 /**
  * Converts an object of type 'SecretTemplateSpec' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_SecretTemplateSpec(obj: SecretTemplateSpec | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -428,7 +428,7 @@ export function toJson_SecretTemplateSpec(obj: SecretTemplateSpec | undefined): 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * InputResource is references a single Kubernetes resource along with a identifying name
@@ -455,7 +455,7 @@ export interface SecretTemplateSpecInputResources {
 /**
  * Converts an object of type 'SecretTemplateSpecInputResources' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_SecretTemplateSpecInputResources(obj: SecretTemplateSpecInputResources | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -465,7 +465,7 @@ export function toJson_SecretTemplateSpecInputResources(obj: SecretTemplateSpecI
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A JSONPath based template that can be used to create Secrets.
@@ -506,7 +506,7 @@ export interface SecretTemplateSpecTemplate {
 /**
  * Converts an object of type 'SecretTemplateSpecTemplate' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_SecretTemplateSpecTemplate(obj: SecretTemplateSpecTemplate | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -518,7 +518,7 @@ export function toJson_SecretTemplateSpecTemplate(obj: SecretTemplateSpecTemplat
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The reference to the Input Resource
@@ -548,7 +548,7 @@ export interface SecretTemplateSpecInputResourcesRef {
 /**
  * Converts an object of type 'SecretTemplateSpecInputResourcesRef' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_SecretTemplateSpecInputResourcesRef(obj: SecretTemplateSpecInputResourcesRef | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -559,7 +559,7 @@ export function toJson_SecretTemplateSpecInputResourcesRef(obj: SecretTemplateSp
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Metadata contains metadata for the Secret
@@ -586,7 +586,7 @@ export interface SecretTemplateSpecTemplateMetadata {
 /**
  * Converts an object of type 'SecretTemplateSpecTemplateMetadata' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_SecretTemplateSpecTemplateMetadata(obj: SecretTemplateSpecTemplateMetadata | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -596,5 +596,5 @@ export function toJson_SecretTemplateSpecTemplateMetadata(obj: SecretTemplateSpe
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 

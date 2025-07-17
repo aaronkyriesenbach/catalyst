@@ -7,7 +7,7 @@ import { Construct } from 'constructs';
  * TLSStore is the CRD implementation of a Traefik TLS Store.
 For the time being, only the TLSStore named default is supported.
 This means that you cannot have two stores that are named default in different Kubernetes namespaces.
-More info: https://doc.traefik.io/traefik/v3.3/https/tls/#certificates-stores
+More info: https://doc.traefik.io/traefik/v3.4/https/tls/#certificates-stores
  *
  * @schema TLSStore
  */
@@ -64,7 +64,7 @@ export class TlsStore extends ApiObject {
  * TLSStore is the CRD implementation of a Traefik TLS Store.
  * For the time being, only the TLSStore named default is supported.
  * This means that you cannot have two stores that are named default in different Kubernetes namespaces.
- * More info: https://doc.traefik.io/traefik/v3.3/https/tls/#certificates-stores
+ * More info: https://doc.traefik.io/traefik/v3.4/https/tls/#certificates-stores
  *
  * @schema TLSStore
  */
@@ -86,7 +86,7 @@ export interface TlsStoreProps {
 /**
  * Converts an object of type 'TlsStoreProps' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_TlsStoreProps(obj: TlsStoreProps | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -96,7 +96,7 @@ export function toJson_TlsStoreProps(obj: TlsStoreProps | undefined): Record<str
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * TLSStoreSpec defines the desired state of a TLSStore.
@@ -130,7 +130,7 @@ export interface TlsStoreSpec {
 /**
  * Converts an object of type 'TlsStoreSpec' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_TlsStoreSpec(obj: TlsStoreSpec | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -141,7 +141,7 @@ export function toJson_TlsStoreSpec(obj: TlsStoreSpec | undefined): Record<strin
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Certificate holds a secret name for the TLSStore resource.
@@ -161,7 +161,7 @@ export interface TlsStoreSpecCertificates {
 /**
  * Converts an object of type 'TlsStoreSpecCertificates' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_TlsStoreSpecCertificates(obj: TlsStoreSpecCertificates | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -170,7 +170,7 @@ export function toJson_TlsStoreSpecCertificates(obj: TlsStoreSpecCertificates | 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * DefaultCertificate defines the default certificate configuration.
@@ -190,7 +190,7 @@ export interface TlsStoreSpecDefaultCertificate {
 /**
  * Converts an object of type 'TlsStoreSpecDefaultCertificate' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_TlsStoreSpecDefaultCertificate(obj: TlsStoreSpecDefaultCertificate | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -199,7 +199,7 @@ export function toJson_TlsStoreSpecDefaultCertificate(obj: TlsStoreSpecDefaultCe
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * DefaultGeneratedCert defines the default generated certificate configuration.
@@ -226,7 +226,7 @@ export interface TlsStoreSpecDefaultGeneratedCert {
 /**
  * Converts an object of type 'TlsStoreSpecDefaultGeneratedCert' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_TlsStoreSpecDefaultGeneratedCert(obj: TlsStoreSpecDefaultGeneratedCert | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -236,7 +236,7 @@ export function toJson_TlsStoreSpecDefaultGeneratedCert(obj: TlsStoreSpecDefault
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Domain is the domain definition for the DefaultCertificate.
@@ -263,7 +263,7 @@ export interface TlsStoreSpecDefaultGeneratedCertDomain {
 /**
  * Converts an object of type 'TlsStoreSpecDefaultGeneratedCertDomain' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_TlsStoreSpecDefaultGeneratedCertDomain(obj: TlsStoreSpecDefaultGeneratedCertDomain | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -273,5 +273,5 @@ export function toJson_TlsStoreSpecDefaultGeneratedCertDomain(obj: TlsStoreSpecD
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 

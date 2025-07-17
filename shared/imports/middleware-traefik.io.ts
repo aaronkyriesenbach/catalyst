@@ -5,7 +5,7 @@ import { Construct } from 'constructs';
 
 /**
  * Middleware is the CRD implementation of a Traefik Middleware.
-More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/overview/
+More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/overview/
  *
  * @schema Middleware
  */
@@ -60,7 +60,7 @@ export class Middleware extends ApiObject {
 
 /**
  * Middleware is the CRD implementation of a Traefik Middleware.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/overview/
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/overview/
  *
  * @schema Middleware
  */
@@ -82,7 +82,7 @@ export interface MiddlewareProps {
 /**
  * Converts an object of type 'MiddlewareProps' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareProps(obj: MiddlewareProps | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -92,7 +92,7 @@ export function toJson_MiddlewareProps(obj: MiddlewareProps | undefined): Record
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * MiddlewareSpec defines the desired state of a Middleware.
@@ -103,7 +103,7 @@ export interface MiddlewareSpec {
   /**
    * AddPrefix holds the add prefix middleware configuration.
    * This middleware updates the path of a request before forwarding it.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/addprefix/
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/addprefix/
    *
    * @schema MiddlewareSpec#addPrefix
    */
@@ -112,7 +112,7 @@ export interface MiddlewareSpec {
   /**
    * BasicAuth holds the basic auth middleware configuration.
    * This middleware restricts access to your services to known users.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/basicauth/
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/basicauth/
    *
    * @schema MiddlewareSpec#basicAuth
    */
@@ -121,7 +121,7 @@ export interface MiddlewareSpec {
   /**
    * Buffering holds the buffering middleware configuration.
    * This middleware retries or limits the size of requests that can be forwarded to backends.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/buffering/#maxrequestbodybytes
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/buffering/#maxrequestbodybytes
    *
    * @schema MiddlewareSpec#buffering
    */
@@ -130,7 +130,7 @@ export interface MiddlewareSpec {
   /**
    * Chain holds the configuration of the chain middleware.
    * This middleware enables to define reusable combinations of other pieces of middleware.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/chain/
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/chain/
    *
    * @schema MiddlewareSpec#chain
    */
@@ -146,7 +146,7 @@ export interface MiddlewareSpec {
   /**
    * Compress holds the compress middleware configuration.
    * This middleware compresses responses before sending them to the client, using gzip, brotli, or zstd compression.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/compress/
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/compress/
    *
    * @schema MiddlewareSpec#compress
    */
@@ -163,7 +163,7 @@ export interface MiddlewareSpec {
   /**
    * DigestAuth holds the digest auth middleware configuration.
    * This middleware restricts access to your services to known users.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/digestauth/
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/digestauth/
    *
    * @schema MiddlewareSpec#digestAuth
    */
@@ -172,7 +172,7 @@ export interface MiddlewareSpec {
   /**
    * ErrorPage holds the custom error middleware configuration.
    * This middleware returns a custom page in lieu of the default, according to configured ranges of HTTP Status codes.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/errorpages/
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/errorpages/
    *
    * @schema MiddlewareSpec#errors
    */
@@ -181,7 +181,7 @@ export interface MiddlewareSpec {
   /**
    * ForwardAuth holds the forward auth middleware configuration.
    * This middleware delegates the request authentication to a Service.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/forwardauth/
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/forwardauth/
    *
    * @schema MiddlewareSpec#forwardAuth
    */
@@ -198,7 +198,7 @@ export interface MiddlewareSpec {
   /**
    * Headers holds the headers middleware configuration.
    * This middleware manages the requests and responses headers.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/headers/#customrequestheaders
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/headers/#customrequestheaders
    *
    * @schema MiddlewareSpec#headers
    */
@@ -207,7 +207,7 @@ export interface MiddlewareSpec {
   /**
    * InFlightReq holds the in-flight request middleware configuration.
    * This middleware limits the number of requests being processed and served concurrently.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/inflightreq/
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/inflightreq/
    *
    * @schema MiddlewareSpec#inFlightReq
    */
@@ -216,7 +216,7 @@ export interface MiddlewareSpec {
   /**
    * IPAllowList holds the IP allowlist middleware configuration.
    * This middleware limits allowed requests based on the client IP.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/ipallowlist/
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/ipallowlist/
    *
    * @schema MiddlewareSpec#ipAllowList
    */
@@ -232,7 +232,7 @@ export interface MiddlewareSpec {
   /**
    * PassTLSClientCert holds the pass TLS client cert middleware configuration.
    * This middleware adds the selected data from the passed client TLS certificate to a header.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/passtlsclientcert/
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/passtlsclientcert/
    *
    * @schema MiddlewareSpec#passTLSClientCert
    */
@@ -249,7 +249,7 @@ export interface MiddlewareSpec {
   /**
    * RateLimit holds the rate limit configuration.
    * This middleware ensures that services will receive a fair amount of requests, and allows one to define what fair is.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/ratelimit/
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/ratelimit/
    *
    * @schema MiddlewareSpec#rateLimit
    */
@@ -258,7 +258,7 @@ export interface MiddlewareSpec {
   /**
    * RedirectRegex holds the redirect regex middleware configuration.
    * This middleware redirects a request using regex matching and replacement.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/redirectregex/#regex
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/redirectregex/#regex
    *
    * @schema MiddlewareSpec#redirectRegex
    */
@@ -267,7 +267,7 @@ export interface MiddlewareSpec {
   /**
    * RedirectScheme holds the redirect scheme middleware configuration.
    * This middleware redirects requests from a scheme/port to another.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/redirectscheme/
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/redirectscheme/
    *
    * @schema MiddlewareSpec#redirectScheme
    */
@@ -276,7 +276,7 @@ export interface MiddlewareSpec {
   /**
    * ReplacePath holds the replace path middleware configuration.
    * This middleware replaces the path of the request URL and store the original path in an X-Replaced-Path header.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/replacepath/
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/replacepath/
    *
    * @schema MiddlewareSpec#replacePath
    */
@@ -285,7 +285,7 @@ export interface MiddlewareSpec {
   /**
    * ReplacePathRegex holds the replace path regex middleware configuration.
    * This middleware replaces the path of a URL using regex matching and replacement.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/replacepathregex/
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/replacepathregex/
    *
    * @schema MiddlewareSpec#replacePathRegex
    */
@@ -295,7 +295,7 @@ export interface MiddlewareSpec {
    * Retry holds the retry middleware configuration.
    * This middleware reissues requests a given number of times to a backend server if that server does not reply.
    * As soon as the server answers, the middleware stops retrying, regardless of the response status.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/retry/
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/retry/
    *
    * @schema MiddlewareSpec#retry
    */
@@ -304,7 +304,7 @@ export interface MiddlewareSpec {
   /**
    * StripPrefix holds the strip prefix middleware configuration.
    * This middleware removes the specified prefixes from the URL path.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/stripprefix/
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/stripprefix/
    *
    * @schema MiddlewareSpec#stripPrefix
    */
@@ -313,7 +313,7 @@ export interface MiddlewareSpec {
   /**
    * StripPrefixRegex holds the strip prefix regex middleware configuration.
    * This middleware removes the matching prefixes from the URL path.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/stripprefixregex/
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/stripprefixregex/
    *
    * @schema MiddlewareSpec#stripPrefixRegex
    */
@@ -324,7 +324,7 @@ export interface MiddlewareSpec {
 /**
  * Converts an object of type 'MiddlewareSpec' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpec(obj: MiddlewareSpec | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -357,12 +357,12 @@ export function toJson_MiddlewareSpec(obj: MiddlewareSpec | undefined): Record<s
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * AddPrefix holds the add prefix middleware configuration.
  * This middleware updates the path of a request before forwarding it.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/addprefix/
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/addprefix/
  *
  * @schema MiddlewareSpecAddPrefix
  */
@@ -380,7 +380,7 @@ export interface MiddlewareSpecAddPrefix {
 /**
  * Converts an object of type 'MiddlewareSpecAddPrefix' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecAddPrefix(obj: MiddlewareSpecAddPrefix | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -389,19 +389,19 @@ export function toJson_MiddlewareSpecAddPrefix(obj: MiddlewareSpecAddPrefix | un
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * BasicAuth holds the basic auth middleware configuration.
  * This middleware restricts access to your services to known users.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/basicauth/
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/basicauth/
  *
  * @schema MiddlewareSpecBasicAuth
  */
 export interface MiddlewareSpecBasicAuth {
   /**
    * HeaderField defines a header field to store the authenticated user.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/basicauth/#headerfield
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/basicauth/#headerfield
    *
    * @schema MiddlewareSpecBasicAuth#headerField
    */
@@ -435,7 +435,7 @@ export interface MiddlewareSpecBasicAuth {
 /**
  * Converts an object of type 'MiddlewareSpecBasicAuth' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecBasicAuth(obj: MiddlewareSpecBasicAuth | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -447,12 +447,12 @@ export function toJson_MiddlewareSpecBasicAuth(obj: MiddlewareSpecBasicAuth | un
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Buffering holds the buffering middleware configuration.
  * This middleware retries or limits the size of requests that can be forwarded to backends.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/buffering/#maxrequestbodybytes
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/buffering/#maxrequestbodybytes
  *
  * @schema MiddlewareSpecBuffering
  */
@@ -494,7 +494,7 @@ export interface MiddlewareSpecBuffering {
   /**
    * RetryExpression defines the retry conditions.
    * It is a logical combination of functions with operators AND (&&) and OR (||).
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/buffering/#retryexpression
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/buffering/#retryexpression
    *
    * @schema MiddlewareSpecBuffering#retryExpression
    */
@@ -505,7 +505,7 @@ export interface MiddlewareSpecBuffering {
 /**
  * Converts an object of type 'MiddlewareSpecBuffering' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecBuffering(obj: MiddlewareSpecBuffering | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -518,12 +518,12 @@ export function toJson_MiddlewareSpecBuffering(obj: MiddlewareSpecBuffering | un
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Chain holds the configuration of the chain middleware.
  * This middleware enables to define reusable combinations of other pieces of middleware.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/chain/
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/chain/
  *
  * @schema MiddlewareSpecChain
  */
@@ -540,7 +540,7 @@ export interface MiddlewareSpecChain {
 /**
  * Converts an object of type 'MiddlewareSpecChain' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecChain(obj: MiddlewareSpecChain | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -549,7 +549,7 @@ export function toJson_MiddlewareSpecChain(obj: MiddlewareSpecChain | undefined)
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * CircuitBreaker holds the circuit breaker configuration.
@@ -597,7 +597,7 @@ export interface MiddlewareSpecCircuitBreaker {
 /**
  * Converts an object of type 'MiddlewareSpecCircuitBreaker' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecCircuitBreaker(obj: MiddlewareSpecCircuitBreaker | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -610,12 +610,12 @@ export function toJson_MiddlewareSpecCircuitBreaker(obj: MiddlewareSpecCircuitBr
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Compress holds the compress middleware configuration.
  * This middleware compresses responses before sending them to the client, using gzip, brotli, or zstd compression.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/compress/
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/compress/
  *
  * @schema MiddlewareSpecCompress
  */
@@ -662,7 +662,7 @@ export interface MiddlewareSpecCompress {
 /**
  * Converts an object of type 'MiddlewareSpecCompress' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecCompress(obj: MiddlewareSpecCompress | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -675,7 +675,7 @@ export function toJson_MiddlewareSpecCompress(obj: MiddlewareSpecCompress | unde
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * ContentType holds the content-type middleware configuration.
@@ -698,7 +698,7 @@ export interface MiddlewareSpecContentType {
 /**
  * Converts an object of type 'MiddlewareSpecContentType' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecContentType(obj: MiddlewareSpecContentType | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -707,19 +707,19 @@ export function toJson_MiddlewareSpecContentType(obj: MiddlewareSpecContentType 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * DigestAuth holds the digest auth middleware configuration.
  * This middleware restricts access to your services to known users.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/digestauth/
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/digestauth/
  *
  * @schema MiddlewareSpecDigestAuth
  */
 export interface MiddlewareSpecDigestAuth {
   /**
    * HeaderField defines a header field to store the authenticated user.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/basicauth/#headerfield
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/basicauth/#headerfield
    *
    * @schema MiddlewareSpecDigestAuth#headerField
    */
@@ -752,7 +752,7 @@ export interface MiddlewareSpecDigestAuth {
 /**
  * Converts an object of type 'MiddlewareSpecDigestAuth' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecDigestAuth(obj: MiddlewareSpecDigestAuth | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -764,12 +764,12 @@ export function toJson_MiddlewareSpecDigestAuth(obj: MiddlewareSpecDigestAuth | 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * ErrorPage holds the custom error middleware configuration.
  * This middleware returns a custom page in lieu of the default, according to configured ranges of HTTP Status codes.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/errorpages/
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/errorpages/
  *
  * @schema MiddlewareSpecErrors
  */
@@ -777,6 +777,8 @@ export interface MiddlewareSpecErrors {
   /**
    * Query defines the URL for the error page (hosted by service).
    * The {status} variable can be used in order to insert the status code in the URL.
+   * The {originalStatus} variable can be used in order to insert the upstream status code in the URL.
+   * The {url} variable can be used in order to insert the escaped request URL.
    *
    * @schema MiddlewareSpecErrors#query
    */
@@ -784,7 +786,7 @@ export interface MiddlewareSpecErrors {
 
   /**
    * Service defines the reference to a Kubernetes Service that will serve the error page.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/errorpages/#service
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/errorpages/#service
    *
    * @schema MiddlewareSpecErrors#service
    */
@@ -801,28 +803,37 @@ export interface MiddlewareSpecErrors {
    */
   readonly status?: string[];
 
+  /**
+   * StatusRewrites defines a mapping of status codes that should be returned instead of the original error status codes.
+   * For example: "418": 404 or "410-418": 404
+   *
+   * @schema MiddlewareSpecErrors#statusRewrites
+   */
+  readonly statusRewrites?: { [key: string]: number };
+
 }
 
 /**
  * Converts an object of type 'MiddlewareSpecErrors' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecErrors(obj: MiddlewareSpecErrors | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
     'query': obj.query,
     'service': toJson_MiddlewareSpecErrorsService(obj.service),
     'status': obj.status?.map(y => y),
+    'statusRewrites': ((obj.statusRewrites) === undefined) ? undefined : (Object.entries(obj.statusRewrites).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {})),
   };
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * ForwardAuth holds the forward auth middleware configuration.
  * This middleware delegates the request authentication to a Service.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/forwardauth/
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/forwardauth/
  *
  * @schema MiddlewareSpecForwardAuth
  */
@@ -858,7 +869,7 @@ export interface MiddlewareSpecForwardAuth {
 
   /**
    * AuthResponseHeadersRegex defines the regex to match headers to copy from the authentication server response and set on forwarded request, after stripping all headers that match the regex.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/forwardauth/#authresponseheadersregex
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/forwardauth/#authresponseheadersregex
    *
    * @schema MiddlewareSpecForwardAuth#authResponseHeadersRegex
    */
@@ -873,7 +884,7 @@ export interface MiddlewareSpecForwardAuth {
 
   /**
    * HeaderField defines a header field to store the authenticated user.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/forwardauth/#headerfield
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/forwardauth/#headerfield
    *
    * @schema MiddlewareSpecForwardAuth#headerField
    */
@@ -894,6 +905,13 @@ export interface MiddlewareSpecForwardAuth {
   readonly preserveLocationHeader?: boolean;
 
   /**
+   * PreserveRequestMethod defines whether to preserve the original request method while forwarding the request to the authentication server.
+   *
+   * @schema MiddlewareSpecForwardAuth#preserveRequestMethod
+   */
+  readonly preserveRequestMethod?: boolean;
+
+  /**
    * TLS defines the configuration used to secure the connection to the authentication server.
    *
    * @schema MiddlewareSpecForwardAuth#tls
@@ -912,7 +930,7 @@ export interface MiddlewareSpecForwardAuth {
 /**
  * Converts an object of type 'MiddlewareSpecForwardAuth' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecForwardAuth(obj: MiddlewareSpecForwardAuth | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -925,13 +943,14 @@ export function toJson_MiddlewareSpecForwardAuth(obj: MiddlewareSpecForwardAuth 
     'headerField': obj.headerField,
     'maxBodySize': obj.maxBodySize,
     'preserveLocationHeader': obj.preserveLocationHeader,
+    'preserveRequestMethod': obj.preserveRequestMethod,
     'tls': toJson_MiddlewareSpecForwardAuthTls(obj.tls),
     'trustForwardHeader': obj.trustForwardHeader,
   };
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * GrpcWeb holds the gRPC web middleware configuration.
@@ -953,7 +972,7 @@ export interface MiddlewareSpecGrpcWeb {
 /**
  * Converts an object of type 'MiddlewareSpecGrpcWeb' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecGrpcWeb(obj: MiddlewareSpecGrpcWeb | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -962,12 +981,12 @@ export function toJson_MiddlewareSpecGrpcWeb(obj: MiddlewareSpecGrpcWeb | undefi
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Headers holds the headers middleware configuration.
  * This middleware manages the requests and responses headers.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/headers/#customrequestheaders
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/headers/#customrequestheaders
  *
  * @schema MiddlewareSpecHeaders
  */
@@ -1217,7 +1236,7 @@ export interface MiddlewareSpecHeaders {
 /**
  * Converts an object of type 'MiddlewareSpecHeaders' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecHeaders(obj: MiddlewareSpecHeaders | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1258,12 +1277,12 @@ export function toJson_MiddlewareSpecHeaders(obj: MiddlewareSpecHeaders | undefi
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * InFlightReq holds the in-flight request middleware configuration.
  * This middleware limits the number of requests being processed and served concurrently.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/inflightreq/
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/inflightreq/
  *
  * @schema MiddlewareSpecInFlightReq
  */
@@ -1280,7 +1299,7 @@ export interface MiddlewareSpecInFlightReq {
    * SourceCriterion defines what criterion is used to group requests as originating from a common source.
    * If several strategies are defined at the same time, an error will be raised.
    * If none are set, the default is to use the requestHost.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/inflightreq/#sourcecriterion
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/inflightreq/#sourcecriterion
    *
    * @schema MiddlewareSpecInFlightReq#sourceCriterion
    */
@@ -1291,7 +1310,7 @@ export interface MiddlewareSpecInFlightReq {
 /**
  * Converts an object of type 'MiddlewareSpecInFlightReq' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecInFlightReq(obj: MiddlewareSpecInFlightReq | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1301,19 +1320,19 @@ export function toJson_MiddlewareSpecInFlightReq(obj: MiddlewareSpecInFlightReq 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * IPAllowList holds the IP allowlist middleware configuration.
  * This middleware limits allowed requests based on the client IP.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/ipallowlist/
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/ipallowlist/
  *
  * @schema MiddlewareSpecIpAllowList
  */
 export interface MiddlewareSpecIpAllowList {
   /**
    * IPStrategy holds the IP strategy configuration used by Traefik to determine the client IP.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/ipallowlist/#ipstrategy
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/ipallowlist/#ipstrategy
    *
    * @schema MiddlewareSpecIpAllowList#ipStrategy
    */
@@ -1339,7 +1358,7 @@ export interface MiddlewareSpecIpAllowList {
 /**
  * Converts an object of type 'MiddlewareSpecIpAllowList' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecIpAllowList(obj: MiddlewareSpecIpAllowList | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1350,7 +1369,7 @@ export function toJson_MiddlewareSpecIpAllowList(obj: MiddlewareSpecIpAllowList 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Deprecated: please use IPAllowList instead.
@@ -1360,7 +1379,7 @@ export function toJson_MiddlewareSpecIpAllowList(obj: MiddlewareSpecIpAllowList 
 export interface MiddlewareSpecIpWhiteList {
   /**
    * IPStrategy holds the IP strategy configuration used by Traefik to determine the client IP.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/ipallowlist/#ipstrategy
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/ipallowlist/#ipstrategy
    *
    * @schema MiddlewareSpecIpWhiteList#ipStrategy
    */
@@ -1378,7 +1397,7 @@ export interface MiddlewareSpecIpWhiteList {
 /**
  * Converts an object of type 'MiddlewareSpecIpWhiteList' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecIpWhiteList(obj: MiddlewareSpecIpWhiteList | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1388,12 +1407,12 @@ export function toJson_MiddlewareSpecIpWhiteList(obj: MiddlewareSpecIpWhiteList 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * PassTLSClientCert holds the pass TLS client cert middleware configuration.
  * This middleware adds the selected data from the passed client TLS certificate to a header.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/passtlsclientcert/
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/passtlsclientcert/
  *
  * @schema MiddlewareSpecPassTlsClientCert
  */
@@ -1417,7 +1436,7 @@ export interface MiddlewareSpecPassTlsClientCert {
 /**
  * Converts an object of type 'MiddlewareSpecPassTlsClientCert' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecPassTlsClientCert(obj: MiddlewareSpecPassTlsClientCert | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1427,12 +1446,12 @@ export function toJson_MiddlewareSpecPassTlsClientCert(obj: MiddlewareSpecPassTl
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * RateLimit holds the rate limit configuration.
  * This middleware ensures that services will receive a fair amount of requests, and allows one to define what fair is.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/ratelimit/
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/ratelimit/
  *
  * @schema MiddlewareSpecRateLimit
  */
@@ -1464,6 +1483,13 @@ export interface MiddlewareSpecRateLimit {
   readonly period?: MiddlewareSpecRateLimitPeriod;
 
   /**
+   * Redis hold the configs of Redis as bucket in rate limiter.
+   *
+   * @schema MiddlewareSpecRateLimit#redis
+   */
+  readonly redis?: MiddlewareSpecRateLimitRedis;
+
+  /**
    * SourceCriterion defines what criterion is used to group requests as originating from a common source.
    * If several strategies are defined at the same time, an error will be raised.
    * If none are set, the default is to use the request's remote address field (as an ipStrategy).
@@ -1477,24 +1503,25 @@ export interface MiddlewareSpecRateLimit {
 /**
  * Converts an object of type 'MiddlewareSpecRateLimit' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecRateLimit(obj: MiddlewareSpecRateLimit | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
     'average': obj.average,
     'burst': obj.burst,
     'period': obj.period?.value,
+    'redis': toJson_MiddlewareSpecRateLimitRedis(obj.redis),
     'sourceCriterion': toJson_MiddlewareSpecRateLimitSourceCriterion(obj.sourceCriterion),
   };
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * RedirectRegex holds the redirect regex middleware configuration.
  * This middleware redirects a request using regex matching and replacement.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/redirectregex/#regex
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/redirectregex/#regex
  *
  * @schema MiddlewareSpecRedirectRegex
  */
@@ -1525,7 +1552,7 @@ export interface MiddlewareSpecRedirectRegex {
 /**
  * Converts an object of type 'MiddlewareSpecRedirectRegex' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecRedirectRegex(obj: MiddlewareSpecRedirectRegex | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1536,12 +1563,12 @@ export function toJson_MiddlewareSpecRedirectRegex(obj: MiddlewareSpecRedirectRe
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * RedirectScheme holds the redirect scheme middleware configuration.
  * This middleware redirects requests from a scheme/port to another.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/redirectscheme/
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/redirectscheme/
  *
  * @schema MiddlewareSpecRedirectScheme
  */
@@ -1572,7 +1599,7 @@ export interface MiddlewareSpecRedirectScheme {
 /**
  * Converts an object of type 'MiddlewareSpecRedirectScheme' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecRedirectScheme(obj: MiddlewareSpecRedirectScheme | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1583,12 +1610,12 @@ export function toJson_MiddlewareSpecRedirectScheme(obj: MiddlewareSpecRedirectS
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * ReplacePath holds the replace path middleware configuration.
  * This middleware replaces the path of the request URL and store the original path in an X-Replaced-Path header.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/replacepath/
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/replacepath/
  *
  * @schema MiddlewareSpecReplacePath
  */
@@ -1605,7 +1632,7 @@ export interface MiddlewareSpecReplacePath {
 /**
  * Converts an object of type 'MiddlewareSpecReplacePath' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecReplacePath(obj: MiddlewareSpecReplacePath | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1614,12 +1641,12 @@ export function toJson_MiddlewareSpecReplacePath(obj: MiddlewareSpecReplacePath 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * ReplacePathRegex holds the replace path regex middleware configuration.
  * This middleware replaces the path of a URL using regex matching and replacement.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/replacepathregex/
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/replacepathregex/
  *
  * @schema MiddlewareSpecReplacePathRegex
  */
@@ -1643,7 +1670,7 @@ export interface MiddlewareSpecReplacePathRegex {
 /**
  * Converts an object of type 'MiddlewareSpecReplacePathRegex' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecReplacePathRegex(obj: MiddlewareSpecReplacePathRegex | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1653,13 +1680,13 @@ export function toJson_MiddlewareSpecReplacePathRegex(obj: MiddlewareSpecReplace
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Retry holds the retry middleware configuration.
  * This middleware reissues requests a given number of times to a backend server if that server does not reply.
  * As soon as the server answers, the middleware stops retrying, regardless of the response status.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/retry/
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/retry/
  *
  * @schema MiddlewareSpecRetry
  */
@@ -1687,7 +1714,7 @@ export interface MiddlewareSpecRetry {
 /**
  * Converts an object of type 'MiddlewareSpecRetry' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecRetry(obj: MiddlewareSpecRetry | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1697,12 +1724,12 @@ export function toJson_MiddlewareSpecRetry(obj: MiddlewareSpecRetry | undefined)
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * StripPrefix holds the strip prefix middleware configuration.
  * This middleware removes the specified prefixes from the URL path.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/stripprefix/
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/stripprefix/
  *
  * @schema MiddlewareSpecStripPrefix
  */
@@ -1728,7 +1755,7 @@ export interface MiddlewareSpecStripPrefix {
 /**
  * Converts an object of type 'MiddlewareSpecStripPrefix' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecStripPrefix(obj: MiddlewareSpecStripPrefix | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1738,12 +1765,12 @@ export function toJson_MiddlewareSpecStripPrefix(obj: MiddlewareSpecStripPrefix 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * StripPrefixRegex holds the strip prefix regex middleware configuration.
  * This middleware removes the matching prefixes from the URL path.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/stripprefixregex/
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/stripprefixregex/
  *
  * @schema MiddlewareSpecStripPrefixRegex
  */
@@ -1760,7 +1787,7 @@ export interface MiddlewareSpecStripPrefixRegex {
 /**
  * Converts an object of type 'MiddlewareSpecStripPrefixRegex' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecStripPrefixRegex(obj: MiddlewareSpecStripPrefixRegex | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1769,7 +1796,7 @@ export function toJson_MiddlewareSpecStripPrefixRegex(obj: MiddlewareSpecStripPr
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * MiddlewareRef is a reference to a Middleware resource.
@@ -1796,7 +1823,7 @@ export interface MiddlewareSpecChainMiddlewares {
 /**
  * Converts an object of type 'MiddlewareSpecChainMiddlewares' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecChainMiddlewares(obj: MiddlewareSpecChainMiddlewares | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1806,7 +1833,7 @@ export function toJson_MiddlewareSpecChainMiddlewares(obj: MiddlewareSpecChainMi
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * CheckPeriod is the interval between successive checks of the circuit breaker condition (when in standby state).
@@ -1858,7 +1885,7 @@ export class MiddlewareSpecCircuitBreakerRecoveryDuration {
 
 /**
  * Service defines the reference to a Kubernetes Service that will serve the error page.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/errorpages/#service
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/errorpages/#service
  *
  * @schema MiddlewareSpecErrorsService
  */
@@ -1954,7 +1981,7 @@ export interface MiddlewareSpecErrorsService {
 
   /**
    * Sticky defines the sticky sessions configuration.
-   * More info: https://doc.traefik.io/traefik/v3.3/routing/services/#sticky-sessions
+   * More info: https://doc.traefik.io/traefik/v3.4/routing/services/#sticky-sessions
    *
    * @schema MiddlewareSpecErrorsService#sticky
    */
@@ -1962,11 +1989,12 @@ export interface MiddlewareSpecErrorsService {
 
   /**
    * Strategy defines the load balancing strategy between the servers.
-   * RoundRobin is the only supported value at the moment.
+   * Supported values are: wrr (Weighed round-robin) and p2c (Power of two choices).
+   * RoundRobin value is deprecated and supported for backward compatibility.
    *
    * @schema MiddlewareSpecErrorsService#strategy
    */
-  readonly strategy?: string;
+  readonly strategy?: MiddlewareSpecErrorsServiceStrategy;
 
   /**
    * Weight defines the weight and should only be specified when Name references a TraefikService object
@@ -1981,7 +2009,7 @@ export interface MiddlewareSpecErrorsService {
 /**
  * Converts an object of type 'MiddlewareSpecErrorsService' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecErrorsService(obj: MiddlewareSpecErrorsService | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2003,7 +2031,7 @@ export function toJson_MiddlewareSpecErrorsService(obj: MiddlewareSpecErrorsServ
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * TLS defines the configuration used to secure the connection to the authentication server.
@@ -2046,7 +2074,7 @@ export interface MiddlewareSpecForwardAuthTls {
 /**
  * Converts an object of type 'MiddlewareSpecForwardAuthTls' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecForwardAuthTls(obj: MiddlewareSpecForwardAuthTls | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2058,20 +2086,20 @@ export function toJson_MiddlewareSpecForwardAuthTls(obj: MiddlewareSpecForwardAu
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * SourceCriterion defines what criterion is used to group requests as originating from a common source.
  * If several strategies are defined at the same time, an error will be raised.
  * If none are set, the default is to use the requestHost.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/inflightreq/#sourcecriterion
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/inflightreq/#sourcecriterion
  *
  * @schema MiddlewareSpecInFlightReqSourceCriterion
  */
 export interface MiddlewareSpecInFlightReqSourceCriterion {
   /**
    * IPStrategy holds the IP strategy configuration used by Traefik to determine the client IP.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/ipallowlist/#ipstrategy
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/ipallowlist/#ipstrategy
    *
    * @schema MiddlewareSpecInFlightReqSourceCriterion#ipStrategy
    */
@@ -2096,7 +2124,7 @@ export interface MiddlewareSpecInFlightReqSourceCriterion {
 /**
  * Converts an object of type 'MiddlewareSpecInFlightReqSourceCriterion' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecInFlightReqSourceCriterion(obj: MiddlewareSpecInFlightReqSourceCriterion | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2107,11 +2135,11 @@ export function toJson_MiddlewareSpecInFlightReqSourceCriterion(obj: MiddlewareS
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * IPStrategy holds the IP strategy configuration used by Traefik to determine the client IP.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/ipallowlist/#ipstrategy
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/ipallowlist/#ipstrategy
  *
  * @schema MiddlewareSpecIpAllowListIpStrategy
  */
@@ -2142,7 +2170,7 @@ export interface MiddlewareSpecIpAllowListIpStrategy {
 /**
  * Converts an object of type 'MiddlewareSpecIpAllowListIpStrategy' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecIpAllowListIpStrategy(obj: MiddlewareSpecIpAllowListIpStrategy | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2153,11 +2181,11 @@ export function toJson_MiddlewareSpecIpAllowListIpStrategy(obj: MiddlewareSpecIp
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * IPStrategy holds the IP strategy configuration used by Traefik to determine the client IP.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/ipallowlist/#ipstrategy
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/ipallowlist/#ipstrategy
  *
  * @schema MiddlewareSpecIpWhiteListIpStrategy
  */
@@ -2188,7 +2216,7 @@ export interface MiddlewareSpecIpWhiteListIpStrategy {
 /**
  * Converts an object of type 'MiddlewareSpecIpWhiteListIpStrategy' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecIpWhiteListIpStrategy(obj: MiddlewareSpecIpWhiteListIpStrategy | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2199,7 +2227,7 @@ export function toJson_MiddlewareSpecIpWhiteListIpStrategy(obj: MiddlewareSpecIp
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Info selects the specific client certificate details you want to add to the X-Forwarded-Tls-Client-Cert-Info header.
@@ -2254,7 +2282,7 @@ export interface MiddlewareSpecPassTlsClientCertInfo {
 /**
  * Converts an object of type 'MiddlewareSpecPassTlsClientCertInfo' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecPassTlsClientCertInfo(obj: MiddlewareSpecPassTlsClientCertInfo | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2268,7 +2296,7 @@ export function toJson_MiddlewareSpecPassTlsClientCertInfo(obj: MiddlewareSpecPa
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Period, in combination with Average, defines the actual maximum rate, such as:
@@ -2288,6 +2316,117 @@ export class MiddlewareSpecRateLimitPeriod {
 }
 
 /**
+ * Redis hold the configs of Redis as bucket in rate limiter.
+ *
+ * @schema MiddlewareSpecRateLimitRedis
+ */
+export interface MiddlewareSpecRateLimitRedis {
+  /**
+   * DB defines the Redis database that will be selected after connecting to the server.
+   *
+   * @schema MiddlewareSpecRateLimitRedis#db
+   */
+  readonly db?: number;
+
+  /**
+   * DialTimeout sets the timeout for establishing new connections.
+   * Default value is 5 seconds.
+   *
+   * @schema MiddlewareSpecRateLimitRedis#dialTimeout
+   */
+  readonly dialTimeout?: MiddlewareSpecRateLimitRedisDialTimeout;
+
+  /**
+   * Endpoints contains either a single address or a seed list of host:port addresses.
+   * Default value is ["localhost:6379"].
+   *
+   * @schema MiddlewareSpecRateLimitRedis#endpoints
+   */
+  readonly endpoints?: string[];
+
+  /**
+   * MaxActiveConns defines the maximum number of connections allocated by the pool at a given time.
+   * Default value is 0, meaning there is no limit.
+   *
+   * @schema MiddlewareSpecRateLimitRedis#maxActiveConns
+   */
+  readonly maxActiveConns?: number;
+
+  /**
+   * MinIdleConns defines the minimum number of idle connections.
+   * Default value is 0, and idle connections are not closed by default.
+   *
+   * @schema MiddlewareSpecRateLimitRedis#minIdleConns
+   */
+  readonly minIdleConns?: number;
+
+  /**
+   * PoolSize defines the initial number of socket connections.
+   * If the pool runs out of available connections, additional ones will be created beyond PoolSize.
+   * This can be limited using MaxActiveConns.
+   * // Default value is 0, meaning 10 connections per every available CPU as reported by runtime.GOMAXPROCS.
+   *
+   * @schema MiddlewareSpecRateLimitRedis#poolSize
+   */
+  readonly poolSize?: number;
+
+  /**
+   * ReadTimeout defines the timeout for socket read operations.
+   * Default value is 3 seconds.
+   *
+   * @schema MiddlewareSpecRateLimitRedis#readTimeout
+   */
+  readonly readTimeout?: MiddlewareSpecRateLimitRedisReadTimeout;
+
+  /**
+   * Secret defines the name of the referenced Kubernetes Secret containing Redis credentials.
+   *
+   * @schema MiddlewareSpecRateLimitRedis#secret
+   */
+  readonly secret?: string;
+
+  /**
+   * TLS defines TLS-specific configurations, including the CA, certificate, and key,
+   * which can be provided as a file path or file content.
+   *
+   * @schema MiddlewareSpecRateLimitRedis#tls
+   */
+  readonly tls?: MiddlewareSpecRateLimitRedisTls;
+
+  /**
+   * WriteTimeout defines the timeout for socket write operations.
+   * Default value is 3 seconds.
+   *
+   * @schema MiddlewareSpecRateLimitRedis#writeTimeout
+   */
+  readonly writeTimeout?: MiddlewareSpecRateLimitRedisWriteTimeout;
+
+}
+
+/**
+ * Converts an object of type 'MiddlewareSpecRateLimitRedis' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_MiddlewareSpecRateLimitRedis(obj: MiddlewareSpecRateLimitRedis | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'db': obj.db,
+    'dialTimeout': obj.dialTimeout?.value,
+    'endpoints': obj.endpoints?.map(y => y),
+    'maxActiveConns': obj.maxActiveConns,
+    'minIdleConns': obj.minIdleConns,
+    'poolSize': obj.poolSize,
+    'readTimeout': obj.readTimeout?.value,
+    'secret': obj.secret,
+    'tls': toJson_MiddlewareSpecRateLimitRedisTls(obj.tls),
+    'writeTimeout': obj.writeTimeout?.value,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
  * SourceCriterion defines what criterion is used to group requests as originating from a common source.
  * If several strategies are defined at the same time, an error will be raised.
  * If none are set, the default is to use the request's remote address field (as an ipStrategy).
@@ -2297,7 +2436,7 @@ export class MiddlewareSpecRateLimitPeriod {
 export interface MiddlewareSpecRateLimitSourceCriterion {
   /**
    * IPStrategy holds the IP strategy configuration used by Traefik to determine the client IP.
-   * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/ipallowlist/#ipstrategy
+   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/ipallowlist/#ipstrategy
    *
    * @schema MiddlewareSpecRateLimitSourceCriterion#ipStrategy
    */
@@ -2322,7 +2461,7 @@ export interface MiddlewareSpecRateLimitSourceCriterion {
 /**
  * Converts an object of type 'MiddlewareSpecRateLimitSourceCriterion' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecRateLimitSourceCriterion(obj: MiddlewareSpecRateLimitSourceCriterion | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2333,7 +2472,7 @@ export function toJson_MiddlewareSpecRateLimitSourceCriterion(obj: MiddlewareSpe
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * InitialInterval defines the first wait time in the exponential backoff series.
@@ -2448,7 +2587,7 @@ export interface MiddlewareSpecErrorsServiceHealthCheck {
 /**
  * Converts an object of type 'MiddlewareSpecErrorsServiceHealthCheck' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecErrorsServiceHealthCheck(obj: MiddlewareSpecErrorsServiceHealthCheck | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2467,7 +2606,7 @@ export function toJson_MiddlewareSpecErrorsServiceHealthCheck(obj: MiddlewareSpe
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Kind defines the kind of the Service.
@@ -2520,7 +2659,7 @@ export interface MiddlewareSpecErrorsServiceResponseForwarding {
 /**
  * Converts an object of type 'MiddlewareSpecErrorsServiceResponseForwarding' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecErrorsServiceResponseForwarding(obj: MiddlewareSpecErrorsServiceResponseForwarding | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2529,11 +2668,11 @@ export function toJson_MiddlewareSpecErrorsServiceResponseForwarding(obj: Middle
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Sticky defines the sticky sessions configuration.
- * More info: https://doc.traefik.io/traefik/v3.3/routing/services/#sticky-sessions
+ * More info: https://doc.traefik.io/traefik/v3.4/routing/services/#sticky-sessions
  *
  * @schema MiddlewareSpecErrorsServiceSticky
  */
@@ -2550,7 +2689,7 @@ export interface MiddlewareSpecErrorsServiceSticky {
 /**
  * Converts an object of type 'MiddlewareSpecErrorsServiceSticky' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecErrorsServiceSticky(obj: MiddlewareSpecErrorsServiceSticky | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2559,11 +2698,27 @@ export function toJson_MiddlewareSpecErrorsServiceSticky(obj: MiddlewareSpecErro
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * Strategy defines the load balancing strategy between the servers.
+ * Supported values are: wrr (Weighed round-robin) and p2c (Power of two choices).
+ * RoundRobin value is deprecated and supported for backward compatibility.
+ *
+ * @schema MiddlewareSpecErrorsServiceStrategy
+ */
+export enum MiddlewareSpecErrorsServiceStrategy {
+  /** wrr */
+  WRR = "wrr",
+  /** p2c */
+  P2C = "p2c",
+  /** RoundRobin */
+  ROUND_ROBIN = "RoundRobin",
+}
 
 /**
  * IPStrategy holds the IP strategy configuration used by Traefik to determine the client IP.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/ipallowlist/#ipstrategy
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/ipallowlist/#ipstrategy
  *
  * @schema MiddlewareSpecInFlightReqSourceCriterionIpStrategy
  */
@@ -2594,7 +2749,7 @@ export interface MiddlewareSpecInFlightReqSourceCriterionIpStrategy {
 /**
  * Converts an object of type 'MiddlewareSpecInFlightReqSourceCriterionIpStrategy' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecInFlightReqSourceCriterionIpStrategy(obj: MiddlewareSpecInFlightReqSourceCriterionIpStrategy | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2605,7 +2760,7 @@ export function toJson_MiddlewareSpecInFlightReqSourceCriterionIpStrategy(obj: M
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Issuer defines the client certificate issuer details to add to the X-Forwarded-Tls-Client-Cert-Info header.
@@ -2667,7 +2822,7 @@ export interface MiddlewareSpecPassTlsClientCertInfoIssuer {
 /**
  * Converts an object of type 'MiddlewareSpecPassTlsClientCertInfoIssuer' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecPassTlsClientCertInfoIssuer(obj: MiddlewareSpecPassTlsClientCertInfoIssuer | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2682,7 +2837,7 @@ export function toJson_MiddlewareSpecPassTlsClientCertInfoIssuer(obj: Middleware
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Subject defines the client certificate subject details to add to the X-Forwarded-Tls-Client-Cert-Info header.
@@ -2751,7 +2906,7 @@ export interface MiddlewareSpecPassTlsClientCertInfoSubject {
 /**
  * Converts an object of type 'MiddlewareSpecPassTlsClientCertInfoSubject' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecPassTlsClientCertInfoSubject(obj: MiddlewareSpecPassTlsClientCertInfoSubject | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2767,11 +2922,110 @@ export function toJson_MiddlewareSpecPassTlsClientCertInfoSubject(obj: Middlewar
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * DialTimeout sets the timeout for establishing new connections.
+ * Default value is 5 seconds.
+ *
+ * @schema MiddlewareSpecRateLimitRedisDialTimeout
+ */
+export class MiddlewareSpecRateLimitRedisDialTimeout {
+  public static fromNumber(value: number): MiddlewareSpecRateLimitRedisDialTimeout {
+    return new MiddlewareSpecRateLimitRedisDialTimeout(value);
+  }
+  public static fromString(value: string): MiddlewareSpecRateLimitRedisDialTimeout {
+    return new MiddlewareSpecRateLimitRedisDialTimeout(value);
+  }
+  private constructor(public readonly value: number | string) {
+  }
+}
+
+/**
+ * ReadTimeout defines the timeout for socket read operations.
+ * Default value is 3 seconds.
+ *
+ * @schema MiddlewareSpecRateLimitRedisReadTimeout
+ */
+export class MiddlewareSpecRateLimitRedisReadTimeout {
+  public static fromNumber(value: number): MiddlewareSpecRateLimitRedisReadTimeout {
+    return new MiddlewareSpecRateLimitRedisReadTimeout(value);
+  }
+  public static fromString(value: string): MiddlewareSpecRateLimitRedisReadTimeout {
+    return new MiddlewareSpecRateLimitRedisReadTimeout(value);
+  }
+  private constructor(public readonly value: number | string) {
+  }
+}
+
+/**
+ * TLS defines TLS-specific configurations, including the CA, certificate, and key,
+ * which can be provided as a file path or file content.
+ *
+ * @schema MiddlewareSpecRateLimitRedisTls
+ */
+export interface MiddlewareSpecRateLimitRedisTls {
+  /**
+   * CASecret is the name of the referenced Kubernetes Secret containing the CA to validate the server certificate.
+   * The CA certificate is extracted from key `tls.ca` or `ca.crt`.
+   *
+   * @schema MiddlewareSpecRateLimitRedisTls#caSecret
+   */
+  readonly caSecret?: string;
+
+  /**
+   * CertSecret is the name of the referenced Kubernetes Secret containing the client certificate.
+   * The client certificate is extracted from the keys `tls.crt` and `tls.key`.
+   *
+   * @schema MiddlewareSpecRateLimitRedisTls#certSecret
+   */
+  readonly certSecret?: string;
+
+  /**
+   * InsecureSkipVerify defines whether the server certificates should be validated.
+   *
+   * @schema MiddlewareSpecRateLimitRedisTls#insecureSkipVerify
+   */
+  readonly insecureSkipVerify?: boolean;
+
+}
+
+/**
+ * Converts an object of type 'MiddlewareSpecRateLimitRedisTls' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_MiddlewareSpecRateLimitRedisTls(obj: MiddlewareSpecRateLimitRedisTls | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'caSecret': obj.caSecret,
+    'certSecret': obj.certSecret,
+    'insecureSkipVerify': obj.insecureSkipVerify,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * WriteTimeout defines the timeout for socket write operations.
+ * Default value is 3 seconds.
+ *
+ * @schema MiddlewareSpecRateLimitRedisWriteTimeout
+ */
+export class MiddlewareSpecRateLimitRedisWriteTimeout {
+  public static fromNumber(value: number): MiddlewareSpecRateLimitRedisWriteTimeout {
+    return new MiddlewareSpecRateLimitRedisWriteTimeout(value);
+  }
+  public static fromString(value: string): MiddlewareSpecRateLimitRedisWriteTimeout {
+    return new MiddlewareSpecRateLimitRedisWriteTimeout(value);
+  }
+  private constructor(public readonly value: number | string) {
+  }
+}
 
 /**
  * IPStrategy holds the IP strategy configuration used by Traefik to determine the client IP.
- * More info: https://doc.traefik.io/traefik/v3.3/middlewares/http/ipallowlist/#ipstrategy
+ * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/ipallowlist/#ipstrategy
  *
  * @schema MiddlewareSpecRateLimitSourceCriterionIpStrategy
  */
@@ -2802,7 +3056,7 @@ export interface MiddlewareSpecRateLimitSourceCriterionIpStrategy {
 /**
  * Converts an object of type 'MiddlewareSpecRateLimitSourceCriterionIpStrategy' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecRateLimitSourceCriterionIpStrategy(obj: MiddlewareSpecRateLimitSourceCriterionIpStrategy | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2813,7 +3067,7 @@ export function toJson_MiddlewareSpecRateLimitSourceCriterionIpStrategy(obj: Mid
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Interval defines the frequency of the health check calls.
@@ -2856,6 +3110,14 @@ export class MiddlewareSpecErrorsServiceHealthCheckTimeout {
  */
 export interface MiddlewareSpecErrorsServiceStickyCookie {
   /**
+   * Domain defines the host to which the cookie will be sent.
+   * More info: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#domaindomain-value
+   *
+   * @schema MiddlewareSpecErrorsServiceStickyCookie#domain
+   */
+  readonly domain?: string;
+
+  /**
    * HTTPOnly defines whether the cookie can be accessed by client-side APIs, such as JavaScript.
    *
    * @schema MiddlewareSpecErrorsServiceStickyCookie#httpOnly
@@ -2893,7 +3155,7 @@ export interface MiddlewareSpecErrorsServiceStickyCookie {
    *
    * @schema MiddlewareSpecErrorsServiceStickyCookie#sameSite
    */
-  readonly sameSite?: string;
+  readonly sameSite?: MiddlewareSpecErrorsServiceStickyCookieSameSite;
 
   /**
    * Secure defines whether the cookie can only be transmitted over an encrypted connection (i.e. HTTPS).
@@ -2907,10 +3169,11 @@ export interface MiddlewareSpecErrorsServiceStickyCookie {
 /**
  * Converts an object of type 'MiddlewareSpecErrorsServiceStickyCookie' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_MiddlewareSpecErrorsServiceStickyCookie(obj: MiddlewareSpecErrorsServiceStickyCookie | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
+    'domain': obj.domain,
     'httpOnly': obj.httpOnly,
     'maxAge': obj.maxAge,
     'name': obj.name,
@@ -2921,5 +3184,20 @@ export function toJson_MiddlewareSpecErrorsServiceStickyCookie(obj: MiddlewareSp
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * SameSite defines the same site policy.
+ * More info: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite
+ *
+ * @schema MiddlewareSpecErrorsServiceStickyCookieSameSite
+ */
+export enum MiddlewareSpecErrorsServiceStickyCookieSameSite {
+  /** none */
+  NONE = "none",
+  /** lax */
+  LAX = "lax",
+  /** strict */
+  STRICT = "strict",
+}
 

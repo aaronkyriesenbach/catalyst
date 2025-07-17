@@ -76,7 +76,7 @@ export interface CertificateProps {
 /**
  * Converts an object of type 'CertificateProps' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_CertificateProps(obj: CertificateProps | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -86,7 +86,7 @@ export function toJson_CertificateProps(obj: CertificateProps | undefined): Reco
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema CertificateSpec
@@ -139,7 +139,7 @@ export interface CertificateSpec {
 /**
  * Converts an object of type 'CertificateSpec' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_CertificateSpec(obj: CertificateSpec | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -155,7 +155,7 @@ export function toJson_CertificateSpec(obj: CertificateSpec | undefined): Record
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * LocalObjectReference contains enough information to let you locate the referenced object inside the same namespace.
@@ -175,7 +175,7 @@ export interface CertificateSpecCaRef {
 /**
  * Converts an object of type 'CertificateSpecCaRef' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_CertificateSpecCaRef(obj: CertificateSpecCaRef | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -184,7 +184,7 @@ export function toJson_CertificateSpecCaRef(obj: CertificateSpecCaRef | undefine
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema CertificateSpecSecretTemplate
@@ -210,7 +210,7 @@ export interface CertificateSpecSecretTemplate {
 /**
  * Converts an object of type 'CertificateSpecSecretTemplate' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_CertificateSpecSecretTemplate(obj: CertificateSpecSecretTemplate | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -221,7 +221,7 @@ export function toJson_CertificateSpecSecretTemplate(obj: CertificateSpecSecretT
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema CertificateSpecSecretTemplateMetadata
@@ -242,7 +242,7 @@ export interface CertificateSpecSecretTemplateMetadata {
 /**
  * Converts an object of type 'CertificateSpecSecretTemplateMetadata' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_CertificateSpecSecretTemplateMetadata(obj: CertificateSpecSecretTemplateMetadata | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -252,7 +252,7 @@ export function toJson_CertificateSpecSecretTemplateMetadata(obj: CertificateSpe
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 
 /**
@@ -328,7 +328,7 @@ export interface PasswordProps {
 /**
  * Converts an object of type 'PasswordProps' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_PasswordProps(obj: PasswordProps | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -338,7 +338,7 @@ export function toJson_PasswordProps(obj: PasswordProps | undefined): Record<str
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema PasswordSpec
@@ -384,7 +384,7 @@ export interface PasswordSpec {
 /**
  * Converts an object of type 'PasswordSpec' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_PasswordSpec(obj: PasswordSpec | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -399,7 +399,7 @@ export function toJson_PasswordSpec(obj: PasswordSpec | undefined): Record<strin
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema PasswordSpecSecretTemplate
@@ -425,7 +425,7 @@ export interface PasswordSpecSecretTemplate {
 /**
  * Converts an object of type 'PasswordSpecSecretTemplate' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_PasswordSpecSecretTemplate(obj: PasswordSpecSecretTemplate | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -436,7 +436,7 @@ export function toJson_PasswordSpecSecretTemplate(obj: PasswordSpecSecretTemplat
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema PasswordSpecSecretTemplateMetadata
@@ -457,7 +457,7 @@ export interface PasswordSpecSecretTemplateMetadata {
 /**
  * Converts an object of type 'PasswordSpecSecretTemplateMetadata' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_PasswordSpecSecretTemplateMetadata(obj: PasswordSpecSecretTemplateMetadata | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -467,7 +467,7 @@ export function toJson_PasswordSpecSecretTemplateMetadata(obj: PasswordSpecSecre
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 
 /**
@@ -543,7 +543,7 @@ export interface RsaKeyProps {
 /**
  * Converts an object of type 'RsaKeyProps' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_RsaKeyProps(obj: RsaKeyProps | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -553,7 +553,7 @@ export function toJson_RsaKeyProps(obj: RsaKeyProps | undefined): Record<string,
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema RsaKeySpec
@@ -569,7 +569,7 @@ export interface RsaKeySpec {
 /**
  * Converts an object of type 'RsaKeySpec' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_RsaKeySpec(obj: RsaKeySpec | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -578,7 +578,7 @@ export function toJson_RsaKeySpec(obj: RsaKeySpec | undefined): Record<string, a
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema RsaKeySpecSecretTemplate
@@ -604,7 +604,7 @@ export interface RsaKeySpecSecretTemplate {
 /**
  * Converts an object of type 'RsaKeySpecSecretTemplate' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_RsaKeySpecSecretTemplate(obj: RsaKeySpecSecretTemplate | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -615,7 +615,7 @@ export function toJson_RsaKeySpecSecretTemplate(obj: RsaKeySpecSecretTemplate | 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema RsaKeySpecSecretTemplateMetadata
@@ -636,7 +636,7 @@ export interface RsaKeySpecSecretTemplateMetadata {
 /**
  * Converts an object of type 'RsaKeySpecSecretTemplateMetadata' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_RsaKeySpecSecretTemplateMetadata(obj: RsaKeySpecSecretTemplateMetadata | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -646,7 +646,7 @@ export function toJson_RsaKeySpecSecretTemplateMetadata(obj: RsaKeySpecSecretTem
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 
 /**
@@ -722,7 +722,7 @@ export interface SshKeyProps {
 /**
  * Converts an object of type 'SshKeyProps' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_SshKeyProps(obj: SshKeyProps | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -732,7 +732,7 @@ export function toJson_SshKeyProps(obj: SshKeyProps | undefined): Record<string,
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema SshKeySpec
@@ -748,7 +748,7 @@ export interface SshKeySpec {
 /**
  * Converts an object of type 'SshKeySpec' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_SshKeySpec(obj: SshKeySpec | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -757,7 +757,7 @@ export function toJson_SshKeySpec(obj: SshKeySpec | undefined): Record<string, a
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema SshKeySpecSecretTemplate
@@ -783,7 +783,7 @@ export interface SshKeySpecSecretTemplate {
 /**
  * Converts an object of type 'SshKeySpecSecretTemplate' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_SshKeySpecSecretTemplate(obj: SshKeySpecSecretTemplate | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -794,7 +794,7 @@ export function toJson_SshKeySpecSecretTemplate(obj: SshKeySpecSecretTemplate | 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema SshKeySpecSecretTemplateMetadata
@@ -815,7 +815,7 @@ export interface SshKeySpecSecretTemplateMetadata {
 /**
  * Converts an object of type 'SshKeySpecSecretTemplateMetadata' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_SshKeySpecSecretTemplateMetadata(obj: SshKeySpecSecretTemplateMetadata | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -825,5 +825,5 @@ export function toJson_SshKeySpecSecretTemplateMetadata(obj: SshKeySpecSecretTem
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 

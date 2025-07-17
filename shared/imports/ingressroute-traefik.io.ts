@@ -80,7 +80,7 @@ export interface IngressRouteProps {
 /**
  * Converts an object of type 'IngressRouteProps' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_IngressRouteProps(obj: IngressRouteProps | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -90,7 +90,7 @@ export function toJson_IngressRouteProps(obj: IngressRouteProps | undefined): Re
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * IngressRouteSpec defines the desired state of IngressRoute.
@@ -101,7 +101,7 @@ export interface IngressRouteSpec {
   /**
    * EntryPoints defines the list of entry point names to bind to.
    * Entry points have to be configured in the static configuration.
-   * More info: https://doc.traefik.io/traefik/v3.3/routing/entrypoints/
+   * More info: https://doc.traefik.io/traefik/v3.4/routing/entrypoints/
    * Default: all.
    *
    * @schema IngressRouteSpec#entryPoints
@@ -117,7 +117,7 @@ export interface IngressRouteSpec {
 
   /**
    * TLS defines the TLS configuration.
-   * More info: https://doc.traefik.io/traefik/v3.3/routing/routers/#tls
+   * More info: https://doc.traefik.io/traefik/v3.4/routing/routers/#tls
    *
    * @schema IngressRouteSpec#tls
    */
@@ -128,7 +128,7 @@ export interface IngressRouteSpec {
 /**
  * Converts an object of type 'IngressRouteSpec' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_IngressRouteSpec(obj: IngressRouteSpec | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -139,7 +139,7 @@ export function toJson_IngressRouteSpec(obj: IngressRouteSpec | undefined): Reco
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Route holds the HTTP route configuration.
@@ -158,7 +158,7 @@ export interface IngressRouteSpecRoutes {
 
   /**
    * Match defines the router's rule.
-   * More info: https://doc.traefik.io/traefik/v3.3/routing/routers/#rule
+   * More info: https://doc.traefik.io/traefik/v3.4/routing/routers/#rule
    *
    * @schema IngressRouteSpecRoutes#match
    */
@@ -166,7 +166,7 @@ export interface IngressRouteSpecRoutes {
 
   /**
    * Middlewares defines the list of references to Middleware resources.
-   * More info: https://doc.traefik.io/traefik/v3.3/routing/providers/kubernetes-crd/#kind-middleware
+   * More info: https://doc.traefik.io/traefik/v3.4/routing/providers/kubernetes-crd/#kind-middleware
    *
    * @schema IngressRouteSpecRoutes#middlewares
    */
@@ -174,7 +174,7 @@ export interface IngressRouteSpecRoutes {
 
   /**
    * Observability defines the observability configuration for a router.
-   * More info: https://doc.traefik.io/traefik/v3.2/routing/routers/#observability
+   * More info: https://doc.traefik.io/traefik/v3.4/routing/routers/#observability
    *
    * @schema IngressRouteSpecRoutes#observability
    */
@@ -182,7 +182,7 @@ export interface IngressRouteSpecRoutes {
 
   /**
    * Priority defines the router's priority.
-   * More info: https://doc.traefik.io/traefik/v3.3/routing/routers/#priority
+   * More info: https://doc.traefik.io/traefik/v3.4/routing/routers/#priority
    *
    * @schema IngressRouteSpecRoutes#priority
    */
@@ -198,7 +198,8 @@ export interface IngressRouteSpecRoutes {
 
   /**
    * Syntax defines the router's rule syntax.
-   * More info: https://doc.traefik.io/traefik/v3.3/routing/routers/#rulesyntax
+   * More info: https://doc.traefik.io/traefik/v3.4/routing/routers/#rulesyntax
+   * Deprecated: Please do not use this field and rewrite the router rules to use the v3 syntax.
    *
    * @schema IngressRouteSpecRoutes#syntax
    */
@@ -209,7 +210,7 @@ export interface IngressRouteSpecRoutes {
 /**
  * Converts an object of type 'IngressRouteSpecRoutes' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_IngressRouteSpecRoutes(obj: IngressRouteSpecRoutes | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -224,11 +225,11 @@ export function toJson_IngressRouteSpecRoutes(obj: IngressRouteSpecRoutes | unde
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * TLS defines the TLS configuration.
- * More info: https://doc.traefik.io/traefik/v3.3/routing/routers/#tls
+ * More info: https://doc.traefik.io/traefik/v3.4/routing/routers/#tls
  *
  * @schema IngressRouteSpecTls
  */
@@ -236,7 +237,7 @@ export interface IngressRouteSpecTls {
   /**
    * CertResolver defines the name of the certificate resolver to use.
    * Cert resolvers have to be configured in the static configuration.
-   * More info: https://doc.traefik.io/traefik/v3.3/https/acme/#certificate-resolvers
+   * More info: https://doc.traefik.io/traefik/v3.4/https/acme/#certificate-resolvers
    *
    * @schema IngressRouteSpecTls#certResolver
    */
@@ -244,7 +245,7 @@ export interface IngressRouteSpecTls {
 
   /**
    * Domains defines the list of domains that will be used to issue certificates.
-   * More info: https://doc.traefik.io/traefik/v3.3/routing/routers/#domains
+   * More info: https://doc.traefik.io/traefik/v3.4/routing/routers/#domains
    *
    * @schema IngressRouteSpecTls#domains
    */
@@ -253,7 +254,7 @@ export interface IngressRouteSpecTls {
   /**
    * Options defines the reference to a TLSOption, that specifies the parameters of the TLS connection.
    * If not defined, the `default` TLSOption is used.
-   * More info: https://doc.traefik.io/traefik/v3.3/https/tls/#tls-options
+   * More info: https://doc.traefik.io/traefik/v3.4/https/tls/#tls-options
    *
    * @schema IngressRouteSpecTls#options
    */
@@ -279,7 +280,7 @@ export interface IngressRouteSpecTls {
 /**
  * Converts an object of type 'IngressRouteSpecTls' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_IngressRouteSpecTls(obj: IngressRouteSpecTls | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -292,7 +293,7 @@ export function toJson_IngressRouteSpecTls(obj: IngressRouteSpecTls | undefined)
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Kind defines the kind of the route.
@@ -331,7 +332,7 @@ export interface IngressRouteSpecRoutesMiddlewares {
 /**
  * Converts an object of type 'IngressRouteSpecRoutesMiddlewares' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_IngressRouteSpecRoutesMiddlewares(obj: IngressRouteSpecRoutesMiddlewares | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -341,11 +342,11 @@ export function toJson_IngressRouteSpecRoutesMiddlewares(obj: IngressRouteSpecRo
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Observability defines the observability configuration for a router.
- * More info: https://doc.traefik.io/traefik/v3.2/routing/routers/#observability
+ * More info: https://doc.traefik.io/traefik/v3.4/routing/routers/#observability
  *
  * @schema IngressRouteSpecRoutesObservability
  */
@@ -370,7 +371,7 @@ export interface IngressRouteSpecRoutesObservability {
 /**
  * Converts an object of type 'IngressRouteSpecRoutesObservability' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_IngressRouteSpecRoutesObservability(obj: IngressRouteSpecRoutesObservability | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -381,7 +382,7 @@ export function toJson_IngressRouteSpecRoutesObservability(obj: IngressRouteSpec
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Service defines an upstream HTTP service to proxy traffic to.
@@ -480,7 +481,7 @@ export interface IngressRouteSpecRoutesServices {
 
   /**
    * Sticky defines the sticky sessions configuration.
-   * More info: https://doc.traefik.io/traefik/v3.3/routing/services/#sticky-sessions
+   * More info: https://doc.traefik.io/traefik/v3.4/routing/services/#sticky-sessions
    *
    * @schema IngressRouteSpecRoutesServices#sticky
    */
@@ -488,11 +489,12 @@ export interface IngressRouteSpecRoutesServices {
 
   /**
    * Strategy defines the load balancing strategy between the servers.
-   * RoundRobin is the only supported value at the moment.
+   * Supported values are: wrr (Weighed round-robin) and p2c (Power of two choices).
+   * RoundRobin value is deprecated and supported for backward compatibility.
    *
    * @schema IngressRouteSpecRoutesServices#strategy
    */
-  readonly strategy?: string;
+  readonly strategy?: IngressRouteSpecRoutesServicesStrategy;
 
   /**
    * Weight defines the weight and should only be specified when Name references a TraefikService object
@@ -507,7 +509,7 @@ export interface IngressRouteSpecRoutesServices {
 /**
  * Converts an object of type 'IngressRouteSpecRoutesServices' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_IngressRouteSpecRoutesServices(obj: IngressRouteSpecRoutesServices | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -529,7 +531,7 @@ export function toJson_IngressRouteSpecRoutesServices(obj: IngressRouteSpecRoute
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Domain holds a domain name with SANs.
@@ -556,7 +558,7 @@ export interface IngressRouteSpecTlsDomains {
 /**
  * Converts an object of type 'IngressRouteSpecTlsDomains' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_IngressRouteSpecTlsDomains(obj: IngressRouteSpecTlsDomains | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -566,19 +568,19 @@ export function toJson_IngressRouteSpecTlsDomains(obj: IngressRouteSpecTlsDomain
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Options defines the reference to a TLSOption, that specifies the parameters of the TLS connection.
  * If not defined, the `default` TLSOption is used.
- * More info: https://doc.traefik.io/traefik/v3.3/https/tls/#tls-options
+ * More info: https://doc.traefik.io/traefik/v3.4/https/tls/#tls-options
  *
  * @schema IngressRouteSpecTlsOptions
  */
 export interface IngressRouteSpecTlsOptions {
   /**
    * Name defines the name of the referenced TLSOption.
-   * More info: https://doc.traefik.io/traefik/v3.3/routing/providers/kubernetes-crd/#kind-tlsoption
+   * More info: https://doc.traefik.io/traefik/v3.4/routing/providers/kubernetes-crd/#kind-tlsoption
    *
    * @schema IngressRouteSpecTlsOptions#name
    */
@@ -586,7 +588,7 @@ export interface IngressRouteSpecTlsOptions {
 
   /**
    * Namespace defines the namespace of the referenced TLSOption.
-   * More info: https://doc.traefik.io/traefik/v3.3/routing/providers/kubernetes-crd/#kind-tlsoption
+   * More info: https://doc.traefik.io/traefik/v3.4/routing/providers/kubernetes-crd/#kind-tlsoption
    *
    * @schema IngressRouteSpecTlsOptions#namespace
    */
@@ -597,7 +599,7 @@ export interface IngressRouteSpecTlsOptions {
 /**
  * Converts an object of type 'IngressRouteSpecTlsOptions' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_IngressRouteSpecTlsOptions(obj: IngressRouteSpecTlsOptions | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -607,7 +609,7 @@ export function toJson_IngressRouteSpecTlsOptions(obj: IngressRouteSpecTlsOption
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Store defines the reference to the TLSStore, that will be used to store certificates.
@@ -618,7 +620,7 @@ export function toJson_IngressRouteSpecTlsOptions(obj: IngressRouteSpecTlsOption
 export interface IngressRouteSpecTlsStore {
   /**
    * Name defines the name of the referenced TLSStore.
-   * More info: https://doc.traefik.io/traefik/v3.3/routing/providers/kubernetes-crd/#kind-tlsstore
+   * More info: https://doc.traefik.io/traefik/v3.4/routing/providers/kubernetes-crd/#kind-tlsstore
    *
    * @schema IngressRouteSpecTlsStore#name
    */
@@ -626,7 +628,7 @@ export interface IngressRouteSpecTlsStore {
 
   /**
    * Namespace defines the namespace of the referenced TLSStore.
-   * More info: https://doc.traefik.io/traefik/v3.3/routing/providers/kubernetes-crd/#kind-tlsstore
+   * More info: https://doc.traefik.io/traefik/v3.4/routing/providers/kubernetes-crd/#kind-tlsstore
    *
    * @schema IngressRouteSpecTlsStore#namespace
    */
@@ -637,7 +639,7 @@ export interface IngressRouteSpecTlsStore {
 /**
  * Converts an object of type 'IngressRouteSpecTlsStore' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_IngressRouteSpecTlsStore(obj: IngressRouteSpecTlsStore | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -647,7 +649,7 @@ export function toJson_IngressRouteSpecTlsStore(obj: IngressRouteSpecTlsStore | 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Healthcheck defines health checks for ExternalName services.
@@ -742,7 +744,7 @@ export interface IngressRouteSpecRoutesServicesHealthCheck {
 /**
  * Converts an object of type 'IngressRouteSpecRoutesServicesHealthCheck' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_IngressRouteSpecRoutesServicesHealthCheck(obj: IngressRouteSpecRoutesServicesHealthCheck | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -761,7 +763,7 @@ export function toJson_IngressRouteSpecRoutesServicesHealthCheck(obj: IngressRou
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Kind defines the kind of the Service.
@@ -814,7 +816,7 @@ export interface IngressRouteSpecRoutesServicesResponseForwarding {
 /**
  * Converts an object of type 'IngressRouteSpecRoutesServicesResponseForwarding' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_IngressRouteSpecRoutesServicesResponseForwarding(obj: IngressRouteSpecRoutesServicesResponseForwarding | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -823,11 +825,11 @@ export function toJson_IngressRouteSpecRoutesServicesResponseForwarding(obj: Ing
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Sticky defines the sticky sessions configuration.
- * More info: https://doc.traefik.io/traefik/v3.3/routing/services/#sticky-sessions
+ * More info: https://doc.traefik.io/traefik/v3.4/routing/services/#sticky-sessions
  *
  * @schema IngressRouteSpecRoutesServicesSticky
  */
@@ -844,7 +846,7 @@ export interface IngressRouteSpecRoutesServicesSticky {
 /**
  * Converts an object of type 'IngressRouteSpecRoutesServicesSticky' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_IngressRouteSpecRoutesServicesSticky(obj: IngressRouteSpecRoutesServicesSticky | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -853,7 +855,23 @@ export function toJson_IngressRouteSpecRoutesServicesSticky(obj: IngressRouteSpe
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * Strategy defines the load balancing strategy between the servers.
+ * Supported values are: wrr (Weighed round-robin) and p2c (Power of two choices).
+ * RoundRobin value is deprecated and supported for backward compatibility.
+ *
+ * @schema IngressRouteSpecRoutesServicesStrategy
+ */
+export enum IngressRouteSpecRoutesServicesStrategy {
+  /** wrr */
+  WRR = "wrr",
+  /** p2c */
+  P2C = "p2c",
+  /** RoundRobin */
+  ROUND_ROBIN = "RoundRobin",
+}
 
 /**
  * Interval defines the frequency of the health check calls.
@@ -896,6 +914,14 @@ export class IngressRouteSpecRoutesServicesHealthCheckTimeout {
  */
 export interface IngressRouteSpecRoutesServicesStickyCookie {
   /**
+   * Domain defines the host to which the cookie will be sent.
+   * More info: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#domaindomain-value
+   *
+   * @schema IngressRouteSpecRoutesServicesStickyCookie#domain
+   */
+  readonly domain?: string;
+
+  /**
    * HTTPOnly defines whether the cookie can be accessed by client-side APIs, such as JavaScript.
    *
    * @schema IngressRouteSpecRoutesServicesStickyCookie#httpOnly
@@ -933,7 +959,7 @@ export interface IngressRouteSpecRoutesServicesStickyCookie {
    *
    * @schema IngressRouteSpecRoutesServicesStickyCookie#sameSite
    */
-  readonly sameSite?: string;
+  readonly sameSite?: IngressRouteSpecRoutesServicesStickyCookieSameSite;
 
   /**
    * Secure defines whether the cookie can only be transmitted over an encrypted connection (i.e. HTTPS).
@@ -947,10 +973,11 @@ export interface IngressRouteSpecRoutesServicesStickyCookie {
 /**
  * Converts an object of type 'IngressRouteSpecRoutesServicesStickyCookie' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_IngressRouteSpecRoutesServicesStickyCookie(obj: IngressRouteSpecRoutesServicesStickyCookie | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
+    'domain': obj.domain,
     'httpOnly': obj.httpOnly,
     'maxAge': obj.maxAge,
     'name': obj.name,
@@ -961,5 +988,20 @@ export function toJson_IngressRouteSpecRoutesServicesStickyCookie(obj: IngressRo
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * SameSite defines the same site policy.
+ * More info: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite
+ *
+ * @schema IngressRouteSpecRoutesServicesStickyCookieSameSite
+ */
+export enum IngressRouteSpecRoutesServicesStickyCookieSameSite {
+  /** none */
+  NONE = "none",
+  /** lax */
+  LAX = "lax",
+  /** strict */
+  STRICT = "strict",
+}
 

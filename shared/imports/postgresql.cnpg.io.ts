@@ -81,7 +81,7 @@ export interface ClusterProps {
 /**
  * Converts an object of type 'ClusterProps' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterProps(obj: ClusterProps | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -91,7 +91,7 @@ export function toJson_ClusterProps(obj: ClusterProps | undefined): Record<strin
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Specification of the desired behavior of the cluster.
@@ -513,7 +513,7 @@ export interface ClusterSpec {
 /**
  * Converts an object of type 'ClusterSpec' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpec(obj: ClusterSpec | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -571,7 +571,7 @@ export function toJson_ClusterSpec(obj: ClusterSpec | undefined): Record<string,
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Affinity/Anti-affinity rules for Pods
@@ -653,7 +653,7 @@ export interface ClusterSpecAffinity {
 /**
  * Converts an object of type 'ClusterSpecAffinity' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinity(obj: ClusterSpecAffinity | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -669,7 +669,7 @@ export function toJson_ClusterSpecAffinity(obj: ClusterSpecAffinity | undefined)
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The configuration to be used for backups
@@ -717,7 +717,7 @@ export interface ClusterSpecBackup {
 /**
  * Converts an object of type 'ClusterSpecBackup' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBackup(obj: ClusterSpecBackup | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -729,7 +729,7 @@ export function toJson_ClusterSpecBackup(obj: ClusterSpecBackup | undefined): Re
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Instructions to bootstrap this cluster
@@ -764,7 +764,7 @@ export interface ClusterSpecBootstrap {
 /**
  * Converts an object of type 'ClusterSpecBootstrap' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrap(obj: ClusterSpecBootstrap | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -775,7 +775,7 @@ export function toJson_ClusterSpecBootstrap(obj: ClusterSpecBootstrap | undefine
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The configuration for the CA and related certificates
@@ -845,7 +845,7 @@ export interface ClusterSpecCertificates {
 /**
  * Converts an object of type 'ClusterSpecCertificates' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecCertificates(obj: ClusterSpecCertificates | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -858,7 +858,7 @@ export function toJson_ClusterSpecCertificates(obj: ClusterSpecCertificates | un
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * EnvVar represents an environment variable present in a Container.
@@ -901,7 +901,7 @@ export interface ClusterSpecEnv {
 /**
  * Converts an object of type 'ClusterSpecEnv' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecEnv(obj: ClusterSpecEnv | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -912,10 +912,10 @@ export function toJson_ClusterSpecEnv(obj: ClusterSpecEnv | undefined): Record<s
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
- * EnvFromSource represents the source of a set of ConfigMaps
+ * EnvFromSource represents the source of a set of ConfigMaps or Secrets
  *
  * @schema ClusterSpecEnvFrom
  */
@@ -928,7 +928,7 @@ export interface ClusterSpecEnvFrom {
   readonly configMapRef?: ClusterSpecEnvFromConfigMapRef;
 
   /**
-   * An optional identifier to prepend to each key in the ConfigMap. Must be a C_IDENTIFIER.
+   * Optional text to prepend to the name of each environment variable. Must be a C_IDENTIFIER.
    *
    * @schema ClusterSpecEnvFrom#prefix
    */
@@ -946,7 +946,7 @@ export interface ClusterSpecEnvFrom {
 /**
  * Converts an object of type 'ClusterSpecEnvFrom' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecEnvFrom(obj: ClusterSpecEnvFrom | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -957,7 +957,7 @@ export function toJson_ClusterSpecEnvFrom(obj: ClusterSpecEnvFrom | undefined): 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * EphemeralVolumeSource allows the user to configure the source of ephemeral volumes.
@@ -997,7 +997,7 @@ export interface ClusterSpecEphemeralVolumeSource {
 /**
  * Converts an object of type 'ClusterSpecEphemeralVolumeSource' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecEphemeralVolumeSource(obj: ClusterSpecEphemeralVolumeSource | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1006,7 +1006,7 @@ export function toJson_ClusterSpecEphemeralVolumeSource(obj: ClusterSpecEphemera
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * EphemeralVolumesSizeLimit allows the user to set the limits for the ephemeral
@@ -1034,7 +1034,7 @@ export interface ClusterSpecEphemeralVolumesSizeLimit {
 /**
  * Converts an object of type 'ClusterSpecEphemeralVolumesSizeLimit' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecEphemeralVolumesSizeLimit(obj: ClusterSpecEphemeralVolumesSizeLimit | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1044,7 +1044,7 @@ export function toJson_ClusterSpecEphemeralVolumesSizeLimit(obj: ClusterSpecEphe
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * ExternalCluster represents the connection parameters to an
@@ -1124,7 +1124,7 @@ export interface ClusterSpecExternalClusters {
 /**
  * Converts an object of type 'ClusterSpecExternalClusters' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecExternalClusters(obj: ClusterSpecExternalClusters | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1140,7 +1140,7 @@ export function toJson_ClusterSpecExternalClusters(obj: ClusterSpecExternalClust
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Defines the major PostgreSQL version we want to use within an ImageCatalog
@@ -1183,7 +1183,7 @@ export interface ClusterSpecImageCatalogRef {
 /**
  * Converts an object of type 'ClusterSpecImageCatalogRef' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecImageCatalogRef(obj: ClusterSpecImageCatalogRef | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1195,7 +1195,7 @@ export function toJson_ClusterSpecImageCatalogRef(obj: ClusterSpecImageCatalogRe
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * LocalObjectReference contains enough information to let you locate a
@@ -1216,7 +1216,7 @@ export interface ClusterSpecImagePullSecrets {
 /**
  * Converts an object of type 'ClusterSpecImagePullSecrets' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecImagePullSecrets(obj: ClusterSpecImagePullSecrets | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1225,7 +1225,7 @@ export function toJson_ClusterSpecImagePullSecrets(obj: ClusterSpecImagePullSecr
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Metadata that will be inherited by all objects related to the Cluster
@@ -1248,7 +1248,7 @@ export interface ClusterSpecInheritedMetadata {
 /**
  * Converts an object of type 'ClusterSpecInheritedMetadata' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecInheritedMetadata(obj: ClusterSpecInheritedMetadata | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1258,7 +1258,7 @@ export function toJson_ClusterSpecInheritedMetadata(obj: ClusterSpecInheritedMet
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The instances' log level, one of the following values: error, warning, info (default), debug, trace
@@ -1303,7 +1303,7 @@ export interface ClusterSpecManaged {
 /**
  * Converts an object of type 'ClusterSpecManaged' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecManaged(obj: ClusterSpecManaged | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1313,7 +1313,7 @@ export function toJson_ClusterSpecManaged(obj: ClusterSpecManaged | undefined): 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The configuration of the monitoring infrastructure of this cluster
@@ -1378,7 +1378,7 @@ export interface ClusterSpecMonitoring {
 /**
  * Converts an object of type 'ClusterSpecMonitoring' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecMonitoring(obj: ClusterSpecMonitoring | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1393,7 +1393,7 @@ export function toJson_ClusterSpecMonitoring(obj: ClusterSpecMonitoring | undefi
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Define a maintenance window for the Kubernetes nodes
@@ -1421,7 +1421,7 @@ export interface ClusterSpecNodeMaintenanceWindow {
 /**
  * Converts an object of type 'ClusterSpecNodeMaintenanceWindow' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecNodeMaintenanceWindow(obj: ClusterSpecNodeMaintenanceWindow | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1431,7 +1431,7 @@ export function toJson_ClusterSpecNodeMaintenanceWindow(obj: ClusterSpecNodeMain
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * PluginConfiguration specifies a plugin that need to be loaded for this
@@ -1474,7 +1474,7 @@ export interface ClusterSpecPlugins {
 /**
  * Converts an object of type 'ClusterSpecPlugins' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecPlugins(obj: ClusterSpecPlugins | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1486,7 +1486,7 @@ export function toJson_ClusterSpecPlugins(obj: ClusterSpecPlugins | undefined): 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Configuration of the PostgreSQL server
@@ -1571,7 +1571,7 @@ export interface ClusterSpecPostgresql {
 /**
  * Converts an object of type 'ClusterSpecPostgresql' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecPostgresql(obj: ClusterSpecPostgresql | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1588,7 +1588,7 @@ export function toJson_ClusterSpecPostgresql(obj: ClusterSpecPostgresql | undefi
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Method to follow to upgrade the primary server during a rolling
@@ -1651,7 +1651,7 @@ export interface ClusterSpecProbes {
 /**
  * Converts an object of type 'ClusterSpecProbes' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecProbes(obj: ClusterSpecProbes | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1662,7 +1662,7 @@ export function toJson_ClusterSpecProbes(obj: ClusterSpecProbes | undefined): Re
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Template to be used to define projected volumes, projected volumes will be mounted
@@ -1696,7 +1696,7 @@ export interface ClusterSpecProjectedVolumeTemplate {
 /**
  * Converts an object of type 'ClusterSpecProjectedVolumeTemplate' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecProjectedVolumeTemplate(obj: ClusterSpecProjectedVolumeTemplate | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1706,7 +1706,7 @@ export function toJson_ClusterSpecProjectedVolumeTemplate(obj: ClusterSpecProjec
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Replica cluster configuration
@@ -1771,7 +1771,7 @@ export interface ClusterSpecReplica {
 /**
  * Converts an object of type 'ClusterSpecReplica' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecReplica(obj: ClusterSpecReplica | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1785,7 +1785,7 @@ export function toJson_ClusterSpecReplica(obj: ClusterSpecReplica | undefined): 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Replication slots management configuration
@@ -1820,7 +1820,7 @@ export interface ClusterSpecReplicationSlots {
 /**
  * Converts an object of type 'ClusterSpecReplicationSlots' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecReplicationSlots(obj: ClusterSpecReplicationSlots | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1831,7 +1831,7 @@ export function toJson_ClusterSpecReplicationSlots(obj: ClusterSpecReplicationSl
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Resources requirements of every generated Pod. Please refer to
@@ -1877,7 +1877,7 @@ export interface ClusterSpecResources {
 /**
  * Converts an object of type 'ClusterSpecResources' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecResources(obj: ClusterSpecResources | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1888,7 +1888,7 @@ export function toJson_ClusterSpecResources(obj: ClusterSpecResources | undefine
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The SeccompProfile applied to every Pod and Container.
@@ -1925,7 +1925,7 @@ export interface ClusterSpecSeccompProfile {
 /**
  * Converts an object of type 'ClusterSpecSeccompProfile' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecSeccompProfile(obj: ClusterSpecSeccompProfile | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1935,7 +1935,7 @@ export function toJson_ClusterSpecSeccompProfile(obj: ClusterSpecSeccompProfile 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Configure the generation of the service account
@@ -1956,7 +1956,7 @@ export interface ClusterSpecServiceAccountTemplate {
 /**
  * Converts an object of type 'ClusterSpecServiceAccountTemplate' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecServiceAccountTemplate(obj: ClusterSpecServiceAccountTemplate | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -1965,7 +1965,7 @@ export function toJson_ClusterSpecServiceAccountTemplate(obj: ClusterSpecService
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Configuration of the storage of the instances
@@ -2011,7 +2011,7 @@ export interface ClusterSpecStorage {
 /**
  * Converts an object of type 'ClusterSpecStorage' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecStorage(obj: ClusterSpecStorage | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2023,7 +2023,7 @@ export function toJson_ClusterSpecStorage(obj: ClusterSpecStorage | undefined): 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The secret containing the superuser password. If not defined a new
@@ -2044,7 +2044,7 @@ export interface ClusterSpecSuperuserSecret {
 /**
  * Converts an object of type 'ClusterSpecSuperuserSecret' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecSuperuserSecret(obj: ClusterSpecSuperuserSecret | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2053,7 +2053,7 @@ export function toJson_ClusterSpecSuperuserSecret(obj: ClusterSpecSuperuserSecre
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * TablespaceConfiguration is the configuration of a tablespace, and includes
@@ -2098,7 +2098,7 @@ export interface ClusterSpecTablespaces {
 /**
  * Converts an object of type 'ClusterSpecTablespaces' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecTablespaces(obj: ClusterSpecTablespaces | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2110,7 +2110,7 @@ export function toJson_ClusterSpecTablespaces(obj: ClusterSpecTablespaces | unde
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * TopologySpreadConstraint specifies how to spread matching pods among the given topology.
@@ -2198,7 +2198,6 @@ export interface ClusterSpecTopologySpreadConstraints {
    * - Ignore: nodeAffinity/nodeSelector are ignored. All nodes are included in the calculations.
    *
    * If this value is nil, the behavior is equivalent to the Honor policy.
-   * This is a beta-level feature default enabled by the NodeInclusionPolicyInPodTopologySpread feature flag.
    *
    * @schema ClusterSpecTopologySpreadConstraints#nodeAffinityPolicy
    */
@@ -2212,7 +2211,6 @@ export interface ClusterSpecTopologySpreadConstraints {
    * - Ignore: node taints are ignored. All nodes are included.
    *
    * If this value is nil, the behavior is equivalent to the Ignore policy.
-   * This is a beta-level feature default enabled by the NodeInclusionPolicyInPodTopologySpread feature flag.
    *
    * @schema ClusterSpecTopologySpreadConstraints#nodeTaintsPolicy
    */
@@ -2263,7 +2261,7 @@ export interface ClusterSpecTopologySpreadConstraints {
 /**
  * Converts an object of type 'ClusterSpecTopologySpreadConstraints' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecTopologySpreadConstraints(obj: ClusterSpecTopologySpreadConstraints | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2279,7 +2277,7 @@ export function toJson_ClusterSpecTopologySpreadConstraints(obj: ClusterSpecTopo
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Configuration of the storage for PostgreSQL WAL (Write-Ahead Log)
@@ -2325,7 +2323,7 @@ export interface ClusterSpecWalStorage {
 /**
  * Converts an object of type 'ClusterSpecWalStorage' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecWalStorage(obj: ClusterSpecWalStorage | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2337,7 +2335,7 @@ export function toJson_ClusterSpecWalStorage(obj: ClusterSpecWalStorage | undefi
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * AdditionalPodAffinity allows to specify pod affinity terms to be passed to all the cluster's pods.
@@ -2378,7 +2376,7 @@ export interface ClusterSpecAffinityAdditionalPodAffinity {
 /**
  * Converts an object of type 'ClusterSpecAffinityAdditionalPodAffinity' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityAdditionalPodAffinity(obj: ClusterSpecAffinityAdditionalPodAffinity | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2388,7 +2386,7 @@ export function toJson_ClusterSpecAffinityAdditionalPodAffinity(obj: ClusterSpec
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * AdditionalPodAntiAffinity allows to specify pod anti-affinity terms to be added to the ones generated
@@ -2430,7 +2428,7 @@ export interface ClusterSpecAffinityAdditionalPodAntiAffinity {
 /**
  * Converts an object of type 'ClusterSpecAffinityAdditionalPodAntiAffinity' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityAdditionalPodAntiAffinity(obj: ClusterSpecAffinityAdditionalPodAntiAffinity | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2440,7 +2438,7 @@ export function toJson_ClusterSpecAffinityAdditionalPodAntiAffinity(obj: Cluster
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * NodeAffinity describes node affinity scheduling rules for the pod.
@@ -2480,7 +2478,7 @@ export interface ClusterSpecAffinityNodeAffinity {
 /**
  * Converts an object of type 'ClusterSpecAffinityNodeAffinity' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityNodeAffinity(obj: ClusterSpecAffinityNodeAffinity | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2490,7 +2488,7 @@ export function toJson_ClusterSpecAffinityNodeAffinity(obj: ClusterSpecAffinityN
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The pod this Toleration is attached to tolerates any taint that matches
@@ -2549,7 +2547,7 @@ export interface ClusterSpecAffinityTolerations {
 /**
  * Converts an object of type 'ClusterSpecAffinityTolerations' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityTolerations(obj: ClusterSpecAffinityTolerations | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2562,7 +2560,7 @@ export function toJson_ClusterSpecAffinityTolerations(obj: ClusterSpecAffinityTo
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The configuration for the barman-cloud tool suite
@@ -2665,7 +2663,7 @@ export interface ClusterSpecBackupBarmanObjectStore {
 /**
  * Converts an object of type 'ClusterSpecBackupBarmanObjectStore' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBackupBarmanObjectStore(obj: ClusterSpecBackupBarmanObjectStore | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2684,7 +2682,7 @@ export function toJson_ClusterSpecBackupBarmanObjectStore(obj: ClusterSpecBackup
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The policy to decide which instance should perform backups. Available
@@ -2698,7 +2696,7 @@ export enum ClusterSpecBackupTarget {
   /** primary */
   PRIMARY = "primary",
   /** prefer-standby */
-  PREFER_STANDBY = "prefer-standby",
+  PREFER_HYPHEN_STANDBY = "prefer-standby",
 }
 
 /**
@@ -2771,7 +2769,7 @@ export interface ClusterSpecBackupVolumeSnapshot {
 /**
  * Converts an object of type 'ClusterSpecBackupVolumeSnapshot' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBackupVolumeSnapshot(obj: ClusterSpecBackupVolumeSnapshot | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -2787,7 +2785,7 @@ export function toJson_ClusterSpecBackupVolumeSnapshot(obj: ClusterSpecBackupVol
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Bootstrap the cluster via initdb
@@ -2988,7 +2986,7 @@ export interface ClusterSpecBootstrapInitdb {
 /**
  * Converts an object of type 'ClusterSpecBootstrapInitdb' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrapInitdb(obj: ClusterSpecBootstrapInitdb | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3017,7 +3015,7 @@ export function toJson_ClusterSpecBootstrapInitdb(obj: ClusterSpecBootstrapInitd
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Bootstrap the cluster taking a physical backup of another compatible
@@ -3063,7 +3061,7 @@ export interface ClusterSpecBootstrapPgBasebackup {
 /**
  * Converts an object of type 'ClusterSpecBootstrapPgBasebackup' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrapPgBasebackup(obj: ClusterSpecBootstrapPgBasebackup | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3075,7 +3073,7 @@ export function toJson_ClusterSpecBootstrapPgBasebackup(obj: ClusterSpecBootstra
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Bootstrap the cluster from a backup
@@ -3158,7 +3156,7 @@ export interface ClusterSpecBootstrapRecovery {
 /**
  * Converts an object of type 'ClusterSpecBootstrapRecovery' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrapRecovery(obj: ClusterSpecBootstrapRecovery | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3173,7 +3171,7 @@ export function toJson_ClusterSpecBootstrapRecovery(obj: ClusterSpecBootstrapRec
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Source for the environment variable's value. Cannot be used if value is not empty.
@@ -3216,7 +3214,7 @@ export interface ClusterSpecEnvValueFrom {
 /**
  * Converts an object of type 'ClusterSpecEnvValueFrom' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecEnvValueFrom(obj: ClusterSpecEnvValueFrom | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3228,7 +3226,7 @@ export function toJson_ClusterSpecEnvValueFrom(obj: ClusterSpecEnvValueFrom | un
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The ConfigMap to select from
@@ -3259,7 +3257,7 @@ export interface ClusterSpecEnvFromConfigMapRef {
 /**
  * Converts an object of type 'ClusterSpecEnvFromConfigMapRef' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecEnvFromConfigMapRef(obj: ClusterSpecEnvFromConfigMapRef | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3269,7 +3267,7 @@ export function toJson_ClusterSpecEnvFromConfigMapRef(obj: ClusterSpecEnvFromCon
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The Secret to select from
@@ -3300,7 +3298,7 @@ export interface ClusterSpecEnvFromSecretRef {
 /**
  * Converts an object of type 'ClusterSpecEnvFromSecretRef' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecEnvFromSecretRef(obj: ClusterSpecEnvFromSecretRef | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3310,7 +3308,7 @@ export function toJson_ClusterSpecEnvFromSecretRef(obj: ClusterSpecEnvFromSecret
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Will be used to create a stand-alone PVC to provision the volume.
@@ -3362,7 +3360,7 @@ export interface ClusterSpecEphemeralVolumeSourceVolumeClaimTemplate {
 /**
  * Converts an object of type 'ClusterSpecEphemeralVolumeSourceVolumeClaimTemplate' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecEphemeralVolumeSourceVolumeClaimTemplate(obj: ClusterSpecEphemeralVolumeSourceVolumeClaimTemplate | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3372,7 +3370,7 @@ export function toJson_ClusterSpecEphemeralVolumeSourceVolumeClaimTemplate(obj: 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Shm is the size limit of the shared memory volume
@@ -3507,7 +3505,7 @@ export interface ClusterSpecExternalClustersBarmanObjectStore {
 /**
  * Converts an object of type 'ClusterSpecExternalClustersBarmanObjectStore' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecExternalClustersBarmanObjectStore(obj: ClusterSpecExternalClustersBarmanObjectStore | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3526,7 +3524,7 @@ export function toJson_ClusterSpecExternalClustersBarmanObjectStore(obj: Cluster
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The reference to the password to be used to connect to the server.
@@ -3570,7 +3568,7 @@ export interface ClusterSpecExternalClustersPassword {
 /**
  * Converts an object of type 'ClusterSpecExternalClustersPassword' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecExternalClustersPassword(obj: ClusterSpecExternalClustersPassword | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3581,7 +3579,7 @@ export function toJson_ClusterSpecExternalClustersPassword(obj: ClusterSpecExter
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The configuration of the plugin that is taking care
@@ -3624,7 +3622,7 @@ export interface ClusterSpecExternalClustersPlugin {
 /**
  * Converts an object of type 'ClusterSpecExternalClustersPlugin' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecExternalClustersPlugin(obj: ClusterSpecExternalClustersPlugin | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3636,7 +3634,7 @@ export function toJson_ClusterSpecExternalClustersPlugin(obj: ClusterSpecExterna
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The reference to an SSL certificate to be used to connect to this
@@ -3675,7 +3673,7 @@ export interface ClusterSpecExternalClustersSslCert {
 /**
  * Converts an object of type 'ClusterSpecExternalClustersSslCert' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecExternalClustersSslCert(obj: ClusterSpecExternalClustersSslCert | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3686,7 +3684,7 @@ export function toJson_ClusterSpecExternalClustersSslCert(obj: ClusterSpecExtern
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The reference to an SSL private key to be used to connect to this
@@ -3725,7 +3723,7 @@ export interface ClusterSpecExternalClustersSslKey {
 /**
  * Converts an object of type 'ClusterSpecExternalClustersSslKey' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecExternalClustersSslKey(obj: ClusterSpecExternalClustersSslKey | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3736,7 +3734,7 @@ export function toJson_ClusterSpecExternalClustersSslKey(obj: ClusterSpecExterna
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The reference to an SSL CA public key to be used to connect to this
@@ -3775,7 +3773,7 @@ export interface ClusterSpecExternalClustersSslRootCert {
 /**
  * Converts an object of type 'ClusterSpecExternalClustersSslRootCert' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecExternalClustersSslRootCert(obj: ClusterSpecExternalClustersSslRootCert | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3786,7 +3784,7 @@ export function toJson_ClusterSpecExternalClustersSslRootCert(obj: ClusterSpecEx
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * RoleConfiguration is the representation, in Kubernetes, of a PostgreSQL role
@@ -3937,7 +3935,7 @@ export interface ClusterSpecManagedRoles {
 /**
  * Converts an object of type 'ClusterSpecManagedRoles' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecManagedRoles(obj: ClusterSpecManagedRoles | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3960,7 +3958,7 @@ export function toJson_ClusterSpecManagedRoles(obj: ClusterSpecManagedRoles | un
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Services roles managed by the `Cluster`
@@ -3988,7 +3986,7 @@ export interface ClusterSpecManagedServices {
 /**
  * Converts an object of type 'ClusterSpecManagedServices' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecManagedServices(obj: ClusterSpecManagedServices | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -3998,7 +3996,7 @@ export function toJson_ClusterSpecManagedServices(obj: ClusterSpecManagedService
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * ConfigMapKeySelector contains enough information to let you locate
@@ -4026,7 +4024,7 @@ export interface ClusterSpecMonitoringCustomQueriesConfigMap {
 /**
  * Converts an object of type 'ClusterSpecMonitoringCustomQueriesConfigMap' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecMonitoringCustomQueriesConfigMap(obj: ClusterSpecMonitoringCustomQueriesConfigMap | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4036,7 +4034,7 @@ export function toJson_ClusterSpecMonitoringCustomQueriesConfigMap(obj: ClusterS
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * SecretKeySelector contains enough information to let you locate
@@ -4064,7 +4062,7 @@ export interface ClusterSpecMonitoringCustomQueriesSecret {
 /**
  * Converts an object of type 'ClusterSpecMonitoringCustomQueriesSecret' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecMonitoringCustomQueriesSecret(obj: ClusterSpecMonitoringCustomQueriesSecret | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4074,7 +4072,7 @@ export function toJson_ClusterSpecMonitoringCustomQueriesSecret(obj: ClusterSpec
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * RelabelConfig allows dynamic rewriting of the label set for targets, alerts,
@@ -4156,7 +4154,7 @@ export interface ClusterSpecMonitoringPodMonitorMetricRelabelings {
 /**
  * Converts an object of type 'ClusterSpecMonitoringPodMonitorMetricRelabelings' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecMonitoringPodMonitorMetricRelabelings(obj: ClusterSpecMonitoringPodMonitorMetricRelabelings | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4171,7 +4169,7 @@ export function toJson_ClusterSpecMonitoringPodMonitorMetricRelabelings(obj: Clu
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * RelabelConfig allows dynamic rewriting of the label set for targets, alerts,
@@ -4253,7 +4251,7 @@ export interface ClusterSpecMonitoringPodMonitorRelabelings {
 /**
  * Converts an object of type 'ClusterSpecMonitoringPodMonitorRelabelings' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecMonitoringPodMonitorRelabelings(obj: ClusterSpecMonitoringPodMonitorRelabelings | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4268,7 +4266,7 @@ export function toJson_ClusterSpecMonitoringPodMonitorRelabelings(obj: ClusterSp
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Configure TLS communication for the metrics endpoint.
@@ -4290,7 +4288,7 @@ export interface ClusterSpecMonitoringTls {
 /**
  * Converts an object of type 'ClusterSpecMonitoringTls' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecMonitoringTls(obj: ClusterSpecMonitoringTls | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4299,7 +4297,7 @@ export function toJson_ClusterSpecMonitoringTls(obj: ClusterSpecMonitoringTls | 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Options to specify LDAP configuration
@@ -4354,7 +4352,7 @@ export interface ClusterSpecPostgresqlLdap {
 /**
  * Converts an object of type 'ClusterSpecPostgresqlLdap' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecPostgresqlLdap(obj: ClusterSpecPostgresqlLdap | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4368,7 +4366,7 @@ export function toJson_ClusterSpecPostgresqlLdap(obj: ClusterSpecPostgresqlLdap 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Requirements to be met by sync replicas. This will affect how the "synchronous_standby_names" parameter will be
@@ -4396,7 +4394,7 @@ export interface ClusterSpecPostgresqlSyncReplicaElectionConstraint {
 /**
  * Converts an object of type 'ClusterSpecPostgresqlSyncReplicaElectionConstraint' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecPostgresqlSyncReplicaElectionConstraint(obj: ClusterSpecPostgresqlSyncReplicaElectionConstraint | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4406,7 +4404,7 @@ export function toJson_ClusterSpecPostgresqlSyncReplicaElectionConstraint(obj: C
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Configuration of the PostgreSQL synchronous replication feature
@@ -4477,7 +4475,7 @@ export interface ClusterSpecPostgresqlSynchronous {
 /**
  * Converts an object of type 'ClusterSpecPostgresqlSynchronous' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecPostgresqlSynchronous(obj: ClusterSpecPostgresqlSynchronous | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4491,7 +4489,7 @@ export function toJson_ClusterSpecPostgresqlSynchronous(obj: ClusterSpecPostgres
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The liveness probe configuration
@@ -4515,6 +4513,17 @@ export interface ClusterSpecProbesLiveness {
    * @schema ClusterSpecProbesLiveness#initialDelaySeconds
    */
   readonly initialDelaySeconds?: number;
+
+  /**
+   * Configure the feature that extends the liveness probe for a primary
+   * instance. In addition to the basic checks, this verifies whether the
+   * primary is isolated from the Kubernetes API server and from its
+   * replicas, ensuring that it can be safely shut down if network
+   * partition or API unavailability is detected. Enabled by default.
+   *
+   * @schema ClusterSpecProbesLiveness#isolationCheck
+   */
+  readonly isolationCheck?: ClusterSpecProbesLivenessIsolationCheck;
 
   /**
    * How often (in seconds) to perform the probe.
@@ -4565,12 +4574,13 @@ export interface ClusterSpecProbesLiveness {
 /**
  * Converts an object of type 'ClusterSpecProbesLiveness' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecProbesLiveness(obj: ClusterSpecProbesLiveness | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
     'failureThreshold': obj.failureThreshold,
     'initialDelaySeconds': obj.initialDelaySeconds,
+    'isolationCheck': toJson_ClusterSpecProbesLivenessIsolationCheck(obj.isolationCheck),
     'periodSeconds': obj.periodSeconds,
     'successThreshold': obj.successThreshold,
     'terminationGracePeriodSeconds': obj.terminationGracePeriodSeconds,
@@ -4579,7 +4589,7 @@ export function toJson_ClusterSpecProbesLiveness(obj: ClusterSpecProbesLiveness 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The readiness probe configuration
@@ -4667,7 +4677,7 @@ export interface ClusterSpecProbesReadiness {
 /**
  * Converts an object of type 'ClusterSpecProbesReadiness' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecProbesReadiness(obj: ClusterSpecProbesReadiness | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4683,7 +4693,7 @@ export function toJson_ClusterSpecProbesReadiness(obj: ClusterSpecProbesReadines
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The startup probe configuration
@@ -4771,7 +4781,7 @@ export interface ClusterSpecProbesStartup {
 /**
  * Converts an object of type 'ClusterSpecProbesStartup' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecProbesStartup(obj: ClusterSpecProbesStartup | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4787,7 +4797,7 @@ export function toJson_ClusterSpecProbesStartup(obj: ClusterSpecProbesStartup | 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Projection that may be projected along with other supported volume types.
@@ -4848,7 +4858,7 @@ export interface ClusterSpecProjectedVolumeTemplateSources {
 /**
  * Converts an object of type 'ClusterSpecProjectedVolumeTemplateSources' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecProjectedVolumeTemplateSources(obj: ClusterSpecProjectedVolumeTemplateSources | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4861,7 +4871,7 @@ export function toJson_ClusterSpecProjectedVolumeTemplateSources(obj: ClusterSpe
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Replication slots for high availability configuration
@@ -4891,22 +4901,35 @@ export interface ClusterSpecReplicationSlotsHighAvailability {
    */
   readonly slotPrefix?: string;
 
+  /**
+   * When enabled, the operator automatically manages synchronization of logical
+   * decoding (replication) slots across high-availability clusters.
+   *
+   * Requires one of the following conditions:
+   * - PostgreSQL version 17 or later
+   * - PostgreSQL version < 17 with pg_failover_slots extension enabled
+   *
+   * @schema ClusterSpecReplicationSlotsHighAvailability#synchronizeLogicalDecoding
+   */
+  readonly synchronizeLogicalDecoding?: boolean;
+
 }
 
 /**
  * Converts an object of type 'ClusterSpecReplicationSlotsHighAvailability' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecReplicationSlotsHighAvailability(obj: ClusterSpecReplicationSlotsHighAvailability | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
     'enabled': obj.enabled,
     'slotPrefix': obj.slotPrefix,
+    'synchronizeLogicalDecoding': obj.synchronizeLogicalDecoding,
   };
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Configures the synchronization of the user defined physical replication slots
@@ -4933,7 +4956,7 @@ export interface ClusterSpecReplicationSlotsSynchronizeReplicas {
 /**
  * Converts an object of type 'ClusterSpecReplicationSlotsSynchronizeReplicas' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecReplicationSlotsSynchronizeReplicas(obj: ClusterSpecReplicationSlotsSynchronizeReplicas | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4943,7 +4966,7 @@ export function toJson_ClusterSpecReplicationSlotsSynchronizeReplicas(obj: Clust
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * ResourceClaim references one entry in PodSpec.ResourceClaims.
@@ -4974,7 +4997,7 @@ export interface ClusterSpecResourcesClaims {
 /**
  * Converts an object of type 'ClusterSpecResourcesClaims' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecResourcesClaims(obj: ClusterSpecResourcesClaims | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -4984,7 +5007,7 @@ export function toJson_ClusterSpecResourcesClaims(obj: ClusterSpecResourcesClaim
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema ClusterSpecResourcesLimits
@@ -5053,7 +5076,7 @@ export interface ClusterSpecServiceAccountTemplateMetadata {
 /**
  * Converts an object of type 'ClusterSpecServiceAccountTemplateMetadata' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecServiceAccountTemplateMetadata(obj: ClusterSpecServiceAccountTemplateMetadata | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -5064,7 +5087,7 @@ export function toJson_ClusterSpecServiceAccountTemplateMetadata(obj: ClusterSpe
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Template to be used to generate the Persistent Volume Claim
@@ -5187,7 +5210,7 @@ export interface ClusterSpecStoragePvcTemplate {
 /**
  * Converts an object of type 'ClusterSpecStoragePvcTemplate' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecStoragePvcTemplate(obj: ClusterSpecStoragePvcTemplate | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -5204,7 +5227,7 @@ export function toJson_ClusterSpecStoragePvcTemplate(obj: ClusterSpecStoragePvcT
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Owner is the PostgreSQL user owning the tablespace
@@ -5222,7 +5245,7 @@ export interface ClusterSpecTablespacesOwner {
 /**
  * Converts an object of type 'ClusterSpecTablespacesOwner' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecTablespacesOwner(obj: ClusterSpecTablespacesOwner | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -5231,7 +5254,7 @@ export function toJson_ClusterSpecTablespacesOwner(obj: ClusterSpecTablespacesOw
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The storage configuration for the tablespace
@@ -5277,7 +5300,7 @@ export interface ClusterSpecTablespacesStorage {
 /**
  * Converts an object of type 'ClusterSpecTablespacesStorage' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecTablespacesStorage(obj: ClusterSpecTablespacesStorage | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -5289,7 +5312,7 @@ export function toJson_ClusterSpecTablespacesStorage(obj: ClusterSpecTablespaces
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * LabelSelector is used to find matching pods.
@@ -5320,7 +5343,7 @@ export interface ClusterSpecTopologySpreadConstraintsLabelSelector {
 /**
  * Converts an object of type 'ClusterSpecTopologySpreadConstraintsLabelSelector' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecTopologySpreadConstraintsLabelSelector(obj: ClusterSpecTopologySpreadConstraintsLabelSelector | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -5330,7 +5353,7 @@ export function toJson_ClusterSpecTopologySpreadConstraintsLabelSelector(obj: Cl
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Template to be used to generate the Persistent Volume Claim
@@ -5453,7 +5476,7 @@ export interface ClusterSpecWalStoragePvcTemplate {
 /**
  * Converts an object of type 'ClusterSpecWalStoragePvcTemplate' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecWalStoragePvcTemplate(obj: ClusterSpecWalStoragePvcTemplate | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -5470,7 +5493,7 @@ export function toJson_ClusterSpecWalStoragePvcTemplate(obj: ClusterSpecWalStora
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The weights of all of the matched WeightedPodAffinityTerm fields are added per-node to find the most preferred node(s)
@@ -5498,7 +5521,7 @@ export interface ClusterSpecAffinityAdditionalPodAffinityPreferredDuringScheduli
 /**
  * Converts an object of type 'ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSchedulingIgnoredDuringExecution' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSchedulingIgnoredDuringExecution(obj: ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSchedulingIgnoredDuringExecution | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -5508,7 +5531,7 @@ export function toJson_ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSc
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Defines a set of pods (namely those matching the labelSelector
@@ -5538,7 +5561,6 @@ export interface ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSchedulin
    * pod labels will be ignored. The default value is empty.
    * The same key is forbidden to exist in both matchLabelKeys and labelSelector.
    * Also, matchLabelKeys cannot be set when labelSelector isn't set.
-   * This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
    *
    * @schema ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSchedulingIgnoredDuringExecution#matchLabelKeys
    */
@@ -5553,7 +5575,6 @@ export interface ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSchedulin
    * pod labels will be ignored. The default value is empty.
    * The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
    * Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-   * This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
    *
    * @schema ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSchedulingIgnoredDuringExecution#mismatchLabelKeys
    */
@@ -5596,7 +5617,7 @@ export interface ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSchedulin
 /**
  * Converts an object of type 'ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSchedulingIgnoredDuringExecution' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSchedulingIgnoredDuringExecution(obj: ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSchedulingIgnoredDuringExecution | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -5610,7 +5631,7 @@ export function toJson_ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSch
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The weights of all of the matched WeightedPodAffinityTerm fields are added per-node to find the most preferred node(s)
@@ -5638,7 +5659,7 @@ export interface ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSche
 /**
  * Converts an object of type 'ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecution' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecution(obj: ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecution | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -5648,7 +5669,7 @@ export function toJson_ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuri
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Defines a set of pods (namely those matching the labelSelector
@@ -5678,7 +5699,6 @@ export interface ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDuringSched
    * pod labels will be ignored. The default value is empty.
    * The same key is forbidden to exist in both matchLabelKeys and labelSelector.
    * Also, matchLabelKeys cannot be set when labelSelector isn't set.
-   * This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
    *
    * @schema ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecution#matchLabelKeys
    */
@@ -5693,7 +5713,6 @@ export interface ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDuringSched
    * pod labels will be ignored. The default value is empty.
    * The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
    * Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-   * This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
    *
    * @schema ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecution#mismatchLabelKeys
    */
@@ -5736,7 +5755,7 @@ export interface ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDuringSched
 /**
  * Converts an object of type 'ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecution' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecution(obj: ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecution | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -5750,7 +5769,7 @@ export function toJson_ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDurin
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * An empty preferred scheduling term matches all objects with implicit weight 0
@@ -5778,7 +5797,7 @@ export interface ClusterSpecAffinityNodeAffinityPreferredDuringSchedulingIgnored
 /**
  * Converts an object of type 'ClusterSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecution' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecution(obj: ClusterSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecution | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -5788,7 +5807,7 @@ export function toJson_ClusterSpecAffinityNodeAffinityPreferredDuringSchedulingI
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * If the affinity requirements specified by this field are not met at
@@ -5812,7 +5831,7 @@ export interface ClusterSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredD
 /**
  * Converts an object of type 'ClusterSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecution' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecution(obj: ClusterSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecution | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -5821,7 +5840,7 @@ export function toJson_ClusterSpecAffinityNodeAffinityRequiredDuringSchedulingIg
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The credentials to use to upload data to Azure Blob Storage
@@ -5871,7 +5890,7 @@ export interface ClusterSpecBackupBarmanObjectStoreAzureCredentials {
 /**
  * Converts an object of type 'ClusterSpecBackupBarmanObjectStoreAzureCredentials' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBackupBarmanObjectStoreAzureCredentials(obj: ClusterSpecBackupBarmanObjectStoreAzureCredentials | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -5884,7 +5903,7 @@ export function toJson_ClusterSpecBackupBarmanObjectStoreAzureCredentials(obj: C
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The configuration to be used to backup the data files
@@ -5958,7 +5977,7 @@ export interface ClusterSpecBackupBarmanObjectStoreData {
 /**
  * Converts an object of type 'ClusterSpecBackupBarmanObjectStoreData' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBackupBarmanObjectStoreData(obj: ClusterSpecBackupBarmanObjectStoreData | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -5971,7 +5990,7 @@ export function toJson_ClusterSpecBackupBarmanObjectStoreData(obj: ClusterSpecBa
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * EndpointCA store the CA bundle of the barman endpoint.
@@ -6000,7 +6019,7 @@ export interface ClusterSpecBackupBarmanObjectStoreEndpointCa {
 /**
  * Converts an object of type 'ClusterSpecBackupBarmanObjectStoreEndpointCa' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBackupBarmanObjectStoreEndpointCa(obj: ClusterSpecBackupBarmanObjectStoreEndpointCa | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -6010,7 +6029,7 @@ export function toJson_ClusterSpecBackupBarmanObjectStoreEndpointCa(obj: Cluster
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The credentials to use to upload data to Google Cloud Storage
@@ -6038,7 +6057,7 @@ export interface ClusterSpecBackupBarmanObjectStoreGoogleCredentials {
 /**
  * Converts an object of type 'ClusterSpecBackupBarmanObjectStoreGoogleCredentials' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBackupBarmanObjectStoreGoogleCredentials(obj: ClusterSpecBackupBarmanObjectStoreGoogleCredentials | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -6048,7 +6067,7 @@ export function toJson_ClusterSpecBackupBarmanObjectStoreGoogleCredentials(obj: 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The credentials to use to upload data to S3
@@ -6096,7 +6115,7 @@ export interface ClusterSpecBackupBarmanObjectStoreS3Credentials {
 /**
  * Converts an object of type 'ClusterSpecBackupBarmanObjectStoreS3Credentials' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBackupBarmanObjectStoreS3Credentials(obj: ClusterSpecBackupBarmanObjectStoreS3Credentials | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -6109,7 +6128,7 @@ export function toJson_ClusterSpecBackupBarmanObjectStoreS3Credentials(obj: Clus
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The configuration for the backup of the WAL stream.
@@ -6193,7 +6212,7 @@ export interface ClusterSpecBackupBarmanObjectStoreWal {
 /**
  * Converts an object of type 'ClusterSpecBackupBarmanObjectStoreWal' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBackupBarmanObjectStoreWal(obj: ClusterSpecBackupBarmanObjectStoreWal | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -6206,7 +6225,7 @@ export function toJson_ClusterSpecBackupBarmanObjectStoreWal(obj: ClusterSpecBac
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Configuration parameters to control the online/hot backup with volume snapshots
@@ -6245,7 +6264,7 @@ export interface ClusterSpecBackupVolumeSnapshotOnlineConfiguration {
 /**
  * Converts an object of type 'ClusterSpecBackupVolumeSnapshotOnlineConfiguration' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBackupVolumeSnapshotOnlineConfiguration(obj: ClusterSpecBackupVolumeSnapshotOnlineConfiguration | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -6255,7 +6274,7 @@ export function toJson_ClusterSpecBackupVolumeSnapshotOnlineConfiguration(obj: C
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * SnapshotOwnerReference indicates the type of owner reference the snapshot should have
@@ -6348,7 +6367,7 @@ export interface ClusterSpecBootstrapInitdbImport {
 /**
  * Converts an object of type 'ClusterSpecBootstrapInitdbImport' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrapInitdbImport(obj: ClusterSpecBootstrapInitdbImport | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -6364,7 +6383,7 @@ export function toJson_ClusterSpecBootstrapInitdbImport(obj: ClusterSpecBootstra
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * List of references to ConfigMaps or Secrets containing SQL files
@@ -6397,7 +6416,7 @@ export interface ClusterSpecBootstrapInitdbPostInitApplicationSqlRefs {
 /**
  * Converts an object of type 'ClusterSpecBootstrapInitdbPostInitApplicationSqlRefs' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrapInitdbPostInitApplicationSqlRefs(obj: ClusterSpecBootstrapInitdbPostInitApplicationSqlRefs | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -6407,7 +6426,7 @@ export function toJson_ClusterSpecBootstrapInitdbPostInitApplicationSqlRefs(obj:
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * List of references to ConfigMaps or Secrets containing SQL files
@@ -6440,7 +6459,7 @@ export interface ClusterSpecBootstrapInitdbPostInitSqlRefs {
 /**
  * Converts an object of type 'ClusterSpecBootstrapInitdbPostInitSqlRefs' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrapInitdbPostInitSqlRefs(obj: ClusterSpecBootstrapInitdbPostInitSqlRefs | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -6450,7 +6469,7 @@ export function toJson_ClusterSpecBootstrapInitdbPostInitSqlRefs(obj: ClusterSpe
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * List of references to ConfigMaps or Secrets containing SQL files
@@ -6483,7 +6502,7 @@ export interface ClusterSpecBootstrapInitdbPostInitTemplateSqlRefs {
 /**
  * Converts an object of type 'ClusterSpecBootstrapInitdbPostInitTemplateSqlRefs' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrapInitdbPostInitTemplateSqlRefs(obj: ClusterSpecBootstrapInitdbPostInitTemplateSqlRefs | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -6493,7 +6512,7 @@ export function toJson_ClusterSpecBootstrapInitdbPostInitTemplateSqlRefs(obj: Cl
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Name of the secret containing the initial credentials for the
@@ -6515,7 +6534,7 @@ export interface ClusterSpecBootstrapInitdbSecret {
 /**
  * Converts an object of type 'ClusterSpecBootstrapInitdbSecret' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrapInitdbSecret(obj: ClusterSpecBootstrapInitdbSecret | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -6524,7 +6543,7 @@ export function toJson_ClusterSpecBootstrapInitdbSecret(obj: ClusterSpecBootstra
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Name of the secret containing the initial credentials for the
@@ -6546,7 +6565,7 @@ export interface ClusterSpecBootstrapPgBasebackupSecret {
 /**
  * Converts an object of type 'ClusterSpecBootstrapPgBasebackupSecret' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrapPgBasebackupSecret(obj: ClusterSpecBootstrapPgBasebackupSecret | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -6555,7 +6574,7 @@ export function toJson_ClusterSpecBootstrapPgBasebackupSecret(obj: ClusterSpecBo
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The backup object containing the physical base backup from which to
@@ -6586,7 +6605,7 @@ export interface ClusterSpecBootstrapRecoveryBackup {
 /**
  * Converts an object of type 'ClusterSpecBootstrapRecoveryBackup' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrapRecoveryBackup(obj: ClusterSpecBootstrapRecoveryBackup | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -6596,7 +6615,7 @@ export function toJson_ClusterSpecBootstrapRecoveryBackup(obj: ClusterSpecBootst
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * By default, the recovery process applies all the available
@@ -6675,7 +6694,7 @@ export interface ClusterSpecBootstrapRecoveryRecoveryTarget {
 /**
  * Converts an object of type 'ClusterSpecBootstrapRecoveryRecoveryTarget' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrapRecoveryRecoveryTarget(obj: ClusterSpecBootstrapRecoveryRecoveryTarget | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -6691,7 +6710,7 @@ export function toJson_ClusterSpecBootstrapRecoveryRecoveryTarget(obj: ClusterSp
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Name of the secret containing the initial credentials for the
@@ -6713,7 +6732,7 @@ export interface ClusterSpecBootstrapRecoverySecret {
 /**
  * Converts an object of type 'ClusterSpecBootstrapRecoverySecret' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrapRecoverySecret(obj: ClusterSpecBootstrapRecoverySecret | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -6722,7 +6741,7 @@ export function toJson_ClusterSpecBootstrapRecoverySecret(obj: ClusterSpecBootst
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The static PVC data source(s) from which to initiate the
@@ -6763,7 +6782,7 @@ export interface ClusterSpecBootstrapRecoveryVolumeSnapshots {
 /**
  * Converts an object of type 'ClusterSpecBootstrapRecoveryVolumeSnapshots' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrapRecoveryVolumeSnapshots(obj: ClusterSpecBootstrapRecoveryVolumeSnapshots | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -6774,7 +6793,7 @@ export function toJson_ClusterSpecBootstrapRecoveryVolumeSnapshots(obj: ClusterS
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Selects a key of a ConfigMap.
@@ -6812,7 +6831,7 @@ export interface ClusterSpecEnvValueFromConfigMapKeyRef {
 /**
  * Converts an object of type 'ClusterSpecEnvValueFromConfigMapKeyRef' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecEnvValueFromConfigMapKeyRef(obj: ClusterSpecEnvValueFromConfigMapKeyRef | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -6823,7 +6842,7 @@ export function toJson_ClusterSpecEnvValueFromConfigMapKeyRef(obj: ClusterSpecEn
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Selects a field of the pod: supports metadata.name, metadata.namespace, `metadata.labels['<KEY>']`, `metadata.annotations['<KEY>']`,
@@ -6851,7 +6870,7 @@ export interface ClusterSpecEnvValueFromFieldRef {
 /**
  * Converts an object of type 'ClusterSpecEnvValueFromFieldRef' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecEnvValueFromFieldRef(obj: ClusterSpecEnvValueFromFieldRef | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -6861,7 +6880,7 @@ export function toJson_ClusterSpecEnvValueFromFieldRef(obj: ClusterSpecEnvValueF
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Selects a resource of the container: only resources limits and requests
@@ -6896,7 +6915,7 @@ export interface ClusterSpecEnvValueFromResourceFieldRef {
 /**
  * Converts an object of type 'ClusterSpecEnvValueFromResourceFieldRef' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecEnvValueFromResourceFieldRef(obj: ClusterSpecEnvValueFromResourceFieldRef | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -6907,7 +6926,7 @@ export function toJson_ClusterSpecEnvValueFromResourceFieldRef(obj: ClusterSpecE
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Selects a key of a secret in the pod's namespace
@@ -6945,7 +6964,7 @@ export interface ClusterSpecEnvValueFromSecretKeyRef {
 /**
  * Converts an object of type 'ClusterSpecEnvValueFromSecretKeyRef' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecEnvValueFromSecretKeyRef(obj: ClusterSpecEnvValueFromSecretKeyRef | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -6956,7 +6975,7 @@ export function toJson_ClusterSpecEnvValueFromSecretKeyRef(obj: ClusterSpecEnvVa
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The specification for the PersistentVolumeClaim. The entire content is
@@ -7082,7 +7101,7 @@ export interface ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpec {
 /**
  * Converts an object of type 'ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpec' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpec(obj: ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpec | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -7099,7 +7118,7 @@ export function toJson_ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpec(o
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The credentials to use to upload data to Azure Blob Storage
@@ -7149,7 +7168,7 @@ export interface ClusterSpecExternalClustersBarmanObjectStoreAzureCredentials {
 /**
  * Converts an object of type 'ClusterSpecExternalClustersBarmanObjectStoreAzureCredentials' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecExternalClustersBarmanObjectStoreAzureCredentials(obj: ClusterSpecExternalClustersBarmanObjectStoreAzureCredentials | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -7162,7 +7181,7 @@ export function toJson_ClusterSpecExternalClustersBarmanObjectStoreAzureCredenti
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The configuration to be used to backup the data files
@@ -7236,7 +7255,7 @@ export interface ClusterSpecExternalClustersBarmanObjectStoreData {
 /**
  * Converts an object of type 'ClusterSpecExternalClustersBarmanObjectStoreData' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecExternalClustersBarmanObjectStoreData(obj: ClusterSpecExternalClustersBarmanObjectStoreData | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -7249,7 +7268,7 @@ export function toJson_ClusterSpecExternalClustersBarmanObjectStoreData(obj: Clu
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * EndpointCA store the CA bundle of the barman endpoint.
@@ -7278,7 +7297,7 @@ export interface ClusterSpecExternalClustersBarmanObjectStoreEndpointCa {
 /**
  * Converts an object of type 'ClusterSpecExternalClustersBarmanObjectStoreEndpointCa' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecExternalClustersBarmanObjectStoreEndpointCa(obj: ClusterSpecExternalClustersBarmanObjectStoreEndpointCa | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -7288,7 +7307,7 @@ export function toJson_ClusterSpecExternalClustersBarmanObjectStoreEndpointCa(ob
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The credentials to use to upload data to Google Cloud Storage
@@ -7316,7 +7335,7 @@ export interface ClusterSpecExternalClustersBarmanObjectStoreGoogleCredentials {
 /**
  * Converts an object of type 'ClusterSpecExternalClustersBarmanObjectStoreGoogleCredentials' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecExternalClustersBarmanObjectStoreGoogleCredentials(obj: ClusterSpecExternalClustersBarmanObjectStoreGoogleCredentials | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -7326,7 +7345,7 @@ export function toJson_ClusterSpecExternalClustersBarmanObjectStoreGoogleCredent
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The credentials to use to upload data to S3
@@ -7374,7 +7393,7 @@ export interface ClusterSpecExternalClustersBarmanObjectStoreS3Credentials {
 /**
  * Converts an object of type 'ClusterSpecExternalClustersBarmanObjectStoreS3Credentials' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecExternalClustersBarmanObjectStoreS3Credentials(obj: ClusterSpecExternalClustersBarmanObjectStoreS3Credentials | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -7387,7 +7406,7 @@ export function toJson_ClusterSpecExternalClustersBarmanObjectStoreS3Credentials
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The configuration for the backup of the WAL stream.
@@ -7471,7 +7490,7 @@ export interface ClusterSpecExternalClustersBarmanObjectStoreWal {
 /**
  * Converts an object of type 'ClusterSpecExternalClustersBarmanObjectStoreWal' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecExternalClustersBarmanObjectStoreWal(obj: ClusterSpecExternalClustersBarmanObjectStoreWal | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -7484,7 +7503,7 @@ export function toJson_ClusterSpecExternalClustersBarmanObjectStoreWal(obj: Clus
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Ensure the role is `present` or `absent` - defaults to "present"
@@ -7517,7 +7536,7 @@ export interface ClusterSpecManagedRolesPasswordSecret {
 /**
  * Converts an object of type 'ClusterSpecManagedRolesPasswordSecret' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecManagedRolesPasswordSecret(obj: ClusterSpecManagedRolesPasswordSecret | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -7526,7 +7545,7 @@ export function toJson_ClusterSpecManagedRolesPasswordSecret(obj: ClusterSpecMan
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * ManagedService represents a specific service managed by the cluster.
@@ -7562,7 +7581,7 @@ export interface ClusterSpecManagedServicesAdditional {
 /**
  * Converts an object of type 'ClusterSpecManagedServicesAdditional' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecManagedServicesAdditional(obj: ClusterSpecManagedServicesAdditional | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -7573,7 +7592,7 @@ export function toJson_ClusterSpecManagedServicesAdditional(obj: ClusterSpecMana
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * ServiceSelectorType describes a valid value for generating the service selectors.
@@ -7603,48 +7622,26 @@ export enum ClusterSpecManagedServicesDisabledDefaultServices {
 export enum ClusterSpecMonitoringPodMonitorMetricRelabelingsAction {
   /** replace */
   REPLACE = "replace",
-  /** Replace */
-  REPLACE = "Replace",
   /** keep */
   KEEP = "keep",
-  /** Keep */
-  KEEP = "Keep",
   /** drop */
   DROP = "drop",
-  /** Drop */
-  DROP = "Drop",
   /** hashmod */
   HASHMOD = "hashmod",
-  /** HashMod */
-  HASH_MOD = "HashMod",
   /** labelmap */
   LABELMAP = "labelmap",
-  /** LabelMap */
-  LABEL_MAP = "LabelMap",
   /** labeldrop */
   LABELDROP = "labeldrop",
-  /** LabelDrop */
-  LABEL_DROP = "LabelDrop",
   /** labelkeep */
   LABELKEEP = "labelkeep",
-  /** LabelKeep */
-  LABEL_KEEP = "LabelKeep",
   /** lowercase */
   LOWERCASE = "lowercase",
-  /** Lowercase */
-  LOWERCASE = "Lowercase",
   /** uppercase */
   UPPERCASE = "uppercase",
-  /** Uppercase */
-  UPPERCASE = "Uppercase",
   /** keepequal */
   KEEPEQUAL = "keepequal",
-  /** KeepEqual */
-  KEEP_EQUAL = "KeepEqual",
   /** dropequal */
   DROPEQUAL = "dropequal",
-  /** DropEqual */
-  DROP_EQUAL = "DropEqual",
 }
 
 /**
@@ -7660,48 +7657,26 @@ export enum ClusterSpecMonitoringPodMonitorMetricRelabelingsAction {
 export enum ClusterSpecMonitoringPodMonitorRelabelingsAction {
   /** replace */
   REPLACE = "replace",
-  /** Replace */
-  REPLACE = "Replace",
   /** keep */
   KEEP = "keep",
-  /** Keep */
-  KEEP = "Keep",
   /** drop */
   DROP = "drop",
-  /** Drop */
-  DROP = "Drop",
   /** hashmod */
   HASHMOD = "hashmod",
-  /** HashMod */
-  HASH_MOD = "HashMod",
   /** labelmap */
   LABELMAP = "labelmap",
-  /** LabelMap */
-  LABEL_MAP = "LabelMap",
   /** labeldrop */
   LABELDROP = "labeldrop",
-  /** LabelDrop */
-  LABEL_DROP = "LabelDrop",
   /** labelkeep */
   LABELKEEP = "labelkeep",
-  /** LabelKeep */
-  LABEL_KEEP = "LabelKeep",
   /** lowercase */
   LOWERCASE = "lowercase",
-  /** Lowercase */
-  LOWERCASE = "Lowercase",
   /** uppercase */
   UPPERCASE = "uppercase",
-  /** Uppercase */
-  UPPERCASE = "Uppercase",
   /** keepequal */
   KEEPEQUAL = "keepequal",
-  /** KeepEqual */
-  KEEP_EQUAL = "KeepEqual",
   /** dropequal */
   DROPEQUAL = "dropequal",
-  /** DropEqual */
-  DROP_EQUAL = "DropEqual",
 }
 
 /**
@@ -7729,7 +7704,7 @@ export interface ClusterSpecPostgresqlLdapBindAsAuth {
 /**
  * Converts an object of type 'ClusterSpecPostgresqlLdapBindAsAuth' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecPostgresqlLdapBindAsAuth(obj: ClusterSpecPostgresqlLdapBindAsAuth | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -7739,7 +7714,7 @@ export function toJson_ClusterSpecPostgresqlLdapBindAsAuth(obj: ClusterSpecPostg
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Bind+Search authentication configuration
@@ -7787,7 +7762,7 @@ export interface ClusterSpecPostgresqlLdapBindSearchAuth {
 /**
  * Converts an object of type 'ClusterSpecPostgresqlLdapBindSearchAuth' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecPostgresqlLdapBindSearchAuth(obj: ClusterSpecPostgresqlLdapBindSearchAuth | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -7800,7 +7775,7 @@ export function toJson_ClusterSpecPostgresqlLdapBindSearchAuth(obj: ClusterSpecP
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * LDAP schema to be used, possible options are `ldap` and `ldaps`
@@ -7848,6 +7823,55 @@ export enum ClusterSpecPostgresqlSynchronousMethod {
 }
 
 /**
+ * Configure the feature that extends the liveness probe for a primary
+ * instance. In addition to the basic checks, this verifies whether the
+ * primary is isolated from the Kubernetes API server and from its
+ * replicas, ensuring that it can be safely shut down if network
+ * partition or API unavailability is detected. Enabled by default.
+ *
+ * @schema ClusterSpecProbesLivenessIsolationCheck
+ */
+export interface ClusterSpecProbesLivenessIsolationCheck {
+  /**
+   * Timeout in milliseconds for connections during the primary isolation check
+   *
+   * @schema ClusterSpecProbesLivenessIsolationCheck#connectionTimeout
+   */
+  readonly connectionTimeout?: number;
+
+  /**
+   * Whether primary isolation checking is enabled for the liveness probe
+   *
+   * @schema ClusterSpecProbesLivenessIsolationCheck#enabled
+   */
+  readonly enabled?: boolean;
+
+  /**
+   * Timeout in milliseconds for requests during the primary isolation check
+   *
+   * @schema ClusterSpecProbesLivenessIsolationCheck#requestTimeout
+   */
+  readonly requestTimeout?: number;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSpecProbesLivenessIsolationCheck' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSpecProbesLivenessIsolationCheck(obj: ClusterSpecProbesLivenessIsolationCheck | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'connectionTimeout': obj.connectionTimeout,
+    'enabled': obj.enabled,
+    'requestTimeout': obj.requestTimeout,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
  * Lag limit. Used only for `streaming` strategy
  *
  * @schema ClusterSpecProbesReadinessMaximumLag
@@ -7870,7 +7894,7 @@ export class ClusterSpecProbesReadinessMaximumLag {
  */
 export enum ClusterSpecProbesReadinessType {
   /** pg_isready */
-  PG_ISREADY = "pg_isready",
+  PG_UNDERSCORE_ISREADY = "pg_isready",
   /** streaming */
   STREAMING = "streaming",
   /** query */
@@ -7900,7 +7924,7 @@ export class ClusterSpecProbesStartupMaximumLag {
  */
 export enum ClusterSpecProbesStartupType {
   /** pg_isready */
-  PG_ISREADY = "pg_isready",
+  PG_UNDERSCORE_ISREADY = "pg_isready",
   /** streaming */
   STREAMING = "streaming",
   /** query */
@@ -7975,7 +7999,7 @@ export interface ClusterSpecProjectedVolumeTemplateSourcesClusterTrustBundle {
 /**
  * Converts an object of type 'ClusterSpecProjectedVolumeTemplateSourcesClusterTrustBundle' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecProjectedVolumeTemplateSourcesClusterTrustBundle(obj: ClusterSpecProjectedVolumeTemplateSourcesClusterTrustBundle | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -7988,7 +8012,7 @@ export function toJson_ClusterSpecProjectedVolumeTemplateSourcesClusterTrustBund
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * configMap information about the configMap data to project
@@ -8032,7 +8056,7 @@ export interface ClusterSpecProjectedVolumeTemplateSourcesConfigMap {
 /**
  * Converts an object of type 'ClusterSpecProjectedVolumeTemplateSourcesConfigMap' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecProjectedVolumeTemplateSourcesConfigMap(obj: ClusterSpecProjectedVolumeTemplateSourcesConfigMap | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -8043,7 +8067,7 @@ export function toJson_ClusterSpecProjectedVolumeTemplateSourcesConfigMap(obj: C
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * downwardAPI information about the downwardAPI data to project
@@ -8063,7 +8087,7 @@ export interface ClusterSpecProjectedVolumeTemplateSourcesDownwardApi {
 /**
  * Converts an object of type 'ClusterSpecProjectedVolumeTemplateSourcesDownwardApi' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecProjectedVolumeTemplateSourcesDownwardApi(obj: ClusterSpecProjectedVolumeTemplateSourcesDownwardApi | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -8072,7 +8096,7 @@ export function toJson_ClusterSpecProjectedVolumeTemplateSourcesDownwardApi(obj:
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * secret information about the secret data to project
@@ -8116,7 +8140,7 @@ export interface ClusterSpecProjectedVolumeTemplateSourcesSecret {
 /**
  * Converts an object of type 'ClusterSpecProjectedVolumeTemplateSourcesSecret' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecProjectedVolumeTemplateSourcesSecret(obj: ClusterSpecProjectedVolumeTemplateSourcesSecret | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -8127,7 +8151,7 @@ export function toJson_ClusterSpecProjectedVolumeTemplateSourcesSecret(obj: Clus
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * serviceAccountToken is information about the serviceAccountToken data to project
@@ -8171,7 +8195,7 @@ export interface ClusterSpecProjectedVolumeTemplateSourcesServiceAccountToken {
 /**
  * Converts an object of type 'ClusterSpecProjectedVolumeTemplateSourcesServiceAccountToken' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecProjectedVolumeTemplateSourcesServiceAccountToken(obj: ClusterSpecProjectedVolumeTemplateSourcesServiceAccountToken | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -8182,7 +8206,7 @@ export function toJson_ClusterSpecProjectedVolumeTemplateSourcesServiceAccountTo
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * dataSource field can be used to specify either:
@@ -8225,7 +8249,7 @@ export interface ClusterSpecStoragePvcTemplateDataSource {
 /**
  * Converts an object of type 'ClusterSpecStoragePvcTemplateDataSource' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecStoragePvcTemplateDataSource(obj: ClusterSpecStoragePvcTemplateDataSource | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -8236,7 +8260,7 @@ export function toJson_ClusterSpecStoragePvcTemplateDataSource(obj: ClusterSpecS
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * dataSourceRef specifies the object from which to populate the volume with data, if a non-empty
@@ -8303,7 +8327,7 @@ export interface ClusterSpecStoragePvcTemplateDataSourceRef {
 /**
  * Converts an object of type 'ClusterSpecStoragePvcTemplateDataSourceRef' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecStoragePvcTemplateDataSourceRef(obj: ClusterSpecStoragePvcTemplateDataSourceRef | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -8315,7 +8339,7 @@ export function toJson_ClusterSpecStoragePvcTemplateDataSourceRef(obj: ClusterSp
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * resources represents the minimum resources the volume should have.
@@ -8350,7 +8374,7 @@ export interface ClusterSpecStoragePvcTemplateResources {
 /**
  * Converts an object of type 'ClusterSpecStoragePvcTemplateResources' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecStoragePvcTemplateResources(obj: ClusterSpecStoragePvcTemplateResources | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -8360,7 +8384,7 @@ export function toJson_ClusterSpecStoragePvcTemplateResources(obj: ClusterSpecSt
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * selector is a label query over volumes to consider for binding.
@@ -8389,7 +8413,7 @@ export interface ClusterSpecStoragePvcTemplateSelector {
 /**
  * Converts an object of type 'ClusterSpecStoragePvcTemplateSelector' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecStoragePvcTemplateSelector(obj: ClusterSpecStoragePvcTemplateSelector | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -8399,7 +8423,7 @@ export function toJson_ClusterSpecStoragePvcTemplateSelector(obj: ClusterSpecSto
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Template to be used to generate the Persistent Volume Claim
@@ -8522,7 +8546,7 @@ export interface ClusterSpecTablespacesStoragePvcTemplate {
 /**
  * Converts an object of type 'ClusterSpecTablespacesStoragePvcTemplate' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecTablespacesStoragePvcTemplate(obj: ClusterSpecTablespacesStoragePvcTemplate | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -8539,7 +8563,7 @@ export function toJson_ClusterSpecTablespacesStoragePvcTemplate(obj: ClusterSpec
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label selector requirement is a selector that contains values, a key, and an operator that
@@ -8578,7 +8602,7 @@ export interface ClusterSpecTopologySpreadConstraintsLabelSelectorMatchExpressio
 /**
  * Converts an object of type 'ClusterSpecTopologySpreadConstraintsLabelSelectorMatchExpressions' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecTopologySpreadConstraintsLabelSelectorMatchExpressions(obj: ClusterSpecTopologySpreadConstraintsLabelSelectorMatchExpressions | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -8589,7 +8613,7 @@ export function toJson_ClusterSpecTopologySpreadConstraintsLabelSelectorMatchExp
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * dataSource field can be used to specify either:
@@ -8632,7 +8656,7 @@ export interface ClusterSpecWalStoragePvcTemplateDataSource {
 /**
  * Converts an object of type 'ClusterSpecWalStoragePvcTemplateDataSource' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecWalStoragePvcTemplateDataSource(obj: ClusterSpecWalStoragePvcTemplateDataSource | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -8643,7 +8667,7 @@ export function toJson_ClusterSpecWalStoragePvcTemplateDataSource(obj: ClusterSp
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * dataSourceRef specifies the object from which to populate the volume with data, if a non-empty
@@ -8710,7 +8734,7 @@ export interface ClusterSpecWalStoragePvcTemplateDataSourceRef {
 /**
  * Converts an object of type 'ClusterSpecWalStoragePvcTemplateDataSourceRef' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecWalStoragePvcTemplateDataSourceRef(obj: ClusterSpecWalStoragePvcTemplateDataSourceRef | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -8722,7 +8746,7 @@ export function toJson_ClusterSpecWalStoragePvcTemplateDataSourceRef(obj: Cluste
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * resources represents the minimum resources the volume should have.
@@ -8757,7 +8781,7 @@ export interface ClusterSpecWalStoragePvcTemplateResources {
 /**
  * Converts an object of type 'ClusterSpecWalStoragePvcTemplateResources' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecWalStoragePvcTemplateResources(obj: ClusterSpecWalStoragePvcTemplateResources | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -8767,7 +8791,7 @@ export function toJson_ClusterSpecWalStoragePvcTemplateResources(obj: ClusterSpe
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * selector is a label query over volumes to consider for binding.
@@ -8796,7 +8820,7 @@ export interface ClusterSpecWalStoragePvcTemplateSelector {
 /**
  * Converts an object of type 'ClusterSpecWalStoragePvcTemplateSelector' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecWalStoragePvcTemplateSelector(obj: ClusterSpecWalStoragePvcTemplateSelector | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -8806,7 +8830,7 @@ export function toJson_ClusterSpecWalStoragePvcTemplateSelector(obj: ClusterSpec
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Required. A pod affinity term, associated with the corresponding weight.
@@ -8831,7 +8855,6 @@ export interface ClusterSpecAffinityAdditionalPodAffinityPreferredDuringScheduli
    * pod labels will be ignored. The default value is empty.
    * The same key is forbidden to exist in both matchLabelKeys and labelSelector.
    * Also, matchLabelKeys cannot be set when labelSelector isn't set.
-   * This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
    *
    * @schema ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#matchLabelKeys
    */
@@ -8846,7 +8869,6 @@ export interface ClusterSpecAffinityAdditionalPodAffinityPreferredDuringScheduli
    * pod labels will be ignored. The default value is empty.
    * The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
    * Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-   * This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
    *
    * @schema ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#mismatchLabelKeys
    */
@@ -8889,7 +8911,7 @@ export interface ClusterSpecAffinityAdditionalPodAffinityPreferredDuringScheduli
 /**
  * Converts an object of type 'ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm(obj: ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -8903,7 +8925,7 @@ export function toJson_ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSc
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label query over a set of resources, in this case pods.
@@ -8933,7 +8955,7 @@ export interface ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSchedulin
 /**
  * Converts an object of type 'ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelector' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelector(obj: ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelector | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -8943,7 +8965,7 @@ export function toJson_ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSch
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label query over the set of namespaces that the term applies to.
@@ -8976,7 +8998,7 @@ export interface ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSchedulin
 /**
  * Converts an object of type 'ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelector' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelector(obj: ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelector | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -8986,7 +9008,7 @@ export function toJson_ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSch
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Required. A pod affinity term, associated with the corresponding weight.
@@ -9011,7 +9033,6 @@ export interface ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSche
    * pod labels will be ignored. The default value is empty.
    * The same key is forbidden to exist in both matchLabelKeys and labelSelector.
    * Also, matchLabelKeys cannot be set when labelSelector isn't set.
-   * This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
    *
    * @schema ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#matchLabelKeys
    */
@@ -9026,7 +9047,6 @@ export interface ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSche
    * pod labels will be ignored. The default value is empty.
    * The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
    * Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-   * This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
    *
    * @schema ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm#mismatchLabelKeys
    */
@@ -9069,7 +9089,7 @@ export interface ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSche
 /**
  * Converts an object of type 'ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm(obj: ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTerm | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -9083,7 +9103,7 @@ export function toJson_ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuri
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label query over a set of resources, in this case pods.
@@ -9113,7 +9133,7 @@ export interface ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDuringSched
 /**
  * Converts an object of type 'ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelector' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelector(obj: ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelector | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -9123,7 +9143,7 @@ export function toJson_ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDurin
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label query over the set of namespaces that the term applies to.
@@ -9156,7 +9176,7 @@ export interface ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDuringSched
 /**
  * Converts an object of type 'ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelector' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelector(obj: ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelector | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -9166,7 +9186,7 @@ export function toJson_ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDurin
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A node selector term, associated with the corresponding weight.
@@ -9193,7 +9213,7 @@ export interface ClusterSpecAffinityNodeAffinityPreferredDuringSchedulingIgnored
 /**
  * Converts an object of type 'ClusterSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreference' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreference(obj: ClusterSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreference | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -9203,7 +9223,7 @@ export function toJson_ClusterSpecAffinityNodeAffinityPreferredDuringSchedulingI
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A null or empty node selector term matches no objects. The requirements of
@@ -9232,7 +9252,7 @@ export interface ClusterSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredD
 /**
  * Converts an object of type 'ClusterSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTerms' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTerms(obj: ClusterSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTerms | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -9242,7 +9262,7 @@ export function toJson_ClusterSpecAffinityNodeAffinityRequiredDuringSchedulingIg
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The connection string to be used
@@ -9269,7 +9289,7 @@ export interface ClusterSpecBackupBarmanObjectStoreAzureCredentialsConnectionStr
 /**
  * Converts an object of type 'ClusterSpecBackupBarmanObjectStoreAzureCredentialsConnectionString' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBackupBarmanObjectStoreAzureCredentialsConnectionString(obj: ClusterSpecBackupBarmanObjectStoreAzureCredentialsConnectionString | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -9279,7 +9299,7 @@ export function toJson_ClusterSpecBackupBarmanObjectStoreAzureCredentialsConnect
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The storage account where to upload data
@@ -9306,7 +9326,7 @@ export interface ClusterSpecBackupBarmanObjectStoreAzureCredentialsStorageAccoun
 /**
  * Converts an object of type 'ClusterSpecBackupBarmanObjectStoreAzureCredentialsStorageAccount' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBackupBarmanObjectStoreAzureCredentialsStorageAccount(obj: ClusterSpecBackupBarmanObjectStoreAzureCredentialsStorageAccount | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -9316,7 +9336,7 @@ export function toJson_ClusterSpecBackupBarmanObjectStoreAzureCredentialsStorage
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The storage account key to be used in conjunction
@@ -9344,7 +9364,7 @@ export interface ClusterSpecBackupBarmanObjectStoreAzureCredentialsStorageKey {
 /**
  * Converts an object of type 'ClusterSpecBackupBarmanObjectStoreAzureCredentialsStorageKey' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBackupBarmanObjectStoreAzureCredentialsStorageKey(obj: ClusterSpecBackupBarmanObjectStoreAzureCredentialsStorageKey | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -9354,7 +9374,7 @@ export function toJson_ClusterSpecBackupBarmanObjectStoreAzureCredentialsStorage
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A shared-access-signature to be used in conjunction with
@@ -9382,7 +9402,7 @@ export interface ClusterSpecBackupBarmanObjectStoreAzureCredentialsStorageSasTok
 /**
  * Converts an object of type 'ClusterSpecBackupBarmanObjectStoreAzureCredentialsStorageSasToken' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBackupBarmanObjectStoreAzureCredentialsStorageSasToken(obj: ClusterSpecBackupBarmanObjectStoreAzureCredentialsStorageSasToken | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -9392,7 +9412,7 @@ export function toJson_ClusterSpecBackupBarmanObjectStoreAzureCredentialsStorage
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Compress a backup file (a tar file per tablespace) while streaming it
@@ -9450,7 +9470,7 @@ export interface ClusterSpecBackupBarmanObjectStoreGoogleCredentialsApplicationC
 /**
  * Converts an object of type 'ClusterSpecBackupBarmanObjectStoreGoogleCredentialsApplicationCredentials' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBackupBarmanObjectStoreGoogleCredentialsApplicationCredentials(obj: ClusterSpecBackupBarmanObjectStoreGoogleCredentialsApplicationCredentials | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -9460,7 +9480,7 @@ export function toJson_ClusterSpecBackupBarmanObjectStoreGoogleCredentialsApplic
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The reference to the access key id
@@ -9487,7 +9507,7 @@ export interface ClusterSpecBackupBarmanObjectStoreS3CredentialsAccessKeyId {
 /**
  * Converts an object of type 'ClusterSpecBackupBarmanObjectStoreS3CredentialsAccessKeyId' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBackupBarmanObjectStoreS3CredentialsAccessKeyId(obj: ClusterSpecBackupBarmanObjectStoreS3CredentialsAccessKeyId | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -9497,7 +9517,7 @@ export function toJson_ClusterSpecBackupBarmanObjectStoreS3CredentialsAccessKeyI
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The reference to the secret containing the region name
@@ -9524,7 +9544,7 @@ export interface ClusterSpecBackupBarmanObjectStoreS3CredentialsRegion {
 /**
  * Converts an object of type 'ClusterSpecBackupBarmanObjectStoreS3CredentialsRegion' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBackupBarmanObjectStoreS3CredentialsRegion(obj: ClusterSpecBackupBarmanObjectStoreS3CredentialsRegion | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -9534,7 +9554,7 @@ export function toJson_ClusterSpecBackupBarmanObjectStoreS3CredentialsRegion(obj
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The reference to the secret access key
@@ -9561,7 +9581,7 @@ export interface ClusterSpecBackupBarmanObjectStoreS3CredentialsSecretAccessKey 
 /**
  * Converts an object of type 'ClusterSpecBackupBarmanObjectStoreS3CredentialsSecretAccessKey' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBackupBarmanObjectStoreS3CredentialsSecretAccessKey(obj: ClusterSpecBackupBarmanObjectStoreS3CredentialsSecretAccessKey | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -9571,7 +9591,7 @@ export function toJson_ClusterSpecBackupBarmanObjectStoreS3CredentialsSecretAcce
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The references to the session key
@@ -9598,7 +9618,7 @@ export interface ClusterSpecBackupBarmanObjectStoreS3CredentialsSessionToken {
 /**
  * Converts an object of type 'ClusterSpecBackupBarmanObjectStoreS3CredentialsSessionToken' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBackupBarmanObjectStoreS3CredentialsSessionToken(obj: ClusterSpecBackupBarmanObjectStoreS3CredentialsSessionToken | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -9608,7 +9628,7 @@ export function toJson_ClusterSpecBackupBarmanObjectStoreS3CredentialsSessionTok
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Compress a WAL file before sending it to the object store. Available
@@ -9665,7 +9685,7 @@ export interface ClusterSpecBootstrapInitdbImportSource {
 /**
  * Converts an object of type 'ClusterSpecBootstrapInitdbImportSource' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrapInitdbImportSource(obj: ClusterSpecBootstrapInitdbImportSource | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -9674,7 +9694,7 @@ export function toJson_ClusterSpecBootstrapInitdbImportSource(obj: ClusterSpecBo
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The import type. Can be `microservice` or `monolith`.
@@ -9714,7 +9734,7 @@ export interface ClusterSpecBootstrapInitdbPostInitApplicationSqlRefsConfigMapRe
 /**
  * Converts an object of type 'ClusterSpecBootstrapInitdbPostInitApplicationSqlRefsConfigMapRefs' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrapInitdbPostInitApplicationSqlRefsConfigMapRefs(obj: ClusterSpecBootstrapInitdbPostInitApplicationSqlRefsConfigMapRefs | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -9724,7 +9744,7 @@ export function toJson_ClusterSpecBootstrapInitdbPostInitApplicationSqlRefsConfi
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * SecretKeySelector contains enough information to let you locate
@@ -9752,7 +9772,7 @@ export interface ClusterSpecBootstrapInitdbPostInitApplicationSqlRefsSecretRefs 
 /**
  * Converts an object of type 'ClusterSpecBootstrapInitdbPostInitApplicationSqlRefsSecretRefs' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrapInitdbPostInitApplicationSqlRefsSecretRefs(obj: ClusterSpecBootstrapInitdbPostInitApplicationSqlRefsSecretRefs | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -9762,7 +9782,7 @@ export function toJson_ClusterSpecBootstrapInitdbPostInitApplicationSqlRefsSecre
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * ConfigMapKeySelector contains enough information to let you locate
@@ -9790,7 +9810,7 @@ export interface ClusterSpecBootstrapInitdbPostInitSqlRefsConfigMapRefs {
 /**
  * Converts an object of type 'ClusterSpecBootstrapInitdbPostInitSqlRefsConfigMapRefs' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrapInitdbPostInitSqlRefsConfigMapRefs(obj: ClusterSpecBootstrapInitdbPostInitSqlRefsConfigMapRefs | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -9800,7 +9820,7 @@ export function toJson_ClusterSpecBootstrapInitdbPostInitSqlRefsConfigMapRefs(ob
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * SecretKeySelector contains enough information to let you locate
@@ -9828,7 +9848,7 @@ export interface ClusterSpecBootstrapInitdbPostInitSqlRefsSecretRefs {
 /**
  * Converts an object of type 'ClusterSpecBootstrapInitdbPostInitSqlRefsSecretRefs' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrapInitdbPostInitSqlRefsSecretRefs(obj: ClusterSpecBootstrapInitdbPostInitSqlRefsSecretRefs | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -9838,7 +9858,7 @@ export function toJson_ClusterSpecBootstrapInitdbPostInitSqlRefsSecretRefs(obj: 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * ConfigMapKeySelector contains enough information to let you locate
@@ -9866,7 +9886,7 @@ export interface ClusterSpecBootstrapInitdbPostInitTemplateSqlRefsConfigMapRefs 
 /**
  * Converts an object of type 'ClusterSpecBootstrapInitdbPostInitTemplateSqlRefsConfigMapRefs' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrapInitdbPostInitTemplateSqlRefsConfigMapRefs(obj: ClusterSpecBootstrapInitdbPostInitTemplateSqlRefsConfigMapRefs | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -9876,7 +9896,7 @@ export function toJson_ClusterSpecBootstrapInitdbPostInitTemplateSqlRefsConfigMa
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * SecretKeySelector contains enough information to let you locate
@@ -9904,7 +9924,7 @@ export interface ClusterSpecBootstrapInitdbPostInitTemplateSqlRefsSecretRefs {
 /**
  * Converts an object of type 'ClusterSpecBootstrapInitdbPostInitTemplateSqlRefsSecretRefs' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrapInitdbPostInitTemplateSqlRefsSecretRefs(obj: ClusterSpecBootstrapInitdbPostInitTemplateSqlRefsSecretRefs | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -9914,7 +9934,7 @@ export function toJson_ClusterSpecBootstrapInitdbPostInitTemplateSqlRefsSecretRe
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * EndpointCA store the CA bundle of the barman endpoint.
@@ -9943,7 +9963,7 @@ export interface ClusterSpecBootstrapRecoveryBackupEndpointCa {
 /**
  * Converts an object of type 'ClusterSpecBootstrapRecoveryBackupEndpointCa' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrapRecoveryBackupEndpointCa(obj: ClusterSpecBootstrapRecoveryBackupEndpointCa | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -9953,7 +9973,7 @@ export function toJson_ClusterSpecBootstrapRecoveryBackupEndpointCa(obj: Cluster
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Configuration of the storage of the instances
@@ -9989,7 +10009,7 @@ export interface ClusterSpecBootstrapRecoveryVolumeSnapshotsStorage {
 /**
  * Converts an object of type 'ClusterSpecBootstrapRecoveryVolumeSnapshotsStorage' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrapRecoveryVolumeSnapshotsStorage(obj: ClusterSpecBootstrapRecoveryVolumeSnapshotsStorage | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -10000,7 +10020,7 @@ export function toJson_ClusterSpecBootstrapRecoveryVolumeSnapshotsStorage(obj: C
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * TypedLocalObjectReference contains enough information to let you locate the
@@ -10037,7 +10057,7 @@ export interface ClusterSpecBootstrapRecoveryVolumeSnapshotsTablespaceStorage {
 /**
  * Converts an object of type 'ClusterSpecBootstrapRecoveryVolumeSnapshotsTablespaceStorage' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrapRecoveryVolumeSnapshotsTablespaceStorage(obj: ClusterSpecBootstrapRecoveryVolumeSnapshotsTablespaceStorage | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -10048,7 +10068,7 @@ export function toJson_ClusterSpecBootstrapRecoveryVolumeSnapshotsTablespaceStor
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Configuration of the storage for PostgreSQL WAL (Write-Ahead Log)
@@ -10084,7 +10104,7 @@ export interface ClusterSpecBootstrapRecoveryVolumeSnapshotsWalStorage {
 /**
  * Converts an object of type 'ClusterSpecBootstrapRecoveryVolumeSnapshotsWalStorage' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecBootstrapRecoveryVolumeSnapshotsWalStorage(obj: ClusterSpecBootstrapRecoveryVolumeSnapshotsWalStorage | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -10095,7 +10115,7 @@ export function toJson_ClusterSpecBootstrapRecoveryVolumeSnapshotsWalStorage(obj
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Specifies the output format of the exposed resources, defaults to "1"
@@ -10154,7 +10174,7 @@ export interface ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecDataSour
 /**
  * Converts an object of type 'ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecDataSource' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecDataSource(obj: ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecDataSource | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -10165,7 +10185,7 @@ export function toJson_ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecDa
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * dataSourceRef specifies the object from which to populate the volume with data, if a non-empty
@@ -10232,7 +10252,7 @@ export interface ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecDataSour
 /**
  * Converts an object of type 'ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecDataSourceRef' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecDataSourceRef(obj: ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecDataSourceRef | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -10244,7 +10264,7 @@ export function toJson_ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecDa
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * resources represents the minimum resources the volume should have.
@@ -10279,7 +10299,7 @@ export interface ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecResource
 /**
  * Converts an object of type 'ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecResources' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecResources(obj: ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecResources | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -10289,7 +10309,7 @@ export function toJson_ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecRe
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * selector is a label query over volumes to consider for binding.
@@ -10318,7 +10338,7 @@ export interface ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecSelector
 /**
  * Converts an object of type 'ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecSelector' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecSelector(obj: ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecSelector | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -10328,7 +10348,7 @@ export function toJson_ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecSe
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The connection string to be used
@@ -10355,7 +10375,7 @@ export interface ClusterSpecExternalClustersBarmanObjectStoreAzureCredentialsCon
 /**
  * Converts an object of type 'ClusterSpecExternalClustersBarmanObjectStoreAzureCredentialsConnectionString' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecExternalClustersBarmanObjectStoreAzureCredentialsConnectionString(obj: ClusterSpecExternalClustersBarmanObjectStoreAzureCredentialsConnectionString | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -10365,7 +10385,7 @@ export function toJson_ClusterSpecExternalClustersBarmanObjectStoreAzureCredenti
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The storage account where to upload data
@@ -10392,7 +10412,7 @@ export interface ClusterSpecExternalClustersBarmanObjectStoreAzureCredentialsSto
 /**
  * Converts an object of type 'ClusterSpecExternalClustersBarmanObjectStoreAzureCredentialsStorageAccount' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecExternalClustersBarmanObjectStoreAzureCredentialsStorageAccount(obj: ClusterSpecExternalClustersBarmanObjectStoreAzureCredentialsStorageAccount | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -10402,7 +10422,7 @@ export function toJson_ClusterSpecExternalClustersBarmanObjectStoreAzureCredenti
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The storage account key to be used in conjunction
@@ -10430,7 +10450,7 @@ export interface ClusterSpecExternalClustersBarmanObjectStoreAzureCredentialsSto
 /**
  * Converts an object of type 'ClusterSpecExternalClustersBarmanObjectStoreAzureCredentialsStorageKey' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecExternalClustersBarmanObjectStoreAzureCredentialsStorageKey(obj: ClusterSpecExternalClustersBarmanObjectStoreAzureCredentialsStorageKey | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -10440,7 +10460,7 @@ export function toJson_ClusterSpecExternalClustersBarmanObjectStoreAzureCredenti
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A shared-access-signature to be used in conjunction with
@@ -10468,7 +10488,7 @@ export interface ClusterSpecExternalClustersBarmanObjectStoreAzureCredentialsSto
 /**
  * Converts an object of type 'ClusterSpecExternalClustersBarmanObjectStoreAzureCredentialsStorageSasToken' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecExternalClustersBarmanObjectStoreAzureCredentialsStorageSasToken(obj: ClusterSpecExternalClustersBarmanObjectStoreAzureCredentialsStorageSasToken | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -10478,7 +10498,7 @@ export function toJson_ClusterSpecExternalClustersBarmanObjectStoreAzureCredenti
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Compress a backup file (a tar file per tablespace) while streaming it
@@ -10536,7 +10556,7 @@ export interface ClusterSpecExternalClustersBarmanObjectStoreGoogleCredentialsAp
 /**
  * Converts an object of type 'ClusterSpecExternalClustersBarmanObjectStoreGoogleCredentialsApplicationCredentials' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecExternalClustersBarmanObjectStoreGoogleCredentialsApplicationCredentials(obj: ClusterSpecExternalClustersBarmanObjectStoreGoogleCredentialsApplicationCredentials | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -10546,7 +10566,7 @@ export function toJson_ClusterSpecExternalClustersBarmanObjectStoreGoogleCredent
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The reference to the access key id
@@ -10573,7 +10593,7 @@ export interface ClusterSpecExternalClustersBarmanObjectStoreS3CredentialsAccess
 /**
  * Converts an object of type 'ClusterSpecExternalClustersBarmanObjectStoreS3CredentialsAccessKeyId' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecExternalClustersBarmanObjectStoreS3CredentialsAccessKeyId(obj: ClusterSpecExternalClustersBarmanObjectStoreS3CredentialsAccessKeyId | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -10583,7 +10603,7 @@ export function toJson_ClusterSpecExternalClustersBarmanObjectStoreS3Credentials
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The reference to the secret containing the region name
@@ -10610,7 +10630,7 @@ export interface ClusterSpecExternalClustersBarmanObjectStoreS3CredentialsRegion
 /**
  * Converts an object of type 'ClusterSpecExternalClustersBarmanObjectStoreS3CredentialsRegion' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecExternalClustersBarmanObjectStoreS3CredentialsRegion(obj: ClusterSpecExternalClustersBarmanObjectStoreS3CredentialsRegion | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -10620,7 +10640,7 @@ export function toJson_ClusterSpecExternalClustersBarmanObjectStoreS3Credentials
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The reference to the secret access key
@@ -10647,7 +10667,7 @@ export interface ClusterSpecExternalClustersBarmanObjectStoreS3CredentialsSecret
 /**
  * Converts an object of type 'ClusterSpecExternalClustersBarmanObjectStoreS3CredentialsSecretAccessKey' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecExternalClustersBarmanObjectStoreS3CredentialsSecretAccessKey(obj: ClusterSpecExternalClustersBarmanObjectStoreS3CredentialsSecretAccessKey | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -10657,7 +10677,7 @@ export function toJson_ClusterSpecExternalClustersBarmanObjectStoreS3Credentials
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * The references to the session key
@@ -10684,7 +10704,7 @@ export interface ClusterSpecExternalClustersBarmanObjectStoreS3CredentialsSessio
 /**
  * Converts an object of type 'ClusterSpecExternalClustersBarmanObjectStoreS3CredentialsSessionToken' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecExternalClustersBarmanObjectStoreS3CredentialsSessionToken(obj: ClusterSpecExternalClustersBarmanObjectStoreS3CredentialsSessionToken | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -10694,7 +10714,7 @@ export function toJson_ClusterSpecExternalClustersBarmanObjectStoreS3Credentials
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Compress a WAL file before sending it to the object store. Available
@@ -10775,7 +10795,7 @@ export interface ClusterSpecManagedServicesAdditionalServiceTemplate {
 /**
  * Converts an object of type 'ClusterSpecManagedServicesAdditionalServiceTemplate' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecManagedServicesAdditionalServiceTemplate(obj: ClusterSpecManagedServicesAdditionalServiceTemplate | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -10785,7 +10805,7 @@ export function toJson_ClusterSpecManagedServicesAdditionalServiceTemplate(obj: 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * UpdateStrategy describes how the service differences should be reconciled
@@ -10835,7 +10855,7 @@ export interface ClusterSpecPostgresqlLdapBindSearchAuthBindPassword {
 /**
  * Converts an object of type 'ClusterSpecPostgresqlLdapBindSearchAuthBindPassword' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecPostgresqlLdapBindSearchAuthBindPassword(obj: ClusterSpecPostgresqlLdapBindSearchAuthBindPassword | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -10846,7 +10866,7 @@ export function toJson_ClusterSpecPostgresqlLdapBindSearchAuthBindPassword(obj: 
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Select all ClusterTrustBundles that match this label selector.  Only has
@@ -10878,7 +10898,7 @@ export interface ClusterSpecProjectedVolumeTemplateSourcesClusterTrustBundleLabe
 /**
  * Converts an object of type 'ClusterSpecProjectedVolumeTemplateSourcesClusterTrustBundleLabelSelector' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecProjectedVolumeTemplateSourcesClusterTrustBundleLabelSelector(obj: ClusterSpecProjectedVolumeTemplateSourcesClusterTrustBundleLabelSelector | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -10888,7 +10908,7 @@ export function toJson_ClusterSpecProjectedVolumeTemplateSourcesClusterTrustBund
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Maps a string key to a path within a volume.
@@ -10930,7 +10950,7 @@ export interface ClusterSpecProjectedVolumeTemplateSourcesConfigMapItems {
 /**
  * Converts an object of type 'ClusterSpecProjectedVolumeTemplateSourcesConfigMapItems' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecProjectedVolumeTemplateSourcesConfigMapItems(obj: ClusterSpecProjectedVolumeTemplateSourcesConfigMapItems | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -10941,7 +10961,7 @@ export function toJson_ClusterSpecProjectedVolumeTemplateSourcesConfigMapItems(o
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * DownwardAPIVolumeFile represents information to create the file containing the pod field
@@ -10988,7 +11008,7 @@ export interface ClusterSpecProjectedVolumeTemplateSourcesDownwardApiItems {
 /**
  * Converts an object of type 'ClusterSpecProjectedVolumeTemplateSourcesDownwardApiItems' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecProjectedVolumeTemplateSourcesDownwardApiItems(obj: ClusterSpecProjectedVolumeTemplateSourcesDownwardApiItems | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -11000,7 +11020,7 @@ export function toJson_ClusterSpecProjectedVolumeTemplateSourcesDownwardApiItems
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Maps a string key to a path within a volume.
@@ -11042,7 +11062,7 @@ export interface ClusterSpecProjectedVolumeTemplateSourcesSecretItems {
 /**
  * Converts an object of type 'ClusterSpecProjectedVolumeTemplateSourcesSecretItems' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecProjectedVolumeTemplateSourcesSecretItems(obj: ClusterSpecProjectedVolumeTemplateSourcesSecretItems | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -11053,7 +11073,7 @@ export function toJson_ClusterSpecProjectedVolumeTemplateSourcesSecretItems(obj:
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema ClusterSpecStoragePvcTemplateResourcesLimits
@@ -11120,7 +11140,7 @@ export interface ClusterSpecStoragePvcTemplateSelectorMatchExpressions {
 /**
  * Converts an object of type 'ClusterSpecStoragePvcTemplateSelectorMatchExpressions' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecStoragePvcTemplateSelectorMatchExpressions(obj: ClusterSpecStoragePvcTemplateSelectorMatchExpressions | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -11131,7 +11151,7 @@ export function toJson_ClusterSpecStoragePvcTemplateSelectorMatchExpressions(obj
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * dataSource field can be used to specify either:
@@ -11174,7 +11194,7 @@ export interface ClusterSpecTablespacesStoragePvcTemplateDataSource {
 /**
  * Converts an object of type 'ClusterSpecTablespacesStoragePvcTemplateDataSource' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecTablespacesStoragePvcTemplateDataSource(obj: ClusterSpecTablespacesStoragePvcTemplateDataSource | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -11185,7 +11205,7 @@ export function toJson_ClusterSpecTablespacesStoragePvcTemplateDataSource(obj: C
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * dataSourceRef specifies the object from which to populate the volume with data, if a non-empty
@@ -11252,7 +11272,7 @@ export interface ClusterSpecTablespacesStoragePvcTemplateDataSourceRef {
 /**
  * Converts an object of type 'ClusterSpecTablespacesStoragePvcTemplateDataSourceRef' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecTablespacesStoragePvcTemplateDataSourceRef(obj: ClusterSpecTablespacesStoragePvcTemplateDataSourceRef | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -11264,7 +11284,7 @@ export function toJson_ClusterSpecTablespacesStoragePvcTemplateDataSourceRef(obj
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * resources represents the minimum resources the volume should have.
@@ -11299,7 +11319,7 @@ export interface ClusterSpecTablespacesStoragePvcTemplateResources {
 /**
  * Converts an object of type 'ClusterSpecTablespacesStoragePvcTemplateResources' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecTablespacesStoragePvcTemplateResources(obj: ClusterSpecTablespacesStoragePvcTemplateResources | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -11309,7 +11329,7 @@ export function toJson_ClusterSpecTablespacesStoragePvcTemplateResources(obj: Cl
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * selector is a label query over volumes to consider for binding.
@@ -11338,7 +11358,7 @@ export interface ClusterSpecTablespacesStoragePvcTemplateSelector {
 /**
  * Converts an object of type 'ClusterSpecTablespacesStoragePvcTemplateSelector' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecTablespacesStoragePvcTemplateSelector(obj: ClusterSpecTablespacesStoragePvcTemplateSelector | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -11348,7 +11368,7 @@ export function toJson_ClusterSpecTablespacesStoragePvcTemplateSelector(obj: Clu
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema ClusterSpecWalStoragePvcTemplateResourcesLimits
@@ -11415,7 +11435,7 @@ export interface ClusterSpecWalStoragePvcTemplateSelectorMatchExpressions {
 /**
  * Converts an object of type 'ClusterSpecWalStoragePvcTemplateSelectorMatchExpressions' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecWalStoragePvcTemplateSelectorMatchExpressions(obj: ClusterSpecWalStoragePvcTemplateSelectorMatchExpressions | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -11426,7 +11446,7 @@ export function toJson_ClusterSpecWalStoragePvcTemplateSelectorMatchExpressions(
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label query over a set of resources, in this case pods.
@@ -11456,7 +11476,7 @@ export interface ClusterSpecAffinityAdditionalPodAffinityPreferredDuringScheduli
 /**
  * Converts an object of type 'ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelector' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelector(obj: ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelector | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -11466,7 +11486,7 @@ export function toJson_ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSc
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label query over the set of namespaces that the term applies to.
@@ -11499,7 +11519,7 @@ export interface ClusterSpecAffinityAdditionalPodAffinityPreferredDuringScheduli
 /**
  * Converts an object of type 'ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelector' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelector(obj: ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelector | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -11509,7 +11529,7 @@ export function toJson_ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSc
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label selector requirement is a selector that contains values, a key, and an operator that
@@ -11548,7 +11568,7 @@ export interface ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSchedulin
 /**
  * Converts an object of type 'ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions(obj: ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -11559,7 +11579,7 @@ export function toJson_ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSch
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label selector requirement is a selector that contains values, a key, and an operator that
@@ -11598,7 +11618,7 @@ export interface ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSchedulin
 /**
  * Converts an object of type 'ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions(obj: ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -11609,7 +11629,7 @@ export function toJson_ClusterSpecAffinityAdditionalPodAffinityRequiredDuringSch
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label query over a set of resources, in this case pods.
@@ -11639,7 +11659,7 @@ export interface ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSche
 /**
  * Converts an object of type 'ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelector' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelector(obj: ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelector | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -11649,7 +11669,7 @@ export function toJson_ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuri
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label query over the set of namespaces that the term applies to.
@@ -11682,7 +11702,7 @@ export interface ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSche
 /**
  * Converts an object of type 'ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelector' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelector(obj: ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelector | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -11692,7 +11712,7 @@ export function toJson_ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuri
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label selector requirement is a selector that contains values, a key, and an operator that
@@ -11731,7 +11751,7 @@ export interface ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDuringSched
 /**
  * Converts an object of type 'ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions(obj: ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionLabelSelectorMatchExpressions | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -11742,7 +11762,7 @@ export function toJson_ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDurin
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label selector requirement is a selector that contains values, a key, and an operator that
@@ -11781,7 +11801,7 @@ export interface ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDuringSched
 /**
  * Converts an object of type 'ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions(obj: ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDuringSchedulingIgnoredDuringExecutionNamespaceSelectorMatchExpressions | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -11792,7 +11812,7 @@ export function toJson_ClusterSpecAffinityAdditionalPodAntiAffinityRequiredDurin
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A node selector requirement is a selector that contains values, a key, and an operator
@@ -11832,7 +11852,7 @@ export interface ClusterSpecAffinityNodeAffinityPreferredDuringSchedulingIgnored
 /**
  * Converts an object of type 'ClusterSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchExpressions' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchExpressions(obj: ClusterSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchExpressions | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -11843,7 +11863,7 @@ export function toJson_ClusterSpecAffinityNodeAffinityPreferredDuringSchedulingI
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A node selector requirement is a selector that contains values, a key, and an operator
@@ -11883,7 +11903,7 @@ export interface ClusterSpecAffinityNodeAffinityPreferredDuringSchedulingIgnored
 /**
  * Converts an object of type 'ClusterSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchFields' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchFields(obj: ClusterSpecAffinityNodeAffinityPreferredDuringSchedulingIgnoredDuringExecutionPreferenceMatchFields | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -11894,7 +11914,7 @@ export function toJson_ClusterSpecAffinityNodeAffinityPreferredDuringSchedulingI
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A node selector requirement is a selector that contains values, a key, and an operator
@@ -11934,7 +11954,7 @@ export interface ClusterSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredD
 /**
  * Converts an object of type 'ClusterSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchExpressions' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchExpressions(obj: ClusterSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchExpressions | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -11945,7 +11965,7 @@ export function toJson_ClusterSpecAffinityNodeAffinityRequiredDuringSchedulingIg
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A node selector requirement is a selector that contains values, a key, and an operator
@@ -11985,7 +12005,7 @@ export interface ClusterSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredD
 /**
  * Converts an object of type 'ClusterSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchFields' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchFields(obj: ClusterSpecAffinityNodeAffinityRequiredDuringSchedulingIgnoredDuringExecutionNodeSelectorTermsMatchFields | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -11996,7 +12016,7 @@ export function toJson_ClusterSpecAffinityNodeAffinityRequiredDuringSchedulingIg
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecResourcesLimits
@@ -12063,7 +12083,7 @@ export interface ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecSelector
 /**
  * Converts an object of type 'ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecSelectorMatchExpressions' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecSelectorMatchExpressions(obj: ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecSelectorMatchExpressions | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -12074,7 +12094,7 @@ export function toJson_ClusterSpecEphemeralVolumeSourceVolumeClaimTemplateSpecSe
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Standard object's metadata.
@@ -12115,7 +12135,7 @@ export interface ClusterSpecManagedServicesAdditionalServiceTemplateMetadata {
 /**
  * Converts an object of type 'ClusterSpecManagedServicesAdditionalServiceTemplateMetadata' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecManagedServicesAdditionalServiceTemplateMetadata(obj: ClusterSpecManagedServicesAdditionalServiceTemplateMetadata | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -12126,7 +12146,7 @@ export function toJson_ClusterSpecManagedServicesAdditionalServiceTemplateMetada
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Specification of the desired behavior of the service.
@@ -12396,13 +12416,12 @@ export interface ClusterSpecManagedServicesAdditionalServiceTemplateSpec {
   readonly sessionAffinityConfig?: ClusterSpecManagedServicesAdditionalServiceTemplateSpecSessionAffinityConfig;
 
   /**
-   * TrafficDistribution offers a way to express preferences for how traffic is
-   * distributed to Service endpoints. Implementations can use this field as a
-   * hint, but are not required to guarantee strict adherence. If the field is
-   * not set, the implementation will apply its default routing strategy. If set
-   * to "PreferClose", implementations should prioritize endpoints that are
-   * topologically close (e.g., same zone).
-   * This is a beta field and requires enabling ServiceTrafficDistribution feature.
+   * TrafficDistribution offers a way to express preferences for how traffic
+   * is distributed to Service endpoints. Implementations can use this field
+   * as a hint, but are not required to guarantee strict adherence. If the
+   * field is not set, the implementation will apply its default routing
+   * strategy. If set to "PreferClose", implementations should prioritize
+   * endpoints that are in the same zone.
    *
    * @schema ClusterSpecManagedServicesAdditionalServiceTemplateSpec#trafficDistribution
    */
@@ -12436,7 +12455,7 @@ export interface ClusterSpecManagedServicesAdditionalServiceTemplateSpec {
 /**
  * Converts an object of type 'ClusterSpecManagedServicesAdditionalServiceTemplateSpec' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecManagedServicesAdditionalServiceTemplateSpec(obj: ClusterSpecManagedServicesAdditionalServiceTemplateSpec | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -12464,7 +12483,7 @@ export function toJson_ClusterSpecManagedServicesAdditionalServiceTemplateSpec(o
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label selector requirement is a selector that contains values, a key, and an operator that
@@ -12503,7 +12522,7 @@ export interface ClusterSpecProjectedVolumeTemplateSourcesClusterTrustBundleLabe
 /**
  * Converts an object of type 'ClusterSpecProjectedVolumeTemplateSourcesClusterTrustBundleLabelSelectorMatchExpressions' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecProjectedVolumeTemplateSourcesClusterTrustBundleLabelSelectorMatchExpressions(obj: ClusterSpecProjectedVolumeTemplateSourcesClusterTrustBundleLabelSelectorMatchExpressions | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -12514,7 +12533,7 @@ export function toJson_ClusterSpecProjectedVolumeTemplateSourcesClusterTrustBund
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Required: Selects a field of the pod: only annotations, labels, name, namespace and uid are supported.
@@ -12541,7 +12560,7 @@ export interface ClusterSpecProjectedVolumeTemplateSourcesDownwardApiItemsFieldR
 /**
  * Converts an object of type 'ClusterSpecProjectedVolumeTemplateSourcesDownwardApiItemsFieldRef' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecProjectedVolumeTemplateSourcesDownwardApiItemsFieldRef(obj: ClusterSpecProjectedVolumeTemplateSourcesDownwardApiItemsFieldRef | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -12551,7 +12570,7 @@ export function toJson_ClusterSpecProjectedVolumeTemplateSourcesDownwardApiItems
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Selects a resource of the container: only resources limits and requests
@@ -12586,7 +12605,7 @@ export interface ClusterSpecProjectedVolumeTemplateSourcesDownwardApiItemsResour
 /**
  * Converts an object of type 'ClusterSpecProjectedVolumeTemplateSourcesDownwardApiItemsResourceFieldRef' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecProjectedVolumeTemplateSourcesDownwardApiItemsResourceFieldRef(obj: ClusterSpecProjectedVolumeTemplateSourcesDownwardApiItemsResourceFieldRef | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -12597,7 +12616,7 @@ export function toJson_ClusterSpecProjectedVolumeTemplateSourcesDownwardApiItems
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * @schema ClusterSpecTablespacesStoragePvcTemplateResourcesLimits
@@ -12664,7 +12683,7 @@ export interface ClusterSpecTablespacesStoragePvcTemplateSelectorMatchExpression
 /**
  * Converts an object of type 'ClusterSpecTablespacesStoragePvcTemplateSelectorMatchExpressions' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecTablespacesStoragePvcTemplateSelectorMatchExpressions(obj: ClusterSpecTablespacesStoragePvcTemplateSelectorMatchExpressions | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -12675,7 +12694,7 @@ export function toJson_ClusterSpecTablespacesStoragePvcTemplateSelectorMatchExpr
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label selector requirement is a selector that contains values, a key, and an operator that
@@ -12714,7 +12733,7 @@ export interface ClusterSpecAffinityAdditionalPodAffinityPreferredDuringScheduli
 /**
  * Converts an object of type 'ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions(obj: ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -12725,7 +12744,7 @@ export function toJson_ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSc
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label selector requirement is a selector that contains values, a key, and an operator that
@@ -12764,7 +12783,7 @@ export interface ClusterSpecAffinityAdditionalPodAffinityPreferredDuringScheduli
 /**
  * Converts an object of type 'ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions(obj: ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -12775,7 +12794,7 @@ export function toJson_ClusterSpecAffinityAdditionalPodAffinityPreferredDuringSc
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label selector requirement is a selector that contains values, a key, and an operator that
@@ -12814,7 +12833,7 @@ export interface ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSche
 /**
  * Converts an object of type 'ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions(obj: ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermLabelSelectorMatchExpressions | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -12825,7 +12844,7 @@ export function toJson_ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuri
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * A label selector requirement is a selector that contains values, a key, and an operator that
@@ -12864,7 +12883,7 @@ export interface ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSche
 /**
  * Converts an object of type 'ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions(obj: ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuringSchedulingIgnoredDuringExecutionPodAffinityTermNamespaceSelectorMatchExpressions | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -12875,7 +12894,7 @@ export function toJson_ClusterSpecAffinityAdditionalPodAntiAffinityPreferredDuri
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * ServicePort contains information on service's port.
@@ -12965,7 +12984,7 @@ export interface ClusterSpecManagedServicesAdditionalServiceTemplateSpecPorts {
 /**
  * Converts an object of type 'ClusterSpecManagedServicesAdditionalServiceTemplateSpecPorts' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecManagedServicesAdditionalServiceTemplateSpecPorts(obj: ClusterSpecManagedServicesAdditionalServiceTemplateSpecPorts | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -12979,7 +12998,7 @@ export function toJson_ClusterSpecManagedServicesAdditionalServiceTemplateSpecPo
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * sessionAffinityConfig contains the configurations of session affinity.
@@ -12999,7 +13018,7 @@ export interface ClusterSpecManagedServicesAdditionalServiceTemplateSpecSessionA
 /**
  * Converts an object of type 'ClusterSpecManagedServicesAdditionalServiceTemplateSpecSessionAffinityConfig' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecManagedServicesAdditionalServiceTemplateSpecSessionAffinityConfig(obj: ClusterSpecManagedServicesAdditionalServiceTemplateSpecSessionAffinityConfig | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -13008,7 +13027,7 @@ export function toJson_ClusterSpecManagedServicesAdditionalServiceTemplateSpecSe
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Specifies the output format of the exposed resources, defaults to "1"
@@ -13069,7 +13088,7 @@ export interface ClusterSpecManagedServicesAdditionalServiceTemplateSpecSessionA
 /**
  * Converts an object of type 'ClusterSpecManagedServicesAdditionalServiceTemplateSpecSessionAffinityConfigClientIp' to JSON representation.
  */
-/* eslint-disable max-len, quote-props */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSpecManagedServicesAdditionalServiceTemplateSpecSessionAffinityConfigClientIp(obj: ClusterSpecManagedServicesAdditionalServiceTemplateSpecSessionAffinityConfigClientIp | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
@@ -13078,5 +13097,5 @@ export function toJson_ClusterSpecManagedServicesAdditionalServiceTemplateSpecSe
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
-/* eslint-enable max-len, quote-props */
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 

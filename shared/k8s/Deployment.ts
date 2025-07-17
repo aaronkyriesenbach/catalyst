@@ -23,7 +23,12 @@ export default class Deployment extends KubeDeployment {
               app: name
             }
           },
-          spec: podSpec,
+          spec: {
+            securityContext: {
+              runAsUser: 1000,
+              runAsGroup: 1000,
+              runAsNonRoot: true
+            },...podSpec},
         },
       },
     });
