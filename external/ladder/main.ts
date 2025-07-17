@@ -21,7 +21,13 @@ export class Ladder extends Chart {
           }],
         }],
       },
-      webPort: 8080
+      webPort: 8080,
+      ingressRouteSpec: {
+        middlewares: [{
+          name: "tinyauth",
+          namespace: "tinyauth"
+        }]
+      }
     });
   }
 }
