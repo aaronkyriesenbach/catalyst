@@ -102,6 +102,14 @@ class MonkeyType extends Chart {
           },
         }],
       },
+      webPort: 5005,
+      ingressRouteSpec: {
+        customHostname: "api.monkeytype",
+        middlewares: [{
+          name: "tinyauth",
+          namespace: "tinyauth"
+        }]
+      }
     });
 
     new Application(this, {
@@ -112,7 +120,7 @@ class MonkeyType extends Chart {
           image: "hub.int.lab53.net/monkeytype/monkeytype-frontend:latest",
           env: [{
             name: "MONKEYTYPE_BACKENDURL",
-            value: "http://backend:5005",
+            value: "https://api.monkeytype.lab53.net",
           }],
           ports: [{ containerPort: 80 }],
         }],
