@@ -76,7 +76,7 @@ class MonkeyType extends Chart {
           image: "hub.int.lab53.net/monkeytype/monkeytype-backend:latest",
           env: [{
             name: "FRONTEND_URL",
-            value: "http://frontend",
+            value: "http://monkeytype",
           }, {
             name: "DB_NAME",
             value: "monkeytype",
@@ -105,7 +105,7 @@ class MonkeyType extends Chart {
     });
 
     new Application(this, {
-      name: "frontend",
+      name: "monkeytype",
       podSpecProps: {
         containers: [{
           name: "frontend",
@@ -116,6 +116,7 @@ class MonkeyType extends Chart {
           }],
           ports: [{ containerPort: 80 }],
         }],
+        securityContext: undefined
       },
       webPort: 80,
       ingressRouteSpec: {
