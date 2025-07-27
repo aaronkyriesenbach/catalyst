@@ -12,6 +12,7 @@ class Kimai extends Chart {
     const adminPass = new GeneratedSecret(this, {
       name: "kimai-admin-pass",
       fieldsToGenerate: ["password"],
+      length: 30
     });
 
     const kimaiDBPass = new GeneratedPassword(this, {
@@ -69,6 +70,7 @@ class Kimai extends Chart {
     new Application(this, {
       name: "kimai",
       podSpecProps: {
+        securityContext: undefined,
         containers: [{
           name: "main",
           image: "hub.int.lab53.net/kimai/kimai2:apache",
