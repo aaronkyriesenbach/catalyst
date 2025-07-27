@@ -3,18 +3,26 @@ import { Construct } from "npm:constructs";
 import { Lab53App } from "../../shared/helpers.ts";
 import Application from "../../shared/Application.ts";
 import GeneratedSecret from "../../shared/mittwald-secret-gen/GeneratedSecret.ts";
+import GeneratedPassword from "../../shared/secretgen/GeneratedPassword.ts";
 
 class Kimai extends Chart {
   constructor(scope: Construct) {
     super(scope, crypto.randomUUID());
 
-    const kamaiDBPass = new GeneratedSecret(this, {
-      name: "kamai-db-pass",
-      fieldsToGenerate: ["secret"],
+    const kimaiDBPass = new GeneratedPassword(this, {
+      name: "kimai-db-pass",
+      secretTemplate: {
+        type: "Opaque",
+        stringData: {
+          secret: "$(value)",
+          connectionString:
+            "mysql://kimai:$(value)@mariadb:3306/kimai?charset=utf8mb4",
+        },
+      },
     });
 
     const appSecret = new GeneratedSecret(this, {
-      name: "kamai-app-secret",
+      name: "kimai-app-secret",
       fieldsToGenerate: ["secret"],
     });
 
@@ -27,18 +35,18 @@ class Kimai extends Chart {
           ports: [{ containerPort: 3306 }],
           env: [{
             name: "MARIADB_USER",
-            value: "kamai",
+            value: "kimai",
           }, {
             name: "MARIADB_PASSWORD",
             valueFrom: {
               secretKeyRef: {
-                name: kamaiDBPass.name,
+                name: kimaiDBPass.name,
                 key: "secret",
               },
             },
           }, {
             name: "MARIADB_DATABASE",
-            value: "kamai",
+            value: "kimai",
           }, {
             name: "MARIADB_RANDOM_ROOT_PASSWORD",
             value: "true",
@@ -47,7 +55,7 @@ class Kimai extends Chart {
         nasVolumeMounts: {
           main: [{
             mountPath: "/var/lib/mysql",
-            subPath: "cluster/kamai/mariadb",
+            subPath: "cluster/kimai/mariadb",
           }],
         },
       },
@@ -60,17 +68,13 @@ class Kimai extends Chart {
           name: "main",
           image: "hub.int.lab53.net/kimai/kimai2:apache",
           env: [{
-            name: "DATABASE_PASSWORD",
+            name: "DATABASE_URL",
             valueFrom: {
               secretKeyRef: {
-                name: kamaiDBPass.name,
-                key: "secret",
+                name: kimaiDBPass.name,
+                key: "connectionString",
               },
             },
-          }, {
-            name: "DATABASE_URL",
-            value:
-              `mysql://kamai:$DATABASE_PASSWORD@mariadb:3306/kimai?charset=utf8mb4`,
           }, {
             name: "APP_SECRET",
             valueFrom: {
