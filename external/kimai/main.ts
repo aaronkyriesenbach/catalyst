@@ -9,6 +9,11 @@ class Kimai extends Chart {
   constructor(scope: Construct) {
     super(scope, crypto.randomUUID());
 
+    const adminPass = new GeneratedSecret(this, {
+      name: "kimai-admin-pass",
+      fieldsToGenerate: ["password"],
+    });
+
     const kimaiDBPass = new GeneratedPassword(this, {
       name: "kimai-db-pass",
       secretTemplate: {
@@ -81,6 +86,14 @@ class Kimai extends Chart {
               secretKeyRef: {
                 name: appSecret.name,
                 key: "secret",
+              },
+            },
+          }, {
+            name: "ADMINPASS",
+            valueFrom: {
+              secretKeyRef: {
+                name: adminPass.name,
+                key: "password",
               },
             },
           }],
