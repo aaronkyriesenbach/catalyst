@@ -96,6 +96,12 @@ class Kimai extends Chart {
                 key: "password",
               },
             },
+          }, {
+            name: "USER_ID",
+            value: "1000",
+          }, {
+            name: "GROUP_ID",
+            value: "1000",
           }],
           ports: [{ containerPort: 8001 }],
         }],
