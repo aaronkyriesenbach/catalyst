@@ -114,7 +114,7 @@ class MPMonitor extends Chart {
           name: "main",
           image: "registry.int.lab53.net/mpmonitor/ui:1.0.0-SNAPSHOT",
           env: [{
-            name: "VITE_API_HOST",
+            name: "API_HOST",
             value: "https://mpmonitor-api.lab53.net",
           }],
           ports: [{ containerPort: 80 }],
