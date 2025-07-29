@@ -30,6 +30,8 @@ class MPMonitor extends Chart {
             "https://mpmonitor-api.lab53.net",
           ],
           accessControlAllowCredentials: true,
+          accessControlAllowHeaders: ["content-type"],
+          accessControlAllowMethods: ["GET", "POST", "DELETE"],
         },
       },
     });
