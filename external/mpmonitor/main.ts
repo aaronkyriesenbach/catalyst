@@ -3,6 +3,7 @@ import { Lab53App } from "../../shared/helpers.ts";
 import { Construct } from "npm:constructs";
 import Application from "../../shared/Application.ts";
 import GeneratedSecret from "../../shared/mittwald-secret-gen/GeneratedSecret.ts";
+import { Middleware } from "../../shared/imports/middleware-traefik.io.ts";
 
 class MPMonitor extends Chart {
   constructor(scope: Construct) {
@@ -16,6 +17,20 @@ class MPMonitor extends Chart {
     const jwtSecret = new GeneratedSecret(this, {
       name: "jwt-secret",
       fieldsToGenerate: ["secret"],
+    });
+
+    const corsMiddleware = new Middleware(this, crypto.randomUUID(), {
+      metadata: {
+        name: "cors-middleware",
+      },
+      spec: {
+        headers: {
+          accessControlAllowOriginList: [
+            "https://mpmonitor.lab53.net",
+            "https://mpmonitor-api.lab53.net",
+          ],
+        },
+      },
     });
 
     new Application(this, {
@@ -104,6 +119,9 @@ class MPMonitor extends Chart {
       webPort: 8080,
       ingressRouteSpec: {
         customHostname: "mpmonitor-api",
+        middlewares: [{
+          name: corsMiddleware.name,
+        }],
       },
     });
 
@@ -123,6 +141,9 @@ class MPMonitor extends Chart {
       webPort: 80,
       ingressRouteSpec: {
         customHostname: "mpmonitor",
+        middlewares: [{
+          name: corsMiddleware.name,
+        }],
       },
     });
   }
