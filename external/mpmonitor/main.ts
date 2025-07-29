@@ -103,7 +103,7 @@ class MPMonitor extends Chart {
       },
       webPort: 8080,
       ingressRouteSpec: {
-        customHostname: "api.mpmonitor",
+        customHostname: "mpmonitor-api",
       },
     });
 
@@ -115,7 +115,7 @@ class MPMonitor extends Chart {
           image: "registry.int.lab53.net/mpmonitor/ui:1.0.0-SNAPSHOT",
           env: [{
             name: "VITE_API_HOST",
-            value: "https://api.mpmonitor.lab53.net",
+            value: "https://mpmonitor-api.lab53.net",
           }],
           ports: [{ containerPort: 80 }],
         }],
