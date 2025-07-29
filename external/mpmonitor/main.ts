@@ -29,6 +29,7 @@ class MPMonitor extends Chart {
             "https://mpmonitor.lab53.net",
             "https://mpmonitor-api.lab53.net",
           ],
+          accessControlAllowCredentials: true,
         },
       },
     });
