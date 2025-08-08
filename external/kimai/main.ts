@@ -12,7 +12,7 @@ class Kimai extends Chart {
     const adminPass = new GeneratedSecret(this, {
       name: "kimai-admin-pass",
       fieldsToGenerate: ["password"],
-      length: 30
+      length: 30,
     });
 
     const kimaiDBPass = new GeneratedPassword(this, {
@@ -90,6 +90,9 @@ class Kimai extends Chart {
                 key: "secret",
               },
             },
+          }, {
+            name: "ADMINMAIL",
+            value: "admin@lab53.net",
           }, {
             name: "ADMINPASS",
             valueFrom: {
