@@ -1,0 +1,109 @@
+table:
+  name: list_books
+  schema: public
+object_relationships:
+  - name: book
+    using:
+      foreign_key_constraint_on: book_id
+  - name: edition
+    using:
+      manual_configuration:
+        column_mapping:
+          edition_id: id
+        insertion_order: null
+        remote_table:
+          name: editions
+          schema: public
+  - name: list
+    using:
+      foreign_key_constraint_on: list_id
+array_relationships:
+  - name: user_books
+    using:
+      manual_configuration:
+        column_mapping:
+          book_id: book_id
+        insertion_order: null
+        remote_table:
+          name: user_books
+          schema: public
+select_permissions:
+  - role: follower
+    permission:
+      columns:
+        - imported
+        - reason
+        - book_id
+        - edition_id
+        - id
+        - list_id
+        - original_book_id
+        - original_edition_id
+        - position
+        - created_at
+        - merged_at
+        - date_added
+        - updated_at
+      filter:
+        list:
+          _and:
+            - privacy_setting_id:
+                _eq: 2
+            - followers:
+                followed_user_id:
+                  _eq: X-Hasura-User-Id
+      limit: 1000
+    comment: ""
+  - role: guest
+    permission:
+      columns:
+        - book_id
+        - date_added
+        - edition_id
+        - id
+        - list_id
+        - position
+        - reason
+      filter:
+        _and:
+          - list:
+              user:
+                status_id:
+                  _in:
+                    - 1
+                    - 2
+          - list:
+              privacy_setting_id:
+                _eq: 1
+      limit: 1000
+      allow_aggregations: true
+  - role: owner
+    permission:
+      columns:
+        - book_id
+        - date_added
+        - edition_id
+        - id
+        - list_id
+        - position
+        - reason
+      filter:
+        list:
+          user_id:
+            _eq: X-Hasura-User-Id
+      limit: 2000
+      allow_aggregations: true
+update_permissions:
+  - role: owner
+    permission:
+      columns:
+        - position
+        - reason
+      filter:
+        list:
+          user_id:
+            _eq: X-Hasura-User-Id
+      check:
+        list:
+          user_id:
+            _eq: X-Hasura-User-Id

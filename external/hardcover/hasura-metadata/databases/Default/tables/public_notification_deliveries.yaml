@@ -1,0 +1,59 @@
+table:
+  name: notification_deliveries
+  schema: public
+object_relationships:
+  - name: channel
+    using:
+      manual_configuration:
+        column_mapping:
+          channel_id: id
+        insertion_order: null
+        remote_table:
+          name: notification_channels
+          schema: public
+  - name: notification
+    using:
+      manual_configuration:
+        column_mapping:
+          notification_id: id
+        insertion_order: null
+        remote_table:
+          name: notifications
+          schema: public
+  - name: user
+    using:
+      manual_configuration:
+        column_mapping:
+          user_id: id
+        insertion_order: null
+        remote_table:
+          name: users
+          schema: public
+select_permissions:
+  - role: owner
+    permission:
+      columns:
+        - id
+        - read
+        - channel_id
+        - notification_id
+        - user_id
+        - read_at
+        - sent_at
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+      limit: 100
+      allow_aggregations: true
+update_permissions:
+  - role: owner
+    permission:
+      columns:
+        - read
+        - read_at
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+      check:
+        user_id:
+          _eq: X-Hasura-User-Id

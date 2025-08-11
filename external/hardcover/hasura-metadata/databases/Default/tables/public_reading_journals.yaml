@@ -1,0 +1,129 @@
+table:
+  name: reading_journals
+  schema: public
+object_relationships:
+  - name: book
+    using:
+      manual_configuration:
+        column_mapping:
+          book_id: id
+        insertion_order: null
+        remote_table:
+          name: books
+          schema: public
+  - name: edition
+    using:
+      manual_configuration:
+        column_mapping:
+          edition_id: id
+        insertion_order: null
+        remote_table:
+          name: editions
+          schema: public
+  - name: user
+    using:
+      manual_configuration:
+        column_mapping:
+          user_id: id
+        insertion_order: null
+        remote_table:
+          name: users
+          schema: public
+array_relationships:
+  - name: followers
+    using:
+      manual_configuration:
+        column_mapping:
+          user_id: user_id
+        insertion_order: null
+        remote_table:
+          name: followed_users
+          schema: public
+  - name: likes
+    using:
+      manual_configuration:
+        column_mapping:
+          id: likeable_id
+          object_type: likeable_type
+        insertion_order: null
+        remote_table:
+          name: likes
+          schema: public
+  - name: taggings
+    using:
+      manual_configuration:
+        column_mapping:
+          id: taggable_id
+          object_type: taggable_type
+          user_id: user_id
+        insertion_order: null
+        remote_table:
+          name: taggings
+          schema: public
+select_permissions:
+  - role: follower
+    permission:
+      columns:
+        - book_id
+        - created_at
+        - edition_id
+        - entry
+        - event
+        - id
+        - likes_count
+        - metadata
+        - object_type
+        - privacy_setting_id
+        - updated_at
+        - user_id
+      filter:
+        followers:
+          followed_user_id:
+            _eq: X-Hasura-User-Id
+      limit: 100
+    comment: ""
+  - role: guest
+    permission:
+      columns:
+        - book_id
+        - created_at
+        - edition_id
+        - entry
+        - event
+        - id
+        - likes_count
+        - metadata
+        - object_type
+        - privacy_setting_id
+        - updated_at
+        - user_id
+      filter:
+        _and:
+          - privacy_setting_id:
+              _eq: 1
+          - user:
+              status_id:
+                _in:
+                  - 1
+                  - 2
+      limit: 100
+    comment: ""
+  - role: owner
+    permission:
+      columns:
+        - book_id
+        - created_at
+        - edition_id
+        - entry
+        - event
+        - id
+        - likes_count
+        - metadata
+        - object_type
+        - privacy_setting_id
+        - updated_at
+        - user_id
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+    comment: ""

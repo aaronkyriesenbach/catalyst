@@ -1,0 +1,16 @@
+table:
+  name: notification_channels
+  schema: public
+select_permissions:
+  - role: guest
+    permission:
+      columns:
+        - id
+        - channel
+      filter: {}
+  - role: owner
+    permission:
+      columns:
+        - id
+        - channel
+      filter: {}

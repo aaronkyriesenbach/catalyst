@@ -1,0 +1,1425 @@
+actions:
+  - name: book_mapping_normalize
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/book_mappings'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: POST
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.id}}/normalize'
+        version: 2
+    permissions:
+      - role: user
+    comment: book_mapping_normalize
+  - name: book_normalize
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/books'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      timeout: 300
+      request_transform:
+        method: POST
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.id}}/normalize'
+        version: 2
+    permissions:
+      - role: user
+  - name: books_trending
+    definition:
+      kind: ""
+      handler: '{{RAILS_APP_URL}}/hasura/books/trending'
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: GET
+        query_params:
+          from: '{{$body.input.from}}'
+          limit: '{{$body.input.limit}}'
+          offset: '{{$body.input.offset}}'
+          to: '{{$body.input.to}}'
+        request_headers:
+          add_headers: {}
+          remove_headers:
+            - content-type
+        template_engine: Kriti
+        version: 2
+    permissions:
+      - role: guest
+      - role: owner
+    comment: books_trending
+  - name: collection_import_result_reimport
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/collection_import_results'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: POST
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.id}}/reimport'
+        version: 2
+    permissions:
+      - role: owner
+    comment: collection_import_result_reimport
+  - name: collection_import_retry
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/collection_imports/retry'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: owner
+    comment: collection_import_retry
+  - name: delete_book_mapping
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/book_mappings'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: DELETE
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.id}}'
+        version: 2
+    permissions:
+      - role: owner
+    comment: delete_book_mapping
+  - name: delete_followed_list
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/lists'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: DELETE
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.list_id}}/bookmarks'
+        version: 2
+    permissions:
+      - role: owner
+    comment: delete_followed_list
+  - name: delete_followed_prompt
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/prompts'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: DELETE
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.prompt_id}}/bookmarks'
+        version: 2
+    permissions:
+      - role: owner
+    comment: delete_followed_prompt
+  - name: delete_followed_user
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/users/followings'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: DELETE
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.user_id}}'
+        version: 2
+    permissions:
+      - role: owner
+    comment: delete_followed_user
+  - name: delete_like
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/likes'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: DELETE
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.likeable_type}}-{{$body.input.likeable_id}}'
+        version: 2
+    permissions:
+      - role: owner
+    comment: delete_like
+  - name: delete_list
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/lists'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: DELETE
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.id}}'
+        version: 2
+    permissions:
+      - role: owner
+    comment: delete_list
+  - name: delete_list_book
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/list_books'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: DELETE
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.id}}'
+        version: 2
+    permissions:
+      - role: owner
+    comment: delete_list_book
+  - name: delete_prompt_answer
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/prompt_answers'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: DELETE
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.id}}'
+        version: 2
+    permissions:
+      - role: owner
+    comment: delete_prompt_answer
+  - name: delete_reading_journal
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/reading_journals'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: DELETE
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.id}}'
+        version: 2
+    permissions:
+      - role: owner
+    comment: delete_reading_journal
+  - name: delete_reading_journals_for_book
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/reading_journals/books'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: DELETE
+        query_params: {}
+        template_engine: Kriti
+        version: 2
+    permissions:
+      - role: user
+    comment: delete_reading_journals_for_book
+  - name: delete_user_book
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/user_books'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: DELETE
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.id}}'
+        version: 2
+    permissions:
+      - role: owner
+  - name: delete_user_book_read
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/user_book_reads'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: DELETE
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.id}}'
+        version: 2
+    permissions:
+      - role: owner
+    comment: delete_user_book_read
+  - name: edition_normalize
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/editions'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: POST
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.id}}/normalize'
+        version: 2
+    permissions:
+      - role: user
+    comment: edition_normalize
+  - name: edition_owned
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/list_books/ownership'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: owner
+    comment: edition_owned
+  - name: email_user_delete_confirmation
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/users/destroy'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: owner
+    comment: email_user_delete_confirmation
+  - name: hey
+    definition:
+      kind: ""
+      handler: '{{RAILS_APP_URL}}/hey'
+      request_transform:
+        method: GET
+        query_params: {}
+        request_headers:
+          add_headers: {}
+          remove_headers:
+            - content-type
+        template_engine: Kriti
+        version: 2
+    comment: hey
+  - name: insert_author
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/authors'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: user
+    comment: insert_author
+  - name: insert_block
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/users/blocks'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: owner
+    comment: insert_block
+  - name: insert_book
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/editions/book'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: owner
+    comment: insert_book
+  - name: insert_book_mapping
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/book_mappings'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: owner
+    comment: insert_book_mapping
+  - name: insert_character
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/characters'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: user
+    comment: insert_character
+  - name: insert_collection_import
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/collection_imports'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: owner
+    comment: insert_collection_import
+  - name: insert_edition
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/editions'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: owner
+    comment: insert_edition
+  - name: insert_followed_user
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/users/followings'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: owner
+    comment: insert_followed_user
+  - name: insert_goal
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/goals'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: user
+    comment: insert_goal
+  - name: insert_image
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/images'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: owner
+    comment: insert_image
+  - name: insert_list
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/lists'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: owner
+    comment: insert_list
+  - name: insert_list_book
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/list_books'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: owner
+    comment: insert_list_book
+  - name: insert_prompt
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/prompts'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      timeout: 60
+    permissions:
+      - role: owner
+    comment: insert_prompt
+  - name: insert_prompt_answer
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/prompt_answers'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: owner
+    comment: insert_prompt_answer
+  - name: insert_publisher
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/publishers'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: user
+    comment: insert_publisher
+  - name: insert_reading_journal
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/reading_journals'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: user
+    comment: insert_reading_journal
+  - name: insert_report
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/reports'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: owner
+      - role: guest
+    comment: insert_report
+  - name: insert_serie
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/series'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: owner
+    comment: insert_series
+  - name: insert_user
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/users/join'
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: guest
+    comment: insert_user
+  - name: insert_user_book
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/user_books'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: owner
+    comment: insert_user_book
+  - name: insert_user_book_read
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/user_book_reads'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: owner
+  - name: newsletter
+    definition:
+      kind: ""
+      handler: '{{RAILS_APP_URL}}/hasura/users/newsletter'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: GET
+        query_params: {}
+        template_engine: Kriti
+        version: 1
+    permissions:
+      - role: owner
+    comment: newsletter
+  - name: receipt_validate
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/users/receipts'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: owner
+    comment: validate_receipt
+  - name: referrals_for_user
+    definition:
+      kind: ""
+      handler: '{{RAILS_APP_URL}}/hasura/users/referrals'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: GET
+        query_params: {}
+        template_engine: Kriti
+        version: 1
+    permissions:
+      - role: guest
+      - role: owner
+    comment: referrals_for_user
+  - name: search
+    definition:
+      kind: ""
+      handler: '{{RAILS_APP_URL}}/hasura/search'
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: user
+  - name: subscriptions
+    definition:
+      kind: ""
+      handler: '{{RAILS_APP_URL}}/hasura/users/subscriptions'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: owner
+    comment: subscriptions
+  - name: update_author
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/authors'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: PUT
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.id}}'
+        version: 2
+    permissions:
+      - role: user
+    comment: update_author
+  - name: update_book
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/books'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: PUT
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.id}}'
+        version: 2
+    permissions:
+      - role: owner
+    comment: update_book
+  - name: update_character
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/characters'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: PUT
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.id}}'
+        version: 2
+    permissions:
+      - role: user
+    comment: update_character
+  - name: update_edition
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/editions'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: PUT
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.id}}'
+        version: 2
+    permissions:
+      - role: owner
+    comment: update_edition
+  - name: update_goal
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/goals'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: PUT
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.id}}'
+        version: 2
+    permissions:
+      - role: user
+    comment: update_goal
+  - name: update_goal_progress
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/goals'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: POST
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.id}}/progress'
+        version: 1
+    permissions:
+      - role: owner
+    comment: update_goal_progress
+  - name: update_list
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/lists'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: PUT
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.id}}'
+        version: 2
+    permissions:
+      - role: owner
+    comment: update_list
+  - name: update_newsletter
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/users/newsletter'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: owner
+    comment: update_newsletter
+  - name: update_prompt
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/prompts/edit'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      timeout: 60
+    permissions:
+      - role: owner
+    comment: update_prompt
+  - name: update_publisher
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/publishers'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: PUT
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.id}}'
+        version: 2
+    permissions:
+      - role: user
+    comment: update_publisher
+  - name: update_reading_journal
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/reading_journals'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: PUT
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.id}}'
+        version: 2
+    permissions:
+      - role: owner
+    comment: update_reading_journal
+  - name: update_serie
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/series'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: PUT
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.id}}'
+        version: 2
+    permissions:
+      - role: user
+    comment: update_serie
+  - name: update_user
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/users/profile'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: PUT
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{escapeUri($session_variables[''x-hasura-user-id''])}}'
+        version: 2
+    permissions:
+      - role: owner
+    comment: update_user
+  - name: update_user_book
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/user_books'
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: PUT
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.id}}'
+        version: 2
+    permissions:
+      - role: owner
+    comment: update_user_book
+  - name: update_user_book_read
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/user_book_reads'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: PUT
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.id}}'
+        version: 2
+    permissions:
+      - role: owner
+    comment: update_user_book_read
+  - name: update_user_privacy_setting
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/users/privacy'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: user
+    comment: update_user_privacy_setting
+  - name: upsert_book
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/books'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      timeout: 60
+    permissions:
+      - role: guest
+      - role: owner
+    comment: upsert_book
+  - name: upsert_followed_list
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/lists'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: POST
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.list_id}}/bookmarks'
+        version: 2
+    permissions:
+      - role: owner
+    comment: upsert_followed_list
+  - name: upsert_followed_prompt
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/prompts'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      request_transform:
+        method: POST
+        query_params: {}
+        template_engine: Kriti
+        url: '{{$base_url}}/{{$body.input.prompt_id}}/bookmarks'
+        version: 2
+    permissions:
+      - role: owner
+    comment: upsert_followed_prompt
+  - name: upsert_like
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/likes'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: owner
+    comment: upsert_like
+  - name: upsert_tags
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/tags'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+      timeout: 60
+    permissions:
+      - role: owner
+    comment: upsert_tags
+  - name: upsert_user_book_reads
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/user_book_reads'
+      forward_client_headers: true
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: owner
+    comment: upsert_user_book_read
+  - name: user_login
+    definition:
+      kind: synchronous
+      handler: '{{RAILS_APP_URL}}/hasura/users/login'
+      headers:
+        - name: X-API-KEY
+          value_from_env: RAILS_API_KEY
+    permissions:
+      - role: guest
+    comment: user_login
+custom_types:
+  enums: []
+  input_objects:
+    - name: BasicTag
+    - name: CreateBookFromPlatformInput
+    - name: CreatePromptInput
+    - name: CollectionImportInput
+    - name: ListBookInput
+    - name: PromptAnswerCreateInput
+    - name: UpdatePromptInput
+    - name: UserBookUpdateInput
+    - name: UserBookCreateInput
+    - name: UserJoinInput
+    - name: UserLoginInput
+    - name: ListInput
+    - name: UpdateUserInput
+    - name: update_user_input
+    - name: ImageInput
+    - name: BookDtoType
+    - name: BookDtoInput
+    - name: BookInput
+    - name: EditionInput
+    - name: ImageDtoInput
+    - name: SampleInput
+    - name: ContributionInputType
+    - name: AuthorInputType
+    - name: SeriesDtoInput
+    - name: BookSeriesDtoInput
+    - name: BookMappingInput
+    - name: SeriesInput
+    - name: LetterbooksListCondition
+    - name: LetterbooksListOrder
+    - name: LetterbooksBookCondition
+    - name: DatesReadInput
+    - name: ReportInput
+    - name: GenresDtoInput
+    - name: GenreDtoInput
+    - name: CharacterDtoInput
+    - name: TagsDtoInput
+    - name: DtoTag
+    - name: AuthorInput
+    - name: SeriesInputType
+    - name: LetterbooksLibraryCondition
+    - name: PublisherInputType
+    - name: ReadingJournalInputType
+    - name: ReadingJournalCreateType
+    - name: ReadingJournalUpdateType
+    - name: LetterbooksTagCondition
+    - name: LetterbooksTagOrder
+    - name: LetterbooksAuthorCondition
+    - name: LetterbooksGoalCondition
+    - name: LetterbooksPromptCondition
+    - name: GoalConditionInput
+    - name: GoalInput
+    - name: CharacterInput
+  objects:
+    - name: BasicTagType
+    - name: BookTagsType
+      relationships:
+        - field_mapping:
+            book_id: id
+          name: book
+          remote_table:
+            name: books
+            schema: public
+          source: Default
+          type: object
+    - name: CollectionImportResultIdType
+      relationships:
+        - field_mapping:
+            id: id
+          name: collection_import_result
+          remote_table:
+            name: collection_import_results
+            schema: public
+          source: Default
+          type: object
+    - name: CollectionImportIdType
+      relationships:
+        - field_mapping:
+            id: id
+          name: collection_import
+          remote_table:
+            name: collection_imports
+            schema: public
+          source: Default
+          type: object
+    - name: BookIdType
+      relationships:
+        - field_mapping:
+            id: id
+          name: book
+          remote_table:
+            name: books
+            schema: public
+          source: Default
+          type: object
+    - name: PromptIdType
+      relationships:
+        - field_mapping:
+            id: id
+          name: prompt
+          remote_table:
+            name: prompts
+            schema: public
+          source: Default
+          type: object
+    - name: ListBookIdType
+      relationships:
+        - field_mapping:
+            id: id
+          name: list_book
+          remote_table:
+            name: list_books
+            schema: public
+          source: Default
+          type: object
+    - name: FollowedUserType
+      relationships:
+        - field_mapping:
+            user_id: id
+          name: user
+          remote_table:
+            name: users
+            schema: public
+          source: Default
+          type: object
+        - field_mapping:
+            followed_user_id: id
+          name: followed_user
+          remote_table:
+            name: users
+            schema: public
+          source: Default
+          type: object
+        - field_mapping:
+            id: id
+          name: followed_users
+          remote_table:
+            name: followed_users
+            schema: public
+          source: Default
+          type: object
+    - name: GoalIdType
+      relationships:
+        - field_mapping:
+            id: id
+          name: goal
+          remote_table:
+            name: goals
+            schema: public
+          source: Default
+          type: object
+    - name: LikeType
+      relationships:
+        - field_mapping:
+            id: id
+          name: like
+          remote_table:
+            name: likes
+            schema: public
+          source: Default
+          type: object
+    - name: NewsletterStatusType
+    - name: PromptAnswerIdType
+      relationships:
+        - field_mapping:
+            id: id
+          name: prompt_answer
+          remote_table:
+            name: prompt_answers
+            schema: public
+          source: Default
+          type: object
+        - field_mapping:
+            book_id: book_id
+            prompt_id: prompt_id
+          name: prompt_book
+          remote_table:
+            name: prompt_books_summary
+            schema: public
+          source: Default
+          type: object
+    - name: ValidateReceiptType
+    - name: ReferralType
+      relationships:
+        - field_mapping:
+            book_id: id
+          name: book
+          remote_table:
+            name: books
+            schema: public
+          source: Default
+          type: object
+    - name: ConfirmationEmailReturnType
+    - name: SuccessType
+    - name: SubscriptionsType
+    - name: UserBookIdType
+      relationships:
+        - field_mapping:
+            id: id
+          name: user_book
+          remote_table:
+            name: user_books
+            schema: public
+          source: Default
+          type: object
+    - name: UserIdType
+      relationships:
+        - field_mapping:
+            id: id
+          name: user
+          remote_table:
+            name: users
+            schema: public
+          source: Default
+          type: object
+    - name: HeyHeyType
+    - name: ListBookDeleteType
+      relationships:
+        - field_mapping:
+            list_id: id
+          name: list
+          remote_table:
+            name: lists
+            schema: public
+          source: Default
+          type: object
+    - name: ListIdType
+      relationships:
+        - field_mapping:
+            id: id
+          name: list
+          remote_table:
+            name: lists
+            schema: public
+          source: Default
+          type: object
+    - name: ImageIdType
+      relationships:
+        - field_mapping:
+            id: id
+          name: image
+          remote_table:
+            name: images
+            schema: public
+          source: Default
+          type: object
+    - name: EditionIdType
+      relationships:
+        - field_mapping:
+            id: id
+          name: edition
+          remote_table:
+            name: editions
+            schema: public
+          source: Default
+          type: object
+    - name: SampleOutput
+    - name: BookMappingIdType
+      relationships:
+        - field_mapping:
+            id: id
+          name: book_mapping
+          remote_table:
+            name: book_mappings
+            schema: public
+          source: Default
+          type: object
+    - name: UserForgotPasswordType
+    - name: LikeDeleteType
+    - name: TrendingBookType
+    - name: SeriesIdType
+      relationships:
+        - field_mapping:
+            id: id
+          name: series
+          remote_table:
+            name: series
+            schema: public
+          source: Default
+          type: object
+    - name: LetterbooksListBook
+    - name: LetterbooksListOutput
+    - name: UserBookDeleteType
+      relationships:
+        - field_mapping:
+            id: id
+          name: user_book
+          remote_table:
+            name: user_books
+            schema: public
+          source: Default
+          type: object
+    - name: UserBookReadDeleteType
+      relationships:
+        - field_mapping:
+            user_book_id: id
+          name: user_book
+          remote_table:
+            name: user_books
+            schema: public
+          source: Default
+          type: object
+    - name: UserBookReadUpsertType
+    - name: UserBooksReadUpsertType
+      relationships:
+        - field_mapping:
+            user_book_id: id
+          name: user_book
+          remote_table:
+            name: user_books
+            schema: public
+          source: Default
+          type: object
+    - name: OptionalEditionIdType
+      relationships:
+        - field_mapping:
+            id: id
+          name: edition
+          remote_table:
+            name: editions
+            schema: public
+          source: Default
+          type: object
+    - name: ReportOutput
+    - name: InsertBlockOutput
+      relationships:
+        - field_mapping:
+            id: id
+          name: user_block
+          remote_table:
+            name: user_blocks
+            schema: public
+          source: Default
+          type: object
+    - name: FollowedListType
+      relationships:
+        - field_mapping:
+            id: id
+          name: followed_list
+          remote_table:
+            name: followed_lists
+            schema: public
+          source: Default
+          type: object
+    - name: DeleteListType
+    - name: ListDeleteType
+    - name: AuthorIdType
+      relationships:
+        - field_mapping:
+            id: id
+          name: author
+          remote_table:
+            name: authors
+            schema: public
+          source: Default
+          type: object
+    - name: LetterbooksLibraryBook
+    - name: LetterbooksLibraryOutput
+    - name: NewBookIdType
+      relationships:
+        - field_mapping:
+            id: id
+          name: book
+          remote_table:
+            name: books
+            schema: public
+          source: Default
+          type: object
+        - field_mapping:
+            edition_id: id
+          name: edition
+          remote_table:
+            name: editions
+            schema: public
+          source: Default
+          type: object
+    - name: PublisherIdType
+      relationships:
+        - field_mapping:
+            id: id
+          name: publisher
+          remote_table:
+            name: publishers
+            schema: public
+          source: Default
+          type: object
+    - name: DeleteReadingJournalOutput
+    - name: DeleteReadingJournalsOutput
+    - name: ReadingJournalOutput
+      relationships:
+        - field_mapping:
+            id: id
+          name: reading_journal
+          remote_table:
+            name: reading_journals
+            schema: public
+          source: Default
+          type: object
+    - name: LetterbooksTagBook
+    - name: LetterbooksTagOutput
+    - name: UserBookReadIdType
+      relationships:
+        - field_mapping:
+            id: id
+          name: user_book_read
+          remote_table:
+            name: user_book_reads
+            schema: public
+          source: Default
+          type: object
+    - name: TagsType
+    - name: LetterbooksAuthorBook
+    - name: LetterbooksAuthorOutput
+    - name: LetterbooksGoalBook
+    - name: LetterbooksGoalOutput
+    - name: LetterbooksPromptBook
+    - name: LetterbooksPromptOutput
+    - name: SignedImageUrlType
+    - name: SearchOutput
+    - name: CharacterIdType
+      relationships:
+        - field_mapping:
+            id: id
+          name: character
+          remote_table:
+            name: characters
+            schema: public
+          source: Default
+          type: object
+    - name: FollowedPromptType
+      relationships:
+        - field_mapping:
+            id: id
+          name: followed_prompt
+          remote_table:
+            name: followed_prompts
+            schema: public
+          source: Default
+          type: object
+    - name: DeleteFollowedPromptType
+  scalars: []

@@ -1,0 +1,5 @@
+- role_name: user
+  role_set:
+    - guest
+    - follower
+    - owner

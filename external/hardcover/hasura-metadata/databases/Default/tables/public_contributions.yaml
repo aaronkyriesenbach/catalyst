@@ -1,0 +1,50 @@
+table:
+  name: contributions
+  schema: public
+object_relationships:
+  - name: author
+    using:
+      manual_configuration:
+        column_mapping:
+          author_id: id
+        insertion_order: null
+        remote_table:
+          name: authors
+          schema: public
+  - name: book
+    using:
+      manual_configuration:
+        column_mapping:
+          contributable_id: id
+          contributable_type: object_type
+        insertion_order: null
+        remote_table:
+          name: books
+          schema: public
+select_permissions:
+  - role: guest
+    permission:
+      columns:
+        - id
+        - contributable_type
+        - contribution
+        - author_id
+        - contributable_id
+        - created_at
+        - updated_at
+      filter: {}
+      limit: 100
+      allow_aggregations: true
+  - role: owner
+    permission:
+      columns:
+        - id
+        - created_at
+        - updated_at
+        - contributable_type
+        - contributable_id
+        - contribution
+        - author_id
+      filter: {}
+      limit: 100
+      allow_aggregations: true

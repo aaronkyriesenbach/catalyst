@@ -1,0 +1,19 @@
+table:
+  name: platforms
+  schema: public
+array_relationships:
+  - name: book_mappings
+    using:
+      foreign_key_constraint_on:
+        column: platform_id
+        table:
+          name: book_mappings
+          schema: public
+select_permissions:
+  - role: owner
+    permission:
+      columns:
+        - id
+        - name
+        - url
+      filter: {}

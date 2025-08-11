@@ -1,0 +1,118 @@
+table:
+  name: prompts
+  schema: public
+object_relationships:
+  - name: privacy_setting
+    using:
+      foreign_key_constraint_on: privacy_setting_id
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+array_relationships:
+  - name: followed_prompts
+    using:
+      foreign_key_constraint_on:
+        column: prompt_id
+        table:
+          name: followed_prompts
+          schema: public
+  - name: followers
+    using:
+      manual_configuration:
+        column_mapping:
+          user_id: user_id
+        insertion_order: null
+        remote_table:
+          name: followed_users
+          schema: public
+  - name: prompt_answers
+    using:
+      foreign_key_constraint_on:
+        column: prompt_id
+        table:
+          name: prompt_answers
+          schema: public
+  - name: prompt_books
+    using:
+      manual_configuration:
+        column_mapping:
+          id: prompt_id
+        insertion_order: null
+        remote_table:
+          name: prompt_books_summary
+          schema: public
+select_permissions:
+  - role: follower
+    permission:
+      columns:
+        - featured
+        - slug
+        - answers_count
+        - books_count
+        - id
+        - privacy_setting_id
+        - user_id
+        - users_count
+        - description
+        - question
+        - created_at
+      filter:
+        _and:
+          - privacy_setting_id:
+              _eq: 2
+          - followers:
+              followed_user_id:
+                _eq: X-Hasura-User-Id
+      limit: 100
+    comment: ""
+  - role: guest
+    permission:
+      columns:
+        - featured
+        - slug
+        - answers_count
+        - books_count
+        - id
+        - privacy_setting_id
+        - user_id
+        - users_count
+        - description
+        - question
+        - created_at
+      filter:
+        _and:
+          - privacy_setting_id:
+              _eq: 1
+          - user:
+              status_id:
+                _in:
+                  - 1
+                  - 2
+      limit: 100
+  - role: owner
+    permission:
+      columns:
+        - featured
+        - slug
+        - answers_count
+        - books_count
+        - id
+        - privacy_setting_id
+        - user_id
+        - users_count
+        - description
+        - question
+        - created_at
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+      limit: 100
+delete_permissions:
+  - role: owner
+    permission:
+      filter:
+        _and:
+          - user_id:
+              _eq: X-Hasura-User-Id
+          - answers_count:
+              _lte: 10

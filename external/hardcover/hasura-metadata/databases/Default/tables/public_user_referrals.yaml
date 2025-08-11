@@ -1,0 +1,39 @@
+table:
+  name: user_referrals
+  schema: public
+object_relationships:
+  - name: referrer
+    using:
+      manual_configuration:
+        column_mapping:
+          referrer_id: id
+        insertion_order: null
+        remote_table:
+          name: users
+          schema: public
+  - name: user
+    using:
+      manual_configuration:
+        column_mapping:
+          user_id: id
+        insertion_order: null
+        remote_table:
+          name: users
+          schema: public
+select_permissions:
+  - role: owner
+    permission:
+      columns:
+        - id
+        - created_at
+        - updated_at
+        - user_id
+        - referrer_id
+        - state
+      filter:
+        _or:
+          - referrer_id:
+              _eq: X-Hasura-User-Id
+          - user_id:
+              _eq: X-Hasura-User-Id
+      limit: 1000

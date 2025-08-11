@@ -1,0 +1,54 @@
+table:
+  name: followed_user_books
+  schema: public
+object_relationships:
+  - name: book
+    using:
+      manual_configuration:
+        column_mapping:
+          book_id: id
+        insertion_order: null
+        remote_table:
+          name: books
+          schema: public
+  - name: follower_user
+    using:
+      manual_configuration:
+        column_mapping:
+          follower_user_id: id
+        insertion_order: null
+        remote_table:
+          name: users
+          schema: public
+  - name: user
+    using:
+      manual_configuration:
+        column_mapping:
+          user_id: id
+        insertion_order: null
+        remote_table:
+          name: users
+          schema: public
+  - name: user_book
+    using:
+      manual_configuration:
+        column_mapping:
+          user_book_id: id
+        insertion_order: null
+        remote_table:
+          name: user_books
+          schema: public
+select_permissions:
+  - role: owner
+    permission:
+      columns:
+        - book_id
+        - follower_user_id
+        - user_book_id
+        - user_id
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+      limit: 1000
+      allow_aggregations: true
+    comment: ""

@@ -1,0 +1,247 @@
+table:
+  name: users
+  schema: public
+object_relationships:
+  - name: image
+    using:
+      manual_configuration:
+        column_mapping:
+          image_id: id
+        insertion_order: null
+        remote_table:
+          name: images
+          schema: public
+array_relationships:
+  - name: activities
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: activities
+          schema: public
+  - name: blocked_users
+    using:
+      manual_configuration:
+        column_mapping:
+          id: user_id
+        insertion_order: null
+        remote_table:
+          name: user_blocks
+          schema: public
+  - name: collection_imports
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: collection_imports
+          schema: public
+  - name: followed_by_users
+    using:
+      foreign_key_constraint_on:
+        column: followed_user_id
+        table:
+          name: followed_users
+          schema: public
+  - name: followed_lists
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: followed_lists
+          schema: public
+  - name: followed_prompts
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: followed_prompts
+          schema: public
+  - name: followed_users
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: followed_users
+          schema: public
+  - name: goals
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: goals
+          schema: public
+  - name: lists
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: lists
+          schema: public
+  - name: notification_deliveries
+    using:
+      manual_configuration:
+        column_mapping:
+          id: user_id
+        insertion_order: null
+        remote_table:
+          name: notification_deliveries
+          schema: public
+  - name: prompt_answers
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: prompt_answers
+          schema: public
+  - name: prompts
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: prompts
+          schema: public
+  - name: recommendations
+    using:
+      manual_configuration:
+        column_mapping:
+          id: subject_id
+          object_type: subject_type
+        insertion_order: null
+        remote_table:
+          name: disco_recommendations
+          schema: public
+  - name: recommended
+    using:
+      manual_configuration:
+        column_mapping:
+          id: item_id
+          object_type: item_type
+        insertion_order: null
+        remote_table:
+          name: disco_recommendations
+          schema: public
+  - name: referrered_users
+    using:
+      foreign_key_constraint_on:
+        column: referrer_user_id
+        table:
+          name: user_books
+          schema: public
+  - name: reported_user_flags
+    using:
+      foreign_key_constraint_on:
+        column: reported_user_id
+        table:
+          name: user_flags
+          schema: public
+  - name: taggings
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: taggings
+          schema: public
+  - name: user_books
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: user_books
+          schema: public
+  - name: user_flags
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          name: user_flags
+          schema: public
+select_permissions:
+  - role: guest
+    permission:
+      columns:
+        - account_privacy_setting_id
+        - activity_privacy_settings_id
+        - admin
+        - bio
+        - birthdate
+        - books_count
+        - cached_cover
+        - cached_genres
+        - cached_image
+        - created_at
+        - flair
+        - followed_users_count
+        - followers_count
+        - id
+        - image_id
+        - last_activity_at
+        - librarian_roles
+        - link
+        - location
+        - membership
+        - name
+        - onboarded
+        - pro
+        - pronoun_personal
+        - pronoun_possessive
+        - status_id
+        - updated_at
+        - username
+      filter:
+        status_id:
+          _in:
+            - 1
+            - 2
+      limit: 100
+  - role: owner
+    permission:
+      columns:
+        - access_level
+        - account_privacy_setting_id
+        - activity_privacy_settings_id
+        - admin
+        - bio
+        - birthdate
+        - books_count
+        - cached_cover
+        - cached_genres
+        - cached_image
+        - confirmation_sent_at
+        - confirmed_at
+        - created_at
+        - current_sign_in_at
+        - email
+        - email_verified
+        - flair
+        - followed_users_count
+        - followers_count
+        - id
+        - image_id
+        - last_activity_at
+        - last_sign_in_at
+        - librarian_roles
+        - link
+        - location
+        - locked_at
+        - match_updated_at
+        - membership
+        - membership_ends_at
+        - name
+        - object_type
+        - onboarded
+        - payment_system_id
+        - pro
+        - pronoun_personal
+        - pronoun_possessive
+        - referrer_id
+        - referrer_url
+        - remember_created_at
+        - reset_password_sent_at
+        - sign_in_count
+        - status_id
+        - unconfirmed_email
+        - updated_at
+        - username
+      filter:
+        id:
+          _eq: X-Hasura-User-Id

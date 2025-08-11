@@ -1,6 +1,5 @@
 {
   "imports": {
-    "@eemeli/yaml": "jsr:@eemeli/yaml@^2.7.1",
     "@std/path": "jsr:@std/path@^1.0.8",
     "cdk8s": "npm:cdk8s@^2.69.63",
     "constructs": "npm:constructs@^10.4.2"

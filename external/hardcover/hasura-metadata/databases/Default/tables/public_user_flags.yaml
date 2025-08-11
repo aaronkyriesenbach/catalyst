@@ -1,0 +1,42 @@
+table:
+  name: user_flags
+  schema: public
+object_relationships:
+  - name: flag_status
+    using:
+      foreign_key_constraint_on: flag_status_id
+  - name: user_reported
+    using:
+      foreign_key_constraint_on: reported_user_id
+  - name: user_submitted
+    using:
+      foreign_key_constraint_on: user_id
+insert_permissions:
+  - role: owner
+    permission:
+      check:
+        user_id:
+          _eq: X-Hasura-User-Id
+      columns:
+        - action_id
+        - action_type
+        - category
+        - details
+        - reported_user_id
+        - user_id
+select_permissions:
+  - role: owner
+    permission:
+      columns:
+        - action_id
+        - flag_status_id
+        - id
+        - reported_user_id
+        - user_id
+        - action_type
+        - category
+        - details
+        - created_at
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id

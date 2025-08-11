@@ -1,0 +1,11 @@
+table:
+  name: book_categories
+  schema: public
+select_permissions:
+  - role: guest
+    permission:
+      columns:
+        - id
+        - name
+      filter: {}
+    comment: ""

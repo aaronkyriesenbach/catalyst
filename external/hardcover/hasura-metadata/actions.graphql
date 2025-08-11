@@ -1,0 +1,1227 @@
+type Mutation {
+  book_mapping_normalize(
+    id: Int!
+    deep: Boolean!
+  ): BookMappingIdType
+}
+
+type Mutation {
+  book_normalize(
+    id: Int!
+    deep: Boolean
+  ): BookIdType
+}
+
+type Query {
+  books_trending(
+    from: date!
+    to: date!
+    limit: Int!
+    offset: Int!
+  ): TrendingBookType
+}
+
+type Mutation {
+  collection_import_result_reimport(
+    id: Int!
+  ): CollectionImportResultIdType
+}
+
+type Mutation {
+  collection_import_retry(
+    id: Int!
+  ): CollectionImportIdType
+}
+
+type Mutation {
+  delete_book_mapping(
+    id: Int!
+  ): BookMappingIdType
+}
+
+type Mutation {
+  delete_followed_list(
+    list_id: Int!
+  ): DeleteListType
+}
+
+type Mutation {
+  delete_followed_prompt(
+    prompt_id: Int!
+  ): DeleteFollowedPromptType
+}
+
+type Mutation {
+  delete_followed_user(
+    user_id: Int!
+  ): FollowedUserType
+}
+
+type Mutation {
+  delete_like(
+    likeable_id: Int!
+    likeable_type: String!
+  ): LikeDeleteType
+}
+
+type Mutation {
+  delete_list(
+    id: Int!
+  ): ListDeleteType
+}
+
+type Mutation {
+  delete_list_book(
+    id: Int!
+  ): ListBookDeleteType
+}
+
+type Mutation {
+  delete_prompt_answer(
+    id: Int!
+  ): PromptAnswerIdType
+}
+
+type Mutation {
+  delete_reading_journal(
+    id: Int!
+  ): DeleteReadingJournalOutput
+}
+
+type Mutation {
+  delete_reading_journals_for_book(
+    book_id: Int!
+  ): DeleteReadingJournalsOutput
+}
+
+type Mutation {
+  delete_user_book(
+    id: Int!
+  ): UserBookDeleteType
+}
+
+type Mutation {
+  delete_user_book_read(
+    id: Int!
+  ): UserBookReadIdType
+}
+
+type Mutation {
+  edition_normalize(
+    id: Int!
+    deep: Boolean!
+  ): EditionIdType
+}
+
+type Mutation {
+  edition_owned(
+    id: Int!
+  ): ListBookIdType
+}
+
+type Mutation {
+  email_user_delete_confirmation: SuccessType
+}
+
+type Query {
+  hey: HeyHeyType
+}
+
+type Mutation {
+  insert_author(
+    object: AuthorInputType!
+  ): AuthorIdType
+}
+
+type Mutation {
+  insert_block(
+    blocked_user_id: Int!
+  ): InsertBlockOutput
+}
+
+type Mutation {
+  insert_book(
+    edition: EditionInput!
+  ): OptionalEditionIdType
+}
+
+type Mutation {
+  insert_book_mapping(
+    object: BookMappingInput!
+  ): BookMappingIdType
+}
+
+type Mutation {
+  insert_character(
+    character: CharacterInput!
+  ): CharacterIdType
+}
+
+type Mutation {
+  insert_collection_import(
+    object: CollectionImportInput!
+  ): CollectionImportIdType
+}
+
+type Mutation {
+  insert_edition(
+    book_id: Int!
+    edition: EditionInput!
+  ): EditionIdType
+}
+
+type Mutation {
+  insert_followed_user(
+    user_id: Int!
+  ): FollowedUserType
+}
+
+type Mutation {
+  insert_goal(
+    object: GoalInput!
+  ): GoalIdType
+}
+
+type Mutation {
+  insert_image(
+    image: ImageInput!
+  ): ImageIdType
+}
+
+type Mutation {
+  insert_list(
+    object: ListInput!
+  ): ListIdType
+}
+
+type Mutation {
+  insert_list_book(
+    object: ListBookInput!
+  ): ListBookIdType
+}
+
+type Mutation {
+  insert_prompt(
+    object: CreatePromptInput!
+  ): PromptIdType
+}
+
+type Mutation {
+  insert_prompt_answer(
+    object: PromptAnswerCreateInput!
+  ): PromptAnswerIdType
+}
+
+type Mutation {
+  insert_publisher(
+    publisher: PublisherInputType!
+  ): PublisherIdType
+}
+
+type Mutation {
+  insert_reading_journal(
+    object: ReadingJournalCreateType!
+  ): ReadingJournalOutput
+}
+
+type Mutation {
+  insert_report(
+    report: ReportInput!
+  ): ReportOutput
+}
+
+type Mutation {
+  insert_serie(
+    object: SeriesInput!
+  ): SeriesIdType
+}
+
+type Mutation {
+  insert_user(
+    user: UserJoinInput!
+  ): UserIdType
+}
+
+type Mutation {
+  insert_user_book(
+    object: UserBookCreateInput!
+  ): UserBookIdType
+}
+
+type Mutation {
+  insert_user_book_read(
+    user_book_id: Int!
+    user_book_read: DatesReadInput!
+  ): UserBookReadIdType
+}
+
+type Query {
+  newsletter: NewsletterStatusType
+}
+
+type Mutation {
+  receipt_validate(
+    receipt: String!
+    payment_system_id: Int!
+  ): ValidateReceiptType
+}
+
+type Query {
+  referrals_for_user(
+    user_id: Int!
+    limit: Int!
+    start_date: date
+    end_date: date
+  ): [ReferralType]
+}
+
+type Query {
+  search(
+    query: String!
+    query_type: String
+    page: Int
+    per_page: Int
+    weights: String
+    sort: String
+    fields: String
+  ): SearchOutput
+}
+
+type Query {
+  subscriptions(
+    default_payment_system_id: Int!
+  ): SubscriptionsType
+}
+
+type Mutation {
+  update_author(
+    id: Int!
+    author: AuthorInputType!
+  ): AuthorIdType
+}
+
+type Mutation {
+  update_book(
+    id: Int!
+    book: BookInput!
+  ): BookIdType
+}
+
+type Mutation {
+  update_character(
+    id: Int!
+    character: CharacterInput!
+  ): CharacterIdType
+}
+
+type Mutation {
+  update_edition(
+    id: Int!
+    edition: EditionInput!
+  ): EditionIdType
+}
+
+type Mutation {
+  update_goal(
+    id: Int!
+    object: GoalInput!
+  ): GoalIdType
+}
+
+type Mutation {
+  update_goal_progress(
+    id: Int!
+  ): GoalIdType
+}
+
+type Mutation {
+  update_list(
+    id: Int!
+    object: ListInput!
+  ): ListIdType
+}
+
+type Mutation {
+  update_newsletter(
+    subscribed: Boolean!
+  ): NewsletterStatusType
+}
+
+type Mutation {
+  update_prompt(
+    object: UpdatePromptInput!
+  ): PromptIdType
+}
+
+type Mutation {
+  update_publisher(
+    id: Int!
+    publisher: PublisherInputType!
+  ): PublisherIdType
+}
+
+type Mutation {
+  update_reading_journal(
+    id: Int!
+    object: ReadingJournalUpdateType!
+  ): ReadingJournalOutput
+}
+
+type Mutation {
+  update_serie(
+    id: Int!
+    series: SeriesInputType!
+  ): SeriesIdType
+}
+
+type Mutation {
+  update_user(
+    user: update_user_input!
+  ): UserIdType
+}
+
+type Mutation {
+  update_user_book(
+    id: Int!
+    object: UserBookUpdateInput!
+  ): UserBookIdType
+}
+
+type Mutation {
+  update_user_book_read(
+    id: Int!
+    object: DatesReadInput!
+  ): UserBookReadIdType
+}
+
+type Mutation {
+  update_user_privacy_setting(
+    privacy_setting_id: Int!
+  ): UserIdType
+}
+
+type Mutation {
+  upsert_book(
+    book: CreateBookFromPlatformInput!
+  ): NewBookIdType
+}
+
+type Mutation {
+  upsert_followed_list(
+    list_id: Int!
+  ): FollowedListType
+}
+
+type Mutation {
+  upsert_followed_prompt(
+    prompt_id: Int!
+  ): FollowedPromptType
+}
+
+type Mutation {
+  upsert_like(
+    likeable_id: Int!
+    likeable_type: String
+  ): LikeType
+}
+
+type Mutation {
+  upsert_tags(
+    tags: [BasicTag]!
+    id: bigint!
+    type: String!
+  ): TagsType
+}
+
+type Mutation {
+  upsert_user_book_reads(
+    user_book_id: Int!
+    datesRead: [DatesReadInput]!
+  ): UserBooksReadUpsertType
+}
+
+type Mutation {
+  user_login(
+    user: UserLoginInput!
+  ): UserIdType
+}
+
+input BasicTag {
+  category: String!
+  tag: String!
+  spoiler: Boolean!
+}
+
+input CreateBookFromPlatformInput {
+  platform_id: Int!
+  external_id: String!
+  book_id: Int
+}
+
+input CreatePromptInput {
+  question: String!
+  privacy_setting_id: Int!
+  description: String!
+}
+
+input CollectionImportInput {
+  user_id: Int!
+  contents_key: String!
+  platform_id: Int!
+  override_ratings: Boolean!
+  override_shelves: Boolean!
+  override_date_read: Boolean!
+  tag_resolution: Int!
+}
+
+input ListBookInput {
+  book_id: Int!
+  edition_id: Int
+  list_id: Int!
+  position: Int
+}
+
+input PromptAnswerCreateInput {
+  book_id: Int!
+  prompt_id: Int!
+  description: String
+}
+
+input UpdatePromptInput {
+  id: Int!
+  description: String!
+  question: String!
+  privacy_setting_id: Int!
+}
+
+input UserBookUpdateInput {
+  review_has_spoilers: Boolean
+  first_started_reading_date: date
+  last_read_date: date
+  read_count: Int
+  reading_format_id: Int
+  status_id: Int
+  rating: numeric
+  private_notes: String
+  recommended_by: String
+  recommended_for: String
+  privacy_setting_id: Int
+  review_slate: jsonb
+  referrer_user_id: Int
+  reviewed_at: date
+  url: String
+  media_url: String
+  date_added: date
+  sponsored_review: Boolean
+  edition_id: Int
+  user_date: date
+}
+
+input UserBookCreateInput {
+  book_id: Int!
+  review_has_spoilers: Boolean
+  first_started_reading_date: date
+  last_read_date: date
+  read_count: Int
+  reading_format_id: Int
+  status_id: Int
+  rating: numeric
+  private_notes: String
+  recommended_by: String
+  recommended_for: String
+  privacy_setting_id: Int
+  review_slate: jsonb
+  referrer_user_id: Int
+  reviewed_at: date
+  url: String
+  media_url: String
+  date_added: date
+  sponsored_review: Boolean
+  edition_id: Int
+  user_date: date
+}
+
+input UserJoinInput {
+  password: String!
+  email: String!
+  referrer_id: Int
+  referrer_url: String
+}
+
+input UserLoginInput {
+  password: String!
+  email: String!
+}
+
+input ListInput {
+  name: String
+  description: String
+  url: String
+  ranked: Boolean
+  privacy_setting_id: Int
+  featured_profile: Boolean
+  default_view: String
+}
+
+input UpdateUserInput {
+  username: String
+  password: String
+  name: String
+  image: String
+  bio: String
+  location: String
+  birthdate: date
+  link: String
+  pronoun_personal: String
+  pronoun_possessive: String
+  account_privacy_setting_id: Int
+  activity_privacy_settings_id: Int
+}
+
+input update_user_input {
+  username: String
+  email: String
+  current_password: String
+  password: String
+  password_confirmation: String
+  name: String
+  image: String
+  cover: String
+  bio: String
+  location: String
+  birthdate: date
+  link: String
+  pronoun_personal: String
+  pronoun_possessive: String
+  account_privacy_setting_id: Int
+  activity_privacy_settings_id: Int
+  onboarded: Boolean
+}
+
+input ImageInput {
+  url: String!
+  imageable_type: String!
+  imageable_id: Int!
+}
+
+input BookDtoType {
+  compilation: Boolean
+  collection_book_ids: [Int]
+  description: String
+  headline: String
+  series: [BookSeriesDtoInput]
+  librarian_tags: [TagsDtoInput]
+  characters: [CharacterDtoInput]
+  literary_type_id: Int
+  title: String
+  book_category_id: Int
+}
+
+input BookDtoInput {
+  image_id: Int
+  reading_format_id: Int
+  page_count: Int
+  audio_seconds: Int
+  edition_format: String
+  edition_information: String
+  title: String
+  subtitle: String
+  release_date: date
+  asin: String
+  isbn_10: String
+  isbn_13: String
+  language_id: Int
+  country_id: Int
+  contributions: [ContributionInputType]
+  publisher_id: Int
+}
+
+input BookInput {
+  default_cover_edition_id: Int
+  default_physical_edition_id: Int
+  default_audio_edition_id: Int
+  default_ebook_edition_id: Int
+  locked: Boolean
+  slug: String
+  dto: BookDtoType
+  book_status_id: Int
+  canonical_id: Int
+  user_added: Boolean
+}
+
+input EditionInput {
+  locked: Boolean
+  book_id: Int
+  dto: BookDtoInput
+}
+
+input ImageDtoInput {
+  id: Int!
+}
+
+input SampleInput {
+  username: String!
+  password: String!
+}
+
+input ContributionInputType {
+  contribution: String
+  author_id: Int!
+}
+
+input AuthorInputType {
+  id: Int
+  name: String
+  slug: String
+  bio: String
+  name_personal: String
+  location: String
+  image_id: Int
+  born_date: date
+  death_date: date
+  born_year: Int
+  death_year: Int
+  is_bipoc: Boolean
+  is_lgbtq: Boolean
+  alias_id: Int
+  locked: Boolean
+  gender_id: Int
+}
+
+input SeriesDtoInput {
+  id: Int!
+  name: String
+  position: numeric
+  details: String
+  featured: Boolean
+}
+
+input BookSeriesDtoInput {
+  series_id: Int!
+  name: String
+  position: numeric
+  details: String
+  featured: Boolean
+  compilation: Boolean
+  collection_book_ids: [Int]
+}
+
+input BookMappingInput {
+  edition_id: Int!
+  platform_id: Int!
+  external_id: String!
+}
+
+input SeriesInput {
+  name: String!
+}
+
+input LetterbooksListCondition {
+  list_id: Int!
+}
+
+input LetterbooksListOrder {
+  fieldname: String!
+  direction: String!
+}
+
+input LetterbooksBookCondition {
+  min_release_date: date
+  max_release_date: date
+}
+
+input DatesReadInput {
+  id: Int
+  action: String
+  started_at: date
+  finished_at: date
+  reading_format_id: Int
+  edition_id: Int
+  progress_pages: Int
+  progress_seconds: Int
+}
+
+input ReportInput {
+  reportable_type: String!
+  reportable_id: Int!
+  details: String!
+  metadata: jsonb
+  service_name: String
+}
+
+input GenresDtoInput {
+  spoiler: Boolean
+  genre: String
+}
+
+input GenreDtoInput {
+  spoiler: Boolean!
+  genre: String!
+  position: Int!
+}
+
+input CharacterDtoInput {
+  character_id: Int!
+  spoiler: Boolean!
+  position: Int!
+}
+
+input TagsDtoInput {
+  Genre: [DtoTag]
+  Mood: [DtoTag]
+  ContentWarning: [DtoTag]
+}
+
+input DtoTag {
+  tag: String!
+  tagSlug: String!
+  spoiler: Boolean!
+}
+
+input AuthorInput {
+  name: String!
+}
+
+input SeriesInputType {
+  id: Int
+  name: String
+  slug: String
+  description: String
+  author_id: Int
+  state: String
+  is_completed: Boolean
+  locked: Boolean
+}
+
+input LetterbooksLibraryCondition {
+  user_id: Int!
+  status_id: Int
+}
+
+input PublisherInputType {
+  name: String
+  slug: String
+  state: String
+  canonical_id: Int
+  locked: Boolean
+}
+
+input ReadingJournalInputType {
+  privacy_setting_id: Int
+}
+
+input ReadingJournalCreateType {
+  privacy_setting_id: Int!
+  action_at: date
+  book_id: Int!
+  edition_id: Int
+  event: String!
+  entry: String
+  metadata: jsonb
+  tags: [BasicTag]!
+}
+
+input ReadingJournalUpdateType {
+  privacy_setting_id: Int
+  edition_id: Int
+  event: String
+  entry: String
+  metadata: jsonb
+  tags: [BasicTag]
+  action_at: date
+}
+
+input LetterbooksTagCondition {
+  tag_category_slug: String!
+  tag_slug: String!
+}
+
+input LetterbooksTagOrder {
+  fieldname: String!
+  direction: String!
+}
+
+input LetterbooksAuthorCondition {
+  author_id: Int!
+}
+
+input LetterbooksGoalCondition {
+  goal_id: Int!
+}
+
+input LetterbooksPromptCondition {
+  prompt_id: Int!
+}
+
+input GoalConditionInput {
+  readingFormatId: Int
+  bookCategoryIds: [Int]
+  authorGenderIds: [Int]
+  authorBipoc: Int
+  authorLgbtqia: Int
+}
+
+input GoalInput {
+  description: String!
+  goal: Int!
+  metric: String!
+  start_date: date!
+  end_date: date!
+  privacy_setting_id: Int
+  archived: Boolean
+  conditions: GoalConditionInput!
+}
+
+input CharacterInput {
+  name: String
+  slug: String
+  state: String
+  locked: Boolean
+  image_id: Int
+  biography: String
+  gender_id: Int
+  is_lgbtq: Boolean
+  is_poc: Boolean
+  has_disability: Boolean
+}
+
+type BasicTagType {
+  category: String!
+  categorySlug: String!
+  tag: String!
+  tagSlug: String!
+  spoiler: Boolean!
+  count: Int
+}
+
+type BookTagsType {
+  tags: [BasicTagType]!
+  book_id: Int!
+}
+
+type CollectionImportResultIdType {
+  id: Int
+}
+
+type CollectionImportIdType {
+  id: Int
+}
+
+type BookIdType {
+  id: Int
+  errors: [String]
+}
+
+type PromptIdType {
+  error: String
+  id: Int
+}
+
+type ListBookIdType {
+  id: Int
+}
+
+type FollowedUserType {
+  id: Int
+  user_id: Int
+  followed_user_id: Int
+  error: String
+}
+
+type GoalIdType {
+  id: Int
+  errors: [String]
+}
+
+type LikeType {
+  likes_count: Int!
+  id: Int!
+}
+
+type NewsletterStatusType {
+  subscribed: Boolean!
+}
+
+type PromptAnswerIdType {
+  id: Int
+  prompt_id: Int!
+  user_id: Int!
+  book_id: Int!
+}
+
+type ValidateReceiptType {
+  result: jsonb!
+  supporter: Boolean
+}
+
+type ReferralType {
+  count: Int!
+  book_id: Int!
+}
+
+type ConfirmationEmailReturnType {
+  message: String
+}
+
+type SuccessType {
+  success: Boolean!
+}
+
+type SubscriptionsType {
+  membership: String
+  membership_ends_at: timestamp
+  payment_system: String
+  billing_portal_url: String
+  monthly_session_id: String
+  yearly_session_id: String
+  monthly_session_url: String
+  yearly_session_url: String
+}
+
+type UserBookIdType {
+  id: Int
+  error: String
+}
+
+type UserIdType {
+  id: Int
+  errors: [String]
+}
+
+type HeyHeyType {
+  hey: Boolean!
+  you: String
+}
+
+type ListBookDeleteType {
+  id: Int
+  list_id: Int
+}
+
+type ListIdType {
+  id: Int
+  errors: [String]
+}
+
+type ImageIdType {
+  id: Int!
+}
+
+type EditionIdType {
+  id: Int
+  errors: [String]
+}
+
+type SampleOutput {
+  accessToken: String!
+}
+
+type BookMappingIdType {
+  id: Int
+  errors: [String]
+}
+
+type UserForgotPasswordType {
+  valid: Boolean!
+  error: String
+}
+
+type LikeDeleteType {
+  likes_count: Int!
+}
+
+type TrendingBookType {
+  ids: [Int]
+  error: String
+}
+
+type SeriesIdType {
+  id: Int
+  errors: [String]
+}
+
+type LetterbooksListBook {
+  book_id: Int!
+  position: Int!
+  list_book_id: Int!
+}
+
+type LetterbooksListOutput {
+  letterbooks: [LetterbooksListBook]!
+  filtered_books: Int!
+  total_books: Int!
+}
+
+type UserBookDeleteType {
+  id: Int
+  user_id: Int
+  book_id: Int
+}
+
+type UserBookReadDeleteType {
+  error: String
+  user_book_id: Int
+}
+
+type UserBookReadUpsertType {
+  id: Int
+  action: String
+}
+
+type UserBooksReadUpsertType {
+  error: String
+  user_book_id: Int
+}
+
+type OptionalEditionIdType {
+  id: Int
+  errors: [String]
+}
+
+type ReportOutput {
+  created: Boolean
+  complete: Boolean
+  errors: [String]
+}
+
+type InsertBlockOutput {
+  id: Int
+  error: String
+}
+
+type FollowedListType {
+  id: Int
+  errors: [String]
+}
+
+type DeleteListType {
+  success: Boolean!
+}
+
+type ListDeleteType {
+  success: Boolean!
+}
+
+type AuthorIdType {
+  id: Int
+  errors: [String]
+}
+
+type LetterbooksLibraryBook {
+  book_id: Int!
+  position: Int!
+  user_book_id: Int!
+}
+
+type LetterbooksLibraryOutput {
+  letterbooks: [LetterbooksLibraryBook]!
+  filtered_books: Int!
+  total_books: Int!
+}
+
+type NewBookIdType {
+  id: Int
+  edition_id: Int
+  errors: [String]
+}
+
+type PublisherIdType {
+  id: Int
+  errors: [String]
+}
+
+type DeleteReadingJournalOutput {
+  id: Int!
+}
+
+type DeleteReadingJournalsOutput {
+  ids: [Int]
+}
+
+type ReadingJournalOutput {
+  id: Int
+  errors: [String]
+}
+
+type LetterbooksTagBook {
+  book_id: Int!
+  position: Int!
+}
+
+type LetterbooksTagOutput {
+  letterbooks: [LetterbooksTagBook]!
+  filtered_books: Int!
+  total_books: Int!
+}
+
+type UserBookReadIdType {
+  id: Int
+  error: String
+}
+
+type TagsType {
+  tags: [BasicTagType]!
+}
+
+type LetterbooksAuthorBook {
+  book_id: Int!
+  position: Int!
+}
+
+type LetterbooksAuthorOutput {
+  letterbooks: [LetterbooksAuthorBook]!
+  filtered_books: Int!
+  total_books: Int!
+}
+
+type LetterbooksGoalBook {
+  book_id: Int!
+  position: Int!
+  user_book_read_id: Int!
+}
+
+type LetterbooksGoalOutput {
+  letterbooks: [LetterbooksGoalBook]!
+  filtered_books: Int!
+  total_books: Int!
+}
+
+type LetterbooksPromptBook {
+  book_id: Int!
+  position: Int!
+}
+
+type LetterbooksPromptOutput {
+  letterbooks: [LetterbooksPromptBook]!
+  filtered_books: Int!
+  total_books: Int!
+}
+
+type SignedImageUrlType {
+  url: String!
+}
+
+type SearchOutput {
+  query: String
+  query_type: String
+  page: Int
+  per_page: Int
+  results: jsonb
+  ids: [Int]
+  error: String
+}
+
+type CharacterIdType {
+  id: Int
+  errors: [String]
+}
+
+type FollowedPromptType {
+  id: Int
+  errors: [String]
+}
+
+type DeleteFollowedPromptType {
+  success: Boolean!
+}
+

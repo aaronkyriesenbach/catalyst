@@ -1,0 +1,47 @@
+table:
+  name: book_characters
+  schema: public
+object_relationships:
+  - name: book
+    using:
+      manual_configuration:
+        column_mapping:
+          book_id: id
+        insertion_order: null
+        remote_table:
+          name: books
+          schema: public
+  - name: character
+    using:
+      manual_configuration:
+        column_mapping:
+          character_id: id
+        insertion_order: null
+        remote_table:
+          name: characters
+          schema: public
+select_permissions:
+  - role: guest
+    permission:
+      columns:
+        - book_id
+        - character_id
+        - id
+        - only_mentioned
+        - spoiler
+        - position
+      filter: {}
+      limit: 100
+    comment: ""
+  - role: owner
+    permission:
+      columns:
+        - book_id
+        - character_id
+        - id
+        - only_mentioned
+        - spoiler
+        - position
+      filter: {}
+      limit: 100
+    comment: ""

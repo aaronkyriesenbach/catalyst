@@ -1,0 +1,133 @@
+table:
+  name: lists
+  schema: public
+object_relationships:
+  - name: privacy_setting
+    using:
+      foreign_key_constraint_on: privacy_setting_id
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+array_relationships:
+  - name: followed_lists
+    using:
+      foreign_key_constraint_on:
+        column: list_id
+        table:
+          name: followed_lists
+          schema: public
+  - name: followers
+    using:
+      manual_configuration:
+        column_mapping:
+          user_id: user_id
+        insertion_order: null
+        remote_table:
+          name: followed_users
+          schema: public
+  - name: likes
+    using:
+      manual_configuration:
+        column_mapping:
+          id: likeable_id
+          object_type: likeable_type
+        insertion_order: null
+        remote_table:
+          name: likes
+          schema: public
+  - name: list_books
+    using:
+      foreign_key_constraint_on:
+        column: list_id
+        table:
+          name: list_books
+          schema: public
+select_permissions:
+  - role: follower
+    permission:
+      columns:
+        - books_count
+        - created_at
+        - default_view
+        - description
+        - featured
+        - featured_profile
+        - followers_count
+        - id
+        - imported
+        - likes_count
+        - name
+        - object_type
+        - privacy_setting_id
+        - public
+        - ranked
+        - slug
+        - updated_at
+        - url
+        - user_id
+      filter:
+        followers:
+          followed_user_id:
+            _eq: X-Hasura-User-Id
+      limit: 100
+    comment: ""
+  - role: guest
+    permission:
+      columns:
+        - books_count
+        - created_at
+        - default_view
+        - description
+        - featured
+        - featured_profile
+        - followers_count
+        - id
+        - imported
+        - likes_count
+        - name
+        - object_type
+        - privacy_setting_id
+        - public
+        - ranked
+        - slug
+        - updated_at
+        - url
+        - user_id
+      filter:
+        _and:
+          - user:
+              status_id:
+                _in:
+                  - 1
+                  - 2
+          - privacy_setting_id:
+              _eq: 1
+      limit: 100
+      allow_aggregations: true
+  - role: owner
+    permission:
+      columns:
+        - books_count
+        - created_at
+        - default_view
+        - description
+        - featured
+        - featured_profile
+        - followers_count
+        - id
+        - imported
+        - likes_count
+        - name
+        - object_type
+        - privacy_setting_id
+        - public
+        - ranked
+        - slug
+        - updated_at
+        - url
+        - user_id
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+      limit: 100
+      allow_aggregations: true

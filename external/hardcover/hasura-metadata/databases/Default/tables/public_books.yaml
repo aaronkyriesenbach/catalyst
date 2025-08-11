@@ -1,0 +1,297 @@
+table:
+  name: books
+  schema: public
+object_relationships:
+  - name: book_status
+    using:
+      foreign_key_constraint_on: book_status_id
+  - name: canonical
+    using:
+      manual_configuration:
+        column_mapping:
+          canonical_id: id
+        insertion_order: null
+        remote_table:
+          name: books
+          schema: public
+  - name: default_audio_edition
+    using:
+      manual_configuration:
+        column_mapping:
+          default_audio_edition_id: id
+        insertion_order: null
+        remote_table:
+          name: editions
+          schema: public
+  - name: default_cover_edition
+    using:
+      manual_configuration:
+        column_mapping:
+          default_cover_edition_id: id
+        insertion_order: null
+        remote_table:
+          name: editions
+          schema: public
+  - name: default_ebook_edition
+    using:
+      manual_configuration:
+        column_mapping:
+          default_ebook_edition_id: id
+        insertion_order: null
+        remote_table:
+          name: editions
+          schema: public
+  - name: default_physical_edition
+    using:
+      manual_configuration:
+        column_mapping:
+          default_physical_edition_id: id
+        insertion_order: null
+        remote_table:
+          name: editions
+          schema: public
+  - name: featured_book_series
+    using:
+      manual_configuration:
+        column_mapping:
+          featured_book_series_id: id
+        insertion_order: null
+        remote_table:
+          name: book_series
+          schema: public
+  - name: image
+    using:
+      manual_configuration:
+        column_mapping:
+          image_id: id
+        insertion_order: null
+        remote_table:
+          name: images
+          schema: public
+array_relationships:
+  - name: book_characters
+    using:
+      manual_configuration:
+        column_mapping:
+          id: book_id
+        insertion_order: null
+        remote_table:
+          name: book_characters
+          schema: public
+  - name: book_mappings
+    using:
+      foreign_key_constraint_on:
+        column: book_id
+        table:
+          name: book_mappings
+          schema: public
+  - name: book_series
+    using:
+      manual_configuration:
+        column_mapping:
+          id: book_id
+        insertion_order: null
+        remote_table:
+          name: book_series
+          schema: public
+  - name: collection_import_results
+    using:
+      foreign_key_constraint_on:
+        column: book_id
+        table:
+          name: collection_import_results
+          schema: public
+  - name: contributions
+    using:
+      manual_configuration:
+        column_mapping:
+          id: contributable_id
+          object_type: contributable_type
+        insertion_order: null
+        remote_table:
+          name: contributions
+          schema: public
+  - name: editions
+    using:
+      foreign_key_constraint_on:
+        column: book_id
+        table:
+          name: editions
+          schema: public
+  - name: images
+    using:
+      manual_configuration:
+        column_mapping:
+          id: imageable_id
+          object_type: imageable_type
+        insertion_order: null
+        remote_table:
+          name: images
+          schema: public
+  - name: list_books
+    using:
+      foreign_key_constraint_on:
+        column: book_id
+        table:
+          name: list_books
+          schema: public
+  - name: prompt_answers
+    using:
+      foreign_key_constraint_on:
+        column: book_id
+        table:
+          name: prompt_answers
+          schema: public
+  - name: prompt_summaries
+    using:
+      manual_configuration:
+        column_mapping:
+          id: book_id
+        insertion_order: null
+        remote_table:
+          name: prompt_books_summary
+          schema: public
+  - name: recommendations
+    using:
+      manual_configuration:
+        column_mapping:
+          id: item_id
+          object_type: item_type
+        insertion_order: null
+        remote_table:
+          name: disco_recommendations
+          schema: public
+  - name: taggable_counts
+    using:
+      manual_configuration:
+        column_mapping:
+          id: taggable_id
+          object_type: taggable_type
+        insertion_order: null
+        remote_table:
+          name: taggable_counts
+          schema: public
+  - name: taggings
+    using:
+      manual_configuration:
+        column_mapping:
+          id: taggable_id
+          object_type: taggable_type
+        insertion_order: null
+        remote_table:
+          name: taggings
+          schema: public
+  - name: user_books
+    using:
+      foreign_key_constraint_on:
+        column: book_id
+        table:
+          name: user_books
+          schema: public
+select_permissions:
+  - role: guest
+    permission:
+      columns:
+        - activities_count
+        - alternative_titles
+        - audio_seconds
+        - book_category_id
+        - book_status_id
+        - cached_contributors
+        - cached_featured_series
+        - cached_header_image
+        - cached_image
+        - cached_tags
+        - canonical_id
+        - compilation
+        - created_at
+        - created_by_user_id
+        - default_audio_edition_id
+        - default_cover_edition_id
+        - default_ebook_edition_id
+        - default_physical_edition_id
+        - description
+        - editions_count
+        - featured_book_series_id
+        - header_image_id
+        - headline
+        - id
+        - image_id
+        - import_platform_id
+        - journals_count
+        - links
+        - lists_count
+        - literary_type_id
+        - locked
+        - pages
+        - prompts_count
+        - rating
+        - ratings_count
+        - ratings_distribution
+        - release_date
+        - release_year
+        - reviews_count
+        - slug
+        - state
+        - subtitle
+        - title
+        - updated_at
+        - user_added
+        - users_count
+        - users_read_count
+      filter: {}
+      limit: 1000
+      allow_aggregations: true
+  - role: owner
+    permission:
+      columns:
+        - activities_count
+        - alternative_titles
+        - audio_seconds
+        - book_category_id
+        - book_status_id
+        - cached_contributors
+        - cached_header_image
+        - cached_image
+        - cached_tags
+        - canonical_id
+        - compilation
+        - created_at
+        - created_by_user_id
+        - default_audio_edition_id
+        - default_cover_edition_id
+        - default_ebook_edition_id
+        - default_physical_edition_id
+        - description
+        - dto
+        - dto_combined
+        - dto_external
+        - editions_count
+        - header_image_id
+        - headline
+        - id
+        - image_id
+        - import_platform_id
+        - journals_count
+        - links
+        - lists_count
+        - literary_type_id
+        - locked
+        - pages
+        - prompts_count
+        - rating
+        - ratings_count
+        - ratings_distribution
+        - release_date
+        - release_year
+        - reviews_count
+        - slug
+        - subtitle
+        - title
+        - updated_at
+        - user_added
+        - users_count
+        - users_read_count
+      filter: {}
+      limit: 1000
+      allow_aggregations: true
