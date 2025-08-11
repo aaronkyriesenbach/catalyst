@@ -1,0 +1,41 @@
+table:
+  name: publishers
+  schema: public
+object_relationships:
+  - name: parent_publisher
+    using:
+      manual_configuration:
+        column_mapping:
+          parent_id: id
+        insertion_order: null
+        remote_table:
+          name: publishers
+          schema: public
+array_relationships:
+  - name: editions
+    using:
+      manual_configuration:
+        column_mapping:
+          id: publisher_id
+        insertion_order: null
+        remote_table:
+          name: editions
+          schema: public
+select_permissions:
+  - role: guest
+    permission:
+      columns:
+        - canonical_id
+        - created_at
+        - editions_count
+        - id
+        - locked
+        - name
+        - parent_id
+        - slug
+        - state
+        - updated_at
+        - user_id
+      filter: {}
+      limit: 100
+    comment: ""

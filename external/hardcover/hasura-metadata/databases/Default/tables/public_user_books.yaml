@@ -1,0 +1,250 @@
+table:
+  name: user_books
+  schema: public
+object_relationships:
+  - name: book
+    using:
+      foreign_key_constraint_on: book_id
+  - name: edition
+    using:
+      manual_configuration:
+        column_mapping:
+          edition_id: id
+        insertion_order: null
+        remote_table:
+          name: editions
+          schema: public
+  - name: privacy_setting
+    using:
+      foreign_key_constraint_on: privacy_setting_id
+  - name: reading_format
+    using:
+      manual_configuration:
+        column_mapping:
+          reading_format_id: id
+        insertion_order: null
+        remote_table:
+          name: reading_formats
+          schema: public
+  - name: reading_journal_summary
+    using:
+      manual_configuration:
+        column_mapping:
+          book_id: book_id
+          user_id: user_id
+        insertion_order: null
+        remote_table:
+          name: reading_journals_summary
+          schema: public
+  - name: referrer
+    using:
+      manual_configuration:
+        column_mapping:
+          referrer_user_id: id
+        insertion_order: null
+        remote_table:
+          name: users
+          schema: public
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+  - name: user_book_status
+    using:
+      foreign_key_constraint_on: status_id
+array_relationships:
+  - name: followers
+    using:
+      manual_configuration:
+        column_mapping:
+          user_id: user_id
+        insertion_order: null
+        remote_table:
+          name: followed_users
+          schema: public
+  - name: likes
+    using:
+      manual_configuration:
+        column_mapping:
+          id: likeable_id
+          object_type: likeable_type
+        insertion_order: null
+        remote_table:
+          name: likes
+          schema: public
+  - name: reading_journals
+    using:
+      manual_configuration:
+        column_mapping:
+          book_id: book_id
+          user_id: user_id
+        insertion_order: null
+        remote_table:
+          name: reading_journals
+          schema: public
+  - name: user_book_reads
+    using:
+      manual_configuration:
+        column_mapping:
+          id: user_book_id
+        insertion_order: null
+        remote_table:
+          name: user_book_reads
+          schema: public
+  - name: user_books
+    using:
+      manual_configuration:
+        column_mapping:
+          book_id: book_id
+        insertion_order: null
+        remote_table:
+          name: user_books
+          schema: public
+select_permissions:
+  - role: follower
+    permission:
+      columns:
+        - book_id
+        - cached_match_score
+        - created_at
+        - date_added
+        - edition_id
+        - first_read_date
+        - first_started_reading_date
+        - has_review
+        - id
+        - imported
+        - last_read_date
+        - likes_count
+        - media_url
+        - merged_at
+        - object_type
+        - original_book_id
+        - original_edition_id
+        - owned
+        - owned_copies
+        - privacy_setting_id
+        - rating
+        - read_count
+        - reading_format_id
+        - recommended_by
+        - recommended_for
+        - referrer_user_id
+        - review
+        - review_has_spoilers
+        - review_html
+        - review_length
+        - review_migrated
+        - review_object
+        - review_raw
+        - review_slate
+        - reviewed_at
+        - sponsored_review
+        - starred
+        - status_id
+        - updated_at
+        - url
+        - user_id
+      filter:
+        _and:
+          - privacy_setting_id:
+              _eq: 2
+          - followers:
+              followed_user_id:
+                _eq: X-Hasura-User-Id
+    comment: ""
+  - role: guest
+    permission:
+      columns:
+        - book_id
+        - created_at
+        - date_added
+        - edition_id
+        - first_read_date
+        - first_started_reading_date
+        - has_review
+        - id
+        - last_read_date
+        - likes_count
+        - media_url
+        - object_type
+        - owned
+        - privacy_setting_id
+        - rating
+        - read_count
+        - reading_format_id
+        - recommended_by
+        - recommended_for
+        - referrer_user_id
+        - review
+        - review_has_spoilers
+        - review_html
+        - review_length
+        - review_object
+        - review_raw
+        - review_slate
+        - reviewed_at
+        - sponsored_review
+        - starred
+        - status_id
+        - updated_at
+        - url
+        - user_id
+      filter:
+        _and:
+          - privacy_setting_id:
+              _eq: 1
+          - user:
+              status_id:
+                _in:
+                  - 1
+                  - 2
+      allow_aggregations: true
+  - role: owner
+    permission:
+      columns:
+        - book_id
+        - cached_match_score
+        - created_at
+        - date_added
+        - edition_id
+        - first_read_date
+        - first_started_reading_date
+        - has_review
+        - id
+        - imported
+        - last_read_date
+        - likes_count
+        - media_url
+        - merged_at
+        - object_type
+        - original_book_id
+        - original_edition_id
+        - owned
+        - owned_copies
+        - privacy_setting_id
+        - private_notes
+        - rating
+        - read_count
+        - reading_format_id
+        - recommended_by
+        - recommended_for
+        - referrer_user_id
+        - review
+        - review_has_spoilers
+        - review_html
+        - review_length
+        - review_migrated
+        - review_object
+        - review_raw
+        - review_slate
+        - reviewed_at
+        - sponsored_review
+        - starred
+        - status_id
+        - updated_at
+        - url
+        - user_id
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+      allow_aggregations: true

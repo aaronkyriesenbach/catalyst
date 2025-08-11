@@ -1,0 +1,61 @@
+table:
+  name: series
+  schema: public
+object_relationships:
+  - name: author
+    using:
+      manual_configuration:
+        column_mapping:
+          author_id: id
+        insertion_order: null
+        remote_table:
+          name: authors
+          schema: public
+  - name: canonical
+    using:
+      manual_configuration:
+        column_mapping:
+          canonical_id: id
+        insertion_order: null
+        remote_table:
+          name: series
+          schema: public
+  - name: creator
+    using:
+      manual_configuration:
+        column_mapping:
+          user_id: id
+        insertion_order: null
+        remote_table:
+          name: users
+          schema: public
+array_relationships:
+  - name: book_series
+    using:
+      manual_configuration:
+        column_mapping:
+          id: series_id
+        insertion_order: null
+        remote_table:
+          name: book_series
+          schema: public
+select_permissions:
+  - role: guest
+    permission:
+      columns:
+        - author_id
+        - books_count
+        - canonical_id
+        - description
+        - id
+        - identifiers
+        - is_completed
+        - locked
+        - name
+        - primary_books_count
+        - slug
+        - state
+        - user_id
+      filter: {}
+      limit: 100
+    comment: ""

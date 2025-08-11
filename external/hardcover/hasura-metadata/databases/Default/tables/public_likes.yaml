@@ -1,0 +1,119 @@
+table:
+  name: likes
+  schema: public
+object_relationships:
+  - name: activity
+    using:
+      manual_configuration:
+        column_mapping:
+          likeable_id: id
+          likeable_type: object_type
+        insertion_order: null
+        remote_table:
+          name: activities
+          schema: public
+  - name: list
+    using:
+      manual_configuration:
+        column_mapping:
+          likeable_id: id
+          likeable_type: object_type
+        insertion_order: null
+        remote_table:
+          name: lists
+          schema: public
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+  - name: user_book
+    using:
+      manual_configuration:
+        column_mapping:
+          likeable_id: id
+          likeable_type: object_type
+        insertion_order: null
+        remote_table:
+          name: user_books
+          schema: public
+array_relationships:
+  - name: followers
+    using:
+      manual_configuration:
+        column_mapping:
+          user_id: user_id
+        insertion_order: null
+        remote_table:
+          name: followed_users
+          schema: public
+select_permissions:
+  - role: follower
+    permission:
+      columns:
+        - likeable_type
+        - id
+        - likeable_id
+        - user_id
+        - created_at
+      filter:
+        _or:
+          - user_book:
+              _and:
+                - privacy_setting_id:
+                    _eq: 2
+                - followers:
+                    followed_user_id:
+                      _eq: X-Hasura-User-Id
+          - activity:
+              _and:
+                - privacy_setting_id:
+                    _eq: 2
+                - followers:
+                    followed_user_id:
+                      _eq: X-Hasura-User-Id
+          - list:
+              _and:
+                - privacy_setting_id:
+                    _eq: 1
+                - followers:
+                    followed_user_id:
+                      _eq: X-Hasura-User-Id
+      limit: 100
+    comment: ""
+  - role: guest
+    permission:
+      columns:
+        - likeable_type
+        - id
+        - likeable_id
+        - user_id
+        - created_at
+      filter:
+        _and:
+          - user:
+              status_id:
+                _in:
+                  - 1
+                  - 2
+          - _or:
+              - activity:
+                  privacy_setting_id:
+                    _eq: 1
+              - user_book:
+                  privacy_setting_id:
+                    _eq: 1
+              - list:
+                  privacy_setting_id:
+                    _eq: 1
+      limit: 100
+  - role: owner
+    permission:
+      columns:
+        - id
+        - likeable_id
+        - user_id
+        - created_at
+        - likeable_type
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+      limit: 100

@@ -1,0 +1,24 @@
+table:
+  name: book_statuses
+  schema: public
+array_relationships:
+  - name: books
+    using:
+      foreign_key_constraint_on:
+        column: book_status_id
+        table:
+          name: books
+          schema: public
+select_permissions:
+  - role: guest
+    permission:
+      columns:
+        - id
+        - name
+      filter: {}
+  - role: owner
+    permission:
+      columns:
+        - name
+        - id
+      filter: {}

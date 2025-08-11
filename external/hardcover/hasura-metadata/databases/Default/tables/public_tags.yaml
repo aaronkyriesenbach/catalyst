@@ -1,0 +1,38 @@
+table:
+  name: tags
+  schema: public
+object_relationships:
+  - name: tag_category
+    using:
+      foreign_key_constraint_on: tag_category_id
+array_relationships:
+  - name: taggings
+    using:
+      foreign_key_constraint_on:
+        column: tag_id
+        table:
+          name: taggings
+          schema: public
+select_permissions:
+  - role: guest
+    permission:
+      columns:
+        - id
+        - slug
+        - tag
+        - count
+        - tag_category_id
+      filter: {}
+      limit: 100
+      allow_aggregations: true
+  - role: owner
+    permission:
+      columns:
+        - id
+        - slug
+        - tag
+        - count
+        - tag_category_id
+      filter: {}
+      limit: 100
+      allow_aggregations: true

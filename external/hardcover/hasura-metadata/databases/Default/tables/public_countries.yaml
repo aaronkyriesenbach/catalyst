@@ -1,0 +1,50 @@
+table:
+  name: countries
+  schema: public
+array_relationships:
+  - name: editions
+    using:
+      manual_configuration:
+        column_mapping:
+          id: country_id
+        insertion_order: null
+        remote_table:
+          name: editions
+          schema: public
+select_permissions:
+  - role: guest
+    permission:
+      columns:
+        - id
+        - created_at
+        - updated_at
+        - name
+        - code2
+        - code3
+        - phone_code
+        - iso_3166
+        - region
+        - sub_region
+        - intermediate_region
+        - region_code
+        - sub_region_code
+        - intermediate_region_code
+      filter: {}
+  - role: owner
+    permission:
+      columns:
+        - id
+        - code2
+        - code3
+        - intermediate_region
+        - intermediate_region_code
+        - iso_3166
+        - name
+        - phone_code
+        - region
+        - region_code
+        - sub_region
+        - sub_region_code
+        - created_at
+        - updated_at
+      filter: {}

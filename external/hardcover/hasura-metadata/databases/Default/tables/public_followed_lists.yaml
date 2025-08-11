@@ -1,0 +1,60 @@
+table:
+  name: followed_lists
+  schema: public
+object_relationships:
+  - name: list
+    using:
+      foreign_key_constraint_on: list_id
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+select_permissions:
+  - role: follower
+    permission:
+      columns:
+        - id
+        - list_id
+        - user_id
+        - created_at
+      filter:
+        user:
+          followed_users:
+            followed_user_id:
+              _eq: X-Hasura-User-Id
+    comment: ""
+  - role: guest
+    permission:
+      columns:
+        - id
+        - list_id
+        - user_id
+        - created_at
+      filter:
+        _and:
+          - list:
+              _and:
+                - privacy_setting_id:
+                    _eq: 1
+                - user:
+                    status_id:
+                      _in:
+                        - 1
+                        - 2
+          - user:
+              status_id:
+                _in:
+                  - 1
+                  - 2
+          - _and: []
+    comment: ""
+  - role: owner
+    permission:
+      columns:
+        - id
+        - list_id
+        - user_id
+        - created_at
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+    comment: ""

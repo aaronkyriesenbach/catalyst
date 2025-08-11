@@ -1,0 +1,16 @@
+table:
+  name: users_aggregate_by_created_at_date
+  schema: public
+select_permissions:
+  - role: guest
+    permission:
+      columns:
+        - count
+        - created_at
+      filter: {}
+  - role: owner
+    permission:
+      columns:
+        - count
+        - created_at
+      filter: {}

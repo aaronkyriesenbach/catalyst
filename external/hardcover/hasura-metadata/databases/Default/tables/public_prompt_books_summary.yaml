@@ -1,0 +1,39 @@
+table:
+  name: prompt_books_summary
+  schema: public
+object_relationships:
+  - name: book
+    using:
+      manual_configuration:
+        column_mapping:
+          book_id: id
+        insertion_order: null
+        remote_table:
+          name: books
+          schema: public
+  - name: prompt
+    using:
+      manual_configuration:
+        column_mapping:
+          prompt_id: id
+        insertion_order: null
+        remote_table:
+          name: prompts
+          schema: public
+select_permissions:
+  - role: guest
+    permission:
+      columns:
+        - answers_count
+        - book_id
+        - prompt_id
+      filter: {}
+      limit: 100
+  - role: owner
+    permission:
+      columns:
+        - prompt_id
+        - book_id
+        - answers_count
+      filter: {}
+      limit: 100

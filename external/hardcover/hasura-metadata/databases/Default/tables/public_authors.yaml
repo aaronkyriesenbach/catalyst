@@ -1,0 +1,82 @@
+table:
+  name: authors
+  schema: public
+object_relationships:
+  - name: canonical
+    using:
+      manual_configuration:
+        column_mapping:
+          canonical_id: id
+        insertion_order: null
+        remote_table:
+          name: authors
+          schema: public
+  - name: creator
+    using:
+      manual_configuration:
+        column_mapping:
+          user_id: id
+        insertion_order: null
+        remote_table:
+          name: users
+          schema: public
+  - name: image
+    using:
+      manual_configuration:
+        column_mapping:
+          image_id: id
+        insertion_order: null
+        remote_table:
+          name: images
+          schema: public
+array_relationships:
+  - name: alias
+    using:
+      manual_configuration:
+        column_mapping:
+          alias_id: id
+        insertion_order: null
+        remote_table:
+          name: authors
+          schema: public
+  - name: contributions
+    using:
+      manual_configuration:
+        column_mapping:
+          id: author_id
+        insertion_order: null
+        remote_table:
+          name: contributions
+          schema: public
+select_permissions:
+  - role: guest
+    permission:
+      columns:
+        - alias_id
+        - alternate_names
+        - bio
+        - books_count
+        - born_date
+        - born_year
+        - cached_image
+        - canonical_id
+        - death_date
+        - death_year
+        - gender_id
+        - id
+        - identifiers
+        - image_id
+        - is_bipoc
+        - is_lgbtq
+        - links
+        - location
+        - locked
+        - name
+        - name_personal
+        - slug
+        - state
+        - title
+        - user_id
+        - users_count
+      filter: {}
+      limit: 100

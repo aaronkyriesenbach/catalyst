@@ -1,0 +1,84 @@
+table:
+  name: characters
+  schema: public
+object_relationships:
+  - name: canonical
+    using:
+      manual_configuration:
+        column_mapping:
+          canonical_id: id
+        insertion_order: null
+        remote_table:
+          name: characters
+          schema: public
+array_relationships:
+  - name: book_characters
+    using:
+      manual_configuration:
+        column_mapping:
+          id: character_id
+        insertion_order: null
+        remote_table:
+          name: book_characters
+          schema: public
+  - name: contributions
+    using:
+      manual_configuration:
+        column_mapping:
+          id: contributable_id
+          object_type: contributable_type
+        insertion_order: null
+        remote_table:
+          name: contributions
+          schema: public
+select_permissions:
+  - role: guest
+    permission:
+      columns:
+        - biography
+        - books_count
+        - cached_tags
+        - canonical_books_count
+        - canonical_id
+        - created_at
+        - gender_id
+        - has_disability
+        - id
+        - image_id
+        - is_lgbtq
+        - is_poc
+        - locked
+        - name
+        - object_type
+        - openlibrary_url
+        - slug
+        - state
+        - updated_at
+        - user_id
+      filter: {}
+      limit: 100
+    comment: ""
+  - role: owner
+    permission:
+      columns:
+        - biography
+        - books_count
+        - cached_tags
+        - canonical_books_count
+        - canonical_id
+        - created_at
+        - gender_id
+        - has_disability
+        - id
+        - image_id
+        - is_lgbtq
+        - is_poc
+        - name
+        - object_type
+        - openlibrary_url
+        - slug
+        - state
+        - updated_at
+      filter: {}
+      limit: 98
+    comment: ""

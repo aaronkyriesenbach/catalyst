@@ -1,6 +1,6 @@
 import { Chart } from "npm:cdk8s";
 import { Construct } from "npm:constructs";
-import { Lab53App, readTextFileFromInitCwd } from "../../shared/helpers.ts";
+import { Lab53App, readTextFile } from "../../shared/helpers.ts";
 import Application from "../../shared/Application.ts";
 import ConfigMap from "../../shared/k8s/ConfigMap.ts";
 
@@ -62,7 +62,7 @@ class MonkeyType extends Chart {
     const config = new ConfigMap(this, {
       name: "backend-config",
       data: {
-        "backend-configuration.json": readTextFileFromInitCwd(
+        "backend-configuration.json": readTextFile(
           "backend-configuration.json",
         ),
       },

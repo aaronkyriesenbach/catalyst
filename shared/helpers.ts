@@ -1,55 +1,16 @@
-import { ApiObject, App, AppProps, YamlOutputType } from "npm:cdk8s";
+import { App, AppProps, YamlOutputType } from "npm:cdk8s";
 import { Construct } from "npm:constructs";
-import { parseAllDocuments } from "jsr:@eemeli/yaml";
 import * as path from "jsr:@std/path";
 import { Container, VolumeMount } from "./imports/k8s.ts";
 import { NasVolumeMount, NasVolumeMountMap } from "./k8s/Pod.ts";
 import { NAS_VOLUME_NAME } from "./constants.ts";
 import { ArgoCDApplication, ArgoCDApplicationSpec } from "./argocd/ArgoCDApplication.ts";
 
-export function readTextFileFromInitCwd(filename: string) {
+export function readTextFile(filename: string) {
   return Deno.readTextFileSync(
     path.resolve(Deno.env.get("INIT_CWD")!, filename),
   );
 }
-
-export function readTextFileFromBaseDir(filename: string) {
-  return Deno.readTextFileSync(new URL(`../base/${filename}`, import.meta.url));
-}
-
-export function createResourcesFromYaml(
-  scope: Construct,
-  filename: string,
-  options?: CreateResourceFromYamlOptions,
-): ApiObject[] {
-  const { useYaml11, readFromShared } = options ?? {};
-  const resourceYaml = readFromShared
-    ? readTextFileFromBaseDir(filename)
-    : readTextFileFromInitCwd(filename);
-
-  const resources = parseAllDocuments(
-    resourceYaml,
-    useYaml11 ? { version: "1.1" } : undefined,
-  );
-
-  const objects: ApiObject[] = [];
-  resources.forEach((r) => {
-    try {
-      const o = new ApiObject(scope, crypto.randomUUID(), r.toJS());
-      objects.push(o);
-    } catch (err) {
-      console.log(r.toJS());
-      throw err;
-    }
-  });
-
-  return objects;
-}
-
-export type CreateResourceFromYamlOptions = {
-  useYaml11?: boolean;
-  readFromShared?: boolean;
-};
 
 export function getInjectedVolumeMount(
   nasVolumeMount: NasVolumeMount,
@@ -120,4 +81,25 @@ export function generateArgoCDApps(
       spec: (overrides ?? {})[app],
     })
   );
+}
+
+// Path is relative to call site
+export function readDirSyncRecursive(path: string): string[] {
+  const results: string[] = [];
+
+  const searchPath = path.substring(0, 1) === "/"
+    ? path
+    : `${Deno.env.get("INIT_CWD")!}/${path}`;
+
+  for (
+    const dirEntry of Deno.readDirSync(searchPath)
+  ) {
+    if (dirEntry.isDirectory) {
+      results.push(...readDirSyncRecursive(`${searchPath}/${dirEntry.name}`));
+    } else {
+      results.push(`${searchPath}/${dirEntry.name}`);
+    }
+  }
+
+  return results;
 }

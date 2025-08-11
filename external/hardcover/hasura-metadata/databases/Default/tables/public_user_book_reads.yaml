@@ -1,0 +1,84 @@
+table:
+  name: user_book_reads
+  schema: public
+object_relationships:
+  - name: edition
+    using:
+      manual_configuration:
+        column_mapping:
+          edition_id: id
+        insertion_order: null
+        remote_table:
+          name: editions
+          schema: public
+  - name: user_book
+    using:
+      manual_configuration:
+        column_mapping:
+          user_book_id: id
+        insertion_order: null
+        remote_table:
+          name: user_books
+          schema: public
+select_permissions:
+  - role: follower
+    permission:
+      columns:
+        - edition_id
+        - finished_at
+        - id
+        - paused_at
+        - progress
+        - progress_pages
+        - progress_seconds
+        - started_at
+        - user_book_id
+      filter:
+        user_book:
+          followers:
+            followed_user_id:
+              _eq: X-Hasura-User-Id
+      limit: 1000
+    comment: ""
+  - role: guest
+    permission:
+      columns:
+        - edition_id
+        - finished_at
+        - id
+        - paused_at
+        - progress
+        - progress_pages
+        - progress_seconds
+        - started_at
+        - user_book_id
+      filter:
+        _and:
+          - user_book:
+              user:
+                status_id:
+                  _in:
+                    - 1
+                    - 2
+          - user_book:
+              privacy_setting_id:
+                _eq: 1
+      limit: 100
+      allow_aggregations: true
+  - role: owner
+    permission:
+      columns:
+        - edition_id
+        - finished_at
+        - id
+        - paused_at
+        - progress
+        - progress_pages
+        - progress_seconds
+        - started_at
+        - user_book_id
+      filter:
+        user_book:
+          user_id:
+            _eq: X-Hasura-User-Id
+      allow_aggregations: true

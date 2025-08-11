@@ -1,0 +1,87 @@
+table:
+  name: reading_journals_summary
+  schema: public
+object_relationships:
+  - name: book
+    using:
+      manual_configuration:
+        column_mapping:
+          book_id: id
+        insertion_order: null
+        remote_table:
+          name: books
+          schema: public
+  - name: user
+    using:
+      manual_configuration:
+        column_mapping:
+          user_id: id
+        insertion_order: null
+        remote_table:
+          name: users
+          schema: public
+array_relationships:
+  - name: followers
+    using:
+      manual_configuration:
+        column_mapping:
+          user_id: user_id
+        insertion_order: null
+        remote_table:
+          name: followed_users
+          schema: public
+  - name: reading_journals
+    using:
+      manual_configuration:
+        column_mapping:
+          book_id: book_id
+          user_id: user_id
+        insertion_order: null
+        remote_table:
+          name: reading_journals
+          schema: public
+select_permissions:
+  - role: follower
+    permission:
+      columns:
+        - journals_count
+        - book_id
+        - user_id
+        - last_updated_at
+      filter:
+        followers:
+          followed_user_id:
+            _eq: X-Hasura-User-Id
+      limit: 100
+    comment: ""
+  - role: guest
+    permission:
+      columns:
+        - journals_count
+        - book_id
+        - user_id
+        - last_updated_at
+      filter:
+        _and:
+          - user:
+              status_id:
+                _in:
+                  - 1
+                  - 2
+          - user:
+              activity_privacy_settings_id:
+                _eq: 1
+      limit: 100
+    comment: ""
+  - role: owner
+    permission:
+      columns:
+        - journals_count
+        - book_id
+        - user_id
+        - last_updated_at
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+      limit: 100
+    comment: ""

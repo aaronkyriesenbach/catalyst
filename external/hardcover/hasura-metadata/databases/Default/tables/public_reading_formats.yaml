@@ -1,0 +1,16 @@
+table:
+  name: reading_formats
+  schema: public
+select_permissions:
+  - role: guest
+    permission:
+      columns:
+        - id
+        - format
+      filter: {}
+  - role: owner
+    permission:
+      columns:
+        - id
+        - format
+      filter: {}

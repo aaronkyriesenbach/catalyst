@@ -1,0 +1,14 @@
+table:
+  name: book_collections
+  schema: public
+select_permissions:
+  - role: guest
+    permission:
+      columns:
+        - book_id
+        - child_book_id
+        - id
+        - position
+      filter: {}
+      limit: 100
+    comment: ""
