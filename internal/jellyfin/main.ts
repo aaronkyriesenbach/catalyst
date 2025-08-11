@@ -29,6 +29,9 @@ export class Jellyfin extends Chart {
           }, {
             mountPath: "/tv",
             subPath: "tv",
+          }, {
+            mountPath: "/live",
+            subPath: "live",
           }],
         },
       },
