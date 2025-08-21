@@ -5,7 +5,7 @@ import { Construct } from 'constructs';
 
 /**
  * Middleware is the CRD implementation of a Traefik Middleware.
-More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/overview/
+More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/overview/
  *
  * @schema Middleware
  */
@@ -60,7 +60,7 @@ export class Middleware extends ApiObject {
 
 /**
  * Middleware is the CRD implementation of a Traefik Middleware.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/overview/
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/overview/
  *
  * @schema Middleware
  */
@@ -103,7 +103,7 @@ export interface MiddlewareSpec {
   /**
    * AddPrefix holds the add prefix middleware configuration.
    * This middleware updates the path of a request before forwarding it.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/addprefix/
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/addprefix/
    *
    * @schema MiddlewareSpec#addPrefix
    */
@@ -112,7 +112,7 @@ export interface MiddlewareSpec {
   /**
    * BasicAuth holds the basic auth middleware configuration.
    * This middleware restricts access to your services to known users.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/basicauth/
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/basicauth/
    *
    * @schema MiddlewareSpec#basicAuth
    */
@@ -121,7 +121,7 @@ export interface MiddlewareSpec {
   /**
    * Buffering holds the buffering middleware configuration.
    * This middleware retries or limits the size of requests that can be forwarded to backends.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/buffering/#maxrequestbodybytes
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/buffering/#maxrequestbodybytes
    *
    * @schema MiddlewareSpec#buffering
    */
@@ -130,7 +130,7 @@ export interface MiddlewareSpec {
   /**
    * Chain holds the configuration of the chain middleware.
    * This middleware enables to define reusable combinations of other pieces of middleware.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/chain/
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/chain/
    *
    * @schema MiddlewareSpec#chain
    */
@@ -146,7 +146,7 @@ export interface MiddlewareSpec {
   /**
    * Compress holds the compress middleware configuration.
    * This middleware compresses responses before sending them to the client, using gzip, brotli, or zstd compression.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/compress/
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/compress/
    *
    * @schema MiddlewareSpec#compress
    */
@@ -163,7 +163,7 @@ export interface MiddlewareSpec {
   /**
    * DigestAuth holds the digest auth middleware configuration.
    * This middleware restricts access to your services to known users.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/digestauth/
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/digestauth/
    *
    * @schema MiddlewareSpec#digestAuth
    */
@@ -172,7 +172,7 @@ export interface MiddlewareSpec {
   /**
    * ErrorPage holds the custom error middleware configuration.
    * This middleware returns a custom page in lieu of the default, according to configured ranges of HTTP Status codes.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/errorpages/
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/errorpages/
    *
    * @schema MiddlewareSpec#errors
    */
@@ -181,7 +181,7 @@ export interface MiddlewareSpec {
   /**
    * ForwardAuth holds the forward auth middleware configuration.
    * This middleware delegates the request authentication to a Service.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/forwardauth/
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/forwardauth/
    *
    * @schema MiddlewareSpec#forwardAuth
    */
@@ -198,7 +198,7 @@ export interface MiddlewareSpec {
   /**
    * Headers holds the headers middleware configuration.
    * This middleware manages the requests and responses headers.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/headers/#customrequestheaders
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/headers/#customrequestheaders
    *
    * @schema MiddlewareSpec#headers
    */
@@ -207,7 +207,7 @@ export interface MiddlewareSpec {
   /**
    * InFlightReq holds the in-flight request middleware configuration.
    * This middleware limits the number of requests being processed and served concurrently.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/inflightreq/
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/inflightreq/
    *
    * @schema MiddlewareSpec#inFlightReq
    */
@@ -216,7 +216,7 @@ export interface MiddlewareSpec {
   /**
    * IPAllowList holds the IP allowlist middleware configuration.
    * This middleware limits allowed requests based on the client IP.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/ipallowlist/
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/ipallowlist/
    *
    * @schema MiddlewareSpec#ipAllowList
    */
@@ -232,7 +232,7 @@ export interface MiddlewareSpec {
   /**
    * PassTLSClientCert holds the pass TLS client cert middleware configuration.
    * This middleware adds the selected data from the passed client TLS certificate to a header.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/passtlsclientcert/
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/passtlsclientcert/
    *
    * @schema MiddlewareSpec#passTLSClientCert
    */
@@ -249,7 +249,7 @@ export interface MiddlewareSpec {
   /**
    * RateLimit holds the rate limit configuration.
    * This middleware ensures that services will receive a fair amount of requests, and allows one to define what fair is.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/ratelimit/
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/ratelimit/
    *
    * @schema MiddlewareSpec#rateLimit
    */
@@ -258,7 +258,7 @@ export interface MiddlewareSpec {
   /**
    * RedirectRegex holds the redirect regex middleware configuration.
    * This middleware redirects a request using regex matching and replacement.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/redirectregex/#regex
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/redirectregex/#regex
    *
    * @schema MiddlewareSpec#redirectRegex
    */
@@ -267,7 +267,7 @@ export interface MiddlewareSpec {
   /**
    * RedirectScheme holds the redirect scheme middleware configuration.
    * This middleware redirects requests from a scheme/port to another.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/redirectscheme/
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/redirectscheme/
    *
    * @schema MiddlewareSpec#redirectScheme
    */
@@ -276,7 +276,7 @@ export interface MiddlewareSpec {
   /**
    * ReplacePath holds the replace path middleware configuration.
    * This middleware replaces the path of the request URL and store the original path in an X-Replaced-Path header.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/replacepath/
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/replacepath/
    *
    * @schema MiddlewareSpec#replacePath
    */
@@ -285,7 +285,7 @@ export interface MiddlewareSpec {
   /**
    * ReplacePathRegex holds the replace path regex middleware configuration.
    * This middleware replaces the path of a URL using regex matching and replacement.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/replacepathregex/
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/replacepathregex/
    *
    * @schema MiddlewareSpec#replacePathRegex
    */
@@ -295,7 +295,7 @@ export interface MiddlewareSpec {
    * Retry holds the retry middleware configuration.
    * This middleware reissues requests a given number of times to a backend server if that server does not reply.
    * As soon as the server answers, the middleware stops retrying, regardless of the response status.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/retry/
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/retry/
    *
    * @schema MiddlewareSpec#retry
    */
@@ -304,7 +304,7 @@ export interface MiddlewareSpec {
   /**
    * StripPrefix holds the strip prefix middleware configuration.
    * This middleware removes the specified prefixes from the URL path.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/stripprefix/
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/stripprefix/
    *
    * @schema MiddlewareSpec#stripPrefix
    */
@@ -313,7 +313,7 @@ export interface MiddlewareSpec {
   /**
    * StripPrefixRegex holds the strip prefix regex middleware configuration.
    * This middleware removes the matching prefixes from the URL path.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/stripprefixregex/
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/stripprefixregex/
    *
    * @schema MiddlewareSpec#stripPrefixRegex
    */
@@ -362,7 +362,7 @@ export function toJson_MiddlewareSpec(obj: MiddlewareSpec | undefined): Record<s
 /**
  * AddPrefix holds the add prefix middleware configuration.
  * This middleware updates the path of a request before forwarding it.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/addprefix/
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/addprefix/
  *
  * @schema MiddlewareSpecAddPrefix
  */
@@ -394,14 +394,14 @@ export function toJson_MiddlewareSpecAddPrefix(obj: MiddlewareSpecAddPrefix | un
 /**
  * BasicAuth holds the basic auth middleware configuration.
  * This middleware restricts access to your services to known users.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/basicauth/
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/basicauth/
  *
  * @schema MiddlewareSpecBasicAuth
  */
 export interface MiddlewareSpecBasicAuth {
   /**
    * HeaderField defines a header field to store the authenticated user.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/basicauth/#headerfield
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/basicauth/#headerfield
    *
    * @schema MiddlewareSpecBasicAuth#headerField
    */
@@ -452,7 +452,7 @@ export function toJson_MiddlewareSpecBasicAuth(obj: MiddlewareSpecBasicAuth | un
 /**
  * Buffering holds the buffering middleware configuration.
  * This middleware retries or limits the size of requests that can be forwarded to backends.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/buffering/#maxrequestbodybytes
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/buffering/#maxrequestbodybytes
  *
  * @schema MiddlewareSpecBuffering
  */
@@ -494,7 +494,7 @@ export interface MiddlewareSpecBuffering {
   /**
    * RetryExpression defines the retry conditions.
    * It is a logical combination of functions with operators AND (&&) and OR (||).
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/buffering/#retryexpression
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/buffering/#retryexpression
    *
    * @schema MiddlewareSpecBuffering#retryExpression
    */
@@ -523,7 +523,7 @@ export function toJson_MiddlewareSpecBuffering(obj: MiddlewareSpecBuffering | un
 /**
  * Chain holds the configuration of the chain middleware.
  * This middleware enables to define reusable combinations of other pieces of middleware.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/chain/
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/chain/
  *
  * @schema MiddlewareSpecChain
  */
@@ -615,7 +615,7 @@ export function toJson_MiddlewareSpecCircuitBreaker(obj: MiddlewareSpecCircuitBr
 /**
  * Compress holds the compress middleware configuration.
  * This middleware compresses responses before sending them to the client, using gzip, brotli, or zstd compression.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/compress/
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/compress/
  *
  * @schema MiddlewareSpecCompress
  */
@@ -712,14 +712,14 @@ export function toJson_MiddlewareSpecContentType(obj: MiddlewareSpecContentType 
 /**
  * DigestAuth holds the digest auth middleware configuration.
  * This middleware restricts access to your services to known users.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/digestauth/
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/digestauth/
  *
  * @schema MiddlewareSpecDigestAuth
  */
 export interface MiddlewareSpecDigestAuth {
   /**
    * HeaderField defines a header field to store the authenticated user.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/basicauth/#headerfield
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/basicauth/#headerfield
    *
    * @schema MiddlewareSpecDigestAuth#headerField
    */
@@ -769,7 +769,7 @@ export function toJson_MiddlewareSpecDigestAuth(obj: MiddlewareSpecDigestAuth | 
 /**
  * ErrorPage holds the custom error middleware configuration.
  * This middleware returns a custom page in lieu of the default, according to configured ranges of HTTP Status codes.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/errorpages/
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/errorpages/
  *
  * @schema MiddlewareSpecErrors
  */
@@ -786,7 +786,7 @@ export interface MiddlewareSpecErrors {
 
   /**
    * Service defines the reference to a Kubernetes Service that will serve the error page.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/errorpages/#service
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/errorpages/#service
    *
    * @schema MiddlewareSpecErrors#service
    */
@@ -833,7 +833,7 @@ export function toJson_MiddlewareSpecErrors(obj: MiddlewareSpecErrors | undefine
 /**
  * ForwardAuth holds the forward auth middleware configuration.
  * This middleware delegates the request authentication to a Service.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/forwardauth/
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/forwardauth/
  *
  * @schema MiddlewareSpecForwardAuth
  */
@@ -869,7 +869,7 @@ export interface MiddlewareSpecForwardAuth {
 
   /**
    * AuthResponseHeadersRegex defines the regex to match headers to copy from the authentication server response and set on forwarded request, after stripping all headers that match the regex.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/forwardauth/#authresponseheadersregex
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/forwardauth/#authresponseheadersregex
    *
    * @schema MiddlewareSpecForwardAuth#authResponseHeadersRegex
    */
@@ -884,7 +884,7 @@ export interface MiddlewareSpecForwardAuth {
 
   /**
    * HeaderField defines a header field to store the authenticated user.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/forwardauth/#headerfield
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/forwardauth/#headerfield
    *
    * @schema MiddlewareSpecForwardAuth#headerField
    */
@@ -986,7 +986,7 @@ export function toJson_MiddlewareSpecGrpcWeb(obj: MiddlewareSpecGrpcWeb | undefi
 /**
  * Headers holds the headers middleware configuration.
  * This middleware manages the requests and responses headers.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/headers/#customrequestheaders
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/headers/#customrequestheaders
  *
  * @schema MiddlewareSpecHeaders
  */
@@ -1282,7 +1282,7 @@ export function toJson_MiddlewareSpecHeaders(obj: MiddlewareSpecHeaders | undefi
 /**
  * InFlightReq holds the in-flight request middleware configuration.
  * This middleware limits the number of requests being processed and served concurrently.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/inflightreq/
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/inflightreq/
  *
  * @schema MiddlewareSpecInFlightReq
  */
@@ -1299,7 +1299,7 @@ export interface MiddlewareSpecInFlightReq {
    * SourceCriterion defines what criterion is used to group requests as originating from a common source.
    * If several strategies are defined at the same time, an error will be raised.
    * If none are set, the default is to use the requestHost.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/inflightreq/#sourcecriterion
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/inflightreq/#sourcecriterion
    *
    * @schema MiddlewareSpecInFlightReq#sourceCriterion
    */
@@ -1325,14 +1325,14 @@ export function toJson_MiddlewareSpecInFlightReq(obj: MiddlewareSpecInFlightReq 
 /**
  * IPAllowList holds the IP allowlist middleware configuration.
  * This middleware limits allowed requests based on the client IP.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/ipallowlist/
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/ipallowlist/
  *
  * @schema MiddlewareSpecIpAllowList
  */
 export interface MiddlewareSpecIpAllowList {
   /**
    * IPStrategy holds the IP strategy configuration used by Traefik to determine the client IP.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/ipallowlist/#ipstrategy
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/ipallowlist/#ipstrategy
    *
    * @schema MiddlewareSpecIpAllowList#ipStrategy
    */
@@ -1379,7 +1379,7 @@ export function toJson_MiddlewareSpecIpAllowList(obj: MiddlewareSpecIpAllowList 
 export interface MiddlewareSpecIpWhiteList {
   /**
    * IPStrategy holds the IP strategy configuration used by Traefik to determine the client IP.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/ipallowlist/#ipstrategy
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/ipallowlist/#ipstrategy
    *
    * @schema MiddlewareSpecIpWhiteList#ipStrategy
    */
@@ -1412,7 +1412,7 @@ export function toJson_MiddlewareSpecIpWhiteList(obj: MiddlewareSpecIpWhiteList 
 /**
  * PassTLSClientCert holds the pass TLS client cert middleware configuration.
  * This middleware adds the selected data from the passed client TLS certificate to a header.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/passtlsclientcert/
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/passtlsclientcert/
  *
  * @schema MiddlewareSpecPassTlsClientCert
  */
@@ -1451,7 +1451,7 @@ export function toJson_MiddlewareSpecPassTlsClientCert(obj: MiddlewareSpecPassTl
 /**
  * RateLimit holds the rate limit configuration.
  * This middleware ensures that services will receive a fair amount of requests, and allows one to define what fair is.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/ratelimit/
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/ratelimit/
  *
  * @schema MiddlewareSpecRateLimit
  */
@@ -1521,13 +1521,13 @@ export function toJson_MiddlewareSpecRateLimit(obj: MiddlewareSpecRateLimit | un
 /**
  * RedirectRegex holds the redirect regex middleware configuration.
  * This middleware redirects a request using regex matching and replacement.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/redirectregex/#regex
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/redirectregex/#regex
  *
  * @schema MiddlewareSpecRedirectRegex
  */
 export interface MiddlewareSpecRedirectRegex {
   /**
-   * Permanent defines whether the redirection is permanent (301).
+   * Permanent defines whether the redirection is permanent (308).
    *
    * @schema MiddlewareSpecRedirectRegex#permanent
    */
@@ -1568,13 +1568,13 @@ export function toJson_MiddlewareSpecRedirectRegex(obj: MiddlewareSpecRedirectRe
 /**
  * RedirectScheme holds the redirect scheme middleware configuration.
  * This middleware redirects requests from a scheme/port to another.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/redirectscheme/
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/redirectscheme/
  *
  * @schema MiddlewareSpecRedirectScheme
  */
 export interface MiddlewareSpecRedirectScheme {
   /**
-   * Permanent defines whether the redirection is permanent (301).
+   * Permanent defines whether the redirection is permanent (308).
    *
    * @schema MiddlewareSpecRedirectScheme#permanent
    */
@@ -1615,7 +1615,7 @@ export function toJson_MiddlewareSpecRedirectScheme(obj: MiddlewareSpecRedirectS
 /**
  * ReplacePath holds the replace path middleware configuration.
  * This middleware replaces the path of the request URL and store the original path in an X-Replaced-Path header.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/replacepath/
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/replacepath/
  *
  * @schema MiddlewareSpecReplacePath
  */
@@ -1646,7 +1646,7 @@ export function toJson_MiddlewareSpecReplacePath(obj: MiddlewareSpecReplacePath 
 /**
  * ReplacePathRegex holds the replace path regex middleware configuration.
  * This middleware replaces the path of a URL using regex matching and replacement.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/replacepathregex/
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/replacepathregex/
  *
  * @schema MiddlewareSpecReplacePathRegex
  */
@@ -1686,7 +1686,7 @@ export function toJson_MiddlewareSpecReplacePathRegex(obj: MiddlewareSpecReplace
  * Retry holds the retry middleware configuration.
  * This middleware reissues requests a given number of times to a backend server if that server does not reply.
  * As soon as the server answers, the middleware stops retrying, regardless of the response status.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/retry/
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/retry/
  *
  * @schema MiddlewareSpecRetry
  */
@@ -1729,7 +1729,7 @@ export function toJson_MiddlewareSpecRetry(obj: MiddlewareSpecRetry | undefined)
 /**
  * StripPrefix holds the strip prefix middleware configuration.
  * This middleware removes the specified prefixes from the URL path.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/stripprefix/
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/stripprefix/
  *
  * @schema MiddlewareSpecStripPrefix
  */
@@ -1770,7 +1770,7 @@ export function toJson_MiddlewareSpecStripPrefix(obj: MiddlewareSpecStripPrefix 
 /**
  * StripPrefixRegex holds the strip prefix regex middleware configuration.
  * This middleware removes the matching prefixes from the URL path.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/stripprefixregex/
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/stripprefixregex/
  *
  * @schema MiddlewareSpecStripPrefixRegex
  */
@@ -1885,7 +1885,7 @@ export class MiddlewareSpecCircuitBreakerRecoveryDuration {
 
 /**
  * Service defines the reference to a Kubernetes Service that will serve the error page.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/errorpages/#service
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/errorpages/#service
  *
  * @schema MiddlewareSpecErrorsService
  */
@@ -1981,7 +1981,7 @@ export interface MiddlewareSpecErrorsService {
 
   /**
    * Sticky defines the sticky sessions configuration.
-   * More info: https://doc.traefik.io/traefik/v3.4/routing/services/#sticky-sessions
+   * More info: https://doc.traefik.io/traefik/v3.5/routing/services/#sticky-sessions
    *
    * @schema MiddlewareSpecErrorsService#sticky
    */
@@ -2092,14 +2092,14 @@ export function toJson_MiddlewareSpecForwardAuthTls(obj: MiddlewareSpecForwardAu
  * SourceCriterion defines what criterion is used to group requests as originating from a common source.
  * If several strategies are defined at the same time, an error will be raised.
  * If none are set, the default is to use the requestHost.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/inflightreq/#sourcecriterion
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/inflightreq/#sourcecriterion
  *
  * @schema MiddlewareSpecInFlightReqSourceCriterion
  */
 export interface MiddlewareSpecInFlightReqSourceCriterion {
   /**
    * IPStrategy holds the IP strategy configuration used by Traefik to determine the client IP.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/ipallowlist/#ipstrategy
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/ipallowlist/#ipstrategy
    *
    * @schema MiddlewareSpecInFlightReqSourceCriterion#ipStrategy
    */
@@ -2139,7 +2139,7 @@ export function toJson_MiddlewareSpecInFlightReqSourceCriterion(obj: MiddlewareS
 
 /**
  * IPStrategy holds the IP strategy configuration used by Traefik to determine the client IP.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/ipallowlist/#ipstrategy
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/ipallowlist/#ipstrategy
  *
  * @schema MiddlewareSpecIpAllowListIpStrategy
  */
@@ -2185,7 +2185,7 @@ export function toJson_MiddlewareSpecIpAllowListIpStrategy(obj: MiddlewareSpecIp
 
 /**
  * IPStrategy holds the IP strategy configuration used by Traefik to determine the client IP.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/ipallowlist/#ipstrategy
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/ipallowlist/#ipstrategy
  *
  * @schema MiddlewareSpecIpWhiteListIpStrategy
  */
@@ -2436,7 +2436,7 @@ export function toJson_MiddlewareSpecRateLimitRedis(obj: MiddlewareSpecRateLimit
 export interface MiddlewareSpecRateLimitSourceCriterion {
   /**
    * IPStrategy holds the IP strategy configuration used by Traefik to determine the client IP.
-   * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/ipallowlist/#ipstrategy
+   * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/ipallowlist/#ipstrategy
    *
    * @schema MiddlewareSpecRateLimitSourceCriterion#ipStrategy
    */
@@ -2523,7 +2523,7 @@ export interface MiddlewareSpecErrorsServiceHealthCheck {
   readonly hostname?: string;
 
   /**
-   * Interval defines the frequency of the health check calls.
+   * Interval defines the frequency of the health check calls for healthy targets.
    * Default: 30s
    *
    * @schema MiddlewareSpecErrorsServiceHealthCheck#interval
@@ -2582,6 +2582,15 @@ export interface MiddlewareSpecErrorsServiceHealthCheck {
    */
   readonly timeout?: MiddlewareSpecErrorsServiceHealthCheckTimeout;
 
+  /**
+   * UnhealthyInterval defines the frequency of the health check calls for unhealthy targets.
+   * When UnhealthyInterval is not defined, it defaults to the Interval value.
+   * Default: 30s
+   *
+   * @schema MiddlewareSpecErrorsServiceHealthCheck#unhealthyInterval
+   */
+  readonly unhealthyInterval?: MiddlewareSpecErrorsServiceHealthCheckUnhealthyInterval;
+
 }
 
 /**
@@ -2602,6 +2611,7 @@ export function toJson_MiddlewareSpecErrorsServiceHealthCheck(obj: MiddlewareSpe
     'scheme': obj.scheme,
     'status': obj.status,
     'timeout': obj.timeout?.value,
+    'unhealthyInterval': obj.unhealthyInterval?.value,
   };
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
@@ -2672,7 +2682,7 @@ export function toJson_MiddlewareSpecErrorsServiceResponseForwarding(obj: Middle
 
 /**
  * Sticky defines the sticky sessions configuration.
- * More info: https://doc.traefik.io/traefik/v3.4/routing/services/#sticky-sessions
+ * More info: https://doc.traefik.io/traefik/v3.5/routing/services/#sticky-sessions
  *
  * @schema MiddlewareSpecErrorsServiceSticky
  */
@@ -2718,7 +2728,7 @@ export enum MiddlewareSpecErrorsServiceStrategy {
 
 /**
  * IPStrategy holds the IP strategy configuration used by Traefik to determine the client IP.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/ipallowlist/#ipstrategy
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/ipallowlist/#ipstrategy
  *
  * @schema MiddlewareSpecInFlightReqSourceCriterionIpStrategy
  */
@@ -3025,7 +3035,7 @@ export class MiddlewareSpecRateLimitRedisWriteTimeout {
 
 /**
  * IPStrategy holds the IP strategy configuration used by Traefik to determine the client IP.
- * More info: https://doc.traefik.io/traefik/v3.4/middlewares/http/ipallowlist/#ipstrategy
+ * More info: https://doc.traefik.io/traefik/v3.5/middlewares/http/ipallowlist/#ipstrategy
  *
  * @schema MiddlewareSpecRateLimitSourceCriterionIpStrategy
  */
@@ -3070,7 +3080,7 @@ export function toJson_MiddlewareSpecRateLimitSourceCriterionIpStrategy(obj: Mid
 /* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
- * Interval defines the frequency of the health check calls.
+ * Interval defines the frequency of the health check calls for healthy targets.
  * Default: 30s
  *
  * @schema MiddlewareSpecErrorsServiceHealthCheckInterval
@@ -3098,6 +3108,24 @@ export class MiddlewareSpecErrorsServiceHealthCheckTimeout {
   }
   public static fromString(value: string): MiddlewareSpecErrorsServiceHealthCheckTimeout {
     return new MiddlewareSpecErrorsServiceHealthCheckTimeout(value);
+  }
+  private constructor(public readonly value: number | string) {
+  }
+}
+
+/**
+ * UnhealthyInterval defines the frequency of the health check calls for unhealthy targets.
+ * When UnhealthyInterval is not defined, it defaults to the Interval value.
+ * Default: 30s
+ *
+ * @schema MiddlewareSpecErrorsServiceHealthCheckUnhealthyInterval
+ */
+export class MiddlewareSpecErrorsServiceHealthCheckUnhealthyInterval {
+  public static fromNumber(value: number): MiddlewareSpecErrorsServiceHealthCheckUnhealthyInterval {
+    return new MiddlewareSpecErrorsServiceHealthCheckUnhealthyInterval(value);
+  }
+  public static fromString(value: string): MiddlewareSpecErrorsServiceHealthCheckUnhealthyInterval {
+    return new MiddlewareSpecErrorsServiceHealthCheckUnhealthyInterval(value);
   }
   private constructor(public readonly value: number | string) {
   }

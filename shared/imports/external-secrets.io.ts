@@ -1696,6 +1696,8 @@ export enum ClusterExternalSecretSpecExternalSecretSpecDataSourceRefGeneratorRef
   QUAY_ACCESS_TOKEN = "QuayAccessToken",
   /** Password */
   PASSWORD = "Password",
+  /** SSHKey */
+  SSH_KEY = "SSHKey",
   /** STSSessionToken */
   STS_SESSION_TOKEN = "STSSessionToken",
   /** UUID */
@@ -1746,6 +1748,8 @@ export enum ClusterExternalSecretSpecExternalSecretSpecDataFromSourceRefGenerato
   QUAY_ACCESS_TOKEN = "QuayAccessToken",
   /** Password */
   PASSWORD = "Password",
+  /** SSHKey */
+  SSH_KEY = "SSHKey",
   /** STSSessionToken */
   STS_SESSION_TOKEN = "STSSessionToken",
   /** UUID */
@@ -3570,6 +3574,8 @@ export enum ClusterExternalSecretV1Beta1SpecExternalSecretSpecDataSourceRefGener
   QUAY_ACCESS_TOKEN = "QuayAccessToken",
   /** Password */
   PASSWORD = "Password",
+  /** SSHKey */
+  SSH_KEY = "SSHKey",
   /** STSSessionToken */
   STS_SESSION_TOKEN = "STSSessionToken",
   /** UUID */
@@ -3618,6 +3624,8 @@ export enum ClusterExternalSecretV1Beta1SpecExternalSecretSpecDataFromSourceRefG
   QUAY_ACCESS_TOKEN = "QuayAccessToken",
   /** Password */
   PASSWORD = "Password",
+  /** SSHKey */
+  SSH_KEY = "SSHKey",
   /** STSSessionToken */
   STS_SESSION_TOKEN = "STSSessionToken",
   /** UUID */
@@ -4759,6 +4767,8 @@ export enum ClusterPushSecretSpecPushSecretSpecSelectorGeneratorRefKind {
   QUAY_ACCESS_TOKEN = "QuayAccessToken",
   /** Password */
   PASSWORD = "Password",
+  /** SSHKey */
+  SSH_KEY = "SSHKey",
   /** STSSessionToken */
   STS_SESSION_TOKEN = "STSSessionToken",
   /** UUID */
@@ -6316,6 +6326,11 @@ export interface ClusterSecretStoreSpecProviderFake {
    */
   readonly data: ClusterSecretStoreSpecProviderFakeData[];
 
+  /**
+   * @schema ClusterSecretStoreSpecProviderFake#validationResult
+   */
+  readonly validationResult?: number;
+
 }
 
 /**
@@ -6326,6 +6341,7 @@ export function toJson_ClusterSecretStoreSpecProviderFake(obj: ClusterSecretStor
   if (obj === undefined) { return undefined; }
   const result = {
     'data': obj.data?.map(y => toJson_ClusterSecretStoreSpecProviderFakeData(y)),
+    'validationResult': obj.validationResult,
   };
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
@@ -8876,9 +8892,49 @@ export function toJson_ClusterSecretStoreSpecProviderIbmAuth(obj: ClusterSecretS
  */
 export interface ClusterSecretStoreSpecProviderInfisicalAuth {
   /**
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuth#awsAuthCredentials
+   */
+  readonly awsAuthCredentials?: ClusterSecretStoreSpecProviderInfisicalAuthAwsAuthCredentials;
+
+  /**
    * @schema ClusterSecretStoreSpecProviderInfisicalAuth#azureAuthCredentials
    */
   readonly azureAuthCredentials?: ClusterSecretStoreSpecProviderInfisicalAuthAzureAuthCredentials;
+
+  /**
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuth#gcpIamAuthCredentials
+   */
+  readonly gcpIamAuthCredentials?: ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentials;
+
+  /**
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuth#gcpIdTokenAuthCredentials
+   */
+  readonly gcpIdTokenAuthCredentials?: ClusterSecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentials;
+
+  /**
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuth#jwtAuthCredentials
+   */
+  readonly jwtAuthCredentials?: ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentials;
+
+  /**
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuth#kubernetesAuthCredentials
+   */
+  readonly kubernetesAuthCredentials?: ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentials;
+
+  /**
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuth#ldapAuthCredentials
+   */
+  readonly ldapAuthCredentials?: ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentials;
+
+  /**
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuth#ociAuthCredentials
+   */
+  readonly ociAuthCredentials?: ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentials;
+
+  /**
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuth#tokenAuthCredentials
+   */
+  readonly tokenAuthCredentials?: ClusterSecretStoreSpecProviderInfisicalAuthTokenAuthCredentials;
 
   /**
    * @schema ClusterSecretStoreSpecProviderInfisicalAuth#universalAuthCredentials
@@ -8894,7 +8950,15 @@ export interface ClusterSecretStoreSpecProviderInfisicalAuth {
 export function toJson_ClusterSecretStoreSpecProviderInfisicalAuth(obj: ClusterSecretStoreSpecProviderInfisicalAuth | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
+    'awsAuthCredentials': toJson_ClusterSecretStoreSpecProviderInfisicalAuthAwsAuthCredentials(obj.awsAuthCredentials),
     'azureAuthCredentials': toJson_ClusterSecretStoreSpecProviderInfisicalAuthAzureAuthCredentials(obj.azureAuthCredentials),
+    'gcpIamAuthCredentials': toJson_ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentials(obj.gcpIamAuthCredentials),
+    'gcpIdTokenAuthCredentials': toJson_ClusterSecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentials(obj.gcpIdTokenAuthCredentials),
+    'jwtAuthCredentials': toJson_ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentials(obj.jwtAuthCredentials),
+    'kubernetesAuthCredentials': toJson_ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentials(obj.kubernetesAuthCredentials),
+    'ldapAuthCredentials': toJson_ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentials(obj.ldapAuthCredentials),
+    'ociAuthCredentials': toJson_ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentials(obj.ociAuthCredentials),
+    'tokenAuthCredentials': toJson_ClusterSecretStoreSpecProviderInfisicalAuthTokenAuthCredentials(obj.tokenAuthCredentials),
     'universalAuthCredentials': toJson_ClusterSecretStoreSpecProviderInfisicalAuthUniversalAuthCredentials(obj.universalAuthCredentials),
   };
   // filter undefined values
@@ -11501,6 +11565,34 @@ export function toJson_ClusterSecretStoreSpecProviderIbmAuthSecretRef(obj: Clust
 /* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthAwsAuthCredentials
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthAwsAuthCredentials {
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthAwsAuthCredentials#identityId
+   */
+  readonly identityId: ClusterSecretStoreSpecProviderInfisicalAuthAwsAuthCredentialsIdentityId;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthAwsAuthCredentials' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthAwsAuthCredentials(obj: ClusterSecretStoreSpecProviderInfisicalAuthAwsAuthCredentials | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'identityId': toJson_ClusterSecretStoreSpecProviderInfisicalAuthAwsAuthCredentialsIdentityId(obj.identityId),
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
  * @schema ClusterSecretStoreSpecProviderInfisicalAuthAzureAuthCredentials
  */
 export interface ClusterSecretStoreSpecProviderInfisicalAuthAzureAuthCredentials {
@@ -11531,6 +11623,301 @@ export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthAzureAuthCrede
   const result = {
     'identityId': toJson_ClusterSecretStoreSpecProviderInfisicalAuthAzureAuthCredentialsIdentityId(obj.identityId),
     'resource': toJson_ClusterSecretStoreSpecProviderInfisicalAuthAzureAuthCredentialsResource(obj.resource),
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentials
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentials {
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentials#identityId
+   */
+  readonly identityId: ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsIdentityId;
+
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentials#serviceAccountKeyFilePath
+   */
+  readonly serviceAccountKeyFilePath: ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsServiceAccountKeyFilePath;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentials' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentials(obj: ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentials | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'identityId': toJson_ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsIdentityId(obj.identityId),
+    'serviceAccountKeyFilePath': toJson_ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsServiceAccountKeyFilePath(obj.serviceAccountKeyFilePath),
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentials
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentials {
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentials#identityId
+   */
+  readonly identityId: ClusterSecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentialsIdentityId;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentials' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentials(obj: ClusterSecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentials | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'identityId': toJson_ClusterSecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentialsIdentityId(obj.identityId),
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentials
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentials {
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentials#identityId
+   */
+  readonly identityId: ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsIdentityId;
+
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentials#jwt
+   */
+  readonly jwt: ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsJwt;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentials' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentials(obj: ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentials | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'identityId': toJson_ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsIdentityId(obj.identityId),
+    'jwt': toJson_ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsJwt(obj.jwt),
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentials
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentials {
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentials#identityId
+   */
+  readonly identityId: ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsIdentityId;
+
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentials#serviceAccountTokenPath
+   */
+  readonly serviceAccountTokenPath?: ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsServiceAccountTokenPath;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentials' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentials(obj: ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentials | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'identityId': toJson_ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsIdentityId(obj.identityId),
+    'serviceAccountTokenPath': toJson_ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsServiceAccountTokenPath(obj.serviceAccountTokenPath),
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentials
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentials {
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentials#identityId
+   */
+  readonly identityId: ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsIdentityId;
+
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentials#ldapPassword
+   */
+  readonly ldapPassword: ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapPassword;
+
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentials#ldapUsername
+   */
+  readonly ldapUsername: ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapUsername;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentials' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentials(obj: ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentials | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'identityId': toJson_ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsIdentityId(obj.identityId),
+    'ldapPassword': toJson_ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapPassword(obj.ldapPassword),
+    'ldapUsername': toJson_ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapUsername(obj.ldapUsername),
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentials
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentials {
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentials#fingerprint
+   */
+  readonly fingerprint: ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsFingerprint;
+
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentials#identityId
+   */
+  readonly identityId: ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsIdentityId;
+
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentials#privateKey
+   */
+  readonly privateKey: ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKey;
+
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentials#privateKeyPassphrase
+   */
+  readonly privateKeyPassphrase?: ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKeyPassphrase;
+
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentials#region
+   */
+  readonly region: ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsRegion;
+
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentials#tenancyId
+   */
+  readonly tenancyId: ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsTenancyId;
+
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentials#userId
+   */
+  readonly userId: ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsUserId;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentials' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentials(obj: ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentials | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'fingerprint': toJson_ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsFingerprint(obj.fingerprint),
+    'identityId': toJson_ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsIdentityId(obj.identityId),
+    'privateKey': toJson_ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKey(obj.privateKey),
+    'privateKeyPassphrase': toJson_ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKeyPassphrase(obj.privateKeyPassphrase),
+    'region': toJson_ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsRegion(obj.region),
+    'tenancyId': toJson_ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsTenancyId(obj.tenancyId),
+    'userId': toJson_ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsUserId(obj.userId),
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthTokenAuthCredentials
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthTokenAuthCredentials {
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthTokenAuthCredentials#accessToken
+   */
+  readonly accessToken: ClusterSecretStoreSpecProviderInfisicalAuthTokenAuthCredentialsAccessToken;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthTokenAuthCredentials' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthTokenAuthCredentials(obj: ClusterSecretStoreSpecProviderInfisicalAuthTokenAuthCredentials | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'accessToken': toJson_ClusterSecretStoreSpecProviderInfisicalAuthTokenAuthCredentialsAccessToken(obj.accessToken),
   };
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
@@ -14674,6 +15061,54 @@ export function toJson_ClusterSecretStoreSpecProviderIbmAuthSecretRefSecretApiKe
  * A reference to a specific 'key' within a Secret resource.
  * In some instances, `key` is a required field.
  *
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthAwsAuthCredentialsIdentityId
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthAwsAuthCredentialsIdentityId {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthAwsAuthCredentialsIdentityId#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthAwsAuthCredentialsIdentityId#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthAwsAuthCredentialsIdentityId#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthAwsAuthCredentialsIdentityId' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthAwsAuthCredentialsIdentityId(obj: ClusterSecretStoreSpecProviderInfisicalAuthAwsAuthCredentialsIdentityId | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
  * @schema ClusterSecretStoreSpecProviderInfisicalAuthAzureAuthCredentialsIdentityId
  */
 export interface ClusterSecretStoreSpecProviderInfisicalAuthAzureAuthCredentialsIdentityId {
@@ -14755,6 +15190,870 @@ export interface ClusterSecretStoreSpecProviderInfisicalAuthAzureAuthCredentials
  */
 /* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthAzureAuthCredentialsResource(obj: ClusterSecretStoreSpecProviderInfisicalAuthAzureAuthCredentialsResource | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsIdentityId
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsIdentityId {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsIdentityId#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsIdentityId#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsIdentityId#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsIdentityId' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsIdentityId(obj: ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsIdentityId | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsServiceAccountKeyFilePath
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsServiceAccountKeyFilePath {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsServiceAccountKeyFilePath#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsServiceAccountKeyFilePath#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsServiceAccountKeyFilePath#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsServiceAccountKeyFilePath' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsServiceAccountKeyFilePath(obj: ClusterSecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsServiceAccountKeyFilePath | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentialsIdentityId
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentialsIdentityId {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentialsIdentityId#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentialsIdentityId#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentialsIdentityId#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentialsIdentityId' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentialsIdentityId(obj: ClusterSecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentialsIdentityId | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsIdentityId
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsIdentityId {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsIdentityId#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsIdentityId#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsIdentityId#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsIdentityId' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsIdentityId(obj: ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsIdentityId | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsJwt
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsJwt {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsJwt#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsJwt#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsJwt#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsJwt' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsJwt(obj: ClusterSecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsJwt | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsIdentityId
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsIdentityId {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsIdentityId#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsIdentityId#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsIdentityId#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsIdentityId' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsIdentityId(obj: ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsIdentityId | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsServiceAccountTokenPath
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsServiceAccountTokenPath {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsServiceAccountTokenPath#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsServiceAccountTokenPath#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsServiceAccountTokenPath#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsServiceAccountTokenPath' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsServiceAccountTokenPath(obj: ClusterSecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsServiceAccountTokenPath | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsIdentityId
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsIdentityId {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsIdentityId#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsIdentityId#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsIdentityId#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsIdentityId' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsIdentityId(obj: ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsIdentityId | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapPassword
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapPassword {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapPassword#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapPassword#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapPassword#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapPassword' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapPassword(obj: ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapPassword | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapUsername
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapUsername {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapUsername#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapUsername#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapUsername#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapUsername' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapUsername(obj: ClusterSecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapUsername | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsFingerprint
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsFingerprint {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsFingerprint#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsFingerprint#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsFingerprint#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsFingerprint' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsFingerprint(obj: ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsFingerprint | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsIdentityId
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsIdentityId {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsIdentityId#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsIdentityId#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsIdentityId#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsIdentityId' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsIdentityId(obj: ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsIdentityId | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKey
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKey {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKey#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKey#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKey#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKey' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKey(obj: ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKey | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKeyPassphrase
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKeyPassphrase {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKeyPassphrase#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKeyPassphrase#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKeyPassphrase#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKeyPassphrase' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKeyPassphrase(obj: ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKeyPassphrase | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsRegion
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsRegion {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsRegion#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsRegion#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsRegion#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsRegion' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsRegion(obj: ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsRegion | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsTenancyId
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsTenancyId {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsTenancyId#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsTenancyId#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsTenancyId#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsTenancyId' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsTenancyId(obj: ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsTenancyId | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsUserId
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsUserId {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsUserId#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsUserId#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsUserId#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsUserId' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsUserId(obj: ClusterSecretStoreSpecProviderInfisicalAuthOciAuthCredentialsUserId | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema ClusterSecretStoreSpecProviderInfisicalAuthTokenAuthCredentialsAccessToken
+ */
+export interface ClusterSecretStoreSpecProviderInfisicalAuthTokenAuthCredentialsAccessToken {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthTokenAuthCredentialsAccessToken#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthTokenAuthCredentialsAccessToken#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema ClusterSecretStoreSpecProviderInfisicalAuthTokenAuthCredentialsAccessToken#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderInfisicalAuthTokenAuthCredentialsAccessToken' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderInfisicalAuthTokenAuthCredentialsAccessToken(obj: ClusterSecretStoreSpecProviderInfisicalAuthTokenAuthCredentialsAccessToken | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
     'key': obj.key,
@@ -28386,6 +29685,8 @@ export enum ExternalSecretSpecDataSourceRefGeneratorRefKind {
   QUAY_ACCESS_TOKEN = "QuayAccessToken",
   /** Password */
   PASSWORD = "Password",
+  /** SSHKey */
+  SSH_KEY = "SSHKey",
   /** STSSessionToken */
   STS_SESSION_TOKEN = "STSSessionToken",
   /** UUID */
@@ -28436,6 +29737,8 @@ export enum ExternalSecretSpecDataFromSourceRefGeneratorRefKind {
   QUAY_ACCESS_TOKEN = "QuayAccessToken",
   /** Password */
   PASSWORD = "Password",
+  /** SSHKey */
+  SSH_KEY = "SSHKey",
   /** STSSessionToken */
   STS_SESSION_TOKEN = "STSSessionToken",
   /** UUID */
@@ -29967,6 +31270,8 @@ export enum ExternalSecretV1Beta1SpecDataSourceRefGeneratorRefKind {
   QUAY_ACCESS_TOKEN = "QuayAccessToken",
   /** Password */
   PASSWORD = "Password",
+  /** SSHKey */
+  SSH_KEY = "SSHKey",
   /** STSSessionToken */
   STS_SESSION_TOKEN = "STSSessionToken",
   /** UUID */
@@ -30015,6 +31320,8 @@ export enum ExternalSecretV1Beta1SpecDataFromSourceRefGeneratorRefKind {
   QUAY_ACCESS_TOKEN = "QuayAccessToken",
   /** Password */
   PASSWORD = "Password",
+  /** SSHKey */
+  SSH_KEY = "SSHKey",
   /** STSSessionToken */
   STS_SESSION_TOKEN = "STSSessionToken",
   /** UUID */
@@ -30973,6 +32280,8 @@ export enum PushSecretSpecSelectorGeneratorRefKind {
   QUAY_ACCESS_TOKEN = "QuayAccessToken",
   /** Password */
   PASSWORD = "Password",
+  /** SSHKey */
+  SSH_KEY = "SSHKey",
   /** STSSessionToken */
   STS_SESSION_TOKEN = "STSSessionToken",
   /** UUID */
@@ -32530,6 +33839,11 @@ export interface SecretStoreSpecProviderFake {
    */
   readonly data: SecretStoreSpecProviderFakeData[];
 
+  /**
+   * @schema SecretStoreSpecProviderFake#validationResult
+   */
+  readonly validationResult?: number;
+
 }
 
 /**
@@ -32540,6 +33854,7 @@ export function toJson_SecretStoreSpecProviderFake(obj: SecretStoreSpecProviderF
   if (obj === undefined) { return undefined; }
   const result = {
     'data': obj.data?.map(y => toJson_SecretStoreSpecProviderFakeData(y)),
+    'validationResult': obj.validationResult,
   };
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
@@ -35090,9 +36405,49 @@ export function toJson_SecretStoreSpecProviderIbmAuth(obj: SecretStoreSpecProvid
  */
 export interface SecretStoreSpecProviderInfisicalAuth {
   /**
+   * @schema SecretStoreSpecProviderInfisicalAuth#awsAuthCredentials
+   */
+  readonly awsAuthCredentials?: SecretStoreSpecProviderInfisicalAuthAwsAuthCredentials;
+
+  /**
    * @schema SecretStoreSpecProviderInfisicalAuth#azureAuthCredentials
    */
   readonly azureAuthCredentials?: SecretStoreSpecProviderInfisicalAuthAzureAuthCredentials;
+
+  /**
+   * @schema SecretStoreSpecProviderInfisicalAuth#gcpIamAuthCredentials
+   */
+  readonly gcpIamAuthCredentials?: SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentials;
+
+  /**
+   * @schema SecretStoreSpecProviderInfisicalAuth#gcpIdTokenAuthCredentials
+   */
+  readonly gcpIdTokenAuthCredentials?: SecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentials;
+
+  /**
+   * @schema SecretStoreSpecProviderInfisicalAuth#jwtAuthCredentials
+   */
+  readonly jwtAuthCredentials?: SecretStoreSpecProviderInfisicalAuthJwtAuthCredentials;
+
+  /**
+   * @schema SecretStoreSpecProviderInfisicalAuth#kubernetesAuthCredentials
+   */
+  readonly kubernetesAuthCredentials?: SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentials;
+
+  /**
+   * @schema SecretStoreSpecProviderInfisicalAuth#ldapAuthCredentials
+   */
+  readonly ldapAuthCredentials?: SecretStoreSpecProviderInfisicalAuthLdapAuthCredentials;
+
+  /**
+   * @schema SecretStoreSpecProviderInfisicalAuth#ociAuthCredentials
+   */
+  readonly ociAuthCredentials?: SecretStoreSpecProviderInfisicalAuthOciAuthCredentials;
+
+  /**
+   * @schema SecretStoreSpecProviderInfisicalAuth#tokenAuthCredentials
+   */
+  readonly tokenAuthCredentials?: SecretStoreSpecProviderInfisicalAuthTokenAuthCredentials;
 
   /**
    * @schema SecretStoreSpecProviderInfisicalAuth#universalAuthCredentials
@@ -35108,7 +36463,15 @@ export interface SecretStoreSpecProviderInfisicalAuth {
 export function toJson_SecretStoreSpecProviderInfisicalAuth(obj: SecretStoreSpecProviderInfisicalAuth | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
+    'awsAuthCredentials': toJson_SecretStoreSpecProviderInfisicalAuthAwsAuthCredentials(obj.awsAuthCredentials),
     'azureAuthCredentials': toJson_SecretStoreSpecProviderInfisicalAuthAzureAuthCredentials(obj.azureAuthCredentials),
+    'gcpIamAuthCredentials': toJson_SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentials(obj.gcpIamAuthCredentials),
+    'gcpIdTokenAuthCredentials': toJson_SecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentials(obj.gcpIdTokenAuthCredentials),
+    'jwtAuthCredentials': toJson_SecretStoreSpecProviderInfisicalAuthJwtAuthCredentials(obj.jwtAuthCredentials),
+    'kubernetesAuthCredentials': toJson_SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentials(obj.kubernetesAuthCredentials),
+    'ldapAuthCredentials': toJson_SecretStoreSpecProviderInfisicalAuthLdapAuthCredentials(obj.ldapAuthCredentials),
+    'ociAuthCredentials': toJson_SecretStoreSpecProviderInfisicalAuthOciAuthCredentials(obj.ociAuthCredentials),
+    'tokenAuthCredentials': toJson_SecretStoreSpecProviderInfisicalAuthTokenAuthCredentials(obj.tokenAuthCredentials),
     'universalAuthCredentials': toJson_SecretStoreSpecProviderInfisicalAuthUniversalAuthCredentials(obj.universalAuthCredentials),
   };
   // filter undefined values
@@ -37715,6 +39078,34 @@ export function toJson_SecretStoreSpecProviderIbmAuthSecretRef(obj: SecretStoreS
 /* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
+ * @schema SecretStoreSpecProviderInfisicalAuthAwsAuthCredentials
+ */
+export interface SecretStoreSpecProviderInfisicalAuthAwsAuthCredentials {
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthAwsAuthCredentials#identityId
+   */
+  readonly identityId: SecretStoreSpecProviderInfisicalAuthAwsAuthCredentialsIdentityId;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthAwsAuthCredentials' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthAwsAuthCredentials(obj: SecretStoreSpecProviderInfisicalAuthAwsAuthCredentials | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'identityId': toJson_SecretStoreSpecProviderInfisicalAuthAwsAuthCredentialsIdentityId(obj.identityId),
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
  * @schema SecretStoreSpecProviderInfisicalAuthAzureAuthCredentials
  */
 export interface SecretStoreSpecProviderInfisicalAuthAzureAuthCredentials {
@@ -37745,6 +39136,301 @@ export function toJson_SecretStoreSpecProviderInfisicalAuthAzureAuthCredentials(
   const result = {
     'identityId': toJson_SecretStoreSpecProviderInfisicalAuthAzureAuthCredentialsIdentityId(obj.identityId),
     'resource': toJson_SecretStoreSpecProviderInfisicalAuthAzureAuthCredentialsResource(obj.resource),
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * @schema SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentials
+ */
+export interface SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentials {
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentials#identityId
+   */
+  readonly identityId: SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsIdentityId;
+
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentials#serviceAccountKeyFilePath
+   */
+  readonly serviceAccountKeyFilePath: SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsServiceAccountKeyFilePath;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentials' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentials(obj: SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentials | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'identityId': toJson_SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsIdentityId(obj.identityId),
+    'serviceAccountKeyFilePath': toJson_SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsServiceAccountKeyFilePath(obj.serviceAccountKeyFilePath),
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * @schema SecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentials
+ */
+export interface SecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentials {
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentials#identityId
+   */
+  readonly identityId: SecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentialsIdentityId;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentials' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentials(obj: SecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentials | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'identityId': toJson_SecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentialsIdentityId(obj.identityId),
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * @schema SecretStoreSpecProviderInfisicalAuthJwtAuthCredentials
+ */
+export interface SecretStoreSpecProviderInfisicalAuthJwtAuthCredentials {
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthJwtAuthCredentials#identityId
+   */
+  readonly identityId: SecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsIdentityId;
+
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthJwtAuthCredentials#jwt
+   */
+  readonly jwt: SecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsJwt;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthJwtAuthCredentials' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthJwtAuthCredentials(obj: SecretStoreSpecProviderInfisicalAuthJwtAuthCredentials | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'identityId': toJson_SecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsIdentityId(obj.identityId),
+    'jwt': toJson_SecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsJwt(obj.jwt),
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * @schema SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentials
+ */
+export interface SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentials {
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentials#identityId
+   */
+  readonly identityId: SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsIdentityId;
+
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentials#serviceAccountTokenPath
+   */
+  readonly serviceAccountTokenPath?: SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsServiceAccountTokenPath;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentials' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentials(obj: SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentials | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'identityId': toJson_SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsIdentityId(obj.identityId),
+    'serviceAccountTokenPath': toJson_SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsServiceAccountTokenPath(obj.serviceAccountTokenPath),
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * @schema SecretStoreSpecProviderInfisicalAuthLdapAuthCredentials
+ */
+export interface SecretStoreSpecProviderInfisicalAuthLdapAuthCredentials {
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthLdapAuthCredentials#identityId
+   */
+  readonly identityId: SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsIdentityId;
+
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthLdapAuthCredentials#ldapPassword
+   */
+  readonly ldapPassword: SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapPassword;
+
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthLdapAuthCredentials#ldapUsername
+   */
+  readonly ldapUsername: SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapUsername;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthLdapAuthCredentials' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthLdapAuthCredentials(obj: SecretStoreSpecProviderInfisicalAuthLdapAuthCredentials | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'identityId': toJson_SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsIdentityId(obj.identityId),
+    'ldapPassword': toJson_SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapPassword(obj.ldapPassword),
+    'ldapUsername': toJson_SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapUsername(obj.ldapUsername),
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentials
+ */
+export interface SecretStoreSpecProviderInfisicalAuthOciAuthCredentials {
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentials#fingerprint
+   */
+  readonly fingerprint: SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsFingerprint;
+
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentials#identityId
+   */
+  readonly identityId: SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsIdentityId;
+
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentials#privateKey
+   */
+  readonly privateKey: SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKey;
+
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentials#privateKeyPassphrase
+   */
+  readonly privateKeyPassphrase?: SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKeyPassphrase;
+
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentials#region
+   */
+  readonly region: SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsRegion;
+
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentials#tenancyId
+   */
+  readonly tenancyId: SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsTenancyId;
+
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentials#userId
+   */
+  readonly userId: SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsUserId;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthOciAuthCredentials' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthOciAuthCredentials(obj: SecretStoreSpecProviderInfisicalAuthOciAuthCredentials | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'fingerprint': toJson_SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsFingerprint(obj.fingerprint),
+    'identityId': toJson_SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsIdentityId(obj.identityId),
+    'privateKey': toJson_SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKey(obj.privateKey),
+    'privateKeyPassphrase': toJson_SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKeyPassphrase(obj.privateKeyPassphrase),
+    'region': toJson_SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsRegion(obj.region),
+    'tenancyId': toJson_SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsTenancyId(obj.tenancyId),
+    'userId': toJson_SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsUserId(obj.userId),
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * @schema SecretStoreSpecProviderInfisicalAuthTokenAuthCredentials
+ */
+export interface SecretStoreSpecProviderInfisicalAuthTokenAuthCredentials {
+  /**
+   * A reference to a specific 'key' within a Secret resource.
+   * In some instances, `key` is a required field.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthTokenAuthCredentials#accessToken
+   */
+  readonly accessToken: SecretStoreSpecProviderInfisicalAuthTokenAuthCredentialsAccessToken;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthTokenAuthCredentials' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthTokenAuthCredentials(obj: SecretStoreSpecProviderInfisicalAuthTokenAuthCredentials | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'accessToken': toJson_SecretStoreSpecProviderInfisicalAuthTokenAuthCredentialsAccessToken(obj.accessToken),
   };
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
@@ -40888,6 +42574,54 @@ export function toJson_SecretStoreSpecProviderIbmAuthSecretRefSecretApiKeySecret
  * A reference to a specific 'key' within a Secret resource.
  * In some instances, `key` is a required field.
  *
+ * @schema SecretStoreSpecProviderInfisicalAuthAwsAuthCredentialsIdentityId
+ */
+export interface SecretStoreSpecProviderInfisicalAuthAwsAuthCredentialsIdentityId {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthAwsAuthCredentialsIdentityId#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthAwsAuthCredentialsIdentityId#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthAwsAuthCredentialsIdentityId#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthAwsAuthCredentialsIdentityId' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthAwsAuthCredentialsIdentityId(obj: SecretStoreSpecProviderInfisicalAuthAwsAuthCredentialsIdentityId | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
  * @schema SecretStoreSpecProviderInfisicalAuthAzureAuthCredentialsIdentityId
  */
 export interface SecretStoreSpecProviderInfisicalAuthAzureAuthCredentialsIdentityId {
@@ -40969,6 +42703,870 @@ export interface SecretStoreSpecProviderInfisicalAuthAzureAuthCredentialsResourc
  */
 /* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 export function toJson_SecretStoreSpecProviderInfisicalAuthAzureAuthCredentialsResource(obj: SecretStoreSpecProviderInfisicalAuthAzureAuthCredentialsResource | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsIdentityId
+ */
+export interface SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsIdentityId {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsIdentityId#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsIdentityId#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsIdentityId#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsIdentityId' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsIdentityId(obj: SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsIdentityId | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsServiceAccountKeyFilePath
+ */
+export interface SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsServiceAccountKeyFilePath {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsServiceAccountKeyFilePath#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsServiceAccountKeyFilePath#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsServiceAccountKeyFilePath#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsServiceAccountKeyFilePath' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsServiceAccountKeyFilePath(obj: SecretStoreSpecProviderInfisicalAuthGcpIamAuthCredentialsServiceAccountKeyFilePath | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema SecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentialsIdentityId
+ */
+export interface SecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentialsIdentityId {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentialsIdentityId#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentialsIdentityId#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentialsIdentityId#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentialsIdentityId' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentialsIdentityId(obj: SecretStoreSpecProviderInfisicalAuthGcpIdTokenAuthCredentialsIdentityId | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema SecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsIdentityId
+ */
+export interface SecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsIdentityId {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsIdentityId#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsIdentityId#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsIdentityId#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsIdentityId' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsIdentityId(obj: SecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsIdentityId | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema SecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsJwt
+ */
+export interface SecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsJwt {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsJwt#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsJwt#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsJwt#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsJwt' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsJwt(obj: SecretStoreSpecProviderInfisicalAuthJwtAuthCredentialsJwt | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsIdentityId
+ */
+export interface SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsIdentityId {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsIdentityId#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsIdentityId#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsIdentityId#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsIdentityId' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsIdentityId(obj: SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsIdentityId | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsServiceAccountTokenPath
+ */
+export interface SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsServiceAccountTokenPath {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsServiceAccountTokenPath#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsServiceAccountTokenPath#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsServiceAccountTokenPath#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsServiceAccountTokenPath' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsServiceAccountTokenPath(obj: SecretStoreSpecProviderInfisicalAuthKubernetesAuthCredentialsServiceAccountTokenPath | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsIdentityId
+ */
+export interface SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsIdentityId {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsIdentityId#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsIdentityId#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsIdentityId#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsIdentityId' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsIdentityId(obj: SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsIdentityId | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapPassword
+ */
+export interface SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapPassword {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapPassword#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapPassword#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapPassword#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapPassword' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapPassword(obj: SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapPassword | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapUsername
+ */
+export interface SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapUsername {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapUsername#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapUsername#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapUsername#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapUsername' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapUsername(obj: SecretStoreSpecProviderInfisicalAuthLdapAuthCredentialsLdapUsername | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsFingerprint
+ */
+export interface SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsFingerprint {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsFingerprint#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsFingerprint#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsFingerprint#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsFingerprint' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsFingerprint(obj: SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsFingerprint | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsIdentityId
+ */
+export interface SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsIdentityId {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsIdentityId#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsIdentityId#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsIdentityId#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsIdentityId' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsIdentityId(obj: SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsIdentityId | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKey
+ */
+export interface SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKey {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKey#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKey#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKey#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKey' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKey(obj: SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKey | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKeyPassphrase
+ */
+export interface SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKeyPassphrase {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKeyPassphrase#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKeyPassphrase#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKeyPassphrase#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKeyPassphrase' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKeyPassphrase(obj: SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsPrivateKeyPassphrase | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsRegion
+ */
+export interface SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsRegion {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsRegion#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsRegion#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsRegion#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsRegion' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsRegion(obj: SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsRegion | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsTenancyId
+ */
+export interface SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsTenancyId {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsTenancyId#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsTenancyId#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsTenancyId#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsTenancyId' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsTenancyId(obj: SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsTenancyId | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsUserId
+ */
+export interface SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsUserId {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsUserId#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsUserId#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsUserId#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsUserId' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsUserId(obj: SecretStoreSpecProviderInfisicalAuthOciAuthCredentialsUserId | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'key': obj.key,
+    'name': obj.name,
+    'namespace': obj.namespace,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * A reference to a specific 'key' within a Secret resource.
+ * In some instances, `key` is a required field.
+ *
+ * @schema SecretStoreSpecProviderInfisicalAuthTokenAuthCredentialsAccessToken
+ */
+export interface SecretStoreSpecProviderInfisicalAuthTokenAuthCredentialsAccessToken {
+  /**
+   * A key in the referenced Secret.
+   * Some instances of this field may be defaulted, in others it may be required.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthTokenAuthCredentialsAccessToken#key
+   */
+  readonly key?: string;
+
+  /**
+   * The name of the Secret resource being referred to.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthTokenAuthCredentialsAccessToken#name
+   */
+  readonly name?: string;
+
+  /**
+   * The namespace of the Secret resource being referred to.
+   * Ignored if referent is not cluster-scoped, otherwise defaults to the namespace of the referent.
+   *
+   * @schema SecretStoreSpecProviderInfisicalAuthTokenAuthCredentialsAccessToken#namespace
+   */
+  readonly namespace?: string;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderInfisicalAuthTokenAuthCredentialsAccessToken' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderInfisicalAuthTokenAuthCredentialsAccessToken(obj: SecretStoreSpecProviderInfisicalAuthTokenAuthCredentialsAccessToken | undefined): Record<string, any> | undefined {
   if (obj === undefined) { return undefined; }
   const result = {
     'key': obj.key,
