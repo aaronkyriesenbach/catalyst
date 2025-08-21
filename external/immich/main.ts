@@ -65,7 +65,7 @@ class Immich extends Chart {
           tag: "v1.138.1",
         },
         env: {
-          DB_HOSTNAME: "immich-rw",
+          DB_HOSTNAME: "immich-cluster-rw",
         },
         immich: {
           persistence: {
