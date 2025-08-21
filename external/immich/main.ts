@@ -43,7 +43,7 @@ class Immich extends Chart {
     new CNPGCluster(this, {
       appName: "immich",
       imageName:
-        "ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0",
+        "ghcr.io/tensorchord/vchord-postgres:pg14-v0.3.0",
       instances: 3,
       secretName: dbSecret.name,
     });
