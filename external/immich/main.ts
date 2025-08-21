@@ -23,8 +23,8 @@ class Immich extends Chart {
           sourceRef: {
             generatorRef: {
               apiVersion: "generators.external-secrets.io/v1alpha1",
-              kind:
-                ExternalSecretSpecDataFromSourceRefGeneratorRefKind.CLUSTER_GENERATOR,
+              kind: ExternalSecretSpecDataFromSourceRefGeneratorRefKind
+                .CLUSTER_GENERATOR,
               name: "secret-generator",
             },
           },
@@ -42,10 +42,10 @@ class Immich extends Chart {
 
     new CNPGCluster(this, {
       appName: "immich",
-      imageName:
-        "ghcr.io/tensorchord/vchord-postgres:pg14-v0.3.0",
+      imageName: "ghcr.io/tensorchord/cloudnative-vectorchord:14-0.5.0",
       instances: 3,
       secretName: dbSecret.name,
+      postInitSQL: ["CREATE EXTENSION IF NOT EXISTS vchord CASCADE;"],
     });
 
     const pvc = new KubePersistentVolumeClaim(this, crypto.randomUUID(), {
