@@ -3,7 +3,7 @@ import { Construct } from "npm:constructs";
 
 export class HelmChart extends HelmChartConstruct {
     constructor(scope: Construct, props: HelmChartProps) {
-        const { name, repo, chartName, namespace, values } = props;
+        const { name, repo, chartName, namespace, values, version } = props;
 
         super(scope, crypto.randomUUID(), {
             metadata: {
@@ -13,6 +13,7 @@ export class HelmChart extends HelmChartConstruct {
             spec: {
                 repo: repo,
                 chart: chartName ?? name,
+                version: version,
                 targetNamespace: namespace ?? name,
                 valuesContent: values
             }
@@ -26,4 +27,5 @@ export type HelmChartProps = {
     chartName?: string
     namespace?: string
     values?: string
+    version?: string
 }
