@@ -16,7 +16,7 @@ class NFSSubdirExternalProvisioner extends Chart {
       values: stringify({
         nfs: {
           server: "192.168.53.40",
-          path: "/mnt/tank/data/cluster",
+          path: "/mnt/tank/data/cluster/external",
         },
         storageClass: {
           defaultClass: true,
