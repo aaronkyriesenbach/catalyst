@@ -7,7 +7,7 @@ import {
 import { Construct } from "npm:constructs";
 
 export default class CNPGCluster extends Cluster {
-  constructor(scope: Construct, id: string, props: ClusterProps) {
+  constructor(scope: Construct, props: ClusterProps) {
     const {
       appName,
       customClusterName,
@@ -23,7 +23,7 @@ export default class CNPGCluster extends Cluster {
 
     const clusterUsername = username ?? appName;
 
-    super(scope, id, {
+    super(scope, crypto.randomUUID(), {
       metadata: {
         name: customClusterName ?? `${appName}-cluster`,
       },

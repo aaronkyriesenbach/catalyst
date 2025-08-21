@@ -7,7 +7,7 @@ import { Construct } from 'constructs';
  * TLSStore is the CRD implementation of a Traefik TLS Store.
 For the time being, only the TLSStore named default is supported.
 This means that you cannot have two stores that are named default in different Kubernetes namespaces.
-More info: https://doc.traefik.io/traefik/v3.4/https/tls/#certificates-stores
+More info: https://doc.traefik.io/traefik/v3.5/https/tls/#certificates-stores
  *
  * @schema TLSStore
  */
@@ -64,7 +64,7 @@ export class TlsStore extends ApiObject {
  * TLSStore is the CRD implementation of a Traefik TLS Store.
  * For the time being, only the TLSStore named default is supported.
  * This means that you cannot have two stores that are named default in different Kubernetes namespaces.
- * More info: https://doc.traefik.io/traefik/v3.4/https/tls/#certificates-stores
+ * More info: https://doc.traefik.io/traefik/v3.5/https/tls/#certificates-stores
  *
  * @schema TLSStore
  */

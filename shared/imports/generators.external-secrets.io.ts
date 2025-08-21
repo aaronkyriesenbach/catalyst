@@ -700,6 +700,13 @@ export interface ClusterGeneratorSpecGenerator {
   readonly quayAccessTokenSpec?: ClusterGeneratorSpecGeneratorQuayAccessTokenSpec;
 
   /**
+   * SSHKeySpec controls the behavior of the ssh key generator.
+   *
+   * @schema ClusterGeneratorSpecGenerator#sshKeySpec
+   */
+  readonly sshKeySpec?: ClusterGeneratorSpecGeneratorSshKeySpec;
+
+  /**
    * @schema ClusterGeneratorSpecGenerator#stsSessionTokenSpec
    */
   readonly stsSessionTokenSpec?: ClusterGeneratorSpecGeneratorStsSessionTokenSpec;
@@ -741,6 +748,7 @@ export function toJson_ClusterGeneratorSpecGenerator(obj: ClusterGeneratorSpecGe
     'mfaSpec': toJson_ClusterGeneratorSpecGeneratorMfaSpec(obj.mfaSpec),
     'passwordSpec': toJson_ClusterGeneratorSpecGeneratorPasswordSpec(obj.passwordSpec),
     'quayAccessTokenSpec': toJson_ClusterGeneratorSpecGeneratorQuayAccessTokenSpec(obj.quayAccessTokenSpec),
+    'sshKeySpec': toJson_ClusterGeneratorSpecGeneratorSshKeySpec(obj.sshKeySpec),
     'stsSessionTokenSpec': toJson_ClusterGeneratorSpecGeneratorStsSessionTokenSpec(obj.stsSessionTokenSpec),
     'uuidSpec': obj.uuidSpec,
     'vaultDynamicSecretSpec': toJson_ClusterGeneratorSpecGeneratorVaultDynamicSecretSpec(obj.vaultDynamicSecretSpec),
@@ -771,6 +779,8 @@ export enum ClusterGeneratorSpecKind {
   QUAY_ACCESS_TOKEN = "QuayAccessToken",
   /** Password */
   PASSWORD = "Password",
+  /** SSHKey */
+  SSH_KEY = "SSHKey",
   /** STSSessionToken */
   STS_SESSION_TOKEN = "STSSessionToken",
   /** UUID */
@@ -1271,6 +1281,53 @@ export function toJson_ClusterGeneratorSpecGeneratorQuayAccessTokenSpec(obj: Clu
     'robotAccount': obj.robotAccount,
     'serviceAccountRef': toJson_ClusterGeneratorSpecGeneratorQuayAccessTokenSpecServiceAccountRef(obj.serviceAccountRef),
     'url': obj.url,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * SSHKeySpec controls the behavior of the ssh key generator.
+ *
+ * @schema ClusterGeneratorSpecGeneratorSshKeySpec
+ */
+export interface ClusterGeneratorSpecGeneratorSshKeySpec {
+  /**
+   * Comment specifies an optional comment for the SSH key
+   *
+   * @schema ClusterGeneratorSpecGeneratorSshKeySpec#comment
+   */
+  readonly comment?: string;
+
+  /**
+   * KeySize specifies the key size for RSA keys (default: 2048)
+   * For RSA keys: 2048, 3072, 4096
+   * Ignored for ed25519 keys
+   *
+   * @schema ClusterGeneratorSpecGeneratorSshKeySpec#keySize
+   */
+  readonly keySize?: number;
+
+  /**
+   * KeyType specifies the SSH key type (rsa, ed25519)
+   *
+   * @schema ClusterGeneratorSpecGeneratorSshKeySpec#keyType
+   */
+  readonly keyType?: ClusterGeneratorSpecGeneratorSshKeySpecKeyType;
+
+}
+
+/**
+ * Converts an object of type 'ClusterGeneratorSpecGeneratorSshKeySpec' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterGeneratorSpecGeneratorSshKeySpec(obj: ClusterGeneratorSpecGeneratorSshKeySpec | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'comment': obj.comment,
+    'keySize': obj.keySize,
+    'keyType': obj.keyType,
   };
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
@@ -1861,6 +1918,18 @@ export function toJson_ClusterGeneratorSpecGeneratorQuayAccessTokenSpecServiceAc
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
 /* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * KeyType specifies the SSH key type (rsa, ed25519)
+ *
+ * @schema ClusterGeneratorSpecGeneratorSshKeySpecKeyType
+ */
+export enum ClusterGeneratorSpecGeneratorSshKeySpecKeyType {
+  /** rsa */
+  RSA = "rsa",
+  /** ed25519 */
+  ED25519 = "ed25519",
+}
 
 /**
  * Auth defines how to authenticate with AWS
@@ -7404,6 +7473,155 @@ export function toJson_QuayAccessTokenSpecServiceAccountRef(obj: QuayAccessToken
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
 /* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+
+/**
+ * SSHKey generates SSH key pairs.
+ *
+ * @schema SSHKey
+ */
+export class SshKey extends ApiObject {
+  /**
+   * Returns the apiVersion and kind for "SSHKey"
+   */
+  public static readonly GVK: GroupVersionKind = {
+    apiVersion: 'generators.external-secrets.io/v1alpha1',
+    kind: 'SSHKey',
+  }
+
+  /**
+   * Renders a Kubernetes manifest for "SSHKey".
+   *
+   * This can be used to inline resource manifests inside other objects (e.g. as templates).
+   *
+   * @param props initialization props
+   */
+  public static manifest(props: SshKeyProps = {}): any {
+    return {
+      ...SshKey.GVK,
+      ...toJson_SshKeyProps(props),
+    };
+  }
+
+  /**
+   * Defines a "SSHKey" API object
+   * @param scope the scope in which to define this object
+   * @param id a scope-local name for the object
+   * @param props initialization props
+   */
+  public constructor(scope: Construct, id: string, props: SshKeyProps = {}) {
+    super(scope, id, {
+      ...SshKey.GVK,
+      ...props,
+    });
+  }
+
+  /**
+   * Renders the object to Kubernetes JSON.
+   */
+  public toJson(): any {
+    const resolved = super.toJson();
+
+    return {
+      ...SshKey.GVK,
+      ...toJson_SshKeyProps(resolved),
+    };
+  }
+}
+
+/**
+ * SSHKey generates SSH key pairs.
+ *
+ * @schema SSHKey
+ */
+export interface SshKeyProps {
+  /**
+   * @schema SSHKey#metadata
+   */
+  readonly metadata?: ApiObjectMetadata;
+
+  /**
+   * SSHKeySpec controls the behavior of the ssh key generator.
+   *
+   * @schema SSHKey#spec
+   */
+  readonly spec?: SshKeySpec;
+
+}
+
+/**
+ * Converts an object of type 'SshKeyProps' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SshKeyProps(obj: SshKeyProps | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'metadata': obj.metadata,
+    'spec': toJson_SshKeySpec(obj.spec),
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * SSHKeySpec controls the behavior of the ssh key generator.
+ *
+ * @schema SshKeySpec
+ */
+export interface SshKeySpec {
+  /**
+   * Comment specifies an optional comment for the SSH key
+   *
+   * @schema SshKeySpec#comment
+   */
+  readonly comment?: string;
+
+  /**
+   * KeySize specifies the key size for RSA keys (default: 2048)
+   * For RSA keys: 2048, 3072, 4096
+   * Ignored for ed25519 keys
+   *
+   * @schema SshKeySpec#keySize
+   */
+  readonly keySize?: number;
+
+  /**
+   * KeyType specifies the SSH key type (rsa, ed25519)
+   *
+   * @schema SshKeySpec#keyType
+   */
+  readonly keyType?: SshKeySpecKeyType;
+
+}
+
+/**
+ * Converts an object of type 'SshKeySpec' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SshKeySpec(obj: SshKeySpec | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'comment': obj.comment,
+    'keySize': obj.keySize,
+    'keyType': obj.keyType,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * KeyType specifies the SSH key type (rsa, ed25519)
+ *
+ * @schema SshKeySpecKeyType
+ */
+export enum SshKeySpecKeyType {
+  /** rsa */
+  RSA = "rsa",
+  /** ed25519 */
+  ED25519 = "ed25519",
+}
 
 
 /**

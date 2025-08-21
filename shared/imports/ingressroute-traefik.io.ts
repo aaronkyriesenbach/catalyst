@@ -101,7 +101,7 @@ export interface IngressRouteSpec {
   /**
    * EntryPoints defines the list of entry point names to bind to.
    * Entry points have to be configured in the static configuration.
-   * More info: https://doc.traefik.io/traefik/v3.4/routing/entrypoints/
+   * More info: https://doc.traefik.io/traefik/v3.5/routing/entrypoints/
    * Default: all.
    *
    * @schema IngressRouteSpec#entryPoints
@@ -117,7 +117,7 @@ export interface IngressRouteSpec {
 
   /**
    * TLS defines the TLS configuration.
-   * More info: https://doc.traefik.io/traefik/v3.4/routing/routers/#tls
+   * More info: https://doc.traefik.io/traefik/v3.5/routing/routers/#tls
    *
    * @schema IngressRouteSpec#tls
    */
@@ -158,7 +158,7 @@ export interface IngressRouteSpecRoutes {
 
   /**
    * Match defines the router's rule.
-   * More info: https://doc.traefik.io/traefik/v3.4/routing/routers/#rule
+   * More info: https://doc.traefik.io/traefik/v3.5/routing/routers/#rule
    *
    * @schema IngressRouteSpecRoutes#match
    */
@@ -166,7 +166,7 @@ export interface IngressRouteSpecRoutes {
 
   /**
    * Middlewares defines the list of references to Middleware resources.
-   * More info: https://doc.traefik.io/traefik/v3.4/routing/providers/kubernetes-crd/#kind-middleware
+   * More info: https://doc.traefik.io/traefik/v3.5/routing/providers/kubernetes-crd/#kind-middleware
    *
    * @schema IngressRouteSpecRoutes#middlewares
    */
@@ -174,7 +174,7 @@ export interface IngressRouteSpecRoutes {
 
   /**
    * Observability defines the observability configuration for a router.
-   * More info: https://doc.traefik.io/traefik/v3.4/routing/routers/#observability
+   * More info: https://doc.traefik.io/traefik/v3.5/routing/routers/#observability
    *
    * @schema IngressRouteSpecRoutes#observability
    */
@@ -182,7 +182,7 @@ export interface IngressRouteSpecRoutes {
 
   /**
    * Priority defines the router's priority.
-   * More info: https://doc.traefik.io/traefik/v3.4/routing/routers/#priority
+   * More info: https://doc.traefik.io/traefik/v3.5/routing/routers/#priority
    *
    * @schema IngressRouteSpecRoutes#priority
    */
@@ -198,7 +198,7 @@ export interface IngressRouteSpecRoutes {
 
   /**
    * Syntax defines the router's rule syntax.
-   * More info: https://doc.traefik.io/traefik/v3.4/routing/routers/#rulesyntax
+   * More info: https://doc.traefik.io/traefik/v3.5/routing/routers/#rulesyntax
    * Deprecated: Please do not use this field and rewrite the router rules to use the v3 syntax.
    *
    * @schema IngressRouteSpecRoutes#syntax
@@ -229,7 +229,7 @@ export function toJson_IngressRouteSpecRoutes(obj: IngressRouteSpecRoutes | unde
 
 /**
  * TLS defines the TLS configuration.
- * More info: https://doc.traefik.io/traefik/v3.4/routing/routers/#tls
+ * More info: https://doc.traefik.io/traefik/v3.5/routing/routers/#tls
  *
  * @schema IngressRouteSpecTls
  */
@@ -237,7 +237,7 @@ export interface IngressRouteSpecTls {
   /**
    * CertResolver defines the name of the certificate resolver to use.
    * Cert resolvers have to be configured in the static configuration.
-   * More info: https://doc.traefik.io/traefik/v3.4/https/acme/#certificate-resolvers
+   * More info: https://doc.traefik.io/traefik/v3.5/https/acme/#certificate-resolvers
    *
    * @schema IngressRouteSpecTls#certResolver
    */
@@ -245,7 +245,7 @@ export interface IngressRouteSpecTls {
 
   /**
    * Domains defines the list of domains that will be used to issue certificates.
-   * More info: https://doc.traefik.io/traefik/v3.4/routing/routers/#domains
+   * More info: https://doc.traefik.io/traefik/v3.5/routing/routers/#domains
    *
    * @schema IngressRouteSpecTls#domains
    */
@@ -254,7 +254,7 @@ export interface IngressRouteSpecTls {
   /**
    * Options defines the reference to a TLSOption, that specifies the parameters of the TLS connection.
    * If not defined, the `default` TLSOption is used.
-   * More info: https://doc.traefik.io/traefik/v3.4/https/tls/#tls-options
+   * More info: https://doc.traefik.io/traefik/v3.5/https/tls/#tls-options
    *
    * @schema IngressRouteSpecTls#options
    */
@@ -346,22 +346,35 @@ export function toJson_IngressRouteSpecRoutesMiddlewares(obj: IngressRouteSpecRo
 
 /**
  * Observability defines the observability configuration for a router.
- * More info: https://doc.traefik.io/traefik/v3.4/routing/routers/#observability
+ * More info: https://doc.traefik.io/traefik/v3.5/routing/routers/#observability
  *
  * @schema IngressRouteSpecRoutesObservability
  */
 export interface IngressRouteSpecRoutesObservability {
   /**
+   * AccessLogs enables access logs for this router.
+   *
    * @schema IngressRouteSpecRoutesObservability#accessLogs
    */
   readonly accessLogs?: boolean;
 
   /**
+   * Metrics enables metrics for this router.
+   *
    * @schema IngressRouteSpecRoutesObservability#metrics
    */
   readonly metrics?: boolean;
 
   /**
+   * TraceVerbosity defines the verbosity level of the tracing for this router.
+   *
+   * @schema IngressRouteSpecRoutesObservability#traceVerbosity
+   */
+  readonly traceVerbosity?: IngressRouteSpecRoutesObservabilityTraceVerbosity;
+
+  /**
+   * Tracing enables tracing for this router.
+   *
    * @schema IngressRouteSpecRoutesObservability#tracing
    */
   readonly tracing?: boolean;
@@ -377,6 +390,7 @@ export function toJson_IngressRouteSpecRoutesObservability(obj: IngressRouteSpec
   const result = {
     'accessLogs': obj.accessLogs,
     'metrics': obj.metrics,
+    'traceVerbosity': obj.traceVerbosity,
     'tracing': obj.tracing,
   };
   // filter undefined values
@@ -481,7 +495,7 @@ export interface IngressRouteSpecRoutesServices {
 
   /**
    * Sticky defines the sticky sessions configuration.
-   * More info: https://doc.traefik.io/traefik/v3.4/routing/services/#sticky-sessions
+   * More info: https://doc.traefik.io/traefik/v3.5/routing/services/#sticky-sessions
    *
    * @schema IngressRouteSpecRoutesServices#sticky
    */
@@ -573,14 +587,14 @@ export function toJson_IngressRouteSpecTlsDomains(obj: IngressRouteSpecTlsDomain
 /**
  * Options defines the reference to a TLSOption, that specifies the parameters of the TLS connection.
  * If not defined, the `default` TLSOption is used.
- * More info: https://doc.traefik.io/traefik/v3.4/https/tls/#tls-options
+ * More info: https://doc.traefik.io/traefik/v3.5/https/tls/#tls-options
  *
  * @schema IngressRouteSpecTlsOptions
  */
 export interface IngressRouteSpecTlsOptions {
   /**
    * Name defines the name of the referenced TLSOption.
-   * More info: https://doc.traefik.io/traefik/v3.4/routing/providers/kubernetes-crd/#kind-tlsoption
+   * More info: https://doc.traefik.io/traefik/v3.5/routing/providers/kubernetes-crd/#kind-tlsoption
    *
    * @schema IngressRouteSpecTlsOptions#name
    */
@@ -588,7 +602,7 @@ export interface IngressRouteSpecTlsOptions {
 
   /**
    * Namespace defines the namespace of the referenced TLSOption.
-   * More info: https://doc.traefik.io/traefik/v3.4/routing/providers/kubernetes-crd/#kind-tlsoption
+   * More info: https://doc.traefik.io/traefik/v3.5/routing/providers/kubernetes-crd/#kind-tlsoption
    *
    * @schema IngressRouteSpecTlsOptions#namespace
    */
@@ -620,7 +634,7 @@ export function toJson_IngressRouteSpecTlsOptions(obj: IngressRouteSpecTlsOption
 export interface IngressRouteSpecTlsStore {
   /**
    * Name defines the name of the referenced TLSStore.
-   * More info: https://doc.traefik.io/traefik/v3.4/routing/providers/kubernetes-crd/#kind-tlsstore
+   * More info: https://doc.traefik.io/traefik/v3.5/routing/providers/kubernetes-crd/#kind-tlsstore
    *
    * @schema IngressRouteSpecTlsStore#name
    */
@@ -628,7 +642,7 @@ export interface IngressRouteSpecTlsStore {
 
   /**
    * Namespace defines the namespace of the referenced TLSStore.
-   * More info: https://doc.traefik.io/traefik/v3.4/routing/providers/kubernetes-crd/#kind-tlsstore
+   * More info: https://doc.traefik.io/traefik/v3.5/routing/providers/kubernetes-crd/#kind-tlsstore
    *
    * @schema IngressRouteSpecTlsStore#namespace
    */
@@ -650,6 +664,18 @@ export function toJson_IngressRouteSpecTlsStore(obj: IngressRouteSpecTlsStore | 
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
 }
 /* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * TraceVerbosity defines the verbosity level of the tracing for this router.
+ *
+ * @schema IngressRouteSpecRoutesObservabilityTraceVerbosity
+ */
+export enum IngressRouteSpecRoutesObservabilityTraceVerbosity {
+  /** minimal */
+  MINIMAL = "minimal",
+  /** detailed */
+  DETAILED = "detailed",
+}
 
 /**
  * Healthcheck defines health checks for ExternalName services.
@@ -680,7 +706,7 @@ export interface IngressRouteSpecRoutesServicesHealthCheck {
   readonly hostname?: string;
 
   /**
-   * Interval defines the frequency of the health check calls.
+   * Interval defines the frequency of the health check calls for healthy targets.
    * Default: 30s
    *
    * @schema IngressRouteSpecRoutesServicesHealthCheck#interval
@@ -739,6 +765,15 @@ export interface IngressRouteSpecRoutesServicesHealthCheck {
    */
   readonly timeout?: IngressRouteSpecRoutesServicesHealthCheckTimeout;
 
+  /**
+   * UnhealthyInterval defines the frequency of the health check calls for unhealthy targets.
+   * When UnhealthyInterval is not defined, it defaults to the Interval value.
+   * Default: 30s
+   *
+   * @schema IngressRouteSpecRoutesServicesHealthCheck#unhealthyInterval
+   */
+  readonly unhealthyInterval?: IngressRouteSpecRoutesServicesHealthCheckUnhealthyInterval;
+
 }
 
 /**
@@ -759,6 +794,7 @@ export function toJson_IngressRouteSpecRoutesServicesHealthCheck(obj: IngressRou
     'scheme': obj.scheme,
     'status': obj.status,
     'timeout': obj.timeout?.value,
+    'unhealthyInterval': obj.unhealthyInterval?.value,
   };
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
@@ -829,7 +865,7 @@ export function toJson_IngressRouteSpecRoutesServicesResponseForwarding(obj: Ing
 
 /**
  * Sticky defines the sticky sessions configuration.
- * More info: https://doc.traefik.io/traefik/v3.4/routing/services/#sticky-sessions
+ * More info: https://doc.traefik.io/traefik/v3.5/routing/services/#sticky-sessions
  *
  * @schema IngressRouteSpecRoutesServicesSticky
  */
@@ -874,7 +910,7 @@ export enum IngressRouteSpecRoutesServicesStrategy {
 }
 
 /**
- * Interval defines the frequency of the health check calls.
+ * Interval defines the frequency of the health check calls for healthy targets.
  * Default: 30s
  *
  * @schema IngressRouteSpecRoutesServicesHealthCheckInterval
@@ -902,6 +938,24 @@ export class IngressRouteSpecRoutesServicesHealthCheckTimeout {
   }
   public static fromString(value: string): IngressRouteSpecRoutesServicesHealthCheckTimeout {
     return new IngressRouteSpecRoutesServicesHealthCheckTimeout(value);
+  }
+  private constructor(public readonly value: number | string) {
+  }
+}
+
+/**
+ * UnhealthyInterval defines the frequency of the health check calls for unhealthy targets.
+ * When UnhealthyInterval is not defined, it defaults to the Interval value.
+ * Default: 30s
+ *
+ * @schema IngressRouteSpecRoutesServicesHealthCheckUnhealthyInterval
+ */
+export class IngressRouteSpecRoutesServicesHealthCheckUnhealthyInterval {
+  public static fromNumber(value: number): IngressRouteSpecRoutesServicesHealthCheckUnhealthyInterval {
+    return new IngressRouteSpecRoutesServicesHealthCheckUnhealthyInterval(value);
+  }
+  public static fromString(value: string): IngressRouteSpecRoutesServicesHealthCheckUnhealthyInterval {
+    return new IngressRouteSpecRoutesServicesHealthCheckUnhealthyInterval(value);
   }
   private constructor(public readonly value: number | string) {
   }

@@ -108,7 +108,7 @@ export interface BundleSpec {
    *
    * @schema BundleSpec#target
    */
-  readonly target: BundleSpecTarget;
+  readonly target?: BundleSpecTarget;
 
 }
 

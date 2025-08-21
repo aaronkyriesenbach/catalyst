@@ -1506,6 +1506,13 @@ export interface ClusterSpecPostgresql {
   readonly enableAlterSystem?: boolean;
 
   /**
+   * The configuration of the extensions to be added
+   *
+   * @schema ClusterSpecPostgresql#extensions
+   */
+  readonly extensions?: ClusterSpecPostgresqlExtensions[];
+
+  /**
    * Options to specify LDAP configuration
    *
    * @schema ClusterSpecPostgresql#ldap
@@ -1576,6 +1583,7 @@ export function toJson_ClusterSpecPostgresql(obj: ClusterSpecPostgresql | undefi
   if (obj === undefined) { return undefined; }
   const result = {
     'enableAlterSystem': obj.enableAlterSystem,
+    'extensions': obj.extensions?.map(y => toJson_ClusterSpecPostgresqlExtensions(y)),
     'ldap': toJson_ClusterSpecPostgresqlLdap(obj.ldap),
     'parameters': ((obj.parameters) === undefined) ? undefined : (Object.entries(obj.parameters).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {})),
     'pg_hba': obj.pgHba?.map(y => y),
@@ -4293,6 +4301,70 @@ export function toJson_ClusterSpecMonitoringTls(obj: ClusterSpecMonitoringTls | 
   if (obj === undefined) { return undefined; }
   const result = {
     'enabled': obj.enabled,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * ExtensionConfiguration is the configuration used to add
+ * PostgreSQL extensions to the Cluster.
+ *
+ * @schema ClusterSpecPostgresqlExtensions
+ */
+export interface ClusterSpecPostgresqlExtensions {
+  /**
+   * The list of directories inside the image which should be added to dynamic_library_path.
+   * If not defined, defaults to "/lib".
+   *
+   * @schema ClusterSpecPostgresqlExtensions#dynamic_library_path
+   */
+  readonly dynamicLibraryPath?: string[];
+
+  /**
+   * The list of directories inside the image which should be added to extension_control_path.
+   * If not defined, defaults to "/share".
+   *
+   * @schema ClusterSpecPostgresqlExtensions#extension_control_path
+   */
+  readonly extensionControlPath?: string[];
+
+  /**
+   * The image containing the extension, required
+   *
+   * @schema ClusterSpecPostgresqlExtensions#image
+   */
+  readonly image: ClusterSpecPostgresqlExtensionsImage;
+
+  /**
+   * The list of directories inside the image which should be added to ld_library_path.
+   *
+   * @schema ClusterSpecPostgresqlExtensions#ld_library_path
+   */
+  readonly ldLibraryPath?: string[];
+
+  /**
+   * The name of the extension, required
+   *
+   * @schema ClusterSpecPostgresqlExtensions#name
+   */
+  readonly name: string;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSpecPostgresqlExtensions' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSpecPostgresqlExtensions(obj: ClusterSpecPostgresqlExtensions | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'dynamic_library_path': obj.dynamicLibraryPath?.map(y => y),
+    'extension_control_path': obj.extensionControlPath?.map(y => y),
+    'image': toJson_ClusterSpecPostgresqlExtensionsImage(obj.image),
+    'ld_library_path': obj.ldLibraryPath?.map(y => y),
+    'name': obj.name,
   };
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
@@ -7678,6 +7750,53 @@ export enum ClusterSpecMonitoringPodMonitorRelabelingsAction {
   /** dropequal */
   DROPEQUAL = "dropequal",
 }
+
+/**
+ * The image containing the extension, required
+ *
+ * @schema ClusterSpecPostgresqlExtensionsImage
+ */
+export interface ClusterSpecPostgresqlExtensionsImage {
+  /**
+   * Policy for pulling OCI objects. Possible values are:
+   * Always: the kubelet always attempts to pull the reference. Container creation will fail If the pull fails.
+   * Never: the kubelet never pulls the reference and only uses a local image or artifact. Container creation will fail if the reference isn't present.
+   * IfNotPresent: the kubelet pulls if the reference isn't already present on disk. Container creation will fail if the reference isn't present and the pull fails.
+   * Defaults to Always if :latest tag is specified, or IfNotPresent otherwise.
+   *
+   * @default Always if :latest tag is specified, or IfNotPresent otherwise.
+   * @schema ClusterSpecPostgresqlExtensionsImage#pullPolicy
+   */
+  readonly pullPolicy?: string;
+
+  /**
+   * Required: Image or artifact reference to be used.
+   * Behaves in the same way as pod.spec.containers[*].image.
+   * Pull secrets will be assembled in the same way as for the container image by looking up node credentials, SA image pull secrets, and pod spec image pull secrets.
+   * More info: https://kubernetes.io/docs/concepts/containers/images
+   * This field is optional to allow higher level config management to default or override
+   * container images in workload controllers like Deployments and StatefulSets.
+   *
+   * @schema ClusterSpecPostgresqlExtensionsImage#reference
+   */
+  readonly reference?: string;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSpecPostgresqlExtensionsImage' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSpecPostgresqlExtensionsImage(obj: ClusterSpecPostgresqlExtensionsImage | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'pullPolicy': obj.pullPolicy,
+    'reference': obj.reference,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
 
 /**
  * Bind as authentication configuration
