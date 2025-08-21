@@ -1,9 +1,4 @@
-import {
-  Cluster,
-  ClusterSpecBootstrapInitdbSecret,
-  ClusterSpecManagedRolesEnsure,
-  ClusterSpecPostgresql
-} from "./imports/postgresql.cnpg.io.ts";
+import { Cluster, ClusterSpecManagedRolesEnsure, ClusterSpecPostgresql } from "./imports/postgresql.cnpg.io.ts";
 import { Construct } from "npm:constructs";
 
 export default class CNPGCluster extends Cluster {
@@ -12,16 +7,14 @@ export default class CNPGCluster extends Cluster {
       appName,
       customClusterName,
       dbName,
-      username,
-      passwordSecret,
+      username = appName,
+      secretName,
       superuser,
       imageName,
       postgresql,
       instances,
       storageSize,
     } = props;
-
-    const clusterUsername = username ?? appName;
 
     super(scope, crypto.randomUUID(), {
       metadata: {
@@ -33,13 +26,13 @@ export default class CNPGCluster extends Cluster {
         bootstrap: {
           initdb: {
             database: dbName ?? appName,
-            owner: clusterUsername,
-            secret: passwordSecret,
+            owner: username,
+            secret: secretName ? { name: secretName } : undefined,
           },
         },
         managed: {
           roles: [{
-            name: clusterUsername,
+            name: username,
             connectionLimit: -1,
             ensure: ClusterSpecManagedRolesEnsure.PRESENT,
             inherit: true,
@@ -61,7 +54,7 @@ export type ClusterProps = {
   customClusterName?: string;
   dbName?: string;
   username?: string;
-  passwordSecret?: ClusterSpecBootstrapInitdbSecret;
+  secretName?: string;
   superuser?: boolean;
   imageName?: string;
   postgresql?: ClusterSpecPostgresql;
