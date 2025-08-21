@@ -14,6 +14,7 @@ export default class CNPGCluster extends Cluster {
       postgresql,
       instances,
       storageSize,
+      postInitSQL,
     } = props;
 
     super(scope, crypto.randomUUID(), {
@@ -28,6 +29,7 @@ export default class CNPGCluster extends Cluster {
             database: dbName ?? appName,
             owner: username,
             secret: secretName ? { name: secretName } : undefined,
+            postInitSql: postInitSQL,
           },
         },
         managed: {
@@ -60,4 +62,5 @@ export type ClusterProps = {
   postgresql?: ClusterSpecPostgresql;
   instances?: number;
   storageSize?: string;
+  postInitSQL?: string[];
 };
