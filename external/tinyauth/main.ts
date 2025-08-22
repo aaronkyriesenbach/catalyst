@@ -6,6 +6,7 @@ import Application from "../../shared/Application.ts";
 import GeneratedSecret from "../../shared/mittwald-secret-gen/GeneratedSecret.ts";
 import { IntOrString } from "../../shared/imports/k8s.ts";
 import { Middleware } from "../../shared/imports/middleware-traefik.io.ts";
+import GeneratedExternalSecret from "../../shared/external-secrets/GeneratedExternalSecret.ts";
 
 class TinyAuth extends Chart {
   constructor(scope: Construct) {
@@ -16,6 +17,14 @@ class TinyAuth extends Chart {
       fieldsToGenerate: ["secret"],
       length: 32,
     });
+
+    new GeneratedExternalSecret(this, {
+        name: "test",
+        fieldsToGenerate: ["secret1", "secret2"],
+        extraData: {
+            key: "value"
+        }
+    })
 
     const creds = new GeneratedBasicAuthSecret(this, {
       name: "tinyauth-creds",
