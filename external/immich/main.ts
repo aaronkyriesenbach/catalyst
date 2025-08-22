@@ -11,37 +11,19 @@ import {
     ExternalSecretSpecDataFromSourceRefGeneratorRefKind,
     ExternalSecretSpecRefreshPolicy
 } from "../../shared/imports/external-secrets.io.ts";
+import GeneratedExternalSecret from "../../shared/external-secrets/GeneratedExternalSecret.ts";
 
 class Immich extends Chart {
   constructor(scope: Construct) {
     super(scope, crypto.randomUUID());
 
-    const dbSecret = new ExternalSecret(this, crypto.randomUUID(), {
-      metadata: {
+    const dbSecret = new GeneratedExternalSecret(this, {
         name: "db-secret",
-      },
-      spec: {
-        refreshPolicy: ExternalSecretSpecRefreshPolicy.CREATED_ONCE,
-        dataFrom: [{
-          sourceRef: {
-            generatorRef: {
-              apiVersion: "generators.external-secrets.io/v1alpha1",
-              kind: ExternalSecretSpecDataFromSourceRefGeneratorRefKind
-                .CLUSTER_GENERATOR,
-              name: "secret-generator",
-            },
-          },
-        }],
-        target: {
-          template: {
-            data: {
-              username: "immich",
-              password: "{{ .password }}",
-            },
-          },
-        },
-      },
-    });
+        fieldsToGenerate: ["password"],
+        extraData: {
+            username: "immich"
+        }
+    })
 
     new CNPGCluster(this, {
       appName: "immich",
