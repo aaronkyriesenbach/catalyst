@@ -8,7 +8,7 @@ import {
     ExternalSecret,
     ExternalSecretSpecDataFromSourceRefGeneratorRefKind
 } from "../../shared/imports/external-secrets.io.ts";
-import { KubePersistentVolumeClaim } from "../../shared/imports/k8s.ts";
+import ConfigPVC from "../../shared/ConfigPVC.ts";
 
 class Immich extends Chart {
   constructor(scope: Construct) {
@@ -51,13 +51,9 @@ class Immich extends Chart {
       },
     });
 
-    const pvc = new KubePersistentVolumeClaim(this, crypto.randomUUID(), {
-      metadata: {
-        name: "immich-data",
-      },
-      spec: {
-        accessModes: ["ReadWriteMany"],
-      },
+    const pvc = new ConfigPVC(this, {
+      name: "immich-data",
+      accessMode: "ReadWriteMany",
     });
 
     new HelmChart(this, {
