@@ -45,6 +45,7 @@ class Immich extends Chart {
       imageName: "ghcr.io/tensorchord/cloudnative-vectorchord:14-0.4.3",
       instances: 3,
       secretName: dbSecret.name,
+      superuser: true,
       postInitSQL: ["CREATE EXTENSION IF NOT EXISTS vchord CASCADE;"],
       postgresql: {
         sharedPreloadLibraries: ["vchord.so"],
