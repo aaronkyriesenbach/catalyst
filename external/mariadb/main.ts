@@ -11,12 +11,14 @@ class MariaDB extends Chart {
       name: "mariadb-operator-crds",
       repo: "https://helm.mariadb.com/mariadb-operator",
       version: "25.8.3",
+      namespace: "mariadb",
     });
 
     new HelmChart(this, {
       name: "mariadb-operator",
       repo: "https://helm.mariadb.com/mariadb-operator",
       version: "25.8.3",
+      namespace: "mariadb",
     });
   }
 }
