@@ -95,6 +95,17 @@ class Immich extends Chart {
         redis: {
           enabled: true,
         },
+        server: {
+          persistence: {
+            photos: {
+              enabled: true,
+              type: "nfs",
+              server: "192.168.53.40",
+              path: "/mnt/tank/data/shotwell",
+              readOnly: true,
+            },
+          },
+        },
       }),
     });
 
