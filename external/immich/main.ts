@@ -46,6 +46,9 @@ class Immich extends Chart {
       instances: 3,
       secretName: dbSecret.name,
       postInitSQL: ["CREATE EXTENSION IF NOT EXISTS vchord CASCADE;"],
+      postgresql: {
+        sharedPreloadLibraries: ["vchord.so"],
+      },
     });
 
     const pvc = new KubePersistentVolumeClaim(this, crypto.randomUUID(), {
