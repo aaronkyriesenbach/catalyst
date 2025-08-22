@@ -65,6 +65,14 @@ class Immich extends Chart {
         },
         env: {
           DB_HOSTNAME: "immich-cluster-rw",
+          DB_PASSWORD: {
+            valueFrom: {
+              secretKeyRef: {
+                name: dbSecret.name,
+                key: "password",
+              },
+            },
+          },
         },
         immich: {
           persistence: {
@@ -81,6 +89,9 @@ class Immich extends Chart {
               },
             },
           },
+        },
+        redis: {
+          enabled: true,
         },
       }),
     });
