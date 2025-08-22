@@ -1,5 +1,5 @@
 {
-  "version": "4",
+  "version": "5",
   "specifiers": {
     "jsr:@std/path@*": "1.0.8",
     "jsr:@std/path@^1.0.8": "1.0.8",
@@ -8,7 +8,8 @@
     "npm:cdk8s@^2.69.63": "2.69.63_constructs@10.4.2",
     "npm:construct@*": "1.0.0",
     "npm:constructs@*": "10.4.2",
-    "npm:constructs@^10.4.2": "10.4.2"
+    "npm:constructs@^10.4.2": "10.4.2",
+    "npm:yaml@2.7.1": "2.7.1"
   },
   "jsr": {
     "@std/path@1.0.8": {
@@ -41,7 +42,8 @@
       "integrity": "sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ=="
     },
     "yaml@2.7.1": {
-      "integrity": "sha512-10ULxpnOCQXxJvBgxsn9ptjq6uviG/htZKk9veJGhlqn3w/DxQ631zFF+nlQXLwmImeS5amR2dl2U8sg6U9jsQ=="
+      "integrity": "sha512-10ULxpnOCQXxJvBgxsn9ptjq6uviG/htZKk9veJGhlqn3w/DxQ631zFF+nlQXLwmImeS5amR2dl2U8sg6U9jsQ==",
+      "bin": true
     }
   },
   "workspace": {
