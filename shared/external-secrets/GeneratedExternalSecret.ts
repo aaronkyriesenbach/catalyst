@@ -15,7 +15,7 @@ export default class GeneratedExternalSecret extends ExternalSecret {
       },
       spec: {
         refreshPolicy: ExternalSecretSpecRefreshPolicy.CREATED_ONCE,
-        dataFrom: fieldsToGenerate.map((_) => ({
+        dataFrom: fieldsToGenerate.map((field) => ({
           sourceRef: {
             generatorRef: {
               apiVersion: "generators.external-secrets.io/v1alpha1",
@@ -24,6 +24,12 @@ export default class GeneratedExternalSecret extends ExternalSecret {
               name: "secret-generator",
             },
           },
+          rewrite: [{
+            regexp: {
+              source: "password", // The password generator will only output the hardcoded key "password".
+              target: field, // This rewrites the output to the desired field name.
+            },
+          }],
         })),
         target: {
           template: {
