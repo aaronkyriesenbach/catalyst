@@ -24,8 +24,6 @@ export default class CNPGCluster extends Cluster {
       spec: {
         imageName: imageName,
         postgresql: postgresql,
-        postgresUid: 1000,
-        postgresGid: 1000,
         bootstrap: {
           initdb: {
             database: dbName ?? appName,
