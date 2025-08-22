@@ -9,6 +9,7 @@ import {
     ExternalSecretSpecDataFromSourceRefGeneratorRefKind
 } from "../../shared/imports/external-secrets.io.ts";
 import ConfigPVC from "../../shared/ConfigPVC.ts";
+import IngressRoute from "../../shared/traefik/IngressRoute.ts";
 
 class Immich extends Chart {
   constructor(scope: Construct) {
@@ -95,6 +96,14 @@ class Immich extends Chart {
           enabled: true,
         },
       }),
+    });
+
+    new IngressRoute(this, {
+      name: "immich",
+      service: {
+        name: "immich-server",
+        port: 2283,
+      },
     });
   }
 }
