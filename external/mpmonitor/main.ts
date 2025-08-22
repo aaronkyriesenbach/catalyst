@@ -4,17 +4,18 @@ import { Construct } from "npm:constructs";
 import Application from "../../shared/Application.ts";
 import GeneratedSecret from "../../shared/mittwald-secret-gen/GeneratedSecret.ts";
 import { Middleware } from "../../shared/imports/middleware-traefik.io.ts";
+import GeneratedExternalSecret from "../../shared/external-secrets/GeneratedExternalSecret.ts";
 
 class MPMonitor extends Chart {
   constructor(scope: Construct) {
     super(scope, crypto.randomUUID());
 
-    const dbPass = new GeneratedSecret(this, {
+    const dbPass = new GeneratedExternalSecret(this, {
       name: "db-pass",
       fieldsToGenerate: ["password"],
     });
 
-    const jwtSecret = new GeneratedSecret(this, {
+    const jwtSecret = new GeneratedExternalSecret(this, {
       name: "jwt-secret",
       fieldsToGenerate: ["secret"],
     });
