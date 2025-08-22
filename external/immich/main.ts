@@ -42,7 +42,7 @@ class Immich extends Chart {
 
     new CNPGCluster(this, {
       appName: "immich",
-      imageName: "ghcr.io/tensorchord/cloudnative-vectorchord:14-0.5.0",
+      imageName: "ghcr.io/tensorchord/cloudnative-vectorchord:14-0.4.3",
       instances: 3,
       secretName: dbSecret.name,
       postInitSQL: ["CREATE EXTENSION IF NOT EXISTS vchord CASCADE;"],
