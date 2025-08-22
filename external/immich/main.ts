@@ -58,7 +58,7 @@ class Immich extends Chart {
 
     new HelmChart(this, {
       name: "immich",
-      repo: "oci://ghcr.io/immich-app/immich-charts/immich",
+      repo: "https://immich-app.github.io/immich-charts",
       values: stringify({
         image: {
           tag: "v1.138.1",
