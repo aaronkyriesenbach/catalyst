@@ -3,7 +3,6 @@ import { Construct } from "npm:constructs";
 import { Lab53App } from "../../shared/helpers.ts";
 import GeneratedBasicAuthSecret from "../../shared/mittwald-secret-gen/GeneratedBasicAuthSecret.ts";
 import Application from "../../shared/Application.ts";
-import GeneratedSecret from "../../shared/mittwald-secret-gen/GeneratedSecret.ts";
 import { IntOrString } from "../../shared/imports/k8s.ts";
 import { Middleware } from "../../shared/imports/middleware-traefik.io.ts";
 import GeneratedExternalSecret from "../../shared/external-secrets/GeneratedExternalSecret.ts";
@@ -12,23 +11,18 @@ class TinyAuth extends Chart {
   constructor(scope: Construct) {
     super(scope, crypto.randomUUID());
 
-    const secret = new GeneratedSecret(this, {
+    const secret = new GeneratedExternalSecret(this, {
       name: "secret",
       fieldsToGenerate: ["secret"],
-      length: 32,
     });
 
-    new GeneratedExternalSecret(this, {
-        name: "test",
-        fieldsToGenerate: ["secret1", "secret2"],
+    const creds = new GeneratedExternalSecret(this, {
+        name: "tinyauth-creds",
+        fieldsToGenerate: ["password"],
         extraData: {
-            key: "value"
+            username: "aaron"
         }
     })
-
-    const creds = new GeneratedBasicAuthSecret(this, {
-      name: "tinyauth-creds",
-    });
 
     new Application(this, {
       name: "tinyauth",
@@ -58,7 +52,7 @@ class TinyAuth extends Chart {
             },
           }, {
             name: "DISABLE_CONTINUE",
-            value: "true"
+            value: "true",
           }],
           livenessProbe: {
             httpGet: {
