@@ -4,12 +4,13 @@ import { Construct } from "npm:constructs";
 import { HelmChart } from "../../shared/HelmChart.ts";
 import { stringify } from "npm:yaml@2.7.1";
 import CNPGCluster from "../../shared/CNPGCluster.ts";
-import {
-    ExternalSecret,
-    ExternalSecretSpecDataFromSourceRefGeneratorRefKind
-} from "../../shared/imports/external-secrets.io.ts";
 import ConfigPVC from "../../shared/ConfigPVC.ts";
 import IngressRoute from "../../shared/traefik/IngressRoute.ts";
+import {
+    ExternalSecret,
+    ExternalSecretSpecDataFromSourceRefGeneratorRefKind,
+    ExternalSecretSpecRefreshPolicy
+} from "../../shared/imports/external-secrets.io.ts";
 
 class Immich extends Chart {
   constructor(scope: Construct) {
@@ -20,6 +21,7 @@ class Immich extends Chart {
         name: "db-secret",
       },
       spec: {
+        refreshPolicy: ExternalSecretSpecRefreshPolicy.CREATED_ONCE,
         dataFrom: [{
           sourceRef: {
             generatorRef: {
