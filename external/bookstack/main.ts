@@ -2,7 +2,7 @@ import { Chart } from "npm:cdk8s";
 import { Construct } from "npm:constructs";
 import { Lab53App } from "../../shared/helpers.ts";
 import Application from "../../shared/Application.ts";
-import { MariaDb } from "../../shared/imports/k8s.mariadb.com.ts";
+import { MariaDb, MariaDbSpecStorageSize } from "../../shared/imports/k8s.mariadb.com.ts";
 import { DEFAULT_LSCR_ENV } from "../../shared/constants.ts";
 
 class Bookstack extends Chart {
@@ -17,6 +17,9 @@ class Bookstack extends Chart {
         replicas: 3,
         galera: {
           enabled: true,
+        },
+        storage: {
+          size: MariaDbSpecStorageSize.fromString("1Gi"),
         },
       },
     });
