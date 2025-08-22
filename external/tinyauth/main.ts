@@ -20,7 +20,8 @@ class TinyAuth extends Chart {
         name: "tinyauth-creds",
         fieldsToGenerate: ["password"],
         extraData: {
-            username: "aaron"
+            username: "aaron",
+            auth: "{{ htpasswd aaron .password }}",
         }
     })
 
