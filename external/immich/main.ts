@@ -6,11 +6,6 @@ import { stringify } from "npm:yaml@2.7.1";
 import CNPGCluster from "../../shared/CNPGCluster.ts";
 import ConfigPVC from "../../shared/ConfigPVC.ts";
 import IngressRoute from "../../shared/traefik/IngressRoute.ts";
-import {
-    ExternalSecret,
-    ExternalSecretSpecDataFromSourceRefGeneratorRefKind,
-    ExternalSecretSpecRefreshPolicy
-} from "../../shared/imports/external-secrets.io.ts";
 import GeneratedExternalSecret from "../../shared/external-secrets/GeneratedExternalSecret.ts";
 
 class Immich extends Chart {
@@ -18,12 +13,12 @@ class Immich extends Chart {
     super(scope, crypto.randomUUID());
 
     const dbSecret = new GeneratedExternalSecret(this, {
-        name: "db-secret",
-        fieldsToGenerate: ["password"],
-        extraData: {
-            username: "immich"
-        }
-    })
+      name: "db-secret",
+      fieldsToGenerate: ["password"],
+      extraData: {
+        username: "immich",
+      },
+    });
 
     new CNPGCluster(this, {
       appName: "immich",
@@ -85,8 +80,7 @@ class Immich extends Chart {
               enabled: true,
               type: "nfs",
               server: "192.168.53.40",
-              path: "/mnt/tank/data/shotwell",
-              readOnly: true,
+              path: "/mnt/tank/data/pictures",
             },
           },
         },
