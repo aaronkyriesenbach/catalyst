@@ -2,7 +2,8 @@
   "imports": {
     "@std/path": "jsr:@std/path@^1.0.8",
     "cdk8s": "npm:cdk8s@^2.69.63",
-    "constructs": "npm:constructs@^10.4.2"
+    "constructs": "npm:constructs@^10.4.2",
+    "prettier": "npm:prettier@^3.6.2"
   },
   "tasks": {
     "synth": "deno run --allow-env --allow-write --allow-read --allow-run $INIT_CWD/main.ts && cat $INIT_CWD/dist/*"

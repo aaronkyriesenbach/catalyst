@@ -7376,6 +7376,15 @@ export interface ClusterSecretStoreSpecProviderVault {
   readonly caProvider?: ClusterSecretStoreSpecProviderVaultCaProvider;
 
   /**
+   * CheckAndSet defines the Check-And-Set (CAS) settings for PushSecret operations.
+   * Only applies to Vault KV v2 stores. When enabled, write operations must include
+   * the current version of the secret to prevent unintentional overwrites.
+   *
+   * @schema ClusterSecretStoreSpecProviderVault#checkAndSet
+   */
+  readonly checkAndSet?: ClusterSecretStoreSpecProviderVaultCheckAndSet;
+
+  /**
    * ForwardInconsistent tells Vault to forward read-after-write requests to the Vault
    * leader instead of simply retrying within a loop. This can increase performance if
    * the option is enabled serverside.
@@ -7459,6 +7468,7 @@ export function toJson_ClusterSecretStoreSpecProviderVault(obj: ClusterSecretSto
     'auth': toJson_ClusterSecretStoreSpecProviderVaultAuth(obj.auth),
     'caBundle': obj.caBundle,
     'caProvider': toJson_ClusterSecretStoreSpecProviderVaultCaProvider(obj.caProvider),
+    'checkAndSet': toJson_ClusterSecretStoreSpecProviderVaultCheckAndSet(obj.checkAndSet),
     'forwardInconsistent': obj.forwardInconsistent,
     'headers': ((obj.headers) === undefined) ? undefined : (Object.entries(obj.headers).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {})),
     'namespace': obj.namespace,
@@ -9919,6 +9929,38 @@ export function toJson_ClusterSecretStoreSpecProviderVaultCaProvider(obj: Cluste
     'name': obj.name,
     'namespace': obj.namespace,
     'type': obj.type,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * CheckAndSet defines the Check-And-Set (CAS) settings for PushSecret operations.
+ * Only applies to Vault KV v2 stores. When enabled, write operations must include
+ * the current version of the secret to prevent unintentional overwrites.
+ *
+ * @schema ClusterSecretStoreSpecProviderVaultCheckAndSet
+ */
+export interface ClusterSecretStoreSpecProviderVaultCheckAndSet {
+  /**
+   * Required when true, all write operations must include a check-and-set parameter.
+   * This helps prevent unintentional overwrites of secrets.
+   *
+   * @schema ClusterSecretStoreSpecProviderVaultCheckAndSet#required
+   */
+  readonly required?: boolean;
+
+}
+
+/**
+ * Converts an object of type 'ClusterSecretStoreSpecProviderVaultCheckAndSet' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_ClusterSecretStoreSpecProviderVaultCheckAndSet(obj: ClusterSecretStoreSpecProviderVaultCheckAndSet | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'required': obj.required,
   };
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
@@ -34889,6 +34931,15 @@ export interface SecretStoreSpecProviderVault {
   readonly caProvider?: SecretStoreSpecProviderVaultCaProvider;
 
   /**
+   * CheckAndSet defines the Check-And-Set (CAS) settings for PushSecret operations.
+   * Only applies to Vault KV v2 stores. When enabled, write operations must include
+   * the current version of the secret to prevent unintentional overwrites.
+   *
+   * @schema SecretStoreSpecProviderVault#checkAndSet
+   */
+  readonly checkAndSet?: SecretStoreSpecProviderVaultCheckAndSet;
+
+  /**
    * ForwardInconsistent tells Vault to forward read-after-write requests to the Vault
    * leader instead of simply retrying within a loop. This can increase performance if
    * the option is enabled serverside.
@@ -34972,6 +35023,7 @@ export function toJson_SecretStoreSpecProviderVault(obj: SecretStoreSpecProvider
     'auth': toJson_SecretStoreSpecProviderVaultAuth(obj.auth),
     'caBundle': obj.caBundle,
     'caProvider': toJson_SecretStoreSpecProviderVaultCaProvider(obj.caProvider),
+    'checkAndSet': toJson_SecretStoreSpecProviderVaultCheckAndSet(obj.checkAndSet),
     'forwardInconsistent': obj.forwardInconsistent,
     'headers': ((obj.headers) === undefined) ? undefined : (Object.entries(obj.headers).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {})),
     'namespace': obj.namespace,
@@ -37432,6 +37484,38 @@ export function toJson_SecretStoreSpecProviderVaultCaProvider(obj: SecretStoreSp
     'name': obj.name,
     'namespace': obj.namespace,
     'type': obj.type,
+  };
+  // filter undefined values
+  return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
+}
+/* eslint-enable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+
+/**
+ * CheckAndSet defines the Check-And-Set (CAS) settings for PushSecret operations.
+ * Only applies to Vault KV v2 stores. When enabled, write operations must include
+ * the current version of the secret to prevent unintentional overwrites.
+ *
+ * @schema SecretStoreSpecProviderVaultCheckAndSet
+ */
+export interface SecretStoreSpecProviderVaultCheckAndSet {
+  /**
+   * Required when true, all write operations must include a check-and-set parameter.
+   * This helps prevent unintentional overwrites of secrets.
+   *
+   * @schema SecretStoreSpecProviderVaultCheckAndSet#required
+   */
+  readonly required?: boolean;
+
+}
+
+/**
+ * Converts an object of type 'SecretStoreSpecProviderVaultCheckAndSet' to JSON representation.
+ */
+/* eslint-disable max-len, @stylistic/max-len, quote-props, @stylistic/quote-props */
+export function toJson_SecretStoreSpecProviderVaultCheckAndSet(obj: SecretStoreSpecProviderVaultCheckAndSet | undefined): Record<string, any> | undefined {
+  if (obj === undefined) { return undefined; }
+  const result = {
+    'required': obj.required,
   };
   // filter undefined values
   return Object.entries(result).reduce((r, i) => (i[1] === undefined) ? r : ({ ...r, [i[0]]: i[1] }), {});
