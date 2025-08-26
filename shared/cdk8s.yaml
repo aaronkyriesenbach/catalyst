@@ -16,3 +16,5 @@ imports:
   - https://github.com/k3s-io/helm-controller/raw/refs/heads/master/pkg/crds/yaml/generated/helm.cattle.io_helmcharts.yaml
   - https://github.com/cloudnative-pg/cloudnative-pg/raw/refs/heads/main/config/crd/bases/postgresql.cnpg.io_clusters.yaml
   - https://github.com/mariadb-operator/mariadb-operator/raw/refs/heads/main/config/crd/bases/k8s.mariadb.com_mariadbs.yaml
+  - rec:=rec.yaml # https://github.com/RedisLabs/redis-enterprise-k8s-docs/raw/refs/heads/master/crds/rec_crd.yaml
+  - redb:=https://github.com/RedisLabs/redis-enterprise-k8s-docs/raw/refs/heads/master/crds/redb_crd.yaml
