@@ -10,13 +10,12 @@ class NFSSubdirExternalProvisioner extends Chart {
 
     new HelmChart(this, {
       name: "nfs-subdir-external-provisioner",
-      repo:
-        "https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/",
+      repo: "https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/",
       version: "4.0.18",
       values: stringify({
         nfs: {
-          server: "192.168.53.40",
-          path: "/mnt/tank/data/cluster/external",
+          server: "192.168.53.48",
+          path: "/mnt/bolt/cluster",
         },
         storageClass: {
           defaultClass: true,
