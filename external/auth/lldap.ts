@@ -23,7 +23,7 @@ export class LLDAP extends Chart {
 
     const userConfig = new GeneratedExternalSecret(this, {
       name: "lldap-users",
-      fieldsToGenerate: usersToCreate.map((username) => `${username}-password`),
+      fieldsToGenerate: usersToCreate.map((username) => `${username}_password`),
       extraData: {
         "users.json": JSON.stringify(
           Object.fromEntries(
@@ -32,7 +32,7 @@ export class LLDAP extends Chart {
               {
                 id: user,
                 email: `${user}@lab53.net`,
-                password: "{{ ." + user + "-password }}",
+                password: "{{ ." + user + "_password }}",
               },
             ]),
           ),
