@@ -105,8 +105,8 @@ export class LLDAP extends Chart {
         volumes: [
           {
             name: userConfig.name,
-            configMap: {
-              name: userConfig.name,
+            secret: {
+              secretName: userConfig.name,
             },
           },
         ],
