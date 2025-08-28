@@ -2,7 +2,10 @@ import { Chart } from "npm:cdk8s";
 import { Lab53App } from "../../shared/helpers.ts";
 import { Construct } from "npm:constructs";
 import { HelmChart } from "../../shared/HelmChart.ts";
-import { ClusterGenerator, ClusterGeneratorSpecKind } from "../../shared/imports/generators.external-secrets.io.ts";
+import {
+  ClusterGenerator,
+  ClusterGeneratorSpecKind,
+} from "../../shared/imports/generators.external-secrets.io.ts";
 
 class ExternalSecrets extends Chart {
   constructor(scope: Construct) {
@@ -25,6 +28,7 @@ class ExternalSecrets extends Chart {
             length: 32,
             allowRepeat: true,
             noUpper: false,
+            symbolCharacters: "~!@#$%^&*()_+-=|[]:<>?,./", // Don't use characters that could interface with templating
           },
         },
       },

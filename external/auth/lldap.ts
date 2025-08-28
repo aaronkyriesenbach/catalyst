@@ -43,6 +43,7 @@ export class LLDAP extends Chart {
     new Application(this, {
       name: "lldap",
       podSpecProps: {
+        securityContext: undefined,
         containers: [
           {
             name: "main",
