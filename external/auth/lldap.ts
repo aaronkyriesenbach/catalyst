@@ -13,7 +13,7 @@ export class LLDAP extends Chart {
 
     const lldapSecrets = new GeneratedExternalSecret(this, {
       name: "lldap-secrets",
-      fieldsToGenerate: ["jwt-secret", "key-seed"],
+      fieldsToGenerate: ["jwtsecret", "keyseed"],
     });
 
     const adminCreds = new GeneratedExternalSecret(this, {
@@ -54,13 +54,13 @@ export class LLDAP extends Chart {
               LLDAP_JWT_SECRET: {
                 secretKeyRef: {
                   name: lldapSecrets.name,
-                  key: "jwt-secret",
+                  key: "jwtsecret",
                 },
               },
               LLDAP_KEY_SEED: {
                 secretKeyRef: {
                   name: lldapSecrets.name,
-                  key: "key-seed",
+                  key: "keyseed",
                 },
               },
               LLDAP_LDAP_BASE_DN: "dc=lab53,dc=net",
