@@ -83,7 +83,7 @@ export class LLDAP extends Chart {
             name: "bootstrap",
             image: image,
             command: ["/app/bootstrap.sh"],
-            restartPolicy: "OnFailure",
+            restartPolicy: "Always",
             env: makeEnvVars({
               LLDAP_ADMIN_PASSWORD: {
                 secretKeyRef: {
