@@ -1,7 +1,7 @@
 import {
-    ExternalSecret,
-    ExternalSecretSpecDataFromSourceRefGeneratorRefKind,
-    ExternalSecretSpecRefreshPolicy
+  ExternalSecret,
+  ExternalSecretSpecDataFromSourceRefGeneratorRefKind,
+  ExternalSecretSpecRefreshPolicy
 } from "../imports/external-secrets.io.ts";
 import { Construct } from "npm:constructs";
 
@@ -14,22 +14,23 @@ export default class GeneratedExternalSecret extends ExternalSecret {
         name: name,
       },
       spec: {
-        refreshPolicy: ExternalSecretSpecRefreshPolicy.CREATED_ONCE,
+        refreshPolicy: ExternalSecretSpecRefreshPolicy.ON_CHANGE,
         dataFrom: fieldsToGenerate.map((field) => ({
           sourceRef: {
             generatorRef: {
               apiVersion: "generators.external-secrets.io/v1alpha1",
-              kind: ExternalSecretSpecDataFromSourceRefGeneratorRefKind
-                .CLUSTER_GENERATOR,
+              kind: ExternalSecretSpecDataFromSourceRefGeneratorRefKind.CLUSTER_GENERATOR,
               name: "secret-generator",
             },
           },
-          rewrite: [{
-            regexp: {
-              source: "password", // The password generator will only output the hardcoded key "password".
-              target: field, // This rewrites the output to the desired field name.
+          rewrite: [
+            {
+              regexp: {
+                source: "password", // The password generator will only output the hardcoded key "password".
+                target: field, // This rewrites the output to the desired field name.
+              },
             },
-          }],
+          ],
         })),
         target: {
           template: {
