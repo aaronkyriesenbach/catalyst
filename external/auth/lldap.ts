@@ -24,15 +24,16 @@ export class LLDAP extends Chart {
     const userConfig = new GeneratedExternalSecret(this, {
       name: "lldap-users",
       fieldsToGenerate: usersToCreate.map((username) => `${username}_password`),
-      extraData: {
-        "users.json": JSON.stringify(
-          usersToCreate.map((user) => ({
-            id: user,
-            email: `${user}@lab53.net`,
-            password: "{{ ." + user + "_password }}",
-          })),
-        ),
-      },
+      extraData: Object.fromEntries(
+        usersToCreate.map((u) => [
+          `${u}.json`,
+          JSON.stringify({
+            id: u,
+            email: `${u}@lab53.net`,
+            password: "{{ ." + u + "_password }}",
+          }),
+        ]),
+      ),
     });
 
     new Application(this, {
@@ -92,8 +93,7 @@ export class LLDAP extends Chart {
             volumeMounts: [
               {
                 name: userConfig.name,
-                mountPath: "/bootstrap/user-configs/users.json",
-                subPath: "users.json",
+                mountPath: "/bootstrap/user-configs",
               },
             ],
           },

@@ -1,7 +1,7 @@
 import {
   ExternalSecret,
   ExternalSecretSpecDataFromSourceRefGeneratorRefKind,
-  ExternalSecretSpecRefreshPolicy
+  ExternalSecretSpecRefreshPolicy,
 } from "../imports/external-secrets.io.ts";
 import { Construct } from "npm:constructs";
 
