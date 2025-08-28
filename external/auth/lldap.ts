@@ -79,7 +79,7 @@ export class LLDAP extends Chart {
           {
             name: "bootstrap",
             image: image,
-            command: ["/app/bootstrap.sh"],
+            command: ["/bin/bash", "-c", "/app/bootstrap.sh && sleep infinity"], // This cannot be run as an init container because the main container needs to be up
             restartPolicy: "Always",
             env: makeEnvVars({
               LLDAP_ADMIN_PASSWORD: {
