@@ -26,16 +26,11 @@ export class LLDAP extends Chart {
       fieldsToGenerate: usersToCreate.map((username) => `${username}_password`),
       extraData: {
         "users.json": JSON.stringify(
-          Object.fromEntries(
-            usersToCreate.map((user) => [
-              user,
-              {
-                id: user,
-                email: `${user}@lab53.net`,
-                password: "{{ ." + user + "_password }}",
-              },
-            ]),
-          ),
+          usersToCreate.map((user) => ({
+            id: user,
+            email: `${user}@lab53.net`,
+            password: "{{ ." + user + "_password }}",
+          })),
         ),
       },
     });
