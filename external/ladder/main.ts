@@ -10,24 +10,30 @@ export class Ladder extends Chart {
     new Application(this, {
       name: "ladder",
       podSpecProps: {
-        containers: [{
-          name: "ladder",
-          image: "ghcr.int.lab53.net/everywall/ladder:latest",
-          ports: [{ containerPort: 8080 }],
-          env: [{
-            name: "RULESET",
-            value:
-              "https://raw.githubusercontent.com/everywall/ladder-rules/main/ruleset.yaml",
-          }],
-        }],
+        containers: [
+          {
+            name: "ladder",
+            image: "ghcr.int.lab53.net/everywall/ladder:latest",
+            ports: [{ containerPort: 8080 }],
+            env: [
+              {
+                name: "RULESET",
+                value:
+                  "https://raw.githubusercontent.com/everywall/ladder-rules/main/ruleset.yaml",
+              },
+            ],
+          },
+        ],
       },
       webPort: 8080,
       ingressRouteSpec: {
-        middlewares: [{
-          name: "tinyauth",
-          namespace: "tinyauth"
-        }]
-      }
+        middlewares: [
+          {
+            name: "auth",
+            namespace: "auth",
+          },
+        ],
+      },
     });
   }
 }
