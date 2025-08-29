@@ -29,7 +29,7 @@ export class Ladder extends Chart {
       ingressRouteSpec: {
         middlewares: [
           {
-            name: "auth",
+            name: "oidc",
             namespace: "auth",
           },
         ],

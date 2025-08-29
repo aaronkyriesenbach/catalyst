@@ -4,6 +4,7 @@ import Application from "../../shared/Application.ts";
 import { makeEnvVars } from "../../shared/helpers.ts";
 import GeneratedExternalSecret from "../../shared/external-secrets/GeneratedExternalSecret.ts";
 import CNPGCluster from "../../shared/CNPGCluster.ts";
+import { Middleware } from "../../shared/imports/middleware-traefik.io.ts";
 
 export class PocketID extends Chart {
   constructor(scope: Construct) {
@@ -84,6 +85,23 @@ export class PocketID extends Chart {
       webPort: 1411,
       ingressRouteSpec: {
         customHostnamePrefix: "auth",
+      },
+    });
+
+    new Middleware(this, crypto.randomUUID(), {
+      metadata: {
+        name: "oidc",
+      },
+      spec: {
+        plugin: {
+          "traefik-oidc-plugin": {
+            Secret: "urn:k8s:secret:oidc-secret:pluginSecret",
+            Provider: {
+              ClientId: "a469471e-02d0-439c-a3d8-f8d818362b9e",
+              ClientSecret: "urn:k8s:secret:oidc-secret:clientSecret",
+            },
+          },
+        },
       },
     });
   }
