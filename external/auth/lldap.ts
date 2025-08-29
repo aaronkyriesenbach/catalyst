@@ -3,13 +3,14 @@ import { Construct } from "npm:constructs";
 import { makeEnvVars } from "../../shared/helpers.ts";
 import GeneratedExternalSecret from "../../shared/external-secrets/GeneratedExternalSecret.ts";
 import Application from "../../shared/Application.ts";
+import { User } from "./user.ts";
+import ConfigMap from "../../shared/k8s/ConfigMap.ts";
 
 export class LLDAP extends Chart {
   constructor(scope: Construct) {
     super(scope, crypto.randomUUID());
 
     const image = "hub.int.lab53.net/lldap/lldap:2025-08-21";
-    const usersToCreate = ["aaron", "pocketid"];
 
     const lldapSecrets = new GeneratedExternalSecret(this, {
       name: "lldap-secrets",
@@ -21,20 +22,53 @@ export class LLDAP extends Chart {
       fieldsToGenerate: ["password"],
     });
 
+    const users: { [id: string]: User } = {
+      aaron: {
+        email: "aaron@lab53.net",
+        firstName: "Aaron",
+        lastName: "Ky-Riesenbach",
+        groups: ["admins", "users"],
+      },
+    };
+
+    const serviceAccounts = ["pocketid"];
+
+    const allUsers = [...serviceAccounts, ...Object.keys(users)];
+
     const userConfig = new GeneratedExternalSecret(this, {
       name: "lldap-users",
-      fieldsToGenerate: usersToCreate.map((username) => `${username}_password`),
-      extraData: Object.fromEntries(
-        usersToCreate.map((u) => [
-          `${u}.json`,
-          JSON.stringify({
-            id: u,
-            email: `${u}@lab53.net`,
-            password: "{{ ." + u + "_password }}",
-            groups: ["lldap_strict_readonly"],
-          }),
-        ]),
-      ),
+      fieldsToGenerate: allUsers.map((username) => `${username}_password`),
+      extraData: {
+        ...Object.fromEntries(
+          Object.keys(users).map((u) => [
+            `${u}.json`,
+            JSON.stringify({
+              id: u,
+              password: "{{ ." + u + "_password }}",
+              ...users[u],
+            }),
+          ]),
+        ),
+        ...Object.fromEntries(
+          serviceAccounts.map((sa) => [
+            `${sa}.json`,
+            JSON.stringify({
+              id: sa,
+              email: `${sa}@lab53.net`,
+              password: "{{ ." + sa + "_password }}",
+              groups: ["serviceAccounts"],
+            }),
+          ]),
+        ),
+      },
+    });
+
+    const groupConfig = new ConfigMap(this, {
+      name: "lldap-groups",
+      data: {
+        "groups.json":
+          '{ "name": "users" }\n{ "name": "admins" }\n{ "name": "serviceAccounts" }\n',
+      },
     });
 
     new Application(this, {
@@ -101,6 +135,10 @@ export class LLDAP extends Chart {
                 name: userConfig.name,
                 mountPath: "/bootstrap/user-configs",
               },
+              {
+                name: groupConfig.name,
+                mountPath: "/bootstrap/group-configs",
+              },
             ],
           },
         ],
@@ -109,6 +147,12 @@ export class LLDAP extends Chart {
             name: userConfig.name,
             secret: {
               secretName: userConfig.name,
+            },
+          },
+          {
+            name: groupConfig.name,
+            configMap: {
+              name: groupConfig.name,
             },
           },
         ],
