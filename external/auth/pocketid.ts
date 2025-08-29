@@ -74,7 +74,7 @@ export class PocketID extends Chart {
               LDAP_ATTRIBUTE_USER_LAST_NAME: "lastname",
               LDAP_ATTRIBUTE_USER_PROFILE_PICTURE: "avatar",
               LDAP_ATTRIBUTE_GROUP_UNIQUE_IDENTIFIER: "uuid",
-              LDAP_ATTRIBUTE_GROUP_NAME: "displayname",
+              LDAP_ATTRIBUTE_GROUP_NAME: "cn",
               LDAP_ATTRIBUTE_ADMIN_GROUP: "admins",
             }),
             ports: [{ containerPort: 1411 }],
