@@ -62,6 +62,7 @@ export class PocketID extends Chart {
               LDAP_BASE: "dc=lab53,dc=net",
               LDAP_USER_SEARCH_FILTER:
                 "(&(objectClass=person)(memberOf=cn=users,ou=groups,dc=lab53,dc=net))",
+              LDAP_SOFT_DELETE_USERS: "false",
               LDAP_BIND_PASSWORD: {
                 secretKeyRef: {
                   name: "lldap-users",
