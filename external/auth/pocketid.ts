@@ -66,6 +66,8 @@ export class PocketID extends Chart {
                   key: "pocketid_password",
                 },
               },
+              LDAP_ATTRIBUTE_USER_UNIQUE_IDENTIFIER: "id",
+              LDAP_ATTRIBUTE_USER_USERNAME: "id",
             }),
             ports: [{ containerPort: 1411 }],
           },
