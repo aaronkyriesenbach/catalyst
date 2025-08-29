@@ -56,8 +56,8 @@ export class PocketID extends Chart {
               },
               UI_CONFIG_DISABLED: "true",
               LDAP_ENABLED: "true",
-              LDAP_URL: "ldap://lldap:17170",
-              LDAP_BIND_DN: "cn=pocketid,dc=lab53,dc=net",
+              LDAP_URL: "ldap://lldap:3890",
+              LDAP_BIND_DN: "cn=pocketid,ou=people,dc=lab53,dc=net",
               LDAP_BASE: "dc=lab53,dc=net",
               LDAP_SKIP_CERT_VERIFY: "true",
               LDAP_BIND_PASSWORD: {

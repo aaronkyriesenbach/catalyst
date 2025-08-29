@@ -71,7 +71,7 @@ export class LLDAP extends Chart {
             }),
             ports: [
               {
-                containerPort: 17170,
+                containerPort: 3890,
               },
             ],
           },
