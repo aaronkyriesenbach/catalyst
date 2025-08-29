@@ -56,7 +56,7 @@ export class LLDAP extends Chart {
               id: sa,
               email: `${sa}@lab53.net`,
               password: "{{ ." + sa + "_password }}",
-              groups: ["serviceAccounts"],
+              groups: ["serviceAccounts", "lldap_strict_readonly"],
             }),
           ]),
         ),
