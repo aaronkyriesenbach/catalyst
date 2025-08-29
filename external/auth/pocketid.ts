@@ -94,9 +94,10 @@ export class PocketID extends Chart {
       },
       spec: {
         plugin: {
-          "traefik-oidc-plugin": {
+          "traefik-oidc-auth": {
             Secret: "urn:k8s:secret:oidc-secret:pluginSecret",
             Provider: {
+              Url: "https://auth.lab53.net",
               ClientId: "a469471e-02d0-439c-a3d8-f8d818362b9e",
               ClientSecret: "urn:k8s:secret:oidc-secret:clientSecret",
             },
