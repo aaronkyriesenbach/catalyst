@@ -28,7 +28,7 @@ class ExternalSecrets extends Chart {
             length: 32,
             allowRepeat: true,
             noUpper: false,
-            symbolCharacters: "~!@#$%^&*()_+-=|[]:<>?,./", // Don't use characters that could interface with templating
+            symbols: 0, // Don't use characters so as to not interface with templating
           },
         },
       },
