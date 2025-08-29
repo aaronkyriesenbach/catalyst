@@ -16,17 +16,19 @@ export class ArgoConfig extends Chart {
         port: 443,
       },
       ingressRouteSpec: {
-        customHostname: "argo",
+        customHostnamePrefix: "argo",
       },
     });
 
     const execRole = new Role(this, {
       name: "argocd-server-exec",
-      rules: [{
-        apiGroups: ["*"],
-        resources: ["pods/exec"],
-        verbs: ["create"],
-      }],
+      rules: [
+        {
+          apiGroups: ["*"],
+          resources: ["pods/exec"],
+          verbs: ["create"],
+        },
+      ],
     });
 
     new RoleBinding(this, {
@@ -36,11 +38,13 @@ export class ArgoConfig extends Chart {
         kind: "Role",
         name: execRole.name,
       },
-      subjects: [{
-        kind: "ServiceAccount",
-        name: "argocd-server",
-        namespace: "argocd",
-      }],
+      subjects: [
+        {
+          kind: "ServiceAccount",
+          name: "argocd-server",
+          namespace: "argocd",
+        },
+      ],
     });
   }
 }

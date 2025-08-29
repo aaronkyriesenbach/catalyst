@@ -2,7 +2,6 @@ import { Chart } from "npm:cdk8s";
 import { Lab53App } from "../../shared/helpers.ts";
 import { Construct } from "npm:constructs";
 import Application from "../../shared/Application.ts";
-import GeneratedSecret from "../../shared/mittwald-secret-gen/GeneratedSecret.ts";
 import { Middleware } from "../../shared/imports/middleware-traefik.io.ts";
 import GeneratedExternalSecret from "../../shared/external-secrets/GeneratedExternalSecret.ts";
 
@@ -40,28 +39,35 @@ class MPMonitor extends Chart {
     new Application(this, {
       name: "postgres",
       podSpecProps: {
-        containers: [{
-          name: "main",
-          image: "hub.int.lab53.net/library/postgres:17-alpine",
-          env: [{
-            name: "POSTGRES_USER",
-            value: "mpmonitor",
-          }, {
-            name: "POSTGRES_PASSWORD",
-            valueFrom: {
-              secretKeyRef: {
-                name: dbPass.name,
-                key: "password",
+        containers: [
+          {
+            name: "main",
+            image: "hub.int.lab53.net/library/postgres:17-alpine",
+            env: [
+              {
+                name: "POSTGRES_USER",
+                value: "mpmonitor",
               },
-            },
-          }],
-          ports: [{ containerPort: 5432 }],
-        }],
+              {
+                name: "POSTGRES_PASSWORD",
+                valueFrom: {
+                  secretKeyRef: {
+                    name: dbPass.name,
+                    key: "password",
+                  },
+                },
+              },
+            ],
+            ports: [{ containerPort: 5432 }],
+          },
+        ],
         nasVolumeMounts: {
-          main: [{
-            mountPath: "/var/lib/postgresql/data",
-            subPath: "cluster/mpmonitor/postgres",
-          }],
+          main: [
+            {
+              mountPath: "/var/lib/postgresql/data",
+              subPath: "cluster/mpmonitor/postgres",
+            },
+          ],
         },
       },
     });
@@ -69,85 +75,104 @@ class MPMonitor extends Chart {
     new Application(this, {
       name: "api",
       podSpecProps: {
-        containers: [{
-          name: "main",
-          image: "registry.int.lab53.net/mpmonitor/api:1.0.0-SNAPSHOT",
-          env: [{
-            name: "DB_HOST",
-            value: "postgres",
-          }, {
-            name: "DB_USER",
-            value: "mpmonitor",
-          }, {
-            name: "DB_PASS",
-            valueFrom: {
-              secretKeyRef: {
-                name: dbPass.name,
-                key: "password",
+        containers: [
+          {
+            name: "main",
+            image: "registry.int.lab53.net/mpmonitor/api:1.0.0-SNAPSHOT",
+            env: [
+              {
+                name: "DB_HOST",
+                value: "postgres",
               },
-            },
-          }, {
-            name: "DB_NAME",
-            value: "mpmonitor",
-          }, {
-            name: "JWT_SECRET",
-            valueFrom: {
-              secretKeyRef: {
-                name: jwtSecret.name,
-                key: "secret",
+              {
+                name: "DB_USER",
+                value: "mpmonitor",
               },
-            },
-          }, {
-            name: "ACCESS_CODE",
-            valueFrom: {
-              secretKeyRef: {
-                name: "access-code",
-                key: "code",
+              {
+                name: "DB_PASS",
+                valueFrom: {
+                  secretKeyRef: {
+                    name: dbPass.name,
+                    key: "password",
+                  },
+                },
               },
-            },
-          }, {
-            name: "NTFY_HOST",
-            value: "https://ntfy.lab53.net",
-          }, {
-            name: "NTFY_TOKEN",
-            valueFrom: {
-              secretKeyRef: {
-                name: "ntfy-token",
-                key: "token",
+              {
+                name: "DB_NAME",
+                value: "mpmonitor",
               },
-            },
-          }],
-          ports: [{ containerPort: 8080 }],
-        }],
+              {
+                name: "JWT_SECRET",
+                valueFrom: {
+                  secretKeyRef: {
+                    name: jwtSecret.name,
+                    key: "secret",
+                  },
+                },
+              },
+              {
+                name: "ACCESS_CODE",
+                valueFrom: {
+                  secretKeyRef: {
+                    name: "access-code",
+                    key: "code",
+                  },
+                },
+              },
+              {
+                name: "NTFY_HOST",
+                value: "https://ntfy.lab53.net",
+              },
+              {
+                name: "NTFY_TOKEN",
+                valueFrom: {
+                  secretKeyRef: {
+                    name: "ntfy-token",
+                    key: "token",
+                  },
+                },
+              },
+            ],
+            ports: [{ containerPort: 8080 }],
+          },
+        ],
       },
       webPort: 8080,
       ingressRouteSpec: {
-        customHostname: "mpmonitor-api",
-        middlewares: [{
-          name: corsMiddleware.name,
-        }],
+        customHostnamePrefix: "mpmonitor-api",
+        middlewares: [
+          {
+            name: corsMiddleware.name,
+          },
+        ],
       },
     });
 
     new Application(this, {
       name: "ui",
       podSpecProps: {
-        containers: [{
-          name: "main",
-          image: "registry.int.lab53.net/mpmonitor/ui:1.0.0-SNAPSHOT",
-          env: [{
-            name: "API_HOST",
-            value: "https://mpmonitor-api.lab53.net",
-          }],
-          ports: [{ containerPort: 80 }],
-        }],
+        containers: [
+          {
+            name: "main",
+            image: "registry.int.lab53.net/mpmonitor/ui:1.0.0-SNAPSHOT",
+            env: [
+              {
+                name: "API_HOST",
+                value: "https://mpmonitor-api.lab53.net",
+              },
+            ],
+            ports: [{ containerPort: 80 }],
+          },
+        ],
       },
       webPort: 80,
       ingressRouteSpec: {
-        customHostname: "mpmonitor",
-        middlewares: [{
-          name: corsMiddleware.name,
-        }],
+        customHostnamePrefix: "mpmonitor",
+        middlewares: [
+          {
+            name: corsMiddleware.name,
+          },
+        ],
       },
     });
   }

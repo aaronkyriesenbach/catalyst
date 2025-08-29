@@ -2,21 +2,17 @@ import {
   IngressRoute as TraefikIngressRoute,
   IngressRouteSpecRoutesKind,
   IngressRouteSpecRoutesMiddlewares,
-  IngressRouteSpecRoutesServicesPort
+  IngressRouteSpecRoutesServicesPort,
 } from "../imports/ingressroute-traefik.io.ts";
 import { Construct } from "npm:constructs";
 
 export default class IngressRoute extends TraefikIngressRoute {
   constructor(scope: Construct, props: IngressRouteProps) {
-    const {
-      name,
-      service,
-      ingressRouteSpec,
-    } = props;
+    const { name, service, ingressRouteSpec } = props;
 
     const {
       subdomain,
-      customHostname,
+      customHostnamePrefix,
       matchOverride,
       useInsecureTransport = true,
       middlewares,
@@ -28,22 +24,28 @@ export default class IngressRoute extends TraefikIngressRoute {
       },
       spec: {
         entryPoints: ["websecure"],
-        routes: [{
-          match: matchOverride ??
-            `Host(\`${
-              [customHostname ?? name, subdomain, "lab53.net"].filter(Boolean)
-                .join(".")
-            }\`)`,
-          kind: IngressRouteSpecRoutesKind.RULE,
-          middlewares: middlewares,
-          services: [{
-            name: service.name,
-            serversTransport: useInsecureTransport
-              ? "traefik-insecuretransport@kubernetescrd"
-              : undefined,
-            port: IngressRouteSpecRoutesServicesPort.fromNumber(service.port),
-          }],
-        }],
+        routes: [
+          {
+            match:
+              matchOverride ??
+              `Host(\`${[customHostnamePrefix ?? name, subdomain, "lab53.net"]
+                .filter(Boolean)
+                .join(".")}\`)`,
+            kind: IngressRouteSpecRoutesKind.RULE,
+            middlewares: middlewares,
+            services: [
+              {
+                name: service.name,
+                serversTransport: useInsecureTransport
+                  ? "traefik-insecuretransport@kubernetescrd"
+                  : undefined,
+                port: IngressRouteSpecRoutesServicesPort.fromNumber(
+                  service.port,
+                ),
+              },
+            ],
+          },
+        ],
       },
     });
   }
@@ -60,7 +62,7 @@ export type IngressRouteProps = {
 
 export type IngressRouteSpec = {
   subdomain?: string;
-  customHostname?: string;
+  customHostnamePrefix?: string;
   matchOverride?: string;
   useInsecureTransport?: boolean;
   middlewares?: IngressRouteSpecRoutesMiddlewares[];
