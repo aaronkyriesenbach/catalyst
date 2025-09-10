@@ -3,13 +3,7 @@ import { Construct } from "npm:constructs";
 import { Lab53App } from "../../shared/helpers.ts";
 import { HelmChart } from "../../shared/HelmChart.ts";
 import { RedisEnterpriseCluster } from "../../shared/imports/rec-app.redislabs.com.ts";
-import {
-  KubeClusterRole,
-  KubeClusterRoleBinding,
-  KubeNamespace,
-  KubeRole,
-  KubeRoleBinding,
-} from "../../shared/imports/k8s.ts";
+import { KubeClusterRole, KubeConfigMap, KubeRoleBinding } from "../../shared/imports/k8s.ts";
 import { stringify } from "npm:yaml@2.7.1";
 
 class Redis extends Chart {
@@ -54,104 +48,88 @@ class Redis extends Chart {
       },
     });
 
-    const managedNamespaces = ["authelia", "immich", "outline"];
-
-    managedNamespaces.map(
-      (namespace) =>
-        new KubeNamespace(this, crypto.randomUUID(), {
-          metadata: {
-            name: namespace,
-            labels: {
-              "redis.enabled": "true",
-            },
-          },
-        }),
-    );
+    const managedNamespaces = ["auth", "immich", "outline"];
 
     // Roles and bindings created per https://redis.io/docs/latest/operate/kubernetes/7.4.6/re-clusters/multi-namespace/
-    managedNamespaces.map(
-      (namespace) =>
-        new KubeRole(this, crypto.randomUUID(), {
-          metadata: {
-            name: `redb-role-${namespace}`,
-            namespace: namespace,
-            labels: {
-              app: "redis-enterprise",
-            },
-          },
-          rules: [
-            {
-              apiGroups: ["app.redislabs.com"],
-              resources: [
-                "redisenterpriseclusters",
-                "redisenterpriseclusters/status",
-                "redisenterpriseclusters/finalizers",
-                "redisenterprisedatabases",
-                "redisenterprisedatabases/status",
-                "redisenterprisedatabases/finalizers",
-                "redisenterpriseremoteclusters",
-                "redisenterpriseremoteclusters/status",
-                "redisenterpriseremoteclusters/finalizers",
-                "redisenterpriseactiveactivedatabases",
-                "redisenterpriseactiveactivedatabases/status",
-                "redisenterpriseactiveactivedatabases/finalizers",
-              ],
-              verbs: [
-                "delete",
-                "deletecollection",
-                "get",
-                "list",
-                "patch",
-                "create",
-                "update",
-                "watch",
-              ],
-            },
-            {
-              apiGroups: [""],
-              resources: ["secrets"],
-              verbs: [
-                "update",
-                "get",
-                "read",
-                "list",
-                "listallnamespaces",
-                "watch",
-                "watchlist",
-                "watchlistallnamespaces",
-                "create",
-                "patch",
-                "replace",
-                "delete",
-                "deletecollection",
-              ],
-            },
-            {
-              apiGroups: [""],
-              resources: ["endpoints"],
-              verbs: ["get", "list", "watch"],
-            },
-            {
-              apiGroups: [""],
-              resources: ["events"],
-              verbs: ["create"],
-            },
-            {
-              apiGroups: [""],
-              resources: ["services"],
-              verbs: [
-                "get",
-                "watch",
-                "list",
-                "update",
-                "patch",
-                "create",
-                "delete",
-              ],
-            },
+    new KubeClusterRole(this, crypto.randomUUID(), {
+      metadata: {
+        name: `redb-role`,
+        labels: {
+          app: "redis-enterprise",
+        },
+      },
+      rules: [
+        {
+          apiGroups: ["app.redislabs.com"],
+          resources: [
+            "redisenterpriseclusters",
+            "redisenterpriseclusters/status",
+            "redisenterpriseclusters/finalizers",
+            "redisenterprisedatabases",
+            "redisenterprisedatabases/status",
+            "redisenterprisedatabases/finalizers",
+            "redisenterpriseremoteclusters",
+            "redisenterpriseremoteclusters/status",
+            "redisenterpriseremoteclusters/finalizers",
+            "redisenterpriseactiveactivedatabases",
+            "redisenterpriseactiveactivedatabases/status",
+            "redisenterpriseactiveactivedatabases/finalizers",
           ],
-        }),
-    );
+          verbs: [
+            "delete",
+            "deletecollection",
+            "get",
+            "list",
+            "patch",
+            "create",
+            "update",
+            "watch",
+          ],
+        },
+        {
+          apiGroups: [""],
+          resources: ["secrets"],
+          verbs: [
+            "update",
+            "get",
+            "read",
+            "list",
+            "listallnamespaces",
+            "watch",
+            "watchlist",
+            "watchlistallnamespaces",
+            "create",
+            "patch",
+            "replace",
+            "delete",
+            "deletecollection",
+          ],
+        },
+        {
+          apiGroups: [""],
+          resources: ["endpoints"],
+          verbs: ["get", "list", "watch"],
+        },
+        {
+          apiGroups: [""],
+          resources: ["events"],
+          verbs: ["create"],
+        },
+        {
+          apiGroups: [""],
+          resources: ["services"],
+          verbs: [
+            "get",
+            "watch",
+            "list",
+            "update",
+            "patch",
+            "create",
+            "delete",
+          ],
+        },
+      ],
+    });
 
     managedNamespaces.map(
       (namespace) =>
@@ -176,47 +154,19 @@ class Redis extends Chart {
             },
           ],
           roleRef: {
-            kind: "Role",
-            name: `redb-role-${namespace}`,
+            kind: "ClusterRole",
+            name: "redb-role",
             apiGroup: "rbac.authorization.k8s.io",
           },
         }),
     );
 
-    new KubeClusterRole(this, crypto.randomUUID(), {
+    new KubeConfigMap(this, crypto.randomUUID(), {
       metadata: {
-        name: "redis-enterprise-operator-consumer-ns",
-        labels: {
-          app: "redis-enterprise",
-        },
+        name: "operator-environment-config",
       },
-      rules: [
-        {
-          apiGroups: [""],
-          resources: ["namespaces"],
-          verbs: ["list", "watch"],
-        },
-      ],
-    });
-
-    new KubeClusterRoleBinding(this, crypto.randomUUID(), {
-      metadata: {
-        name: "redis-enterprise-operator-consumer-ns",
-        labels: {
-          app: "redis-enterprise",
-        },
-      },
-      subjects: [
-        {
-          kind: "ServiceAccount",
-          name: "redis-enterprise-operator",
-          namespace: recNamespace,
-        },
-      ],
-      roleRef: {
-        kind: "ClusterRole",
-        name: "redis-enterprise-operator-consumer-ns",
-        apiGroup: "rbac.authorization.k8s.io",
+      data: {
+        REDB_NAMESPACES: managedNamespaces.join(","),
       },
     });
   }
