@@ -4,10 +4,9 @@ import { Construct } from "npm:constructs";
 import { HelmChart } from "../../shared/HelmChart.ts";
 import { stringify } from "npm:yaml@2.7.1";
 import CNPGCluster from "../../shared/CNPGCluster.ts";
-import ConfigPVC from "../../shared/ConfigPVC.ts";
 import IngressRoute from "../../shared/traefik/IngressRoute.ts";
 import GeneratedExternalSecret from "../../shared/external-secrets/GeneratedExternalSecret.ts";
-import { KubePersistentVolume, Quantity } from "../../shared/imports/k8s.ts";
+import { KubePersistentVolume, KubePersistentVolumeClaim, Quantity } from "../../shared/imports/k8s.ts";
 
 class Immich extends Chart {
   constructor(scope: Construct) {
@@ -33,6 +32,8 @@ class Immich extends Chart {
       },
     });
 
+    const storageSize = Quantity.fromString("1Ti");
+
     const pv = new KubePersistentVolume(this, crypto.randomUUID(), {
       metadata: {
         name: "immich-data",
@@ -40,19 +41,30 @@ class Immich extends Chart {
       spec: {
         accessModes: ["ReadWriteMany"],
         capacity: {
-          storage: Quantity.fromString("1Ti"),
+          storage: storageSize,
         },
         nfs: {
           server: "192.168.53.40",
           path: "/mnt/tank/data/immich",
         },
+        storageClassName: "manual",
       },
     });
 
-    const pvc = new ConfigPVC(this, {
-      name: "immich-data",
-      accessMode: "ReadWriteMany",
-      persistentVolume: pv.name,
+    const pvc = new KubePersistentVolumeClaim(this, crypto.randomUUID(), {
+      metadata: {
+        name: "immich-data",
+      },
+      spec: {
+        accessModes: ["ReadWriteMany"],
+        volumeName: pv.name,
+        storageClassName: "manual",
+        resources: {
+          requests: {
+            storage: storageSize,
+          },
+        },
+      },
     });
 
     new HelmChart(this, {
