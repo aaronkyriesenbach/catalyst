@@ -6,11 +6,7 @@ import { stringify } from "npm:yaml@2.7.1";
 import CNPGCluster from "../../shared/CNPGCluster.ts";
 import IngressRoute from "../../shared/traefik/IngressRoute.ts";
 import GeneratedExternalSecret from "../../shared/external-secrets/GeneratedExternalSecret.ts";
-import {
-  KubePersistentVolume,
-  KubePersistentVolumeClaim,
-  Quantity,
-} from "../../shared/imports/k8s.ts";
+import { KubePersistentVolume, KubePersistentVolumeClaim, Quantity } from "../../shared/imports/k8s.ts";
 import { RedisEnterpriseDatabase } from "../../shared/imports/redb-app.redislabs.com.ts";
 
 class Immich extends Chart {
@@ -84,6 +80,7 @@ class Immich extends Chart {
             name: "lab53-cluster",
           },
           memorySize: "1GB",
+          evictionPolicy: "noeviction", // Immich wants the noeviction policy; not a concern as Redis data is not criticals
         },
       },
     );
@@ -106,6 +103,22 @@ class Immich extends Chart {
             },
           },
           REDIS_HOSTNAME: redisDatabase.name,
+          REDIS_PORT: {
+            valueFrom: {
+              secretKeyRef: {
+                name: `redb-${redisDatabase.name}`,
+                key: "port",
+              },
+            },
+          },
+          REDIS_PASSWORD: {
+            valueFrom: {
+              secretKeyRef: {
+                name: `redb-${redisDatabase.name}`,
+                key: "password",
+              },
+            },
+          },
         },
         immich: {
           persistence: {
