@@ -54,7 +54,7 @@ class Redis extends Chart {
       },
     });
 
-    const managedNamespaces = ["authelia", "outline"];
+    const managedNamespaces = ["authelia", "immich", "outline"];
 
     managedNamespaces.map(
       (namespace) =>
