@@ -7,7 +7,7 @@ import CNPGCluster from "../../shared/CNPGCluster.ts";
 import ConfigPVC from "../../shared/ConfigPVC.ts";
 import IngressRoute from "../../shared/traefik/IngressRoute.ts";
 import GeneratedExternalSecret from "../../shared/external-secrets/GeneratedExternalSecret.ts";
-import { KubePersistentVolume } from "../../shared/imports/k8s.ts";
+import { KubePersistentVolume, Quantity } from "../../shared/imports/k8s.ts";
 
 class Immich extends Chart {
   constructor(scope: Construct) {
@@ -38,6 +38,10 @@ class Immich extends Chart {
         name: "immich-data",
       },
       spec: {
+        accessModes: ["ReadWriteMany"],
+        capacity: {
+          storage: Quantity.fromString("1Ti"),
+        },
         nfs: {
           server: "192.168.53.40",
           path: "/mnt/tank/data/immich",
