@@ -6,7 +6,12 @@ import { stringify } from "npm:yaml@2.7.1";
 import CNPGCluster from "../../shared/CNPGCluster.ts";
 import IngressRoute from "../../shared/traefik/IngressRoute.ts";
 import GeneratedExternalSecret from "../../shared/external-secrets/GeneratedExternalSecret.ts";
-import { KubePersistentVolume, KubePersistentVolumeClaim, Quantity } from "../../shared/imports/k8s.ts";
+import {
+  KubePersistentVolume,
+  KubePersistentVolumeClaim,
+  Quantity,
+} from "../../shared/imports/k8s.ts";
+import { RedisEnterpriseDatabase } from "../../shared/imports/redb-app.redislabs.com.ts";
 
 class Immich extends Chart {
   constructor(scope: Construct) {
@@ -67,12 +72,28 @@ class Immich extends Chart {
       },
     });
 
+    const redisDatabase = new RedisEnterpriseDatabase(
+      this,
+      crypto.randomUUID(),
+      {
+        metadata: {
+          name: "immich-redis",
+        },
+        spec: {
+          redisEnterpriseCluster: {
+            name: "lab53-cluster",
+          },
+          memorySize: "10GB",
+        },
+      },
+    );
+
     new HelmChart(this, {
       name: "immich",
       repo: "https://immich-app.github.io/immich-charts",
       values: stringify({
         image: {
-          tag: "v1.138.1",
+          tag: "v1.141.1",
         },
         env: {
           DB_HOSTNAME: "immich-cluster-rw",
@@ -84,6 +105,7 @@ class Immich extends Chart {
               },
             },
           },
+          REDIS_HOSTNAME: redisDatabase.name,
         },
         immich: {
           persistence: {
@@ -101,19 +123,6 @@ class Immich extends Chart {
             },
           },
         },
-        redis: {
-          enabled: true,
-        },
-        // server: {
-        //   persistence: {
-        //     photos: {
-        //       enabled: true,
-        //       type: "nfs",
-        //       server: "192.168.53.40",
-        //       path: "/mnt/tank/data/pictures",
-        //     },
-        //   },
-        // },
       }),
     });
 
