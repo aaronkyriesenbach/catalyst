@@ -3,7 +3,7 @@ import { Construct } from "npm:constructs";
 import { Lab53App } from "../../shared/helpers.ts";
 import { HelmChart } from "../../shared/HelmChart.ts";
 import { RedisEnterpriseCluster } from "../../shared/imports/rec-app.redislabs.com.ts";
-import { KubeClusterRole, KubeConfigMap, KubeRoleBinding } from "../../shared/imports/k8s.ts";
+import { KubeClusterRole, KubeConfigMap, KubeNamespace, KubeRoleBinding } from "../../shared/imports/k8s.ts";
 import { stringify } from "npm:yaml@2.7.1";
 
 class Redis extends Chart {
@@ -49,6 +49,15 @@ class Redis extends Chart {
     });
 
     const managedNamespaces = ["auth", "immich", "outline"];
+
+    managedNamespaces.map(
+      (ns) =>
+        new KubeNamespace(this, crypto.randomUUID(), {
+          metadata: {
+            name: ns,
+          },
+        }),
+    );
 
     // Roles and bindings created per https://redis.io/docs/latest/operate/kubernetes/7.4.6/re-clusters/multi-namespace/
     new KubeClusterRole(this, crypto.randomUUID(), {

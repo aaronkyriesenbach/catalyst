@@ -83,7 +83,7 @@ class Immich extends Chart {
           redisEnterpriseCluster: {
             name: "lab53-cluster",
           },
-          memorySize: "10GB",
+          memorySize: "1GB",
         },
       },
     );
