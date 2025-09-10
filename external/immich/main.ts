@@ -7,6 +7,7 @@ import CNPGCluster from "../../shared/CNPGCluster.ts";
 import ConfigPVC from "../../shared/ConfigPVC.ts";
 import IngressRoute from "../../shared/traefik/IngressRoute.ts";
 import GeneratedExternalSecret from "../../shared/external-secrets/GeneratedExternalSecret.ts";
+import { KubePersistentVolume } from "../../shared/imports/k8s.ts";
 
 class Immich extends Chart {
   constructor(scope: Construct) {
@@ -32,9 +33,22 @@ class Immich extends Chart {
       },
     });
 
+    const pv = new KubePersistentVolume(this, crypto.randomUUID(), {
+      metadata: {
+        name: "immich-data",
+      },
+      spec: {
+        nfs: {
+          server: "192.168.53.40",
+          path: "/mnt/tank/data/immich",
+        },
+      },
+    });
+
     const pvc = new ConfigPVC(this, {
       name: "immich-data",
       accessMode: "ReadWriteMany",
+      persistentVolume: pv.name,
     });
 
     new HelmChart(this, {
@@ -74,16 +88,16 @@ class Immich extends Chart {
         redis: {
           enabled: true,
         },
-        server: {
-          persistence: {
-            photos: {
-              enabled: true,
-              type: "nfs",
-              server: "192.168.53.40",
-              path: "/mnt/tank/data/pictures",
-            },
-          },
-        },
+        // server: {
+        //   persistence: {
+        //     photos: {
+        //       enabled: true,
+        //       type: "nfs",
+        //       server: "192.168.53.40",
+        //       path: "/mnt/tank/data/pictures",
+        //     },
+        //   },
+        // },
       }),
     });
 
