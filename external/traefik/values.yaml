@@ -29,3 +29,17 @@ ingressRoute:
     matchRule: Host(`traefik.lab53.net`)
     entryPoints:
       - websecure
+
+ports:
+  web:
+    transport:
+      respondingTimeouts:
+        readTimeout: 600s
+        idleTimeout: 600s
+        writeTimeout: 600s
+  websecure:
+    transport:
+      respondingTimeouts:
+        readTimeout: 600s
+        idleTimeout: 600s
+        writeTimeout: 600s
