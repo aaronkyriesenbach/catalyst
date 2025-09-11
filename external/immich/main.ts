@@ -6,7 +6,11 @@ import { stringify } from "npm:yaml@2.7.1";
 import CNPGCluster from "../../shared/CNPGCluster.ts";
 import IngressRoute from "../../shared/traefik/IngressRoute.ts";
 import GeneratedExternalSecret from "../../shared/external-secrets/GeneratedExternalSecret.ts";
-import { KubePersistentVolume, KubePersistentVolumeClaim, Quantity } from "../../shared/imports/k8s.ts";
+import {
+  KubePersistentVolume,
+  KubePersistentVolumeClaim,
+  Quantity,
+} from "../../shared/imports/k8s.ts";
 import { RedisEnterpriseDatabase } from "../../shared/imports/redb-app.redislabs.com.ts";
 
 class Immich extends Chart {
