@@ -3,10 +3,19 @@ import { Lab53App } from "../../shared/helpers.ts";
 import { Construct } from "npm:constructs";
 import Application from "../../shared/Application.ts";
 import { IntOrString } from "../../shared/imports/k8s.ts";
+import ConfigPVC from "../../shared/ConfigPVC.ts";
 
 class Ntfy extends Chart {
   constructor(scope: Construct) {
     super(scope, crypto.randomUUID());
+
+    const cache = new ConfigPVC(this, {
+      name: "ntfy-cache",
+    });
+
+    const config = new ConfigPVC(this, {
+      name: "ntfy-config",
+    });
 
     new Application(this, {
       name: "ntfy",
@@ -35,16 +44,25 @@ class Ntfy extends Chart {
             name: "NTFY_UPSTREAM_BASE_URL",
             value: "https://ntfy.sh",
           }],
-        }],
-        nasVolumeMounts: {
-          ntfy: [{
+          volumeMounts: [{
+            name: cache.name,
             mountPath: "/var/cache/ntfy",
-            subPath: "ntfy/cache",
           }, {
+            name: config.name,
             mountPath: "/var/lib/ntfy",
-            subPath: "ntfy/config",
           }],
-        },
+        }],
+        volumes: [{
+          name: cache.name,
+          persistentVolumeClaim: {
+            claimName: cache.name,
+          },
+        }, {
+          name: config.name,
+          persistentVolumeClaim: {
+            claimName: config.name,
+          },
+        }],
       },
       webPort: 80,
     });
