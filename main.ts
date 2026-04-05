@@ -9,6 +9,8 @@ if (process.env.ARGOCD_ENV_APP_CONFIG) {
 
   renderAppFromConfig(config);
 } else {
+  const resources: string[] = [];
+
   for (const entry of readdirSync("apps")) {
     const appConfig = await loadAppConfig(entry);
     const { name, namespace } = appConfig;
@@ -39,6 +41,8 @@ if (process.env.ARGOCD_ENV_APP_CONFIG) {
       },
     });
 
-    console.log(stringify(app));
+    resources.push(stringify(app));
   }
+
+  console.log(resources.join("\n---\n"));
 }
