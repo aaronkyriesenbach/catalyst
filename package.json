@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bun run --watch main.ts"
+    "dev": "bun run --watch main.ts",
+    "render": "bun run render.ts"
   },
   "dependencies": {
     "@kubernetes-models/argo-cd": "^2.7.2",
