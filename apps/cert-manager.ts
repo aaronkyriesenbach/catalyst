@@ -8,8 +8,7 @@ const chart = {
     name: "cert-manager",
   },
   spec: {
-    repo: "oci://quay.io/jetstack/charts",
-    chart: "cert-manager",
+    chart: "oci://quay.io/jetstack/charts/cert-manager",
     targetNamespace: "cert-manager",
     version: "v1.20.1",
     set: {
