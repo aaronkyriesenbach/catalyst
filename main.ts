@@ -16,6 +16,7 @@ if (process.env.ARGOCD_ENV_APP_CONFIG) {
     const app = new Application({
       metadata: {
         name: name,
+        namespace: "argocd",
       },
       spec: {
         project: "default",

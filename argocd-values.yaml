@@ -23,7 +23,7 @@ repoServer:
       securityContext:
         runAsNonRoot: true
         runAsUser: 999
-      env:
+      env: # This is required to allow Bun to install dependencies at a path it has write access to
         - name: BUN_INSTALL_CACHE_DIR
           value: /tmp
       volumeMounts:
