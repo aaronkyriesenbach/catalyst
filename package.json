@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@kubernetes-models/argo-cd": "^2.7.2",
+    "@kubernetes-models/cert-manager": "^4.4.4",
     "@kubernetes-models/gateway-api": "^0.7.4",
     "kubernetes-models": "^4.5.1",
     "yaml": "^2.7.0"
