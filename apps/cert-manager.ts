@@ -8,11 +8,11 @@ const chart = {
   },
   spec: {
     repo: "oci://quay.io/jetstack/charts",
-    chart: "cert-manager",
-    version: "v1.20.1",
-    set: {
-      "crds.enabled": true,
-    },
+    // chart: "cert-manager",
+    // version: "v1.20.1",
+    // set: {
+    //   "crds.enabled": true,
+    // },
   },
 };
 
