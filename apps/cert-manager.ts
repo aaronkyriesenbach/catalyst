@@ -1,3 +1,4 @@
+import { ConfigMap } from "kubernetes-models/v1";
 import { AppConfig } from "../types";
 
 const chart = {
@@ -8,25 +9,23 @@ const chart = {
   },
   spec: {
     repo: "oci://quay.io/jetstack/charts",
-    // chart: "cert-manager",
-    // version: "v1.20.1",
-    // set: {
-    //   "crds.enabled": true,
-    // },
+    chart: "cert-manager",
+    version: "v1.20.1",
+    set: {
+      "crds.enabled": true,
+    },
   },
 };
 
-const cm = {
-  apiVersion: "v1",
-  kind: "ConfigMap",
+const cm = new ConfigMap({
   metadata: {
     name: "test",
   },
-};
+});
 
 const config: AppConfig = {
   name: "cert-manager",
-  //   extraResources: [cm],
+  extraResources: [cm],
 };
 
 export default config;
