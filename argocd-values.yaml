@@ -1,0 +1,41 @@
+# install: helm upgrade --install -n argocd --create-namespace -f argocd-values.yaml argocd argocd/argo-cd 
+
+global:
+  domain: argocd.int.lab53.net
+
+configs:
+  cm:
+    exec.enabled: true
+  cmp:
+    create: true
+    plugins:
+      ts:
+        generate:
+          command: ["deno", "run", "-A", "main.ts"]
+        discover:
+          fileName: main.ts
+
+repoServer:
+  extraContainers:
+    - name: ts-cmp
+      command: ["/var/run/argocd/argocd-cmp-server"]
+      image: denoland/deno:2.7.11
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999
+      volumeMounts:
+        - mountPath: /tmp
+          name: cmp-tmp
+        - mountPath: /var/run/argocd
+          name: var-files
+        - mountPath: /home/argocd/cmp-server/plugins
+          name: plugins
+        - mountPath: /home/argocd/cmp-server/config/plugin.yaml
+          name: argocd-cmp-cm
+          subPath: ts.yaml
+  volumes:
+    - name: argocd-cmp-cm
+      configMap:
+        name: argocd-cmp-cm
+    - name: cmp-tmp
+      emptyDir: {}
