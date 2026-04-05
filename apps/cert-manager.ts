@@ -16,9 +16,17 @@ const chart = {
   },
 };
 
+const cm = {
+  apiVersion: "v1",
+  kind: "ConfigMap",
+  metadata: {
+    name: "test",
+  },
+};
+
 const config: AppConfig = {
   name: "cert-manager",
-  extraResources: [chart],
+  extraResources: [cm],
 };
 
 export default config;
