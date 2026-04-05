@@ -26,7 +26,7 @@ const cm = {
 
 const config: AppConfig = {
   name: "cert-manager",
-  extraResources: [cm],
+  //   extraResources: [cm],
 };
 
 export default config;
