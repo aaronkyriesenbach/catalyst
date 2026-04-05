@@ -6,6 +6,7 @@
       "name": "catalyst",
       "dependencies": {
         "@kubernetes-models/argo-cd": "^2.7.2",
+        "@kubernetes-models/gateway-api": "^0.7.4",
         "kubernetes-models": "^4.5.1",
         "yaml": "^2.7.0",
       },
@@ -20,6 +21,8 @@
     "@kubernetes-models/argo-cd": ["@kubernetes-models/argo-cd@2.7.2", "", { "dependencies": { "@kubernetes-models/apimachinery": "^2.2.0", "@kubernetes-models/base": "^5.0.1", "@kubernetes-models/validate": "^4.0.0", "@swc/helpers": "^0.5.8" } }, "sha512-Dge+7Uq54dt5c3pzusOw8i26FHWqJiyiFqHKQKHUNjOq2zb3e7LY2OYBrNP7hDSoM0Ap5K9cJTMgNzsaaKdjOQ=="],
 
     "@kubernetes-models/base": ["@kubernetes-models/base@5.0.1", "", { "dependencies": { "@kubernetes-models/validate": "^4.0.0", "is-plain-object": "^5.0.0", "tslib": "^2.4.0" } }, "sha512-Yfzmh965y/hT8qs9eE+Ms9sO1iT31c/sPoJerBFRGS9KechXXfxHgeqtpOzq+eByQ1INblkcZ09rt2V0FxG0lA=="],
+
+    "@kubernetes-models/gateway-api": ["@kubernetes-models/gateway-api@0.7.4", "", { "dependencies": { "@kubernetes-models/apimachinery": "^2.2.0", "@kubernetes-models/base": "^5.0.1", "@kubernetes-models/validate": "^4.0.0", "@swc/helpers": "^0.5.8" } }, "sha512-nOxmTEqvEIZtp4xDvrxo1JCfmnozisJF4Y05hyhszZtqgfSLaVkAJI6fQOpzNH38yJA8sCo6GtyaoaJRryI/Ag=="],
 
     "@kubernetes-models/validate": ["@kubernetes-models/validate@4.0.0", "", { "dependencies": { "ajv": "^8.12.0", "ajv-formats": "^2.1.1", "ajv-formats-draft2019": "^1.6.1", "ajv-i18n": "^4.2.0", "is-cidr": "^4.0.0", "tslib": "^2.4.0" }, "optionalDependencies": { "re2-wasm": "^1.0.2" } }, "sha512-rsfF5t3sd5c+3ejUgcy8q0cVG2/BxT064L4Xz+CuKEe014u8T4MtFZiWjWZFpfMXSGKzFYEA6DJYm9CqjmIfZg=="],
 
