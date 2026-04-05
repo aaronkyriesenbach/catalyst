@@ -22,6 +22,7 @@ if (process.env.ARGOCD_ENV_APP_CONFIG) {
         project: "default",
         source: {
           repoURL: "https://github.com/aaronkyriesenbach/catalyst",
+          path: ".",
           plugin: {
             env: [
               {
