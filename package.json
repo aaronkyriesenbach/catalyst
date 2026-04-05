@@ -1,0 +1,16 @@
+{
+  "name": "catalyst",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch main.ts"
+  },
+  "dependencies": {
+    "@kubernetes-models/argo-cd": "^2.7.2",
+    "kubernetes-models": "^4.5.1",
+    "yaml": "^2.7.0"
+  },
+  "devDependencies": {
+    "bun-types": "^1.3.11"
+  }
+}

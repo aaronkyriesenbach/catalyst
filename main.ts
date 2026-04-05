@@ -1,13 +1,21 @@
-import { Application } from "@kubernetes-models/argo-cd/argoproj.io/v1alpha1/Application";
-import { stringify } from "@std/yaml";
+import { Application } from "@kubernetes-models/argo-cd/argoproj.io/v1alpha1";
+import { readdirSync } from "fs";
+import { stringify } from "yaml";
+import { loadAppConfig, renderAppFromConfig } from "./utils";
+import { AppConfig } from "./types";
 
-if (Deno.env.has("ARGOCD_ENV_APP_CONFIG")) {
-  // Render app from config here
+if (process.env.ARGOCD_ENV_APP_CONFIG) {
+  const config = JSON.parse(process.env.ARGOCD_ENV_APP_CONFIG) as AppConfig;
+
+  renderAppFromConfig(config);
 } else {
-  for (const entry of Deno.readDirSync("apps")) {
+  for (const entry of readdirSync("apps")) {
+    const appConfig = await loadAppConfig(entry);
+    const { name, namespace } = appConfig;
+
     const app = new Application({
       metadata: {
-        name: entry.name,
+        name: name,
       },
       spec: {
         project: "default",
@@ -17,18 +25,18 @@ if (Deno.env.has("ARGOCD_ENV_APP_CONFIG")) {
             env: [
               {
                 name: "APP_CONFIG",
-                value: "APP_CONFIG_HERE",
+                value: JSON.stringify(appConfig),
               },
             ],
           },
         },
         destination: {
           server: "https://kubernetes.default.svc",
-          namespace: entry.name,
+          namespace: namespace ?? name,
         },
       },
     });
 
-    console.log(stringify(app.toJSON()));
+    console.log(stringify(app));
   }
 }
