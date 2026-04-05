@@ -1,7 +1,6 @@
 import { Deployment } from "kubernetes-models/apps/v1";
 import { AppConfig } from "./types";
 import { stringify } from "yaml";
-import { Model } from "@kubernetes-models/base";
 
 export async function loadAppConfig(path: string): Promise<AppConfig> {
   const mod = await import(`./apps/${path}`);
