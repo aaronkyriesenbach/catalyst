@@ -12,7 +12,7 @@ const chart = {
     chart: "cert-manager",
     version: "v1.20.1",
     set: {
-      "crds.enabled": true,
+      "crds.enabled": "true",
     },
   },
 };
