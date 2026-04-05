@@ -1,9 +1,0 @@
-{
-  "tasks": {
-    "dev": "deno run --watch main.ts"
-  },
-  "imports": {
-    "@kubernetes-models/argo-cd": "npm:@kubernetes-models/argo-cd@^2.7.2",
-    "@std/yaml": "jsr:@std/yaml@^1.0.12"
-  }
-}
