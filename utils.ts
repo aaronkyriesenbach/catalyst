@@ -40,6 +40,5 @@ export function renderAppFromConfig(config: AppConfig) {
     resources.push(stringify(deployment));
   }
 
-  const rendered = resources.map((r) => stringify(r));
-  console.log(rendered.join("\n---\n"));
+  console.log(resources.join("\n---\n"));
 }
