@@ -26,6 +26,8 @@ repoServer:
       volumeMounts:
         - mountPath: /tmp
           name: cmp-tmp
+        - mountPath: /deno-dir
+          name: cmp-tmp
         - mountPath: /var/run/argocd
           name: var-files
         - mountPath: /home/argocd/cmp-server/plugins
