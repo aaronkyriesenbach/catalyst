@@ -33,6 +33,34 @@ const externalCertStaging = new Certificate({
   },
 });
 
+const internalCert = new Certificate({
+  metadata: {
+    name: "int-lab53-net-prod",
+  },
+  spec: {
+    secretName: "int-lab53-net-prod",
+    dnsNames: ["int.lab53.net", "*.int.lab53.net"],
+    issuerRef: {
+      name: "letsencrypt-prod",
+      kind: "ClusterIssuer",
+    },
+  },
+});
+
+const externalCert = new Certificate({
+  metadata: {
+    name: "lab53-net-prod",
+  },
+  spec: {
+    secretName: "lab53-net-prod",
+    dnsNames: ["lab53.net", "*.lab53.net"],
+    issuerRef: {
+      name: "letsencrypt-prod",
+      kind: "ClusterIssuer",
+    },
+  },
+});
+
 const gateway = new Gateway({
   metadata: {
     name: "traefik",
@@ -76,7 +104,7 @@ const gateway = new Gateway({
           certificateRefs: [
             {
               kind: "Secret",
-              name: "int-lab53-net-staging",
+              name: "int-lab53-net-prod",
             },
           ],
         },
@@ -95,7 +123,7 @@ const gateway = new Gateway({
           certificateRefs: [
             {
               kind: "Secret",
-              name: "lab53-net-staging",
+              name: "lab53-net-prod",
             },
           ],
         },
@@ -192,6 +220,8 @@ const config: AppConfig = {
   extraResources: [
     internalCertStaging,
     externalCertStaging,
+    internalCert,
+    externalCert,
     gateway,
     internalRedirect,
     externalRedirect,
