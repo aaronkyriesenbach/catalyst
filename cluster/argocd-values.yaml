@@ -14,6 +14,8 @@ configs:
           command: ["bun", "run", "main.ts"]
         discover:
           fileName: main.ts
+  params:
+    server.insecure: true # This is the Argo project's recommendation for TLS termination at the Gateway level; terminate there, connect to Argo at :80.
 
 repoServer:
   extraContainers:
