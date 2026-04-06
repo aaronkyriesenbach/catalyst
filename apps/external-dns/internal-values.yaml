@@ -25,6 +25,7 @@ provider:
       initialDelaySeconds: 10
       timeoutSeconds: 5
 
+policy: sync
 txtOwnerId: external-dns-int-webhook
 sources: ["gateway-httproute"]
 domainFilters: ["int.lab53.net"]

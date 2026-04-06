@@ -72,26 +72,9 @@ const gateway = new Gateway({
     gatewayClassName: "traefik",
     listeners: [
       {
-        name: "http-int",
-        protocol: "HTTP",
-        port: 80,
-        hostname: "*.int.lab53.net",
-        allowedRoutes: {
-          namespaces: {
-            from: "All",
-          },
-        },
-      },
-      {
         name: "http",
         protocol: "HTTP",
         port: 80,
-        hostname: "*.lab53.net",
-        allowedRoutes: {
-          namespaces: {
-            from: "All",
-          },
-        },
       },
       {
         name: "https-int",
@@ -147,7 +130,7 @@ const httpRedirect = new HTTPRoute({
     parentRefs: [
       {
         name: "traefik",
-        sectionName: "http-int",
+        sectionName: "http",
       },
     ],
     rules: [
