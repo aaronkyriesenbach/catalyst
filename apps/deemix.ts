@@ -17,6 +17,11 @@ const config: AppConfig = {
             value: "1000",
           },
         ],
+        ports: [
+          {
+            containerPort: 6595,
+          },
+        ],
       },
     ],
   },
