@@ -135,9 +135,13 @@ const gateway = new Gateway({
   },
 });
 
-const internalRedirect = new HTTPRoute({
+const httpRedirect = new HTTPRoute({
   metadata: {
-    name: "http-redirect-int",
+    name: "http-redirect",
+    annotations: {
+      "external-dns.alpha.kubernetes.io/gateway-hostname-source":
+        "defined-hosts-only",
+    },
   },
   spec: {
     parentRefs: [
@@ -146,35 +150,6 @@ const internalRedirect = new HTTPRoute({
         sectionName: "http-int",
       },
     ],
-    hostnames: ["*.int.lab53.net"],
-    rules: [
-      {
-        filters: [
-          {
-            type: "RequestRedirect",
-            requestRedirect: {
-              scheme: "https",
-              statusCode: 301,
-            },
-          },
-        ],
-      },
-    ],
-  },
-});
-
-const externalRedirect = new HTTPRoute({
-  metadata: {
-    name: "http-redirect",
-  },
-  spec: {
-    parentRefs: [
-      {
-        name: "traefik",
-        sectionName: "http",
-      },
-    ],
-    hostnames: ["*.lab53.net"],
     rules: [
       {
         filters: [
@@ -226,8 +201,7 @@ const config: AppConfig = {
     internalCert,
     externalCert,
     gateway,
-    internalRedirect,
-    externalRedirect,
+    httpRedirect,
     argoRoute,
   ],
 };
