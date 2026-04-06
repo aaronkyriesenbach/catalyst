@@ -30,4 +30,5 @@ export type ExternalApp = {
   ipAddress: string;
   port: number;
   subDomain?: string;
+  insecure?: boolean;
 };
