@@ -21,6 +21,7 @@ if (process.env.ARGOCD_ENV_APP_CONFIG) {
       metadata: {
         name: name,
         namespace: "argocd",
+        finalizers: ["resources-finalizer.argocd.argoproj.io"],
       },
       spec: {
         project: "default",
