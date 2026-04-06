@@ -1,8 +1,8 @@
 import { Application } from "@kubernetes-models/argo-cd/argoproj.io/v1alpha1";
 import { readdirSync } from "fs";
-import { stringify } from "yaml";
 import { loadAppConfig, renderAppFromConfig } from "./utils";
 import { AppConfig } from "./types";
+import { YAML } from "bun";
 
 if (process.env.ARGOCD_ENV_APP_CONFIG) {
   const config = JSON.parse(process.env.ARGOCD_ENV_APP_CONFIG) as AppConfig;
@@ -11,7 +11,9 @@ if (process.env.ARGOCD_ENV_APP_CONFIG) {
 } else {
   const resources: string[] = [];
 
-  for (const entry of readdirSync("apps")) {
+  for (const entry of readdirSync("apps", { withFileTypes: true })
+    .filter((entry) => entry.isFile())
+    .map((entry) => entry.name)) {
     const appConfig = await loadAppConfig(entry);
     const { name, namespace } = appConfig;
 
@@ -41,7 +43,7 @@ if (process.env.ARGOCD_ENV_APP_CONFIG) {
       },
     });
 
-    resources.push(stringify(app));
+    resources.push(YAML.stringify(app));
   }
 
   console.log(resources.join("\n---\n"));

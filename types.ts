@@ -8,3 +8,19 @@ export type AppConfig = {
   webPort?: number;
   extraResources?: (Model<unknown> | Object)[];
 };
+
+export type HelmChart = {
+  apiVersion: "helm.cattle.io/v1";
+  kind: "HelmChart";
+  metadata: {
+    name: string;
+  };
+  spec: {
+    repo?: string;
+    chart: string;
+    targetNamespace?: string;
+    version: string;
+    valuesContent?: string;
+    set?: { [key: string]: string };
+  };
+};

@@ -1,7 +1,7 @@
 import { ClusterIssuer } from "@kubernetes-models/cert-manager/cert-manager.io/v1";
-import { AppConfig } from "../types";
+import { AppConfig, HelmChart } from "../types";
 
-const chart = {
+const chart: HelmChart = {
   apiVersion: "helm.cattle.io/v1",
   kind: "HelmChart",
   metadata: {
