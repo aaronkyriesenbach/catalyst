@@ -1,6 +1,7 @@
 provider:
   name: aws
 
+policy: sync
 txtOwnerId: external-dns-ext-route53
 sources: ["gateway-httproute"]
 domainFilters: ["lab53.net"]
