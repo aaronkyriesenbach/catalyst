@@ -6,15 +6,6 @@ import {
 import { AppConfig } from "../types";
 import { Certificate } from "@kubernetes-models/cert-manager/cert-manager.io/v1";
 
-const gatewayClass = new GatewayClass({
-  metadata: {
-    name: "traefik",
-  },
-  spec: {
-    controllerName: "traefik.io/gateway-controller",
-  },
-});
-
 const internalCertStaging = new Certificate({
   metadata: {
     name: "int-lab53-net-staging",
@@ -153,7 +144,6 @@ const externalRedirect = new HTTPRoute({
 const config: AppConfig = {
   name: "traefik",
   extraResources: [
-    gatewayClass,
     internalCertStaging,
     externalCertStaging,
     gateway,
