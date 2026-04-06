@@ -45,18 +45,33 @@ const gateway = new Gateway({
         protocol: "HTTP",
         port: 80,
         hostname: "*.int.lab53.net",
+        allowedRoutes: {
+          namespaces: {
+            from: "All",
+          },
+        },
       },
       {
         name: "http",
         protocol: "HTTP",
         port: 80,
         hostname: "*.lab53.net",
+        allowedRoutes: {
+          namespaces: {
+            from: "All",
+          },
+        },
       },
       {
         name: "https-int",
         protocol: "HTTPS",
         port: 443,
         hostname: "*.int.lab53.net",
+        allowedRoutes: {
+          namespaces: {
+            from: "All",
+          },
+        },
         tls: {
           certificateRefs: [
             {
@@ -71,6 +86,11 @@ const gateway = new Gateway({
         protocol: "HTTPS",
         port: 443,
         hostname: "*.lab53.net",
+        allowedRoutes: {
+          namespaces: {
+            from: "All",
+          },
+        },
         tls: {
           certificateRefs: [
             {
@@ -143,11 +163,13 @@ const externalRedirect = new HTTPRoute({
 const argoRoute = new HTTPRoute({
   metadata: {
     name: "argocd",
+    namespace: "argocd",
   },
   spec: {
     parentRefs: [
       {
         name: "traefik",
+        namespace: "traefik",
       },
     ],
     hostnames: ["argocd.int.lab53.net"],
