@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "render": "bun run render.ts",
+    "render": "bun run scripts/render.ts",
+    "sync-external-certs": "bun run scripts/sync-external-certs.ts",
     "install-argo": "helm upgrade --install -n argocd --create-namespace -f ./cluster/argocd-values.yaml argocd argocd/argo-cd"
   },
   "dependencies": {

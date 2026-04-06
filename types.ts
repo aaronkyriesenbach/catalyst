@@ -5,7 +5,12 @@ export type AppConfig = {
   name: string;
   namespace?: string;
   podSpec?: IPodSpec;
+  nasMounts?: {
+    [containerName: string]: { mountPath: string; subPath?: string }[];
+  };
   webPort?: number;
+  subDomain?: string;
+  externallyAccessible?: boolean;
   extraResources?: (Model<unknown> | Object)[];
 };
 
