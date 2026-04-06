@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "render": "bun run render.ts",
-    "install-argo": "helm upgrade --install -n argocd --create-namespace -f argocd-values.yaml argocd argocd/argo-cd"
+    "install-argo": "helm upgrade --install -n argocd --create-namespace -f ./cluster/argocd-values.yaml argocd argocd/argo-cd"
   },
   "dependencies": {
     "@kubernetes-models/argo-cd": "^2.7.2",
