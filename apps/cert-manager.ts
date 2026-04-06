@@ -1,4 +1,5 @@
 import { AppConfig, HelmChart } from "../types";
+import { internalCaResources } from "./cert-manager/internal-ca";
 import { issuers } from "./cert-manager/issuers";
 
 const chart: HelmChart = {
@@ -19,7 +20,7 @@ const chart: HelmChart = {
 
 const config: AppConfig = {
   name: "cert-manager",
-  extraResources: [chart, ...issuers],
+  extraResources: [chart, ...issuers, ...internalCaResources],
 };
 
 export default config;

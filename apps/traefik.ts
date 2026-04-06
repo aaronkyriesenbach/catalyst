@@ -3,7 +3,7 @@ import { certs } from "./traefik/certs";
 import { httpRedirect } from "./traefik/redirect";
 import { gateway } from "./traefik/gateway";
 import { routes } from "./traefik/routes";
-import { insecureTransport } from "./traefik/transports";
+import { externalAppResources } from "./traefik/externalApps";
 
 const config: AppConfig = {
   name: "traefik",
@@ -11,8 +11,8 @@ const config: AppConfig = {
     ...certs,
     gateway,
     httpRedirect,
-    insecureTransport,
     ...routes,
+    ...externalAppResources,
   ],
 };
 
