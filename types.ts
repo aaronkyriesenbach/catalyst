@@ -24,3 +24,10 @@ export type HelmChart = {
     set?: { [key: string]: string };
   };
 };
+
+export type ExternalApp = {
+  name: string;
+  ipAddress: string;
+  port: number;
+  subDomain?: string;
+};
