@@ -56,10 +56,14 @@ const externalEndpointSlices = externalApps.map(
     new EndpointSlice({
       metadata: {
         name: `${a.name}-external`,
+        labels: {
+          "kubernetes.io/service-name": `${a.name}-external`,
+        },
       },
       addressType: "IPv4",
       ports: [
         {
+          name: "http",
           port: a.port,
         },
       ],
@@ -83,7 +87,9 @@ const externalServices = externalApps.map(
       spec: {
         ports: [
           {
+            name: "http",
             port: a.port,
+            targetPort: a.port,
           },
         ],
       },
