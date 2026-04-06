@@ -37,11 +37,13 @@ const externalApps: ExternalApp[] = [
     ipAddress: "192.168.1.1",
     port: 443,
     subDomain: "ui",
+    insecure: true,
   },
   {
     name: "truenas",
     ipAddress: "192.168.53.120",
     port: 443,
+    insecure: true,
   },
   {
     name: "proxmox",
@@ -83,6 +85,13 @@ const externalServices = externalApps.map(
     new Service({
       metadata: {
         name: `${a.name}-external`,
+        annotations: a.insecure
+          ? {
+              "traefik.ingress.kubernetes.io/service.serversscheme": "https",
+              "traefik.ingress.kubernetes.io/service.serverstransport":
+                "insecure@kubernetescrd",
+            }
+          : undefined,
       },
       spec: {
         ports: [
