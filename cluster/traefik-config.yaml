@@ -1,0 +1,18 @@
+# To be placed in /var/lib/rancher/k3s/server/manifests. Auto-propagated to cluster at k3s startup.
+# Required to configure Traefik, as the HelmChart resource is reset at each launch.
+
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: traefik
+  namespace: kube-system
+spec:
+  valuesContent: |-
+    providers:
+      kubernetesGateway:
+        enabled: true
+    ports:
+      http:
+        port: 80
+      https:
+        port: 443
