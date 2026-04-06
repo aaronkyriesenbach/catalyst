@@ -1,0 +1,31 @@
+provider:
+  name: webhook
+  webhook:
+    image:
+      repository: ghcr.io/kashalls/external-dns-unifi-webhook
+      tag: v0.8.2
+    env:
+      - name: UNIFI_HOST
+        value: https://192.168.1.1
+      - name: UNIFI_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: external-dns-unifi-secret
+            key: api-key
+    livenessProbe:
+      httpGet:
+        path: /healthz
+        port: http-webhook
+      initialDelaySeconds: 10
+      timeoutSeconds: 5
+    readinessProbe:
+      httpGet:
+        path: /readyz
+        port: http-webhook
+      initialDelaySeconds: 10
+      timeoutSeconds: 5
+
+policy: sync
+txtOwnerId: external-dns-int-webhook
+sources: ["gateway-httproute"]
+domainFilters: ["int.lab53.net"]
