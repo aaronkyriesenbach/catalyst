@@ -1,5 +1,4 @@
 import {
-  GatewayClass,
   Gateway,
   HTTPRoute,
 } from "@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1";
@@ -141,6 +140,31 @@ const externalRedirect = new HTTPRoute({
   },
 });
 
+const argoRoute = new HTTPRoute({
+  metadata: {
+    name: "argocd",
+  },
+  spec: {
+    parentRefs: [
+      {
+        name: "traefik",
+      },
+    ],
+    hostnames: ["argocd.int.lab53.net"],
+    rules: [
+      {
+        backendRefs: [
+          {
+            name: "argocd-server",
+            namespace: "argocd",
+            port: 80,
+          },
+        ],
+      },
+    ],
+  },
+});
+
 const config: AppConfig = {
   name: "traefik",
   extraResources: [
@@ -149,6 +173,7 @@ const config: AppConfig = {
     gateway,
     internalRedirect,
     externalRedirect,
+    argoRoute,
   ],
 };
 
