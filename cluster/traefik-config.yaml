@@ -11,8 +11,22 @@ spec:
     providers:
       kubernetesGateway:
         enabled: true
+    gateway:
+      enabled: false # Disable the default gateway - we manage a gateway w/ TLS settings in the traefik namespace
     ports:
       http:
         port: 80
+        exposedPort: 80
+        expose:
+          default: true
       https:
         port: 443
+        exposedPort: 443
+        expose:
+          default: true
+      web:
+        expose:
+          default: false
+      websecure:
+        expose:
+          default: false
