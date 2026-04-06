@@ -1,22 +1,32 @@
-import { IPodSpec } from "kubernetes-models/v1";
-import { Model } from "@kubernetes-models/base";
+import { IPodSpec } from 'kubernetes-models/v1';
+import { Model } from '@kubernetes-models/base';
 
-export type AppConfig = {
+export type ResourceLike = Model<unknown> | Record<string, unknown>;
+
+type BaseApp = {
   name: string;
   namespace?: string;
-  podSpec?: IPodSpec;
-  nasMounts?: {
-    [containerName: string]: { mountPath: string; subPath?: string }[];
-  };
+};
+
+export type WorkloadApp = BaseApp & {
+  kind: 'workload';
+  podSpec: IPodSpec;
   webPort?: number;
   subDomain?: string;
   externallyAccessible?: boolean;
-  extraResources?: (Model<unknown> | Object)[];
+  extraResources?: ResourceLike[];
 };
 
+export type StaticApp = BaseApp & {
+  kind: 'static';
+  resources: ResourceLike[];
+};
+
+export type AppConfig = WorkloadApp | StaticApp;
+
 export type HelmChart = {
-  apiVersion: "helm.cattle.io/v1";
-  kind: "HelmChart";
+  apiVersion: 'helm.cattle.io/v1';
+  kind: 'HelmChart';
   metadata: {
     name: string;
   };

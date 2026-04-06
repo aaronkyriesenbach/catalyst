@@ -1,8 +1,8 @@
-import { Application } from "@kubernetes-models/argo-cd/argoproj.io/v1alpha1";
-import { readdirSync } from "fs";
-import { loadAppConfig, renderAppFromConfig } from "./utils";
-import { AppConfig } from "./types";
-import { YAML } from "bun";
+import { Application } from '@kubernetes-models/argo-cd/argoproj.io/v1alpha1';
+import { readdirSync } from 'fs';
+import { loadAppConfig, renderAppFromConfig } from './utils';
+import type { AppConfig } from './types';
+import { stringify } from 'yaml';
 
 if (process.env.ARGOCD_ENV_APP_CONFIG) {
   const config = JSON.parse(process.env.ARGOCD_ENV_APP_CONFIG) as AppConfig;
@@ -44,7 +44,7 @@ if (process.env.ARGOCD_ENV_APP_CONFIG) {
       },
     });
 
-    resources.push(YAML.stringify(app));
+    resources.push(stringify(app));
   }
 
   console.log(resources.join("\n---\n"));
