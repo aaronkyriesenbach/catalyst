@@ -64,6 +64,9 @@ const externalCert = new Certificate({
 const gateway = new Gateway({
   metadata: {
     name: "traefik",
+    annotations: {
+      "external-dns.alpha.kubernetes.io/target": "192.168.53.210",
+    },
   },
   spec: {
     gatewayClassName: "traefik",
