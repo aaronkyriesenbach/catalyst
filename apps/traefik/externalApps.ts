@@ -61,6 +61,7 @@ const externalCerts = externalApps.map(
       },
       spec: {
         secretName: `${a.name}-backend-cert`,
+        commonName: `${a.name}.backend.lab53.net`,
         dnsNames: [`${a.name}.backend.lab53.net`],
         issuerRef: {
           name: "internal-ca",
