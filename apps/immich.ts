@@ -38,19 +38,6 @@ const { pv: valkeyPv, pvc: valkeyPvc } = buildNasPersistentVolumePair({
   nfsPath: "/mnt/tank/data/cluster/immich/valkey",
 });
 
-const dbSecret = new Secret({
-  metadata: {
-    name: "immich-db",
-  },
-  stringData: {
-    DB_HOSTNAME: "immich-postgres",
-    DB_PORT: "5432",
-    DB_DATABASE_NAME: "immich",
-    DB_USERNAME: "immich",
-    DB_PASSWORD: "change-me",
-  },
-});
-
 const postgresService = buildService("immich-postgres", [
   {
     name: "postgres",
@@ -63,10 +50,8 @@ const postgresDeployment = buildDeployment("immich-postgres", {
   containers: [
     {
       name: "postgres",
-      image: "ghcr.io/immich-app/postgres:16-vectorchord0.5.3-pgvector0.8.1",
-      args: ["-c", "shared_preload_libraries=vchord.so"],
+      image: "ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0",
       env: [
-        { name: "POSTGRES_INITDB_ARGS", value: "--data-checksums" },
         {
           name: "POSTGRES_USER",
           valueFrom: {
@@ -142,7 +127,6 @@ const config: StaticApp = {
     mlCachePvc,
     valkeyPv,
     valkeyPvc,
-    dbSecret,
     postgresService,
     postgresDeployment,
     chart,
