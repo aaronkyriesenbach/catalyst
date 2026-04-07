@@ -1,5 +1,5 @@
-import type { IContainer, IVolumeMount } from 'kubernetes-models/v1';
-import type { WorkloadApp } from './types';
+import type { IContainer, IVolumeMount } from "kubernetes-models/v1";
+import type { WorkloadApp } from "./types";
 
 export type NasMountConfig = {
   [containerName: string]: { mountPath: string; subPath?: string }[];
@@ -7,9 +7,9 @@ export type NasMountConfig = {
 
 export type WorkloadModifier = (app: WorkloadApp) => WorkloadApp;
 
-const NAS_VOLUME_NAME = 'nas';
-const NAS_SERVER = '192.168.53.120';
-const NAS_PATH = '/mnt/tank/data';
+const NAS_VOLUME_NAME = "nas";
+const NAS_SERVER = "192.168.53.120";
+const NAS_PATH = "/mnt/tank/data";
 
 export function withNasMounts(mounts: NasMountConfig): WorkloadModifier {
   return (app) => {
@@ -31,11 +31,13 @@ export function withNasMounts(mounts: NasMountConfig): WorkloadModifier {
 
     const requestedContainers = Object.keys(mounts);
     const existingContainerNames = app.podSpec.containers.map((c) => c.name);
-    const missing = requestedContainers.filter((name) => !existingContainerNames.includes(name));
+    const missing = requestedContainers.filter(
+      (name) => !existingContainerNames.includes(name),
+    );
 
     if (missing.length > 0) {
       throw new Error(
-        `NAS mount config references non-existent containers: ${missing.join(', ')}`,
+        `NAS mount config references non-existent containers: ${missing.join(", ")}`,
       );
     }
 
@@ -56,13 +58,15 @@ export function withNasMounts(mounts: NasMountConfig): WorkloadModifier {
   };
 }
 
-export function withSecurityDefaults(): WorkloadModifier {
+export function withSecurityDefaults(id?: number): WorkloadModifier {
   return (app) => ({
     ...app,
     podSpec: {
       ...app.podSpec,
       securityContext: {
         runAsNonRoot: true,
+        runAsUser: id ?? 1000,
+        runAsGroup: id ?? 1000,
         ...app.podSpec.securityContext,
       },
     },
