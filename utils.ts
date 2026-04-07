@@ -1,8 +1,9 @@
-import { Deployment } from 'kubernetes-models/apps/v1';
-import { Service } from 'kubernetes-models/v1';
-import { HTTPRoute } from '@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1';
-import { stringify } from 'yaml';
-import type { AppConfig, StaticApp, WorkloadApp } from './types';
+import { Deployment } from "kubernetes-models/apps/v1";
+import type { IPodSpec } from "kubernetes-models/v1";
+import { Service } from "kubernetes-models/v1";
+import { HTTPRoute } from "@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1";
+import { stringify } from "yaml";
+import type { AppConfig, StaticApp, WorkloadApp } from "./types";
 
 export async function loadAppConfig(path: string): Promise<AppConfig> {
   const mod = await import(`./apps/${path}`);
@@ -10,9 +11,7 @@ export async function loadAppConfig(path: string): Promise<AppConfig> {
   return mod.default;
 }
 
-function buildDeployment(config: WorkloadApp) {
-  const { name, podSpec } = config;
-
+export function buildDeployment(name: string, podSpec: IPodSpec) {
   return new Deployment({
     metadata: {
       name,
@@ -33,15 +32,22 @@ function buildDeployment(config: WorkloadApp) {
 }
 
 function renderWorkload(config: WorkloadApp): string[] {
-  const { name, podSpec, webPort, subDomain, externallyAccessible, extraResources } = config;
+  const {
+    name,
+    podSpec,
+    webPort,
+    subDomain,
+    externallyAccessible,
+    extraResources,
+  } = config;
   const resources: string[] = extraResources?.map((r) => stringify(r)) ?? [];
 
-  resources.push(stringify(buildDeployment(config)));
+  resources.push(stringify(buildDeployment(name, podSpec)));
 
   const ports = podSpec.containers.flatMap((c) => c.ports ?? []);
 
   if (webPort && !ports.some((p) => p.containerPort === webPort)) {
-    throw new Error('Web port provided but not in pod spec');
+    throw new Error("Web port provided but not in pod spec");
   }
 
   if (ports.length > 0) {
@@ -59,9 +65,16 @@ function renderWorkload(config: WorkloadApp): string[] {
       const route = new HTTPRoute({
         metadata: { name },
         spec: {
-          parentRefs: [{ name: 'traefik', namespace: 'traefik' }],
+          parentRefs: [
+            {
+              name: externallyAccessible
+                ? "traefik-external"
+                : "traefik-internal",
+              namespace: "traefik",
+            },
+          ],
           hostnames: [
-            `${subDomain ?? name}${externallyAccessible ? '' : '.int'}.lab53.net`,
+            `${subDomain ?? name}${externallyAccessible ? "" : ".int"}.lab53.net`,
           ],
           rules: [
             {
@@ -86,13 +99,13 @@ export function renderAppFromConfig(config: AppConfig) {
   let resources: string[];
 
   switch (config.kind) {
-    case 'workload':
+    case "workload":
       resources = renderWorkload(config);
       break;
-    case 'static':
+    case "static":
       resources = renderStatic(config);
       break;
   }
 
-  console.log(resources.join('\n---\n'));
+  console.log(resources.join("\n---\n"));
 }

@@ -1,54 +1,73 @@
-import { Gateway } from "@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1";
+import { Gateway } from '@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1';
 
-export const gateway = new Gateway({
+export const internalGateway = new Gateway({
   metadata: {
-    name: "traefik",
+    name: 'traefik-internal',
     annotations: {
-      "external-dns.alpha.kubernetes.io/target": "192.168.53.210",
+      'external-dns.alpha.kubernetes.io/target': '192.168.53.210',
     },
   },
   spec: {
-    gatewayClassName: "traefik",
+    gatewayClassName: 'traefik',
     listeners: [
       {
-        name: "http",
-        protocol: "HTTP",
+        name: 'http',
+        protocol: 'HTTP',
         port: 80,
       },
       {
-        name: "https-int",
-        protocol: "HTTPS",
+        name: 'https-int',
+        protocol: 'HTTPS',
         port: 443,
-        hostname: "*.int.lab53.net",
+        hostname: '*.int.lab53.net',
         allowedRoutes: {
           namespaces: {
-            from: "All",
+            from: 'All',
           },
         },
         tls: {
           certificateRefs: [
             {
-              kind: "Secret",
-              name: "int-lab53-net-prod",
+              kind: 'Secret',
+              name: 'int-lab53-net-prod',
             },
           ],
         },
       },
+    ],
+  },
+});
+
+export const externalGateway = new Gateway({
+  metadata: {
+    name: 'traefik-external',
+    annotations: {
+      'external-dns.alpha.kubernetes.io/target': 'home.lab53.net',
+    },
+  },
+  spec: {
+    gatewayClassName: 'traefik',
+    listeners: [
       {
-        name: "https",
-        protocol: "HTTPS",
+        name: 'http',
+        protocol: 'HTTP',
+        port: 80,
+      },
+      {
+        name: 'https',
+        protocol: 'HTTPS',
         port: 443,
-        hostname: "*.lab53.net",
+        hostname: '*.lab53.net',
         allowedRoutes: {
           namespaces: {
-            from: "All",
+            from: 'All',
           },
         },
         tls: {
           certificateRefs: [
             {
-              kind: "Secret",
-              name: "lab53-net-prod",
+              kind: 'Secret',
+              name: 'lab53-net-prod',
             },
           ],
         },

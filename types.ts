@@ -1,5 +1,5 @@
-import { IPodSpec } from 'kubernetes-models/v1';
-import { Model } from '@kubernetes-models/base';
+import { IPodSpec } from "kubernetes-models/v1";
+import { Model } from "@kubernetes-models/base";
 
 export type ResourceLike = Model<unknown> | Record<string, unknown>;
 
@@ -9,7 +9,7 @@ type BaseApp = {
 };
 
 export type WorkloadApp = BaseApp & {
-  kind: 'workload';
+  kind: "workload";
   podSpec: IPodSpec;
   webPort?: number;
   subDomain?: string;
@@ -18,15 +18,15 @@ export type WorkloadApp = BaseApp & {
 };
 
 export type StaticApp = BaseApp & {
-  kind: 'static';
+  kind: "static";
   resources: ResourceLike[];
 };
 
 export type AppConfig = WorkloadApp | StaticApp;
 
 export type HelmChart = {
-  apiVersion: 'helm.cattle.io/v1';
-  kind: 'HelmChart';
+  apiVersion: "helm.cattle.io/v1";
+  kind: "HelmChart";
   metadata: {
     name: string;
   };
@@ -46,4 +46,28 @@ export type ExternalApp = {
   port: number;
   subDomain?: string;
   insecure?: boolean;
+};
+
+export type BackendTLSPolicy = {
+  apiVersion: "gateway.networking.k8s.io/v1";
+  kind: "BackendTLSPolicy";
+  metadata: {
+    name: string;
+  };
+  spec: {
+    targetRefs: Array<{
+      name: string;
+      group: string;
+      kind: string;
+      sectionName?: string;
+    }>;
+    validation: {
+      hostname: string;
+      caCertificateRefs?: Array<{
+        group: string;
+        kind: string;
+        name: string;
+      }>;
+    };
+  };
 };

@@ -1,27 +1,31 @@
-import { HTTPRoute } from "@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1";
+import { HTTPRoute } from '@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1';
 
 export const httpRedirect = new HTTPRoute({
   metadata: {
-    name: "http-redirect",
+    name: 'http-redirect',
     annotations: {
-      "external-dns.alpha.kubernetes.io/gateway-hostname-source":
-        "defined-hosts-only",
+      'external-dns.alpha.kubernetes.io/gateway-hostname-source':
+        'defined-hosts-only',
     },
   },
   spec: {
     parentRefs: [
       {
-        name: "traefik",
-        sectionName: "http",
+        name: 'traefik-internal',
+        sectionName: 'http',
+      },
+      {
+        name: 'traefik-external',
+        sectionName: 'http',
       },
     ],
     rules: [
       {
         filters: [
           {
-            type: "RequestRedirect",
+            type: 'RequestRedirect',
             requestRedirect: {
-              scheme: "https",
+              scheme: 'https',
               statusCode: 301,
             },
           },
