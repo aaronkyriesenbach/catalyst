@@ -35,6 +35,12 @@ machine-learning:
 
 valkey:
   enabled: true
+  controllers:
+    main:
+      pod:
+        securityContext:
+          runAsUser: 999
+          runAsGroup: 1000
   persistence:
     data:
       enabled: true
