@@ -1,4 +1,4 @@
-import type { IContainer, IVolumeMount } from "kubernetes-models/v1";
+import type { IContainer, IVolume, IVolumeMount } from "kubernetes-models/v1";
 import type { WorkloadApp } from "./types";
 
 export type NasMountConfig = {
@@ -11,21 +11,35 @@ const NAS_VOLUME_NAME = "nas";
 const NAS_SERVER = "192.168.53.120";
 const NAS_PATH = "/mnt/tank/data";
 
+export function nasVolume(): IVolume {
+  return {
+    name: NAS_VOLUME_NAME,
+    nfs: { server: NAS_SERVER, path: NAS_PATH },
+  };
+}
+
+export function nasVolumeMounts(
+  mounts: { mountPath: string; subPath?: string }[],
+): IVolumeMount[] {
+  return mounts.map((m) => ({
+    name: NAS_VOLUME_NAME,
+    mountPath: m.mountPath,
+    subPath: m.subPath,
+  }));
+}
+
 export function withNasMounts(mounts: NasMountConfig): WorkloadModifier {
   return (app) => {
     const containers: IContainer[] = app.podSpec.containers.map((container) => {
       const containerMounts = mounts[container.name];
       if (!containerMounts) return container;
 
-      const newVolumeMounts: IVolumeMount[] = containerMounts.map((m) => ({
-        name: NAS_VOLUME_NAME,
-        mountPath: m.mountPath,
-        subPath: m.subPath,
-      }));
-
       return {
         ...container,
-        volumeMounts: [...(container.volumeMounts ?? []), ...newVolumeMounts],
+        volumeMounts: [
+          ...(container.volumeMounts ?? []),
+          ...nasVolumeMounts(containerMounts),
+        ],
       };
     });
 
@@ -46,13 +60,7 @@ export function withNasMounts(mounts: NasMountConfig): WorkloadModifier {
       podSpec: {
         ...app.podSpec,
         containers,
-        volumes: [
-          ...(app.podSpec.volumes ?? []),
-          {
-            name: NAS_VOLUME_NAME,
-            nfs: { server: NAS_SERVER, path: NAS_PATH },
-          },
-        ],
+        volumes: [...(app.podSpec.volumes ?? []), nasVolume()],
       },
     };
   };

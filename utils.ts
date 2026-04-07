@@ -1,5 +1,5 @@
 import { Deployment } from "kubernetes-models/apps/v1";
-import type { IPodSpec } from "kubernetes-models/v1";
+import type { IPodSpec, IServicePort } from "kubernetes-models/v1";
 import { Service } from "kubernetes-models/v1";
 import { HTTPRoute } from "@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1";
 import { stringify } from "yaml";
@@ -31,6 +31,16 @@ export function buildDeployment(name: string, podSpec: IPodSpec) {
   });
 }
 
+export function buildService(name: string, ports: IServicePort[]) {
+  return new Service({
+    metadata: { name },
+    spec: {
+      selector: { app: name },
+      ports,
+    },
+  });
+}
+
 function renderWorkload(config: WorkloadApp): string[] {
   const {
     name,
@@ -51,13 +61,10 @@ function renderWorkload(config: WorkloadApp): string[] {
   }
 
   if (ports.length > 0) {
-    const service = new Service({
-      metadata: { name },
-      spec: {
-        selector: { app: name },
-        ports: ports.map((p) => ({ port: p.containerPort, name: p.name })),
-      },
-    });
+    const service = buildService(
+      name,
+      ports.map((p) => ({ port: p.containerPort, name: p.name })),
+    );
 
     resources.push(stringify(service));
 

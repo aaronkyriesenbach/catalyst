@@ -29,6 +29,7 @@ export type HelmChart = {
   kind: "HelmChart";
   metadata: {
     name: string;
+    namespace?: string;
   };
   spec: {
     repo?: string;

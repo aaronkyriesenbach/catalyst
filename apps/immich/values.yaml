@@ -1,0 +1,43 @@
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          tag: v2.7.0
+
+immich:
+  persistence:
+    library:
+      existingClaim: immich-library
+
+server:
+  ingress:
+    main:
+      enabled: false
+  controllers:
+    main:
+      containers:
+        main:
+          envFrom:
+            - secretRef:
+                name: immich-db
+          env:
+            DB_VECTOR_EXTENSION: vectorchord
+
+machine-learning:
+  enabled: true
+  persistence:
+    cache:
+      enabled: true
+      type: persistentVolumeClaim
+      existingClaim: immich-ml-cache
+      accessMode: ReadWriteMany
+
+valkey:
+  enabled: true
+  persistence:
+    data:
+      enabled: true
+      type: persistentVolumeClaim
+      existingClaim: immich-valkey
+      accessMode: ReadWriteMany
