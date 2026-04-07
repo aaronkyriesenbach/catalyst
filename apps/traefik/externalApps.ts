@@ -2,6 +2,7 @@ import { HTTPRoute } from "@kubernetes-models/gateway-api/gateway.networking.k8s
 import { EndpointSlice } from "kubernetes-models/discovery.k8s.io/v1";
 import { Service } from "kubernetes-models/v1";
 import { Certificate } from "@kubernetes-models/cert-manager/cert-manager.io/v1";
+import type { BackendTLSPolicy } from "../../types";
 import {
   externalAppBackendCertSecretName,
   externalAppBackendHostname,
@@ -54,9 +55,9 @@ const externalCerts = externalApps.map(
     }),
 );
 
-const externalBackendTlsPolicies = externalApps.map((a) => ({
-  apiVersion: "gateway.networking.k8s.io/v1",
-  kind: "BackendTLSPolicy",
+const externalBackendTlsPolicies: BackendTLSPolicy[] = externalApps.map((a) => ({
+  apiVersion: "gateway.networking.k8s.io/v1" as const,
+  kind: "BackendTLSPolicy" as const,
   metadata: {
     name: `${a.name}-external-tls`,
   },
@@ -109,7 +110,7 @@ const externalRoutes = externalApps.map(
       spec: {
         parentRefs: [
           {
-            name: "traefik",
+            name: 'traefik-internal',
           },
         ],
         hostnames: [`${a.subDomain ?? a.name}.int.lab53.net`],

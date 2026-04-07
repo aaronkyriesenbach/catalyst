@@ -1,24 +1,24 @@
-import { HTTPRoute } from "@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1";
+import { HTTPRoute } from '@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1';
 
 const argoRoute = new HTTPRoute({
   metadata: {
-    name: "argocd",
-    namespace: "argocd",
+    name: 'argocd',
+    namespace: 'argocd',
   },
   spec: {
     parentRefs: [
       {
-        name: "traefik",
-        namespace: "traefik",
+        name: 'traefik-internal',
+        namespace: 'traefik',
       },
     ],
-    hostnames: ["argocd.int.lab53.net"],
+    hostnames: ['argocd.int.lab53.net'],
     rules: [
       {
         backendRefs: [
           {
-            name: "argocd-server",
-            namespace: "argocd",
+            name: 'argocd-server',
+            namespace: 'argocd',
             port: 80,
           },
         ],
