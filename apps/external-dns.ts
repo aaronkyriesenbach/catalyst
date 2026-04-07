@@ -1,4 +1,3 @@
-import { ConfigMap } from "kubernetes-models/v1";
 import type { HelmChart, StaticApp } from "../types";
 import { buildDeployment } from "../utils";
 
@@ -36,50 +35,40 @@ const externalChart: HelmChart = {
   },
 };
 
-const ddclientConfigMap = new ConfigMap({
-  metadata: {
-    name: "ddclient-config",
-  },
-  data: {
-    "ddclient.conf": [
-      "daemon=300",
-      "syslog=yes",
-      "ssl=yes",
-      "use=web, web=https://checkip.amazonaws.com",
-      "protocol=route53",
-      "zone=lab53.net",
-      "ttl=60",
-      "login=aws_access_key_id_placeholder",
-      "password=aws_secret_access_key_placeholder",
-      "home.lab53.net",
-    ].join("\n"),
-  },
-});
+const awsCredentialsSecretName = "aws-credentials";
 
-const ddclientDeployment = buildDeployment("ddclient", {
+const ddnsRoute53Deployment = buildDeployment("ddns-route53", {
   containers: [
     {
-      name: "ddclient",
-      image: "lscr.io/linuxserver/ddclient:latest",
+      name: "ddns-route53",
+      image: "crazymax/ddns-route53:latest",
       env: [
-        { name: "PUID", value: "1000" },
-        { name: "PGID", value: "1000" },
-      ],
-      volumeMounts: [
         {
-          name: "config",
-          mountPath: "/config/ddclient.conf",
-          subPath: "ddclient.conf",
+          name: "AWS_ACCESS_KEY_ID",
+          valueFrom: {
+            secretKeyRef: {
+              name: awsCredentialsSecretName,
+              key: "access-key-id",
+            },
+          },
         },
+        {
+          name: "AWS_SECRET_ACCESS_KEY",
+          valueFrom: {
+            secretKeyRef: {
+              name: awsCredentialsSecretName,
+              key: "secret-access-key",
+            },
+          },
+        },
+        {
+          name: "DDNSR53_ROUTE53_HOSTEDZONEID",
+          value: "Z01889102EIVWW3UBDYVL",
+        },
+        { name: "DDNSR53_ROUTE53_RECORDSSET_0_NAME", value: "home.lab53.net." },
+        { name: "DDNSR53_ROUTE53_RECORDSSET_0_TYPE", value: "A" },
+        { name: "DDNSR53_SCHEDULE", value: "*/5 * * * *" },
       ],
-    },
-  ],
-  volumes: [
-    {
-      name: "config",
-      configMap: {
-        name: "ddclient-config",
-      },
     },
   ],
 });
@@ -87,12 +76,7 @@ const ddclientDeployment = buildDeployment("ddclient", {
 const config: StaticApp = {
   kind: "static",
   name: "external-dns",
-  resources: [
-    internalChart,
-    externalChart,
-    ddclientConfigMap,
-    ddclientDeployment,
-  ],
+  resources: [internalChart, externalChart, ddnsRoute53Deployment],
 };
 
 export default config;

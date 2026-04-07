@@ -10,18 +10,16 @@ excludeDomains: ["int.lab53.net"]
 env:
   - name: AWS_DEFAULT_REGION
     value: us-east-1
-  - name: AWS_SHARED_CREDENTIALS_FILE
-    value: /etc/aws/credentials
-
-extraVolumes:
-  - name: aws-credentials
-    secret:
-      secretName: external-dns-aws-credentials
-
-extraVolumeMounts:
-  - name: aws-credentials
-    mountPath: /etc/aws
-    readOnly: true
+  - name: AWS_ACCESS_KEY_ID
+    valueFrom:
+      secretKeyRef:
+        name: aws-credentials
+        key: access-key-id
+  - name: AWS_SECRET_ACCESS_KEY
+    valueFrom:
+      secretKeyRef:
+        name: aws-credentials
+        key: secret-access-key
 
 extraArgs:
   aws-zone-type: public
