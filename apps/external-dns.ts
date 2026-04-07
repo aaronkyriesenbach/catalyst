@@ -68,7 +68,7 @@ const ddnsRoute53Deployment = buildDeployment("ddns-route53", {
         { name: "DDNSR53_ROUTE53_RECORDSSET_0_NAME", value: "home.lab53.net." },
         { name: "DDNSR53_ROUTE53_RECORDSSET_0_TYPE", value: "A" },
         { name: "DDNSR53_ROUTE53_RECORDSSET_0_TTL", value: "300" },
-        { name: "DDNSR53_SCHEDULE", value: "*/5 * * * *" },
+        { name: "SCHEDULE", value: "*/5 * * * *" },
       ],
     },
   ],
