@@ -8,6 +8,9 @@ metadata:
   namespace: kube-system
 spec:
   valuesContent: |-
+    service:
+      annotations:
+        kube-vip.io/loadbalancerIPs: 192.168.53.201
     providers:
       kubernetesGateway:
         enabled: true

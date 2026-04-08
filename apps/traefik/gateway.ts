@@ -4,7 +4,7 @@ export const internalGateway = new Gateway({
   metadata: {
     name: 'traefik-internal',
     annotations: {
-      'external-dns.alpha.kubernetes.io/target': '192.168.53.210',
+      'external-dns.alpha.kubernetes.io/target': '192.168.53.201',
     },
   },
   spec: {
