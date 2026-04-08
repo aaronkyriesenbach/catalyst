@@ -41,16 +41,55 @@ export function buildService(name: string, ports: IServicePort[]) {
   });
 }
 
+type RouteOptions = {
+  subDomain?: string;
+  serviceName?: string;
+  namespace?: string;
+  externallyAccessible?: boolean;
+};
+
+export function buildRoute(
+  name: string,
+  port: number,
+  options?: RouteOptions,
+): HTTPRoute {
+  const { subDomain, serviceName, namespace, externallyAccessible } =
+    options ?? {};
+  const hostname = `${subDomain ?? name}${externallyAccessible ? "" : ".int"}.lab53.net`;
+
+  const parentRefs = externallyAccessible
+    ? [
+        { name: "traefik-external", namespace: "traefik" },
+        { name: "traefik-internal", namespace: "traefik" },
+      ]
+    : [{ name: "traefik-internal", namespace: "traefik" }];
+
+  return new HTTPRoute({
+    metadata: {
+      name,
+      namespace,
+    },
+    spec: {
+      parentRefs,
+      hostnames: [hostname],
+      rules: [
+        {
+          backendRefs: [
+            {
+              name: serviceName ?? name,
+              port,
+              namespace,
+            },
+          ],
+        },
+      ],
+    },
+  });
+}
+
 function renderWorkload(config: WorkloadApp): string[] {
-  const {
-    name,
-    podSpec,
-    webPort,
-    subDomain,
-    externallyAccessible,
-    extraResources,
-  } = config;
-  const resources: string[] = extraResources?.map((r) => stringify(r)) ?? [];
+  const { name, podSpec, webPort, subDomain, externallyAccessible } = config;
+  const resources: string[] = [];
 
   resources.push(stringify(buildDeployment(name, podSpec)));
 
@@ -69,28 +108,10 @@ function renderWorkload(config: WorkloadApp): string[] {
     resources.push(stringify(service));
 
     if (webPort) {
-      const route = new HTTPRoute({
-        metadata: { name },
-        spec: {
-          parentRefs: [
-            {
-              name: externallyAccessible
-                ? "traefik-external"
-                : "traefik-internal",
-              namespace: "traefik",
-            },
-          ],
-          hostnames: [
-            `${subDomain ?? name}${externallyAccessible ? "" : ".int"}.lab53.net`,
-          ],
-          rules: [
-            {
-              backendRefs: [{ name, port: webPort }],
-            },
-          ],
-        },
+      const route = buildRoute(name, webPort, {
+        subDomain,
+        externallyAccessible,
       });
-
       resources.push(stringify(route));
     }
   }
