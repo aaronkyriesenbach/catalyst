@@ -1,14 +1,13 @@
-import { chmod, mkdir, rm } from 'node:fs/promises';
-import { join } from 'node:path';
+import { chmod, mkdir } from "node:fs/promises";
+import { join } from "node:path";
 import {
-  certManagerNamespace,
   externalAppBackendCertSecretName,
   externalAppDownloadBaseName,
   externalApps,
-  internalRootCaBundleConfigMapName,
-  internalRootCaSecretName,
-  traefikNamespace,
-} from '../apps/traefik/externalApps.config';
+} from "../apps/traefik/externalApps.config";
+import { certManagerNamespace } from "../apps/cert-manager";
+import { traefikNamespace } from "../apps/traefik";
+import { internalRootCaSecretName } from "../apps/cert-manager/internal-ca";
 
 type Secret = {
   data?: Record<string, string | undefined>;
@@ -21,21 +20,21 @@ type Options = {
 
 function parseArgs(args: string[]): Options {
   let dryRun = false;
-  let outputDir = join(process.cwd(), 'downloads', 'external-certs');
+  let outputDir = join(process.cwd(), "downloads", "external-certs");
 
   for (let index = 0; index < args.length; index += 1) {
     const arg = args[index];
 
-    if (arg === '--dry-run') {
+    if (arg === "--dry-run") {
       dryRun = true;
       continue;
     }
 
-    if (arg === '--output-dir') {
+    if (arg === "--output-dir") {
       const nextArg = args[index + 1];
 
       if (!nextArg) {
-        throw new Error('Missing value for --output-dir');
+        throw new Error("Missing value for --output-dir");
       }
 
       outputDir = nextArg;
@@ -43,14 +42,15 @@ function parseArgs(args: string[]): Options {
       continue;
     }
 
-    if (arg === '--help') {
-      console.log([
-        'Usage: bun run sync-external-certs [--dry-run] [--output-dir <path>]',
-        '',
-        'Downloads the internal root CA and external app certificates from the cluster,',
-        `syncs ConfigMap ${traefikNamespace}/${internalRootCaBundleConfigMapName}, and`,
-        'writes cert/key files to a local output directory.',
-      ].join('\n'));
+    if (arg === "--help") {
+      console.log(
+        [
+          "Usage: bun run sync-external-certs [--dry-run] [--output-dir <path>]",
+          "",
+          "Downloads the internal root CA and external app certificates from the cluster",
+          "and writes cert/key files to a local output directory.",
+        ].join("\n"),
+      );
       process.exit(0);
     }
 
@@ -66,9 +66,9 @@ function parseArgs(args: string[]): Options {
 async function runCommand(command: string[], input?: string) {
   const proc = Bun.spawn({
     cmd: command,
-    stdin: input ? 'pipe' : 'ignore',
-    stdout: 'pipe',
-    stderr: 'pipe',
+    stdin: input ? "pipe" : "ignore",
+    stdout: "pipe",
+    stderr: "pipe",
   });
 
   if (input && proc.stdin) {
@@ -85,9 +85,9 @@ async function runCommand(command: string[], input?: string) {
   if (exitCode !== 0) {
     throw new Error(
       [
-        `Command failed: ${command.join(' ')}`,
+        `Command failed: ${command.join(" ")}`,
         stderr.trim() || stdout.trim() || `exit code ${exitCode}`,
-      ].join('\n'),
+      ].join("\n"),
     );
   }
 
@@ -96,14 +96,14 @@ async function runCommand(command: string[], input?: string) {
 
 async function getSecret(namespace: string, name: string) {
   const stdout = await runCommand([
-    'kubectl',
-    'get',
-    'secret',
+    "kubectl",
+    "get",
+    "secret",
     name,
-    '-n',
+    "-n",
     namespace,
-    '-o',
-    'json',
+    "-o",
+    "json",
   ]);
 
   return JSON.parse(stdout) as Secret;
@@ -116,7 +116,7 @@ function decodeSecretKey(secret: Secret, key: string, secretName: string) {
     throw new Error(`Secret ${secretName} is missing data.${key}`);
   }
 
-  return Buffer.from(value, 'base64').toString('utf8');
+  return Buffer.from(value, "base64").toString("utf8");
 }
 
 async function writePemFile(path: string, contents: string, mode?: number) {
@@ -124,36 +124,6 @@ async function writePemFile(path: string, contents: string, mode?: number) {
 
   if (mode !== undefined) {
     await chmod(path, mode);
-  }
-}
-
-async function syncCaConfigMap(caCertificatePath: string, caCertificate: string, dryRun: boolean) {
-  const configMapManifestPath = `${caCertificatePath}.configmap.json`;
-  const manifest = {
-    apiVersion: 'v1',
-    kind: 'ConfigMap',
-    metadata: {
-      name: internalRootCaBundleConfigMapName,
-      namespace: traefikNamespace,
-    },
-    data: {
-      'ca.crt': caCertificate,
-    },
-  };
-
-  if (dryRun) {
-    console.log(
-      `[dry-run] Would apply ConfigMap ${traefikNamespace}/${internalRootCaBundleConfigMapName}`,
-    );
-    return;
-  }
-
-  await Bun.write(configMapManifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
-
-  try {
-    await runCommand(['kubectl', 'apply', '-f', configMapManifestPath]);
-  } finally {
-    await rm(configMapManifestPath, { force: true });
   }
 }
 
@@ -169,10 +139,10 @@ const internalRootCaSecret = await getSecret(
 );
 const internalRootCaCertificate = decodeSecretKey(
   internalRootCaSecret,
-  'tls.crt',
+  "tls.crt",
   `${certManagerNamespace}/${internalRootCaSecretName}`,
 );
-const internalRootCaPath = join(options.outputDir, 'internal-root-ca.crt');
+const internalRootCaPath = join(options.outputDir, "internal-root-ca.crt");
 
 if (options.dryRun) {
   console.log(`[dry-run] Would write ${internalRootCaPath}`);
@@ -180,17 +150,19 @@ if (options.dryRun) {
   await writePemFile(internalRootCaPath, internalRootCaCertificate);
 }
 
-await syncCaConfigMap(
-  internalRootCaPath,
-  internalRootCaCertificate,
-  options.dryRun,
-);
-
 for (const app of externalApps) {
   const secretName = externalAppBackendCertSecretName(app);
   const secret = await getSecret(traefikNamespace, secretName);
-  const certificate = decodeSecretKey(secret, 'tls.crt', `${traefikNamespace}/${secretName}`);
-  const privateKey = decodeSecretKey(secret, 'tls.key', `${traefikNamespace}/${secretName}`);
+  const certificate = decodeSecretKey(
+    secret,
+    "tls.crt",
+    `${traefikNamespace}/${secretName}`,
+  );
+  const privateKey = decodeSecretKey(
+    secret,
+    "tls.key",
+    `${traefikNamespace}/${secretName}`,
+  );
   const fileBase = join(options.outputDir, externalAppDownloadBaseName(app));
   const certificatePath = `${fileBase}.crt`;
   const privateKeyPath = `${fileBase}.key`;
@@ -207,6 +179,6 @@ for (const app of externalApps) {
 
 console.log(
   options.dryRun
-    ? '[dry-run] External certificate sync completed.'
+    ? "[dry-run] External certificate sync completed."
     : `External certificate sync completed. Files written to ${options.outputDir}`,
 );

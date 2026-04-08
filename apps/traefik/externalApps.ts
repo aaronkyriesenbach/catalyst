@@ -7,7 +7,6 @@ import {
   externalAppBackendCertSecretName,
   externalAppBackendHostname,
   externalApps,
-  internalRootCaBundleConfigMapName,
 } from "./externalApps.config";
 
 const externalEndpointSlices = externalApps.map(
@@ -55,33 +54,35 @@ const externalCerts = externalApps.map(
     }),
 );
 
-const externalBackendTlsPolicies: BackendTLSPolicy[] = externalApps.map((a) => ({
-  apiVersion: "gateway.networking.k8s.io/v1" as const,
-  kind: "BackendTLSPolicy" as const,
-  metadata: {
-    name: `${a.name}-external-tls`,
-  },
-  spec: {
-    targetRefs: [
-      {
-        name: `${a.name}-external`,
-        group: "",
-        kind: "Service",
-        sectionName: "https",
-      },
-    ],
-    validation: {
-      hostname: externalAppBackendHostname(a),
-      caCertificateRefs: [
+const externalBackendTlsPolicies: BackendTLSPolicy[] = externalApps.map(
+  (a) => ({
+    apiVersion: "gateway.networking.k8s.io/v1" as const,
+    kind: "BackendTLSPolicy" as const,
+    metadata: {
+      name: `${a.name}-external-tls`,
+    },
+    spec: {
+      targetRefs: [
         {
+          name: `${a.name}-external`,
           group: "",
-          kind: "ConfigMap",
-          name: internalRootCaBundleConfigMapName,
+          kind: "Service",
+          sectionName: "https",
         },
       ],
+      validation: {
+        hostname: externalAppBackendHostname(a),
+        caCertificateRefs: [
+          {
+            group: "",
+            kind: "ConfigMap",
+            name: "internal-root-ca-bundle",
+          },
+        ],
+      },
     },
-  },
-}));
+  }),
+);
 
 const externalServices = externalApps.map(
   (a) =>
@@ -110,7 +111,7 @@ const externalRoutes = externalApps.map(
       spec: {
         parentRefs: [
           {
-            name: 'traefik-internal',
+            name: "traefik-internal",
           },
         ],
         hostnames: [`${a.subDomain ?? a.name}.int.lab53.net`],
