@@ -1,9 +1,8 @@
-import { HTTPRoute } from "@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1";
 import { Secret } from "kubernetes-models/v1";
 import { nasVolume, nasVolumeMounts } from "../modifiers";
 import { buildNasPersistentVolumePair } from "../storage";
 import type { HelmChart, StaticApp } from "../types";
-import { buildDeployment, buildService } from "../utils";
+import { buildDeployment, buildRoute, buildService } from "../utils";
 
 const chart: HelmChart = {
   apiVersion: "helm.cattle.io/v1",
@@ -92,29 +91,9 @@ const postgresDeployment = buildDeployment("immich-postgres", {
   volumes: [nasVolume()],
 });
 
-const route = new HTTPRoute({
-  metadata: {
-    name: "immich",
-  },
-  spec: {
-    parentRefs: [
-      {
-        name: "traefik-external",
-        namespace: "traefik",
-      },
-    ],
-    hostnames: ["immich.lab53.net"],
-    rules: [
-      {
-        backendRefs: [
-          {
-            name: "immich-server",
-            port: 2283,
-          },
-        ],
-      },
-    ],
-  },
+const route = buildRoute("immich", 2283, {
+  serviceName: "immich-server",
+  externallyAccessible: true,
 });
 
 const config: StaticApp = {

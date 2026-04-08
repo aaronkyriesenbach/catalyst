@@ -34,6 +34,25 @@ export const internalGateway = new Gateway({
           ],
         },
       },
+      {
+        name: 'https-ext',
+        protocol: 'HTTPS',
+        port: 443,
+        hostname: '*.lab53.net',
+        allowedRoutes: {
+          namespaces: {
+            from: 'All',
+          },
+        },
+        tls: {
+          certificateRefs: [
+            {
+              kind: 'Secret',
+              name: 'lab53-net-prod',
+            },
+          ],
+        },
+      },
     ],
   },
 });

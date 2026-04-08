@@ -28,7 +28,7 @@ provider:
 policy: sync
 txtOwnerId: external-dns-int-webhook
 sources: ["gateway-httproute"]
-domainFilters: ["int.lab53.net"]
+domainFilters: ["lab53.net"]
 
 extraArgs:
   gateway-name: traefik-internal
