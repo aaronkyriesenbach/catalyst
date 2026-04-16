@@ -12,7 +12,7 @@ const base: WorkloadApp = {
     containers: [
       {
         name: "main",
-        image: "miniflux/miniflux:2.2.19",
+        image: "docker.int.lab53.net/miniflux/miniflux:2.2.19",
         env: [
           {
             name: "DATABASE_URL",
@@ -64,7 +64,7 @@ const base: WorkloadApp = {
       },
       {
         name: "postgres",
-        image: "postgres:18-alpine",
+        image: "docker.int.lab53.net/library/postgres:18-alpine",
         env: [
           { name: "POSTGRES_USER", value: "miniflux" },
           { name: "POSTGRES_PASSWORD", value: "miniflux" },
