@@ -20,6 +20,7 @@ const base: WorkloadApp = {
               "postgres://miniflux:miniflux@localhost:5432/miniflux?sslmode=disable",
           },
           { name: "BASE_URL", value: "https://miniflux.lab53.net" },
+          { name: "RUN_MIGRATIONS", value: "1" },
           { name: "OAUTH2_PROVIDER", value: "oidc" },
           {
             name: "OAUTH2_OIDC_DISCOVERY_ENDPOINT",
@@ -47,7 +48,6 @@ const base: WorkloadApp = {
             name: "OAUTH2_REDIRECT_URL",
             value: "https://miniflux.lab53.net/oauth2/oidc/callback",
           },
-          // { name: "OAUTH2_USER_CREATION", value: "1" },
         ],
         ports: [{ name: "http", containerPort: 8080 }],
         livenessProbe: {
@@ -87,11 +87,11 @@ const base: WorkloadApp = {
 
 export default applyModifiers(
   base,
-  withSecurityDefaults(1000),
+  withSecurityDefaults(),
   withNasMounts({
     postgres: [
       {
-        mountPath: "/var/lib/postgresql/data",
+        mountPath: "/var/lib/postgresql/18/docker",
         subPath: "cluster/miniflux/postgres",
       },
     ],
