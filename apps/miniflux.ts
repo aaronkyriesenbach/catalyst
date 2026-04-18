@@ -1,7 +1,7 @@
 import type { WorkloadApp } from "../types";
 import {
   applyModifiers,
-  withNasMounts,
+  withPostgres,
   withSecurityDefaults,
 } from "../modifiers";
 
@@ -64,23 +64,6 @@ const base: WorkloadApp = {
           failureThreshold: 3,
         },
       },
-      {
-        name: "postgres",
-        image: "docker.int.lab53.net/library/postgres:18-alpine",
-        env: [
-          { name: "POSTGRES_USER", value: "miniflux" },
-          { name: "POSTGRES_PASSWORD", value: "miniflux" },
-          { name: "POSTGRES_DB", value: "miniflux" },
-        ],
-        ports: [{ name: "postgres", containerPort: 5432 }],
-        readinessProbe: {
-          exec: {
-            command: ["pg_isready", "-U", "miniflux"],
-          },
-          periodSeconds: 10,
-          failureThreshold: 3,
-        },
-      },
     ],
   },
   webPort: 8080,
@@ -90,12 +73,5 @@ const base: WorkloadApp = {
 export default applyModifiers(
   base,
   withSecurityDefaults(),
-  withNasMounts({
-    postgres: [
-      {
-        mountPath: "/var/lib/postgresql/18/docker",
-        subPath: "cluster/miniflux/postgres",
-      },
-    ],
-  }),
+  withPostgres(18),
 );

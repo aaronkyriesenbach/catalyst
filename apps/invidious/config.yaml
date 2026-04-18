@@ -1,0 +1,13 @@
+db:
+  dbname: invidious
+  user: invidious
+  password: invidious
+  host: localhost
+  port: 5432
+check_tables: true
+domain: invidious.lab53.net
+external_port: 443
+https_only: true
+invidious_companion:
+  - private_url: "http://localhost:8282"
+
