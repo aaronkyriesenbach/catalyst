@@ -1,0 +1,18 @@
+server:
+  port: 80
+  externalUrl: "https://files.lab53.net"
+  sources:
+    - path: /srv/data
+      config:
+        defaultEnabled: true
+auth:
+  methods:
+    password:
+      enabled: false
+    oidc:
+      enabled: true
+      issuerUrl: "https://auth.lab53.net"
+      scopes: "email openid profile groups"
+      userIdentifier: "preferred_username"
+      createUser: true
+      adminGroup: admin

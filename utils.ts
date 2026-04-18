@@ -88,8 +88,12 @@ export function buildRoute(
 }
 
 function renderWorkload(config: WorkloadApp): string[] {
-  const { name, podSpec, webPort, subDomain, externallyAccessible } = config;
+  const { name, podSpec, webPort, subDomain, externallyAccessible, extraResources } = config;
   const resources: string[] = [];
+
+  if (extraResources) {
+    resources.push(...extraResources.map((r) => stringify(r)));
+  }
 
   resources.push(stringify(buildDeployment(name, podSpec)));
 
