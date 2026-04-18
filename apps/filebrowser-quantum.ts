@@ -3,7 +3,6 @@ import type { WorkloadApp } from "../types";
 import {
   applyModifiers,
   withNasMounts,
-  withSecurityDefaults,
 } from "../modifiers";
 
 const name = "filebrowser-quantum";
@@ -73,7 +72,6 @@ const base: WorkloadApp = {
 
 export default applyModifiers(
   base,
-  withSecurityDefaults(),
   withNasMounts({
     main: [
       {

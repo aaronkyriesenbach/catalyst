@@ -46,6 +46,7 @@ const base: WorkloadApp = {
         },
       },
     ],
+    securityContext: {},
   },
   webPort: 9091,
 };

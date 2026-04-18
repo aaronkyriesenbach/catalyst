@@ -2,7 +2,6 @@ import type { WorkloadApp } from "../types";
 import {
   applyModifiers,
   withNasMounts,
-  withSecurityDefaults,
 } from "../modifiers";
 
 const base: WorkloadApp = {
@@ -39,7 +38,6 @@ const base: WorkloadApp = {
 
 export default applyModifiers(
   base,
-  withSecurityDefaults(),
   withNasMounts({
     main: [{ mountPath: "/var/lib/registry", subPath: "cluster/registry" }],
   }),

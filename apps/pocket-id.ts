@@ -2,7 +2,6 @@ import type { WorkloadApp } from "../types";
 import {
   applyModifiers,
   withNasMounts,
-  withSecurityDefaults,
 } from "../modifiers";
 
 const base: WorkloadApp = {
@@ -46,7 +45,6 @@ const base: WorkloadApp = {
 
 export default applyModifiers(
   base,
-  withSecurityDefaults(1000),
   withNasMounts({
     main: [{ mountPath: "/app/data", subPath: "cluster/pocket-id/data" }],
   }),

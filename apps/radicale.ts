@@ -45,6 +45,7 @@ const base: WorkloadApp = {
         },
       },
     ],
+    securityContext: {},
   },
   webPort: 5232,
   externallyAccessible: true,
