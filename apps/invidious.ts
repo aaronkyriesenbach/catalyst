@@ -2,6 +2,7 @@ import { ConfigMap } from "kubernetes-models/v1";
 import type { WorkloadApp } from "../types";
 import {
   applyModifiers,
+  withOidcAuth,
   withPostgres,
   withSecurityDefaults,
 } from "../modifiers";
@@ -98,4 +99,4 @@ const base: WorkloadApp = {
   extraResources: [configMap],
 };
 
-export default applyModifiers(base, withSecurityDefaults(), withPostgres(14));
+export default applyModifiers(base, withSecurityDefaults(), withPostgres(14), withOidcAuth());
