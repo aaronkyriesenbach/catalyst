@@ -46,6 +46,7 @@ type RouteOptions = {
   serviceName?: string;
   namespace?: string;
   externallyAccessible?: boolean;
+  forwardAuth?: boolean;
 };
 
 export function buildRoute(
@@ -53,7 +54,7 @@ export function buildRoute(
   port: number,
   options?: RouteOptions,
 ): HTTPRoute {
-  const { subDomain, serviceName, namespace, externallyAccessible } =
+  const { subDomain, serviceName, namespace, externallyAccessible, forwardAuth } =
     options ?? {};
   const hostname = `${subDomain ?? name}${externallyAccessible ? "" : ".int"}.lab53.net`;
 
@@ -63,6 +64,19 @@ export function buildRoute(
         { name: "traefik-internal", namespace: "traefik" },
       ]
     : [{ name: "traefik-internal", namespace: "traefik" }];
+
+  const filters = forwardAuth
+    ? [
+        {
+          type: "ExtensionRef" as const,
+          extensionRef: {
+            group: "traefik.io",
+            kind: "Middleware",
+            name: "oidc-auth",
+          },
+        },
+      ]
+    : undefined;
 
   return new HTTPRoute({
     metadata: {
@@ -74,6 +88,7 @@ export function buildRoute(
       hostnames: [hostname],
       rules: [
         {
+          filters,
           backendRefs: [
             {
               name: serviceName ?? name,
@@ -88,7 +103,7 @@ export function buildRoute(
 }
 
 function renderWorkload(config: WorkloadApp): string[] {
-  const { name, podSpec, webPort, subDomain, externallyAccessible, extraResources } = config;
+  const { name, podSpec, webPort, subDomain, externallyAccessible, forwardAuth, extraResources } = config;
   const resources: string[] = [];
 
   if (extraResources) {
@@ -115,6 +130,7 @@ function renderWorkload(config: WorkloadApp): string[] {
       const route = buildRoute(name, webPort, {
         subDomain,
         externallyAccessible,
+        forwardAuth,
       });
       resources.push(stringify(route));
     }

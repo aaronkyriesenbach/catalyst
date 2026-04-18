@@ -1,4 +1,5 @@
 import type { IContainer, IVolume, IVolumeMount } from "kubernetes-models/v1";
+import { Middleware } from "@kubernetes-models/traefik/traefik.io/v1alpha1/Middleware";
 import type { WorkloadApp } from "./types";
 
 export type NasMountConfig = {
@@ -144,6 +145,40 @@ export function withPostgres(
         containers: [...app.podSpec.containers, container],
         volumes: hasNasVolume ? volumes : [...volumes, nasVolume()],
       },
+    };
+  };
+}
+
+export function withOidcAuth(): WorkloadModifier {
+  return (app) => {
+    const middleware = new Middleware({
+      metadata: { name: "oidc-auth" },
+      spec: {
+        plugin: {
+          "traefik-oidc-auth": {
+            Secret: "urn:k8s:secret:oidc-auth:plugin-secret",
+            Provider: {
+              Url: "https://auth.lab53.net/",
+              ClientId: "urn:k8s:secret:oidc-auth:client-id",
+              ClientSecret: "urn:k8s:secret:oidc-auth:client-secret",
+            },
+            Scopes: ["openid", "profile", "email"],
+            CallbackUri: "/oidc/callback",
+            SessionCookie: {
+              Domain: ".lab53.net",
+              Secure: true,
+              HttpOnly: true,
+              SameSite: "lax",
+            },
+          },
+        },
+      },
+    });
+
+    return {
+      ...app,
+      forwardAuth: true,
+      extraResources: [...(app.extraResources ?? []), middleware],
     };
   };
 }

@@ -14,6 +14,7 @@ export type WorkloadApp = BaseApp & {
   webPort?: number;
   subDomain?: string;
   externallyAccessible?: boolean;
+  forwardAuth?: boolean;
   extraResources?: ResourceLike[];
 };
 
