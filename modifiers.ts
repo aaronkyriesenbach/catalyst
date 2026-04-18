@@ -81,6 +81,73 @@ export function withSecurityDefaults(id?: number): WorkloadModifier {
   });
 }
 
+export type PostgresVariant = "alpine" | "bookworm" | "trixie";
+
+export type PostgresOptions = {
+  variant?: PostgresVariant;
+  user?: string;
+  password?: string;
+  database?: string;
+  dataSubPath?: string;
+  image?: string;
+};
+
+const DEFAULT_POSTGRES_REGISTRY = "docker.int.lab53.net/library/postgres";
+
+function postgresDataDir(version: number): string {
+  if (version >= 18) return `/var/lib/postgresql/${version}/docker`;
+  return "/var/lib/postgresql/data";
+}
+
+export function withPostgres(
+  version: number,
+  options?: PostgresOptions,
+): WorkloadModifier {
+  return (app) => {
+    const user = options?.user ?? app.name;
+    const password = options?.password ?? app.name;
+    const database = options?.database ?? app.name;
+    const variant = options?.variant ?? "alpine";
+    const image =
+      options?.image ?? `${DEFAULT_POSTGRES_REGISTRY}:${version}-${variant}`;
+    const dataSubPath =
+      options?.dataSubPath ?? `cluster/${app.name}/postgres`;
+
+    const container: IContainer = {
+      name: "postgres",
+      image,
+      env: [
+        { name: "POSTGRES_USER", value: user },
+        { name: "POSTGRES_PASSWORD", value: password },
+        { name: "POSTGRES_DB", value: database },
+      ],
+      ports: [{ name: "postgres", containerPort: 5432 }],
+      readinessProbe: {
+        exec: {
+          command: ["pg_isready", "-U", user],
+        },
+        periodSeconds: 10,
+        failureThreshold: 3,
+      },
+      volumeMounts: nasVolumeMounts([
+        { mountPath: postgresDataDir(version), subPath: dataSubPath },
+      ]),
+    };
+
+    const volumes = app.podSpec.volumes ?? [];
+    const hasNasVolume = volumes.some((v) => v.name === NAS_VOLUME_NAME);
+
+    return {
+      ...app,
+      podSpec: {
+        ...app.podSpec,
+        containers: [...app.podSpec.containers, container],
+        volumes: hasNasVolume ? volumes : [...volumes, nasVolume()],
+      },
+    };
+  };
+}
+
 export function applyModifiers(
   app: WorkloadApp,
   ...modifiers: WorkloadModifier[]
