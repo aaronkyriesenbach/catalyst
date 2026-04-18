@@ -2,7 +2,6 @@ import type { WorkloadApp } from "../types";
 import {
   applyModifiers,
   withPostgres,
-  withSecurityDefaults,
 } from "../modifiers";
 
 const base: WorkloadApp = {
@@ -72,6 +71,5 @@ const base: WorkloadApp = {
 
 export default applyModifiers(
   base,
-  withSecurityDefaults(),
   withPostgres(18),
 );

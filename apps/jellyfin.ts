@@ -2,7 +2,6 @@ import type { WorkloadApp } from "../types";
 import {
   applyModifiers,
   withNasMounts,
-  withSecurityDefaults,
 } from "../modifiers";
 
 const base: WorkloadApp = {
@@ -23,7 +22,6 @@ const base: WorkloadApp = {
 
 export default applyModifiers(
   base,
-  withSecurityDefaults(1000),
   withNasMounts({
     main: [
       { mountPath: "/config", subPath: "cluster/jellyfin/config" },

@@ -1,11 +1,7 @@
 import { ConfigMap } from "kubernetes-models/v1";
 import type { WorkloadApp } from "../types";
-import {
-  applyModifiers,
-  withOidcAuth,
-  withPostgres,
-  withSecurityDefaults,
-} from "../modifiers";
+import { buildGeneratedSecret } from "../utils";
+import { applyModifiers, withOidcAuth, withPostgres } from "../modifiers";
 
 const name = "invidious";
 
@@ -96,7 +92,10 @@ const base: WorkloadApp = {
   },
   webPort: 3000,
   externallyAccessible: true,
-  extraResources: [configMap],
+  extraResources: [
+    configMap,
+    ...buildGeneratedSecret("invidious-keys", ["hmac-key", "companion-key"]),
+  ],
 };
 
-export default applyModifiers(base, withSecurityDefaults(), withPostgres(14), withOidcAuth());
+export default applyModifiers(base, withPostgres(14), withOidcAuth());

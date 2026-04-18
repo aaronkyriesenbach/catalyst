@@ -67,21 +67,6 @@ export function withNasMounts(mounts: NasMountConfig): WorkloadModifier {
   };
 }
 
-export function withSecurityDefaults(id?: number): WorkloadModifier {
-  return (app) => ({
-    ...app,
-    podSpec: {
-      ...app.podSpec,
-      securityContext: {
-        runAsNonRoot: true,
-        runAsUser: id ?? 1000,
-        runAsGroup: id ?? 1000,
-        ...app.podSpec.securityContext,
-      },
-    },
-  });
-}
-
 export type PostgresVariant = "alpine" | "bookworm" | "trixie";
 
 export type PostgresOptions = {

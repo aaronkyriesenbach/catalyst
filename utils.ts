@@ -3,7 +3,7 @@ import type { IPodSpec, IServicePort } from "kubernetes-models/v1";
 import { Service } from "kubernetes-models/v1";
 import { HTTPRoute } from "@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1";
 import { stringify } from "yaml";
-import type { AppConfig, StaticApp, WorkloadApp } from "./types";
+import type { AppConfig, ResourceLike, StaticApp, WorkloadApp } from "./types";
 
 export async function loadAppConfig(path: string): Promise<AppConfig> {
   const mod = await import(`./apps/${path}`);
@@ -102,8 +102,104 @@ export function buildRoute(
   });
 }
 
+export const GENERATED_PASSWORD_GENERATOR_NAME = "generated-password";
+
+type PasswordEncoding = "raw" | "base64" | "base64url" | "base32" | "hex";
+
+export type GeneratedSecretKey =
+  | string
+  | {
+      key: string;
+      length?: number;
+      encoding?: PasswordEncoding;
+    };
+
+const GENERATOR_API_VERSION = "generators.external-secrets.io/v1alpha1";
+const DEFAULT_LENGTH = 64;
+const DEFAULT_ENCODING: PasswordEncoding = "hex";
+
+export function buildGeneratedSecret(
+  name: string,
+  keys: GeneratedSecretKey[],
+): ResourceLike[] {
+  const resources: ResourceLike[] = [];
+  const dataFrom: Record<string, unknown>[] = [];
+
+  for (const keyConfig of keys) {
+    const keyName = typeof keyConfig === "string" ? keyConfig : keyConfig.key;
+    const rewrite = [{ regexp: { source: "password", target: keyName } }];
+
+    if (
+      typeof keyConfig !== "string" &&
+      (keyConfig.length !== undefined || keyConfig.encoding !== undefined)
+    ) {
+      const generatorName = `${name}-${keyName}-gen`;
+
+      resources.push({
+        apiVersion: GENERATOR_API_VERSION,
+        kind: "Password",
+        metadata: { name: generatorName },
+        spec: {
+          length: keyConfig.length ?? DEFAULT_LENGTH,
+          encoding: keyConfig.encoding ?? DEFAULT_ENCODING,
+          allowRepeat: true,
+        },
+      });
+
+      dataFrom.push({
+        sourceRef: {
+          generatorRef: {
+            apiVersion: GENERATOR_API_VERSION,
+            kind: "Password",
+            name: generatorName,
+          },
+        },
+        rewrite,
+      });
+    } else {
+      dataFrom.push({
+        sourceRef: {
+          generatorRef: {
+            apiVersion: GENERATOR_API_VERSION,
+            kind: "ClusterGenerator",
+            name: GENERATED_PASSWORD_GENERATOR_NAME,
+          },
+        },
+        rewrite,
+      });
+    }
+  }
+
+  resources.push({
+    apiVersion: "external-secrets.io/v1",
+    kind: "ExternalSecret",
+    metadata: { name },
+    spec: {
+      refreshInterval: "0",
+      target: { name },
+      dataFrom,
+    },
+  });
+
+  return resources;
+}
+
 function renderWorkload(config: WorkloadApp): string[] {
-  const { name, podSpec, webPort, subDomain, externallyAccessible, forwardAuth, extraResources } = config;
+  const app = config.podSpec.securityContext
+    ? config
+    : {
+        ...config,
+        podSpec: {
+          ...config.podSpec,
+          securityContext: {
+            runAsNonRoot: true,
+            runAsUser: 1000,
+            runAsGroup: 1000,
+          },
+        },
+      };
+
+  const { name, podSpec, webPort, subDomain, externallyAccessible, forwardAuth, extraResources } = app;
   const resources: string[] = [];
 
   if (extraResources) {
