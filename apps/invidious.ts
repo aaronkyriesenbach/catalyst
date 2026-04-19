@@ -18,6 +18,7 @@ const base: WorkloadApp = {
   kind: "workload",
   name,
   podSpec: {
+    enableServiceLinks: false,
     containers: [
       {
         name: "main",
@@ -52,13 +53,13 @@ const base: WorkloadApp = {
           },
         ],
         livenessProbe: {
-          httpGet: { path: "/api/v1/trending", port: 3000 },
+          httpGet: { path: "/api/v1/stats", port: 3000 },
           initialDelaySeconds: 30,
           periodSeconds: 30,
           failureThreshold: 3,
         },
         readinessProbe: {
-          httpGet: { path: "/api/v1/trending", port: 3000 },
+          httpGet: { path: "/api/v1/stats", port: 3000 },
           periodSeconds: 10,
           failureThreshold: 3,
         },
@@ -94,7 +95,10 @@ const base: WorkloadApp = {
   externallyAccessible: true,
   extraResources: [
     configMap,
-    ...buildGeneratedSecret("invidious-keys", ["hmac-key", "companion-key"]),
+    ...buildGeneratedSecret("invidious-keys", [
+      "hmac-key",
+      { key: "companion-key", length: 8, encoding: "hex" },
+    ]),
   ],
 };
 
