@@ -102,12 +102,20 @@ export function withPostgres(
     const container: IContainer = {
       name: "postgres",
       image,
+      restartPolicy: "Always",
       env: [
         { name: "POSTGRES_USER", value: user },
         { name: "POSTGRES_PASSWORD", value: password },
         { name: "POSTGRES_DB", value: database },
       ],
       ports: [{ name: "postgres", containerPort: 5432 }],
+      startupProbe: {
+        exec: {
+          command: ["pg_isready", "-U", user],
+        },
+        periodSeconds: 5,
+        failureThreshold: 30,
+      },
       readinessProbe: {
         exec: {
           command: ["pg_isready", "-U", user],
@@ -127,7 +135,7 @@ export function withPostgres(
       ...app,
       podSpec: {
         ...app.podSpec,
-        containers: [...app.podSpec.containers, container],
+        initContainers: [...(app.podSpec.initContainers ?? []), container],
         volumes: hasNasVolume ? volumes : [...volumes, nasVolume()],
       },
     };
