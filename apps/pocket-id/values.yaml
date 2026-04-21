@@ -1,0 +1,25 @@
+instance:
+  spec:
+    userManagement:
+      allowUserSignups: "disabled"
+    encryptionKey:
+      valueFrom:
+        secretKeyRef:
+          name: pocket-id
+          key: encryption-key
+
+    appUrl: https://auth.lab53.net
+
+    persistence:
+      enabled: true
+      existingClaim: pocket-id-data
+
+    route:
+      enabled: true
+      parentRefs:
+        - name: traefik-external
+          namespace: traefik
+        - name: traefik-internal
+          namespace: traefik
+      hostnames:
+        - auth.lab53.net

@@ -1,51 +1,32 @@
-import type { WorkloadApp } from "../types";
-import {
-  applyModifiers,
-  withNasMounts,
-} from "../modifiers";
+import { buildNasPersistentVolumePair } from "../storage";
+import type { HelmChart, StaticApp } from "../types";
 
-const base: WorkloadApp = {
-  kind: "workload",
-  name: "pocket-id",
-  podSpec: {
-    containers: [
-      {
-        name: "main",
-        image: "ghcr.io/pocket-id/pocket-id:v2",
-        env: [
-          { name: "APP_URL", value: "https://auth.lab53.net" },
-          {
-            name: "ENCRYPTION_KEY",
-            valueFrom: {
-              secretKeyRef: {
-                name: "pocket-id",
-                key: "encryption-key",
-              },
-            },
-          },
-          { name: "TRUST_PROXY", value: "true" },
-          { name: "PUID", value: "1000" },
-          { name: "PGID", value: "1000" },
-        ],
-        ports: [{ name: "http", containerPort: 1411 }],
-        livenessProbe: {
-          exec: { command: ["/app/pocket-id", "healthcheck"] },
-          initialDelaySeconds: 10,
-          periodSeconds: 90,
-          timeoutSeconds: 5,
-          failureThreshold: 2,
-        },
-      },
-    ],
+const { pv: dataPv, pvc: dataPvc } = buildNasPersistentVolumePair({
+  name: "pocket-id-data",
+  storage: "5Gi",
+  nfsPath: "/mnt/tank/data/cluster/pocket-id/data",
+});
+
+const chart: HelmChart = {
+  apiVersion: "helm.cattle.io/v1",
+  kind: "HelmChart",
+  metadata: {
+    name: "pocket-id-operator",
   },
-  webPort: 1411,
-  subDomain: "auth",
-  externallyAccessible: true,
+  spec: {
+    chart: "oci://ghcr.io/aclerici38/charts/pocket-id-operator",
+    targetNamespace: "pocket-id",
+    version: "0.5.2",
+    valuesContent: await Bun.file(
+      new URL("./pocket-id/values.yaml", import.meta.url),
+    ).text(),
+  },
 };
 
-export default applyModifiers(
-  base,
-  withNasMounts({
-    main: [{ mountPath: "/app/data", subPath: "cluster/pocket-id/data" }],
-  }),
-);
+const config: StaticApp = {
+  kind: "static",
+  name: "pocket-id",
+  resources: [dataPv, dataPvc, chart],
+};
+
+export default config;
