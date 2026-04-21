@@ -3,9 +3,11 @@ import type { WorkloadApp } from "../types";
 import {
   applyModifiers,
   withNasMounts,
+  withOidcAuth,
 } from "../modifiers";
 
 const name = "filebrowser-quantum";
+const oidcCredentialsSecret = `${name}-oidc-credentials`;
 
 const configMap = new ConfigMap({
   metadata: { name },
@@ -30,8 +32,8 @@ const base: WorkloadApp = {
             name: "FILEBROWSER_OIDC_CLIENT_ID",
             valueFrom: {
               secretKeyRef: {
-                name: "filebrowser-quantum-oidc",
-                key: "client-id",
+                name: oidcCredentialsSecret,
+                key: "client_id",
               },
             },
           },
@@ -39,8 +41,8 @@ const base: WorkloadApp = {
             name: "FILEBROWSER_OIDC_CLIENT_SECRET",
             valueFrom: {
               secretKeyRef: {
-                name: "filebrowser-quantum-oidc",
-                key: "client-secret",
+                name: oidcCredentialsSecret,
+                key: "client_secret",
               },
             },
           },
@@ -81,4 +83,5 @@ export default applyModifiers(
       { mountPath: "/srv/data" },
     ],
   }),
+  withOidcAuth(),
 );

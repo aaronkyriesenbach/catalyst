@@ -2,6 +2,7 @@ import type { WorkloadApp } from "../types";
 import {
   applyModifiers,
   withNasMounts,
+  withOidcAuth,
 } from "../modifiers";
 
 const base: WorkloadApp = {
@@ -31,4 +32,5 @@ export default applyModifiers(
       { mountPath: "/live", subPath: "live" },
     ],
   }),
+  withOidcAuth(),
 );
