@@ -11,7 +11,7 @@ const base: WorkloadApp = {
     containers: [
       {
         name: "main",
-        image: "ghcr.io/aaronkyriesenbach/dav:0.0.1-SNAPSHOT",
+        image: "ghcr.io/aaronkyriesenbach/dav:0.1.0-SNAPSHOT",
         ports: [{ containerPort: 8080 }],
         readinessProbe: {
           httpGet: { path: "/healthz", port: 8080 },
