@@ -1,67 +1,53 @@
 # Forward Auth (OIDC)
 
-OIDC-based authentication for apps using [traefik-oidc-auth](https://github.com/sevensolutions/traefik-oidc-auth) and [Pocket ID](https://auth.lab53.net/).
+OIDC-based authentication for apps using [traefik-oidc-auth](https://github.com/sevensolutions/traefik-oidc-auth) and [Pocket ID](https://auth.lab53.net/), managed by the [pocket-id-operator](https://github.com/aclerici38/pocket-id-operator).
 
 ## How it works
 
-1. The `withOidcAuth()` modifier adds a Traefik `Middleware` CRD to the app's `extraResources` and sets `forwardAuth: true`
-2. `forwardAuth: true` causes `buildRoute()` to add an `ExtensionRef` filter to the HTTPRoute, pointing at the middleware
-3. Traefik intercepts requests, redirects unauthenticated users to Pocket ID, and passes authenticated requests through
+The `withOidcAuth()` modifier creates Pocket ID resources for each app:
 
-Session cookies are scoped to `.lab53.net`, so a single login covers all protected apps (SSO).
+1. A `PocketIDUserGroup` named after the app (controls who can access it)
+2. A `PocketIDOIDCClient` with the app's callback URL and a generated credentials secret
+3. Optionally, a Traefik `Middleware` + ESO-generated plugin secret for forward auth
+
+When middleware is enabled (`withOidcAuth({ middleware: true })`):
+- `forwardAuth: true` is set on the app, causing `buildRoute()` to add an `ExtensionRef` filter to the HTTPRoute
+- Traefik intercepts requests, redirects unauthenticated users to Pocket ID, and passes authenticated requests through
+- Session cookies are scoped to `.lab53.net`, so a single login covers all protected apps (SSO)
 
 ## Adding OIDC auth to an app
 
-### 1. Import and apply the modifier
+### With forward auth middleware (Traefik intercepts unauthenticated requests)
 
 ```typescript
-import { applyModifiers, withOidcAuth } from "../modifiers";
+export default applyModifiers(base, withOidcAuth({ middleware: true }));
+```
 
-const base: WorkloadApp = {
-  kind: "workload",
-  name: "my-app",
-  // ...
-  externallyAccessible: true,
-};
+This creates:
+- `PocketIDUserGroup` for the app
+- `PocketIDOIDCClient` with callback URL and credentials secret
+- ESO `Password` generator + `ExternalSecret` for the middleware plugin secret
+- Traefik `Middleware` referencing both secrets
 
+### Without middleware (app handles OIDC itself)
+
+```typescript
 export default applyModifiers(base, withOidcAuth());
 ```
 
-`withOidcAuth()` composes with other modifiers in any order:
+This creates only the `PocketIDUserGroup` and `PocketIDOIDCClient`. The app is responsible for its own OIDC flow using the credentials from the `<app-name>-oidc-credentials` secret.
+
+### Composing with other modifiers
 
 ```typescript
 export default applyModifiers(
   base,
-  withSecurityDefaults(),
   withPostgres(18),
-  withOidcAuth(),
+  withOidcAuth({ middleware: true }),
 );
 ```
 
-### 2. Create the `oidc-auth` Secret in the app's namespace
-
-The middleware reads credentials from a Kubernetes Secret named `oidc-auth` in the same namespace as the app. Each protected app namespace needs its own copy.
-
-```yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: oidc-auth
-  namespace: <app-namespace>  # defaults to app name
-type: Opaque
-stringData:
-  plugin-secret: "<exactly 32 characters, used for session encryption>"
-  client-id: "<OIDC client ID from Pocket ID>"
-  client-secret: "<OIDC client secret from Pocket ID>"
-```
-
-All apps share the same Pocket ID OIDC client. The client must have a callback URL entry for each protected app:
-
-```
-https://<app-subdomain>.lab53.net/oidc/callback
-```
-
-### 3. Verify the rendered output
+### Verify the rendered output
 
 ```bash
 bun run render <app-name>
@@ -69,29 +55,27 @@ bun run render <app-name>
 
 Confirm the output includes:
 
-- A `traefik.io/v1alpha1 Middleware` resource named `oidc-auth`
-- An `HTTPRoute` with a `filters` entry of type `ExtensionRef` referencing `oidc-auth`
+- A `PocketIDUserGroup` named after the app
+- A `PocketIDOIDCClient` with the correct callback URL
+- (If middleware enabled) A `Middleware`, `Password` generator, and `ExternalSecret`
+- (If middleware enabled) An `HTTPRoute` with an `ExtensionRef` filter referencing `oidc-auth`
+
+## Secrets
+
+The modifier creates two secrets per app (when middleware is enabled):
+
+| Secret | Created by | Keys |
+|---|---|---|
+| `<app>-oidc-credentials` | pocket-id-operator | `client_id`, `client_secret`, `issuer_url`, and OIDC endpoint URLs |
+| `<app>-oidc-plugin` | External Secrets | `plugin-secret` (32-char session encryption key) |
+
+Without middleware, only `<app>-oidc-credentials` is created (by the operator).
 
 ## Prerequisites
 
-The Traefik plugin must be declared in the cluster's static config (`cluster/traefik-config.yaml`). This is already done:
-
-```yaml
-experimental:
-  plugins:
-    traefik-oidc-auth:
-      moduleName: "github.com/sevensolutions/traefik-oidc-auth"
-      version: "v0.19.0"
-```
-
-Traefik downloads the plugin at startup. If the version is bumped here, Traefik pods must be restarted.
-
-## Pocket ID client setup
-
-1. Log in to [Pocket ID](https://auth.lab53.net/)
-2. Create one OIDC client (or reuse the existing shared client)
-3. Add a callback URL for each app: `https://<subdomain>.lab53.net/oidc/callback`
-4. Copy the client ID and client secret into the `oidc-auth` Secret for each app namespace
+- The pocket-id-operator must be installed (see `apps/pocket-id.ts`)
+- The External Secrets operator must be installed (see `apps/external-secrets.ts`) — only needed for middleware mode
+- The Traefik OIDC plugin must be declared in `cluster/traefik-config.yaml` — only needed for middleware mode
 
 ## Reference
 
@@ -101,4 +85,4 @@ Traefik downloads the plugin at startup. If the version is bumped here, Traefik 
 | `forwardAuth` type field | `types.ts` (`WorkloadApp`) |
 | `ExtensionRef` filter logic | `utils.ts` (`buildRoute()`) |
 | Traefik plugin declaration | `cluster/traefik-config.yaml` |
-| Example usage | `apps/invidious.ts` |
+| Pocket ID operator app | `apps/pocket-id.ts` |

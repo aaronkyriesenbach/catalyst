@@ -1,6 +1,7 @@
 import type { IContainer, IVolume, IVolumeMount } from "kubernetes-models/v1";
 import { Middleware } from "@kubernetes-models/traefik/traefik.io/v1alpha1/Middleware";
-import type { WorkloadApp } from "./types";
+import type { ResourceLike, WorkloadApp } from "./types";
+import { buildGeneratedSecret } from "./utils";
 
 export type NasMountConfig = {
   [containerName: string]: { mountPath: string; subPath?: string }[];
@@ -142,36 +143,91 @@ export function withPostgres(
   };
 }
 
-export function withOidcAuth(): WorkloadModifier {
-  return (app) => {
-    const middleware = new Middleware({
-      metadata: { name: "oidc-auth" },
-      spec: {
-        plugin: {
-          "traefik-oidc-auth": {
-            Secret: "urn:k8s:secret:oidc-auth:plugin-secret",
-            Provider: {
-              Url: "https://auth.lab53.net/",
-              ClientId: "urn:k8s:secret:oidc-auth:client-id",
-              ClientSecret: "urn:k8s:secret:oidc-auth:client-secret",
-            },
-            Scopes: ["openid", "profile", "email"],
-            CallbackUri: "/oidc/callback",
-            SessionCookie: {
-              Domain: ".lab53.net",
-              Secure: true,
-              HttpOnly: true,
-              SameSite: "lax",
-            },
+const POCKET_ID_API_VERSION = "pocketid.internal/v1alpha1";
+const POCKET_ID_URL = "https://auth.lab53.net/";
+const DEFAULT_MIDDLEWARE_CALLBACK_PATH = "/oidc/callback";
+
+function buildOidcClient(app: WorkloadApp): ResourceLike {
+  const credentialsSecretName = `${app.name}-oidc-credentials`;
+
+  return {
+    apiVersion: POCKET_ID_API_VERSION,
+    kind: "PocketIDOIDCClient",
+    metadata: { name: app.name },
+    spec: {
+      secret: { name: credentialsSecretName },
+      allowedUserGroups: [{ name: app.name }],
+    },
+  };
+}
+
+function buildOidcGroup(app: WorkloadApp): ResourceLike {
+  return {
+    apiVersion: POCKET_ID_API_VERSION,
+    kind: "PocketIDUserGroup",
+    metadata: { name: app.name },
+    spec: {
+      friendlyName: app.name,
+    },
+  };
+}
+
+function buildOidcMiddleware(app: WorkloadApp): Middleware {
+  const credentialsSecretName = `${app.name}-oidc-credentials`;
+  const pluginSecretName = `${app.name}-oidc-plugin`;
+
+  return new Middleware({
+    metadata: { name: "oidc-auth" },
+    spec: {
+      plugin: {
+        "traefik-oidc-auth": {
+          Secret: `urn:k8s:secret:${pluginSecretName}:plugin-secret`,
+          Provider: {
+            Url: POCKET_ID_URL,
+            ClientId: `urn:k8s:secret:${credentialsSecretName}:client_id`,
+            ClientSecret: `urn:k8s:secret:${credentialsSecretName}:client_secret`,
+          },
+          Scopes: ["openid", "profile", "email"],
+          CallbackUri: DEFAULT_MIDDLEWARE_CALLBACK_PATH,
+          SessionCookie: {
+            Domain: ".lab53.net",
+            Secure: true,
+            HttpOnly: true,
+            SameSite: "lax",
           },
         },
       },
-    });
+    },
+  });
+}
+
+export type OidcAuthOptions = {
+  middleware?: boolean;
+};
+
+export function withOidcAuth(options?: OidcAuthOptions): WorkloadModifier {
+  const { middleware: addMiddleware = false } = options ?? {};
+
+  return (app) => {
+    const extraResources: ResourceLike[] = [
+      buildOidcGroup(app),
+      buildOidcClient(app),
+    ];
+
+    if (addMiddleware) {
+      const pluginSecretName = `${app.name}-oidc-plugin`;
+      extraResources.push(
+        ...buildGeneratedSecret(pluginSecretName, [
+          { key: "plugin-secret", length: 32, encoding: "raw" },
+        ]),
+        buildOidcMiddleware(app),
+      );
+    }
 
     return {
       ...app,
-      forwardAuth: true,
-      extraResources: [...(app.extraResources ?? []), middleware],
+      forwardAuth: addMiddleware ? true : app.forwardAuth,
+      extraResources: [...(app.extraResources ?? []), ...extraResources],
     };
   };
 }

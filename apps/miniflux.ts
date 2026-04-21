@@ -1,12 +1,16 @@
 import type { WorkloadApp } from "../types";
 import {
   applyModifiers,
+  withOidcAuth,
   withPostgres,
 } from "../modifiers";
 
+const name = "miniflux";
+const oidcCredentialsSecret = `${name}-oidc-credentials`;
+
 const base: WorkloadApp = {
   kind: "workload",
-  name: "miniflux",
+  name,
   podSpec: {
     containers: [
       {
@@ -29,8 +33,8 @@ const base: WorkloadApp = {
             name: "OAUTH2_CLIENT_ID",
             valueFrom: {
               secretKeyRef: {
-                name: "miniflux-oidc",
-                key: "client-id",
+                name: oidcCredentialsSecret,
+                key: "client_id",
               },
             },
           },
@@ -38,8 +42,8 @@ const base: WorkloadApp = {
             name: "OAUTH2_CLIENT_SECRET",
             valueFrom: {
               secretKeyRef: {
-                name: "miniflux-oidc",
-                key: "client-secret",
+                name: oidcCredentialsSecret,
+                key: "client_secret",
               },
             },
           },
@@ -72,4 +76,5 @@ const base: WorkloadApp = {
 export default applyModifiers(
   base,
   withPostgres(18),
+  withOidcAuth(),
 );
