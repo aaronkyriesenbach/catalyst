@@ -1,10 +1,6 @@
 import { ConfigMap } from "kubernetes-models/v1";
+import { applyModifiers, withNasMounts, withOidcAuth } from "../modifiers";
 import type { WorkloadApp } from "../types";
-import {
-  applyModifiers,
-  withNasMounts,
-  withOidcAuth,
-} from "../modifiers";
 
 const name = "filebrowser-quantum";
 const oidcCredentialsSecret = `${name}-oidc-credentials`;
@@ -25,7 +21,7 @@ const base: WorkloadApp = {
     containers: [
       {
         name: "main",
-        image: "ghcr.io/gtsteffaniak/filebrowser:1.2.4-stable",
+        image: "ghcr.io/gtsteffaniak/filebrowser:1.3.0-stable",
         env: [
           { name: "FILEBROWSER_CONFIG", value: "/config/config.yaml" },
           {
