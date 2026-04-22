@@ -1,5 +1,6 @@
 import { buildNasPersistentVolumePair } from "../storage";
 import type { HelmChart, StaticApp } from "../types";
+import { readFile } from "../utils";
 
 const { pv: dataPv, pvc: dataPvc } = buildNasPersistentVolumePair({
   name: "pocket-id-data",
@@ -17,9 +18,10 @@ const chart: HelmChart = {
     chart: "oci://ghcr.io/aclerici38/charts/pocket-id-operator",
     targetNamespace: "pocket-id",
     version: "0.5.2",
-    valuesContent: await Bun.file(
-      new URL("./pocket-id/values.yaml", import.meta.url),
-    ).text(),
+    valuesContent: await readFile(
+      "./pocket-id/values.yaml",
+      import.meta.url,
+    ),
   },
 };
 

@@ -28,7 +28,7 @@ const clusterGenerator: ResourceLike = {
     kind: "Password",
     generator: {
       passwordSpec: {
-        length: 64,
+        length: 16,
         encoding: "hex",
         allowRepeat: true,
       },

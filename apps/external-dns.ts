@@ -1,5 +1,5 @@
 import type { HelmChart, StaticApp } from "../types";
-import { buildDeployment } from "../utils";
+import { buildDeployment, readFile } from "../utils";
 
 const internalChart: HelmChart = {
   apiVersion: "helm.cattle.io/v1",
@@ -12,9 +12,10 @@ const internalChart: HelmChart = {
     chart: "external-dns",
     targetNamespace: "external-dns",
     version: "1.20.0",
-    valuesContent: await Bun.file(
-      new URL("./external-dns/internal-values.yaml", import.meta.url),
-    ).text(),
+    valuesContent: await readFile(
+      "./external-dns/internal-values.yaml",
+      import.meta.url,
+    ),
   },
 };
 
@@ -29,9 +30,10 @@ const externalChart: HelmChart = {
     chart: "external-dns",
     targetNamespace: "external-dns",
     version: "1.20.0",
-    valuesContent: await Bun.file(
-      new URL("./external-dns/external-values.yaml", import.meta.url),
-    ).text(),
+    valuesContent: await readFile(
+      "./external-dns/external-values.yaml",
+      import.meta.url,
+    ),
   },
 };
 

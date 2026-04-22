@@ -1,0 +1,24 @@
+{
+  "using": ["urn:ietf:params:jmap:core", "urn:stalwart:jmap"],
+  "methodCalls": [
+    [
+      "x:Account/set",
+      {
+        "create": {
+          "new-user": {
+            "@type": "User",
+            "name": "aaron",
+            "domainId": "__DOMAIN_ID__",
+            "credentials": {
+              "0": {
+                "@type": "Password",
+                "secret": "__USER_PASSWORD__"
+              }
+            }
+          }
+        }
+      },
+      "create-user"
+    ]
+  ]
+}

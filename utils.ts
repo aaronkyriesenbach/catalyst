@@ -5,6 +5,10 @@ import { HTTPRoute } from "@kubernetes-models/gateway-api/gateway.networking.k8s
 import { stringify } from "yaml";
 import type { AppConfig, ResourceLike, StaticApp, WorkloadApp } from "./types";
 
+export function readFile(relativePath: string, base: string): Promise<string> {
+  return Bun.file(new URL(relativePath, base)).text();
+}
+
 export async function loadAppConfig(path: string): Promise<AppConfig> {
   const mod = await import(`./apps/${path}`);
 

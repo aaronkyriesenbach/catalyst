@@ -34,9 +34,13 @@ const internalRootCaBundle: ResourceLike = {
         key: "ca.crt",
       },
       namespaceSelector: {
-        matchLabels: {
-          "kubernetes.io/metadata.name": "traefik",
-        },
+        matchExpressions: [
+          {
+            key: "kubernetes.io/metadata.name",
+            operator: "In",
+            values: ["traefik", "stalwart"],
+          },
+        ],
       },
     },
   },
