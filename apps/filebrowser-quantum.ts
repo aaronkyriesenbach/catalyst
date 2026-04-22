@@ -1,6 +1,7 @@
 import { ConfigMap } from "kubernetes-models/v1";
 import { applyModifiers, withNasMounts, withOidcAuth } from "../modifiers";
 import type { WorkloadApp } from "../types";
+import { readFile } from "../utils";
 
 const name = "filebrowser-quantum";
 const oidcCredentialsSecret = `${name}-oidc-credentials`;
@@ -8,9 +9,10 @@ const oidcCredentialsSecret = `${name}-oidc-credentials`;
 const configMap = new ConfigMap({
   metadata: { name },
   data: {
-    "config.yaml": await Bun.file(
-      new URL("./filebrowser-quantum/config.yaml", import.meta.url),
-    ).text(),
+    "config.yaml": await readFile(
+      "./filebrowser-quantum/config.yaml",
+      import.meta.url,
+    ),
   },
 });
 

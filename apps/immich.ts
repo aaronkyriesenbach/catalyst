@@ -2,7 +2,7 @@ import { Secret } from "kubernetes-models/v1";
 import { nasVolume, nasVolumeMounts } from "../modifiers";
 import { buildNasPersistentVolumePair } from "../storage";
 import type { HelmChart, StaticApp } from "../types";
-import { buildDeployment, buildRoute, buildService } from "../utils";
+import { buildDeployment, buildRoute, buildService, readFile } from "../utils";
 
 const chart: HelmChart = {
   apiVersion: "helm.cattle.io/v1",
@@ -13,9 +13,7 @@ const chart: HelmChart = {
   spec: {
     chart: "oci://ghcr.io/immich-app/immich-charts/immich",
     version: "0.11.1",
-    valuesContent: await Bun.file(
-      new URL("./immich/values.yaml", import.meta.url),
-    ).text(),
+    valuesContent: await readFile("./immich/values.yaml", import.meta.url),
   },
 };
 
