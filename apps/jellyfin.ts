@@ -1,9 +1,5 @@
+import { applyModifiers, withNasMounts, withOidcAuth } from "../modifiers";
 import type { WorkloadApp } from "../types";
-import {
-  applyModifiers,
-  withNasMounts,
-  withOidcAuth,
-} from "../modifiers";
 
 const base: WorkloadApp = {
   kind: "workload",
@@ -12,7 +8,7 @@ const base: WorkloadApp = {
     containers: [
       {
         name: "main",
-        image: "jellyfin/jellyfin:10.11.8",
+        image: "docker.int.lab53.net/jellyfin/jellyfin:10.11.8",
         ports: [{ name: "http", containerPort: 8096 }],
       },
     ],
