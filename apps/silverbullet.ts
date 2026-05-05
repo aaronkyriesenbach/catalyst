@@ -3,24 +3,33 @@ import type { WorkloadApp } from "../types";
 
 const base: WorkloadApp = {
   kind: "workload",
-  name: "forscore",
+  name: "silverbullet",
   podSpec: {
     containers: [
       {
         name: "main",
-        image: "ghcr.io/aaronkyriesenbach/forscoreviewer:0.1.0",
+        image: "ghcr.io/silverbulletmd/silverbullet:2.6.1",
         ports: [{ name: "http", containerPort: 3000 }],
       },
     ],
   },
   webPort: 3000,
   externallyAccessible: true,
+  subDomain: "notes",
 };
 
 export default applyModifiers(
   base,
   withNasMounts({
-    main: [{ mountPath: "/data", subPath: "forscore" }],
+    main: [{ mountPath: "/space", subPath: "documents/notes" }],
   }),
-  withOidcAuth({ middleware: { enabled: true } }),
+  withOidcAuth({
+    middleware: {
+      enabled: true,
+      bypassPaths: [
+        { type: "prefix", path: "/.client/" },
+        { type: "exact", path: "/service_worker.js" },
+      ],
+    },
+  }),
 );
