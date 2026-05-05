@@ -8,7 +8,7 @@ const base: WorkloadApp = {
     containers: [
       {
         name: "main",
-        image: "joplin/server:3.6.1",
+        image: "docker.int.lab53.net/joplin/server:3.6.1",
         ports: [{ name: "http", containerPort: 22300 }],
         env: [
           {
