@@ -172,9 +172,16 @@ function buildOidcGroup(app: WorkloadApp): ResourceLike {
   };
 }
 
-function buildOidcMiddleware(app: WorkloadApp): Middleware {
+function buildOidcMiddleware(
+  app: WorkloadApp,
+  bypassPaths?: BypassPath[],
+): Middleware {
   const credentialsSecretName = `${app.name}-oidc-credentials`;
   const pluginSecretName = `${app.name}-oidc-plugin`;
+  const bypassRule =
+    bypassPaths && bypassPaths.length > 0
+      ? buildBypassRule(bypassPaths)
+      : undefined;
 
   return new Middleware({
     metadata: { name: "oidc-auth" },
@@ -195,18 +202,38 @@ function buildOidcMiddleware(app: WorkloadApp): Middleware {
             HttpOnly: true,
             SameSite: "lax",
           },
+          ...(bypassRule && { BypassAuthenticationRule: bypassRule }),
         },
       },
     },
   });
 }
 
+export type BypassPath = {
+  type: "exact" | "prefix";
+  path: `/${string}`;
+};
+
+function buildBypassRule(paths: BypassPath[]): string {
+  return paths
+    .map(({ type, path }) =>
+      type === "exact" ? `Path(\`${path}\`)` : `PathPrefix(\`${path}\`)`,
+    )
+    .join(" || ");
+}
+
+export type OidcMiddlewareOptions = {
+  enabled: boolean;
+  bypassPaths?: BypassPath[];
+};
+
 export type OidcAuthOptions = {
-  middleware?: boolean;
+  middleware?: OidcMiddlewareOptions;
 };
 
 export function withOidcAuth(options?: OidcAuthOptions): WorkloadModifier {
-  const { middleware: addMiddleware = false } = options ?? {};
+  const middlewareOptions = options?.middleware;
+  const addMiddleware = middlewareOptions?.enabled ?? false;
 
   return (app) => {
     const extraResources: ResourceLike[] = [
@@ -220,7 +247,7 @@ export function withOidcAuth(options?: OidcAuthOptions): WorkloadModifier {
         ...buildGeneratedSecret(pluginSecretName, [
           { key: "plugin-secret", length: 32, encoding: "raw" },
         ]),
-        buildOidcMiddleware(app),
+        buildOidcMiddleware(app, middlewareOptions?.bypassPaths),
       );
     }
 
