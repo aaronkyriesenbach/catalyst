@@ -58,6 +58,10 @@ const base: WorkloadApp = {
               },
             },
           },
+          {
+            name: "ADMIN_GROUP",
+            value: "admin",
+          },
         ],
         ports: [{ name: "http", containerPort: 8080 }],
         livenessProbe: {
