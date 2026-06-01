@@ -45,8 +45,8 @@ const base: WorkloadApp = {
           { name: "VPN_PORT_FORWARDING", value: "true" },
           { name: "VPN_PORT_FORWARDING_PROVIDER", value: "protonvpn" },
           {
-            name: "UPDATER_QBITTORRENT_ADDRESSES",
-            value: "http://localhost:8080",
+            name: "VPN_PORT_FORWARDING_UP_COMMAND",
+            value: `/bin/sh -c "wget -O- -nv --retry-connrefused --post-data 'json={\\"listen_port\\":{{PORT}},\\"random_port\\":false,\\"upnp\\":false}' http://127.0.0.1:8080/api/v2/app/setPreferences"`,
           },
           { name: "FIREWALL_INPUT_PORTS", value: "8080" },
         ],
