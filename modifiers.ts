@@ -32,21 +32,30 @@ export function nasVolumeMounts(
 
 export function withNasMounts(mounts: NasMountConfig): WorkloadModifier {
   return (app) => {
-    const containers: IContainer[] = app.podSpec.containers.map((container) => {
-      const containerMounts = mounts[container.name];
-      if (!containerMounts) return container;
+    const applyMounts = (containers: IContainer[]): IContainer[] =>
+      containers.map((container) => {
+        const containerMounts = mounts[container.name];
+        if (!containerMounts) return container;
 
-      return {
-        ...container,
-        volumeMounts: [
-          ...(container.volumeMounts ?? []),
-          ...nasVolumeMounts(containerMounts),
-        ],
-      };
-    });
+        return {
+          ...container,
+          volumeMounts: [
+            ...(container.volumeMounts ?? []),
+            ...nasVolumeMounts(containerMounts),
+          ],
+        };
+      });
+
+    const containers = applyMounts(app.podSpec.containers);
+    const initContainers = app.podSpec.initContainers
+      ? applyMounts(app.podSpec.initContainers as IContainer[])
+      : undefined;
 
     const requestedContainers = Object.keys(mounts);
-    const existingContainerNames = app.podSpec.containers.map((c) => c.name);
+    const existingContainerNames = [
+      ...app.podSpec.containers.map((c) => c.name),
+      ...(app.podSpec.initContainers ?? []).map((c) => c.name),
+    ];
     const missing = requestedContainers.filter(
       (name) => !existingContainerNames.includes(name),
     );
@@ -62,6 +71,7 @@ export function withNasMounts(mounts: NasMountConfig): WorkloadModifier {
       podSpec: {
         ...app.podSpec,
         containers,
+        ...(initContainers && { initContainers }),
         volumes: [...(app.podSpec.volumes ?? []), nasVolume()],
       },
     };
