@@ -8,7 +8,7 @@ const base: WorkloadApp = {
     containers: [
       {
         name: "main",
-        image: "ghcr.io/aaronkyriesenbach/forscoreviewer:0.1.0",
+        image: "ghcr.io/aaronkyriesenbach/forscoreviewer:0.2.0",
         ports: [{ name: "http", containerPort: 3000 }],
       },
     ],
