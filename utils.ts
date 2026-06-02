@@ -1,4 +1,4 @@
-import { Deployment } from "kubernetes-models/apps/v1";
+import { Deployment, StatefulSet } from "kubernetes-models/apps/v1";
 import type { IPodSpec, IServicePort } from "kubernetes-models/v1";
 import { Service } from "kubernetes-models/v1";
 import { HTTPRoute } from "@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1";
@@ -41,6 +41,55 @@ export function buildService(name: string, ports: IServicePort[]) {
     spec: {
       selector: { app: name },
       ports,
+    },
+  });
+}
+
+export function buildHeadlessService(name: string, ports: IServicePort[]) {
+  return new Service({
+    metadata: { name },
+    spec: {
+      clusterIP: "None",
+      selector: { app: name },
+      ports,
+    },
+  });
+}
+
+export type VolumeClaimTemplate = {
+  metadata: { name: string };
+  spec: {
+    accessModes: string[];
+    storageClassName: string;
+    resources: {
+      requests: { storage: string };
+    };
+  };
+};
+
+export function buildStatefulSet(
+  name: string,
+  podSpec: IPodSpec,
+  volumeClaimTemplates: VolumeClaimTemplate[],
+) {
+  return new StatefulSet({
+    metadata: {
+      name,
+      labels: { app: name },
+    },
+    spec: {
+      serviceName: name,
+      replicas: 1,
+      selector: {
+        matchLabels: { app: name },
+      },
+      template: {
+        metadata: {
+          labels: { app: name },
+        },
+        spec: podSpec,
+      },
+      volumeClaimTemplates,
     },
   });
 }

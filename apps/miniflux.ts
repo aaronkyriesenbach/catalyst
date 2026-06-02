@@ -75,6 +75,6 @@ const base: WorkloadApp = {
 
 export default applyModifiers(
   base,
-  withPostgres(18),
+  withPostgres(18, { legacy: true }),
   withOidcAuth(),
 );
