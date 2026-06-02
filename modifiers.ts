@@ -334,6 +334,92 @@ export function withOidcAuth(options?: OidcAuthOptions): WorkloadModifier {
   };
 }
 
+export type IscsiVolumeMount = {
+  name: string;
+  mountPath: string;
+  storage?: string;
+  storageClassName?: string;
+};
+
+export type IscsiVolumesConfig = {
+  [containerName: string]: IscsiVolumeMount[];
+};
+
+const DEFAULT_ISCSI_STORAGE = "10Gi";
+const DEFAULT_ISCSI_STORAGE_CLASS = "truenas-iscsi";
+
+export function withIscsiVolumes(config: IscsiVolumesConfig): WorkloadModifier {
+  return (app) => {
+    const requestedContainers = Object.keys(config);
+    const existingContainerNames = [
+      ...app.podSpec.containers.map((c) => c.name),
+      ...(app.podSpec.initContainers ?? []).map((c) => c.name),
+    ];
+    const missing = requestedContainers.filter(
+      (name) => !existingContainerNames.includes(name),
+    );
+
+    if (missing.length > 0) {
+      throw new Error(
+        `iSCSI volume config references non-existent containers: ${missing.join(", ")}`,
+      );
+    }
+
+    const allMounts = Object.values(config).flat();
+
+    const pvcs: ResourceLike[] = allMounts.map((mount) => ({
+      apiVersion: "v1",
+      kind: "PersistentVolumeClaim",
+      metadata: { name: `${app.name}-${mount.name}` },
+      spec: {
+        accessModes: ["ReadWriteOnce"],
+        storageClassName: mount.storageClassName ?? DEFAULT_ISCSI_STORAGE_CLASS,
+        resources: {
+          requests: { storage: mount.storage ?? DEFAULT_ISCSI_STORAGE },
+        },
+      },
+    }));
+
+    const volumes: IVolume[] = allMounts.map((mount) => ({
+      name: mount.name,
+      persistentVolumeClaim: { claimName: `${app.name}-${mount.name}` },
+    }));
+
+    const applyMounts = (containers: IContainer[]): IContainer[] =>
+      containers.map((container) => {
+        const containerMounts = config[container.name];
+        if (!containerMounts) return container;
+
+        return {
+          ...container,
+          volumeMounts: [
+            ...(container.volumeMounts ?? []),
+            ...containerMounts.map((m) => ({
+              name: m.name,
+              mountPath: m.mountPath,
+            })),
+          ],
+        };
+      });
+
+    const containers = applyMounts(app.podSpec.containers);
+    const initContainers = app.podSpec.initContainers
+      ? applyMounts(app.podSpec.initContainers as IContainer[])
+      : undefined;
+
+    return {
+      ...app,
+      podSpec: {
+        ...app.podSpec,
+        containers,
+        ...(initContainers && { initContainers }),
+        volumes: [...(app.podSpec.volumes ?? []), ...volumes],
+      },
+      extraResources: [...(app.extraResources ?? []), ...pvcs],
+    };
+  };
+}
+
 export function applyModifiers(
   app: WorkloadApp,
   ...modifiers: WorkloadModifier[]

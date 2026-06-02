@@ -1,4 +1,4 @@
-import { applyModifiers, withNasMounts, withOidcAuth } from "../modifiers";
+import { applyModifiers, withIscsiVolumes, withNasMounts, withOidcAuth } from "../modifiers";
 import type { WorkloadApp } from "../types";
 
 const base: WorkloadApp = {
@@ -19,10 +19,14 @@ const base: WorkloadApp = {
 
 export default applyModifiers(
   base,
+  withIscsiVolumes({
+    main: [
+      { name: "config", mountPath: "/config", storage: "5Gi" },
+      { name: "cache", mountPath: "/cache", storage: "20Gi" },
+    ],
+  }),
   withNasMounts({
     main: [
-      { mountPath: "/config", subPath: "cluster/jellyfin/config" },
-      { mountPath: "/cache", subPath: "cluster/jellyfin/cache" },
       { mountPath: "/movies", subPath: "movies" },
       { mountPath: "/tv", subPath: "tv" },
       { mountPath: "/live", subPath: "live" },
