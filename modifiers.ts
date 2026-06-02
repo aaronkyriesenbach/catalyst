@@ -1,7 +1,7 @@
 import type { IContainer, IVolume, IVolumeMount } from "kubernetes-models/v1";
 import { Middleware } from "@kubernetes-models/traefik/traefik.io/v1alpha1/Middleware";
 import type { ResourceLike, WorkloadApp } from "./types";
-import { buildGeneratedSecret } from "./utils";
+import { buildGeneratedSecret, buildHeadlessService, buildStatefulSet } from "./utils";
 
 export type NasMountConfig = {
   [containerName: string]: { mountPath: string; subPath?: string }[];
@@ -87,6 +87,12 @@ export type PostgresOptions = {
   database?: string;
   dataSubPath?: string;
   image?: string;
+  /** Use legacy NFS sidecar mode instead of iSCSI StatefulSet */
+  legacy?: boolean;
+  /** PVC storage size for iSCSI mode (default: "10Gi") */
+  storage?: string;
+  /** StorageClass name for iSCSI mode (default: "truenas-iscsi") */
+  storageClassName?: string;
 };
 
 const DEFAULT_POSTGRES_REGISTRY = "docker.int.lab53.net/library/postgres";
@@ -107,19 +113,14 @@ export function withPostgres(
     const variant = options?.variant ?? "alpine";
     const image =
       options?.image ?? `${DEFAULT_POSTGRES_REGISTRY}:${version}-${variant}`;
-    const dataSubPath =
-      options?.dataSubPath ?? `cluster/${app.name}/postgres`;
 
-    const container: IContainer = {
-      name: "postgres",
-      image,
-      restartPolicy: "Always",
-      env: [
-        { name: "POSTGRES_USER", value: user },
-        { name: "POSTGRES_PASSWORD", value: password },
-        { name: "POSTGRES_DB", value: database },
-      ],
-      ports: [{ name: "postgres", containerPort: 5432 }],
+    const pgEnv = [
+      { name: "POSTGRES_USER", value: user },
+      { name: "POSTGRES_PASSWORD", value: password },
+      { name: "POSTGRES_DB", value: database },
+    ];
+
+    const pgProbes = {
       startupProbe: {
         exec: {
           command: ["pg_isready", "-U", user],
@@ -134,21 +135,85 @@ export function withPostgres(
         periodSeconds: 10,
         failureThreshold: 3,
       },
-      volumeMounts: nasVolumeMounts([
-        { mountPath: postgresDataDir(version), subPath: dataSubPath },
-      ]),
     };
 
-    const volumes = app.podSpec.volumes ?? [];
-    const hasNasVolume = volumes.some((v) => v.name === NAS_VOLUME_NAME);
+    if (options?.legacy) {
+      const dataSubPath =
+        options?.dataSubPath ?? `cluster/${app.name}/postgres`;
+
+      const container: IContainer = {
+        name: "postgres",
+        image,
+        restartPolicy: "Always",
+        env: pgEnv,
+        ports: [{ name: "postgres", containerPort: 5432 }],
+        ...pgProbes,
+        volumeMounts: nasVolumeMounts([
+          { mountPath: postgresDataDir(version), subPath: dataSubPath },
+        ]),
+      };
+
+      const volumes = app.podSpec.volumes ?? [];
+      const hasNasVolume = volumes.some((v) => v.name === NAS_VOLUME_NAME);
+
+      return {
+        ...app,
+        podSpec: {
+          ...app.podSpec,
+          initContainers: [...(app.podSpec.initContainers ?? []), container],
+          volumes: hasNasVolume ? volumes : [...volumes, nasVolume()],
+        },
+      };
+    }
+
+    const storage = options?.storage ?? "10Gi";
+    const storageClassName = options?.storageClassName ?? "truenas-iscsi";
+    const postgresName = `${app.name}-postgres`;
+
+    const statefulSet = buildStatefulSet(
+      postgresName,
+      {
+        containers: [
+          {
+            name: "postgres",
+            image,
+            env: pgEnv,
+            ports: [{ name: "postgres", containerPort: 5432 }],
+            ...pgProbes,
+            volumeMounts: [
+              {
+                name: "data",
+                mountPath: postgresDataDir(version),
+              },
+            ],
+          },
+        ],
+      },
+      [
+        {
+          metadata: { name: "data" },
+          spec: {
+            accessModes: ["ReadWriteOnce"],
+            storageClassName,
+            resources: {
+              requests: { storage },
+            },
+          },
+        },
+      ],
+    );
+
+    const headlessService = buildHeadlessService(postgresName, [
+      { name: "postgres", port: 5432 },
+    ]);
 
     return {
       ...app,
-      podSpec: {
-        ...app.podSpec,
-        initContainers: [...(app.podSpec.initContainers ?? []), container],
-        volumes: hasNasVolume ? volumes : [...volumes, nasVolume()],
-      },
+      extraResources: [
+        ...(app.extraResources ?? []),
+        statefulSet,
+        headlessService,
+      ],
     };
   };
 }
