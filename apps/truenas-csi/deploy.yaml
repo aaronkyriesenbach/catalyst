@@ -139,7 +139,7 @@ metadata:
 data:
   truenasURL: "wss://192.168.53.120/api/current"
   truenasInsecure: "true"
-  defaultPool: "tank/k8s-iscsi"
+  defaultPool: "tank"
   nfsServer: "192.168.53.120"
   iscsiPortal: "192.168.53.120:3260"
   iscsiIQNBase: "iqn.2000-01.io.truenas"
