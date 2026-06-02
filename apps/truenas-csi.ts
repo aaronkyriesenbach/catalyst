@@ -21,7 +21,7 @@ const storageClass: ResourceLike = {
     volblocksize: "16K",
     "iscsi.blocksize": "4096",
   },
-  reclaimPolicy: "Retain",
+  reclaimPolicy: "Delete",
   volumeBindingMode: "Immediate",
   allowVolumeExpansion: true,
 };
