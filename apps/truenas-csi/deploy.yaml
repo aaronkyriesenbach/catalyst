@@ -390,7 +390,7 @@ spec:
             - name: plugin-dir
               mountPath: /csi
             - name: kubelet-dir
-              mountPath: /var/lib/rancher/k3s/agent/kubelet
+              mountPath: /var/lib/kubelet
               mountPropagation: Bidirectional
             - name: device-dir
               mountPath: /dev
@@ -429,7 +429,7 @@ spec:
             - name: ADDRESS
               value: /csi/csi.sock
             - name: DRIVER_REG_SOCK_PATH
-              value: /var/lib/rancher/k3s/agent/kubelet/plugins/csi.truenas.io/csi.sock
+              value: /var/lib/kubelet/plugins/csi.truenas.io/csi.sock
           volumeMounts:
             - name: plugin-dir
               mountPath: /csi
@@ -448,15 +448,15 @@ spec:
       volumes:
         - name: registration-dir
           hostPath:
-            path: /var/lib/rancher/k3s/agent/kubelet/plugins_registry/
+            path: /var/lib/kubelet/plugins_registry/
             type: DirectoryOrCreate
         - name: plugin-dir
           hostPath:
-            path: /var/lib/rancher/k3s/agent/kubelet/plugins/csi.truenas.io/
+            path: /var/lib/kubelet/plugins/csi.truenas.io/
             type: DirectoryOrCreate
         - name: kubelet-dir
           hostPath:
-            path: /var/lib/rancher/k3s/agent/kubelet
+            path: /var/lib/kubelet
             type: Directory
         - name: device-dir
           hostPath:
