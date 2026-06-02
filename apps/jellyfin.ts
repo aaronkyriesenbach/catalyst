@@ -8,7 +8,7 @@ const base: WorkloadApp = {
     containers: [
       {
         name: "main",
-        image: "docker.int.lab53.net/jellyfin/jellyfin:10.11.8",
+        image: "docker.int.lab53.net/jellyfin/jellyfin:10.11.10",
         ports: [{ name: "http", containerPort: 8096 }],
       },
     ],
