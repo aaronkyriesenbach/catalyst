@@ -142,7 +142,7 @@ data:
   defaultPool: "tank"
   nfsServer: "192.168.53.120"
   iscsiPortal: "192.168.53.120:3260"
-  iscsiIQNBase: "iqn.2000-01.io.truenas"
+  iscsiIQNBase: "iqn.2005-10.org.freenas.ctl"
 
 ---
 apiVersion: apps/v1
