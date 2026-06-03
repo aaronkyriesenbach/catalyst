@@ -17,11 +17,8 @@ const chart: HelmChart = {
   spec: {
     chart: "oci://ghcr.io/aclerici38/charts/pocket-id-operator",
     targetNamespace: "pocket-id",
-    version: "0.5.2",
-    valuesContent: await readFile(
-      "./pocket-id/values.yaml",
-      import.meta.url,
-    ),
+    version: "0.7.2",
+    valuesContent: await readFile("./pocket-id/values.yaml", import.meta.url),
   },
 };
 
