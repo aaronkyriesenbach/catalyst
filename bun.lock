@@ -7,9 +7,10 @@
       "dependencies": {
         "@kubernetes-models/argo-cd": "^2.7.2",
         "@kubernetes-models/cert-manager": "^4.4.4",
+        "@kubernetes-models/external-secrets": "^2.0.0",
         "@kubernetes-models/gateway-api": "^0.7.4",
         "@kubernetes-models/traefik": "^0.2.4",
-        "kubernetes-models": "^4.5.1",
+        "kubernetes-models": "4.5.1",
         "yaml": "^2.7.0",
       },
       "devDependencies": {
@@ -25,6 +26,8 @@
     "@kubernetes-models/base": ["@kubernetes-models/base@5.0.1", "", { "dependencies": { "@kubernetes-models/validate": "^4.0.0", "is-plain-object": "^5.0.0", "tslib": "^2.4.0" } }, "sha512-Yfzmh965y/hT8qs9eE+Ms9sO1iT31c/sPoJerBFRGS9KechXXfxHgeqtpOzq+eByQ1INblkcZ09rt2V0FxG0lA=="],
 
     "@kubernetes-models/cert-manager": ["@kubernetes-models/cert-manager@4.4.4", "", { "dependencies": { "@kubernetes-models/apimachinery": "^2.2.0", "@kubernetes-models/base": "^5.0.1", "@kubernetes-models/validate": "^4.0.0", "@swc/helpers": "^0.5.8" } }, "sha512-tBpBIzh8OV1QSlERkovXflvvfRZ2Xgq2Ah46+MIoKZzU9TpRe2Zh/m4SMZHdpvAC+zpBkvC/sAIK/Z1Dm+vzJQ=="],
+
+    "@kubernetes-models/external-secrets": ["@kubernetes-models/external-secrets@2.0.0", "", { "dependencies": { "@kubernetes-models/apimachinery": "^3.0.2", "@kubernetes-models/base": "^6.0.1", "@kubernetes-models/validate": "^5.0.2", "kubernetes-models": "^5.1.0" } }, "sha512-IpwAaO1m67oVMvhvaVrdj18nNUG5aDXFL3S0RerILGenb0MvsjiSCnjAUW1P10gRz7rIEayhFRbtvlDSFBqeEA=="],
 
     "@kubernetes-models/gateway-api": ["@kubernetes-models/gateway-api@0.7.4", "", { "dependencies": { "@kubernetes-models/apimachinery": "^2.2.0", "@kubernetes-models/base": "^5.0.1", "@kubernetes-models/validate": "^4.0.0", "@swc/helpers": "^0.5.8" } }, "sha512-nOxmTEqvEIZtp4xDvrxo1JCfmnozisJF4Y05hyhszZtqgfSLaVkAJI6fQOpzNH38yJA8sCo6GtyaoaJRryI/Ag=="],
 
@@ -95,5 +98,19 @@
     "uri-js": ["uri-js@4.4.1", "", { "dependencies": { "punycode": "^2.1.0" } }, "sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg=="],
 
     "yaml": ["yaml@2.8.3", "", { "bin": { "yaml": "bin.mjs" } }, "sha512-AvbaCLOO2Otw/lW5bmh9d/WEdcDFdQp2Z2ZUH3pX9U2ihyUY0nvLv7J6TrWowklRGPYbB/IuIMfYgxaCPg5Bpg=="],
+
+    "@kubernetes-models/external-secrets/@kubernetes-models/apimachinery": ["@kubernetes-models/apimachinery@3.0.2", "", { "dependencies": { "@kubernetes-models/base": "^6.0.0", "@kubernetes-models/validate": "^5.0.1" } }, "sha512-6Vbzr/tinxPBGGdfYjXiV9WPj8PEhyiqGJiWhXrsihK7h6glPj4HKUxZ0YwYXH/5uucm/NVef/xY3vZ4Crj1Fg=="],
+
+    "@kubernetes-models/external-secrets/@kubernetes-models/base": ["@kubernetes-models/base@6.0.1", "", { "dependencies": { "@kubernetes-models/validate": "^5.0.2" } }, "sha512-pXKCFeSoL6RsMxoPDwaJ5JtijVjeuNCacgtYS9dImF7qFdzdc9lcQbem6y6Ug7/K6/bFOWdTu3qIX88IK81o0A=="],
+
+    "@kubernetes-models/external-secrets/@kubernetes-models/validate": ["@kubernetes-models/validate@5.0.2", "", { "dependencies": { "ajv": "^8.12.0", "ajv-formats": "^3.0.1", "ajv-formats-draft2019": "^1.6.1", "ajv-i18n": "^4.2.0", "is-cidr": "^6.0.4" }, "optionalDependencies": { "re2-wasm": "^1.0.2" } }, "sha512-EzfxB8mu2VPlFYSwsMlZdgTeeqJGI2R58irUrZJWHxJqOqOhnau/oS9KNCZKXjdC2vFubU6v81m2CrIoU+/pxQ=="],
+
+    "@kubernetes-models/external-secrets/kubernetes-models": ["kubernetes-models@5.1.0", "", { "dependencies": { "@kubernetes-models/apimachinery": "^3.0.2", "@kubernetes-models/base": "^6.0.1", "@kubernetes-models/validate": "^5.0.2" } }, "sha512-ym4Kiyr8BzGIWj4f853ytVYES1B8C1BdONRP5zodItPD1o//OEKuTwC5nFV3ZJtFGeMqOFbIYkpunSVXSlHS8g=="],
+
+    "@kubernetes-models/external-secrets/@kubernetes-models/validate/ajv-formats": ["ajv-formats@3.0.1", "", { "dependencies": { "ajv": "^8.0.0" } }, "sha512-8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ=="],
+
+    "@kubernetes-models/external-secrets/@kubernetes-models/validate/is-cidr": ["is-cidr@6.0.4", "", { "dependencies": { "cidr-regex": "^5.0.4" } }, "sha512-tOIBU3QiXy0W4LvHbcKWAWSuQfGwDiEILphFCAZtDqj7C57uv3ClO6K8aNEGV4VTA7bWJlpQ0suKQkUe6Rd6ag=="],
+
+    "@kubernetes-models/external-secrets/@kubernetes-models/validate/is-cidr/cidr-regex": ["cidr-regex@5.0.5", "", {}, "sha512-59tdLZcC+BJXa4C5rOmVSuJTy/UneqfJJtCraqwdx5BDHTkGrBtKCUl3u2uiCFvXu+wk0kVuX8axX7yHCZOI9w=="],
   }
 }
