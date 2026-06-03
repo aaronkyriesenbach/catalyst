@@ -1,7 +1,5 @@
 import type { HelmChart, StaticApp } from "../types";
-import { buildIscsiPvc, readFile } from "../utils";
-
-const dataPvc = buildIscsiPvc("pocket-id-data", "5Gi");
+import { readFile } from "../utils";
 
 const chart: HelmChart = {
   apiVersion: "helm.cattle.io/v1",
@@ -20,7 +18,7 @@ const chart: HelmChart = {
 const config: StaticApp = {
   kind: "static",
   name: "pocket-id",
-  resources: [dataPvc, chart],
+  resources: [chart],
 };
 
 export default config;
