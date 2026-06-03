@@ -16,7 +16,7 @@ const chart: HelmChart = {
   },
   spec: {
     chart: "oci://ghcr.io/immich-app/immich-charts/immich",
-    version: "0.11.1",
+    version: "0.12.0",
     valuesContent: await readFile("./immich/values.yaml", import.meta.url),
   },
 };
@@ -26,18 +26,6 @@ const { pv: libraryPv, pvc: libraryPvc } = buildNasPersistentVolumePair({
   storage: "1Ti",
   nfsPath: "/mnt/tank/data/pictures",
 });
-
-const mlCachePvc = {
-  apiVersion: "v1",
-  kind: "PersistentVolumeClaim",
-  ...buildIscsiPvc("immich-ml-cache"),
-};
-
-const valkeyPvc = {
-  apiVersion: "v1",
-  kind: "PersistentVolumeClaim",
-  ...buildIscsiPvc("immich-valkey", "1Gi"),
-};
 
 const postgresStatefulSet = buildStatefulSet(
   "immich-postgres",
@@ -107,8 +95,6 @@ const config: StaticApp = {
   resources: [
     libraryPv,
     libraryPvc,
-    mlCachePvc,
-    valkeyPvc,
     postgresStatefulSet,
     postgresHeadlessService,
     chart,
