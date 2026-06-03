@@ -2,7 +2,7 @@ import { buildNasPersistentVolumePair } from "../storage";
 import type { HelmChart, StaticApp } from "../types";
 import {
   buildHeadlessService,
-  buildIscsiPvc,
+  buildIscsiPvcTemplate,
   buildRoute,
   buildStatefulSet,
   readFile,
@@ -77,7 +77,7 @@ const postgresStatefulSet = buildStatefulSet(
       },
     ],
   },
-  [buildIscsiPvc("data")],
+  [buildIscsiPvcTemplate("data")],
 );
 
 const postgresHeadlessService = buildHeadlessService("immich-postgres", [
