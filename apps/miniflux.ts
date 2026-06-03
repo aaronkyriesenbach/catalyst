@@ -1,9 +1,5 @@
+import { applyModifiers, withOidcAuth, withPostgres } from "../modifiers";
 import type { WorkloadApp } from "../types";
-import {
-  applyModifiers,
-  withOidcAuth,
-  withPostgres,
-} from "../modifiers";
 
 const name = "miniflux";
 const oidcCredentialsSecret = `${name}-oidc-credentials`;
@@ -20,7 +16,7 @@ const base: WorkloadApp = {
           {
             name: "DATABASE_URL",
             value:
-              "postgres://miniflux:miniflux@localhost:5432/miniflux?sslmode=disable",
+              "postgres://miniflux:miniflux@miniflux-postgres:5432/miniflux?sslmode=disable",
           },
           { name: "BASE_URL", value: "https://miniflux.lab53.net" },
           { name: "RUN_MIGRATIONS", value: "true" },
@@ -73,8 +69,4 @@ const base: WorkloadApp = {
   externallyAccessible: true,
 };
 
-export default applyModifiers(
-  base,
-  withPostgres(18, { legacy: true }),
-  withOidcAuth(),
-);
+export default applyModifiers(base, withPostgres(18), withOidcAuth());
