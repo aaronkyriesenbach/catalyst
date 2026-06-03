@@ -1,7 +1,7 @@
 import type { IContainer, IVolume, IVolumeMount } from "kubernetes-models/v1";
 import { Middleware } from "@kubernetes-models/traefik/traefik.io/v1alpha1/Middleware";
 import type { ResourceLike, WorkloadApp } from "./types";
-import { buildGeneratedSecret, buildHeadlessService, buildIscsiPvc, buildStatefulSet } from "./utils";
+import { buildGeneratedSecret, buildHeadlessService, buildIscsiPvc, buildIscsiPvcTemplate, buildStatefulSet } from "./utils";
 
 export type NasMountConfig = {
   [containerName: string]: { mountPath: string; subPath?: string }[];
@@ -156,7 +156,7 @@ export function withPostgres(
           },
         ],
       },
-      [buildIscsiPvc("data", options?.storage)],
+      [buildIscsiPvcTemplate("data", options?.storage)],
     );
 
     const headlessService = buildHeadlessService(postgresName, [
@@ -319,14 +319,9 @@ export function withIscsiVolumes(config: IscsiVolumesConfig): WorkloadModifier {
 
     const allMounts = Object.values(config).flat();
 
-    const pvcs: ResourceLike[] = allMounts.map((mount) => {
-      const pvc = buildIscsiPvc(`${app.name}-${mount.name}`, mount.storage);
-      return {
-        apiVersion: "v1",
-        kind: "PersistentVolumeClaim",
-        ...pvc,
-      };
-    });
+    const pvcs: ResourceLike[] = allMounts.map((mount) =>
+      buildIscsiPvc(`${app.name}-${mount.name}`, mount.storage),
+    );
 
     const volumes: IVolume[] = allMounts.map((mount) => ({
       name: mount.name,

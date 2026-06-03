@@ -1,6 +1,6 @@
 import { Deployment, StatefulSet } from "kubernetes-models/apps/v1";
 import type { IPersistentVolumeClaimTemplate, IPodSpec, IServicePort } from "kubernetes-models/v1";
-import { Service } from "kubernetes-models/v1";
+import { Service, PersistentVolumeClaim } from "kubernetes-models/v1";
 import { HTTPRoute } from "@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1";
 import { stringify } from "yaml";
 import type { AppConfig, ResourceLike, StaticApp, WorkloadApp } from "./types";
@@ -180,7 +180,7 @@ const DEFAULT_ENCODING: PasswordEncoding = "hex";
 const DEFAULT_ISCSI_STORAGE = "10Gi";
 const DEFAULT_ISCSI_STORAGE_CLASS = "truenas-iscsi";
 
-export function buildIscsiPvc(name: string, storage?: string): IPersistentVolumeClaimTemplate {
+export function buildIscsiPvcTemplate(name: string, storage?: string): IPersistentVolumeClaimTemplate {
   return {
     metadata: { name },
     spec: {
@@ -191,6 +191,19 @@ export function buildIscsiPvc(name: string, storage?: string): IPersistentVolume
       },
     },
   };
+}
+
+export function buildIscsiPvc(name: string, storage?: string) {
+  return new PersistentVolumeClaim({
+    metadata: { name },
+    spec: {
+      accessModes: ["ReadWriteOnce"],
+      storageClassName: DEFAULT_ISCSI_STORAGE_CLASS,
+      resources: {
+        requests: { storage: storage ?? DEFAULT_ISCSI_STORAGE },
+      },
+    },
+  });
 }
 
 export function buildGeneratedSecret(
