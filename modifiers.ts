@@ -1,7 +1,7 @@
 import type { IContainer, IVolume, IVolumeMount } from "kubernetes-models/v1";
 import { Middleware } from "@kubernetes-models/traefik/traefik.io/v1alpha1/Middleware";
 import type { ResourceLike, WorkloadApp } from "./types";
-import { buildGeneratedSecret, buildHeadlessService, buildStatefulSet } from "./utils";
+import { buildGeneratedSecret, buildHeadlessService, buildIscsiPvc, buildStatefulSet } from "./utils";
 
 export type NasMountConfig = {
   [containerName: string]: { mountPath: string; subPath?: string }[];
@@ -91,8 +91,6 @@ export type PostgresOptions = {
   legacy?: boolean;
   /** PVC storage size for iSCSI mode (default: "10Gi") */
   storage?: string;
-  /** StorageClass name for iSCSI mode (default: "truenas-iscsi") */
-  storageClassName?: string;
 };
 
 const DEFAULT_POSTGRES_REGISTRY = "docker.int.lab53.net/library/postgres";
@@ -166,8 +164,6 @@ export function withPostgres(
       };
     }
 
-    const storage = options?.storage ?? "10Gi";
-    const storageClassName = options?.storageClassName ?? "truenas-iscsi";
     const postgresName = `${app.name}-postgres`;
 
     const statefulSet = buildStatefulSet(
@@ -192,18 +188,7 @@ export function withPostgres(
           },
         ],
       },
-      [
-        {
-          metadata: { name: "data" },
-          spec: {
-            accessModes: ["ReadWriteOnce"],
-            storageClassName,
-            resources: {
-              requests: { storage },
-            },
-          },
-        },
-      ],
+      [buildIscsiPvc("data", options?.storage)],
     );
 
     const headlessService = buildHeadlessService(postgresName, [
@@ -341,15 +326,11 @@ export type IscsiVolumeMount = {
   name: string;
   mountPath: string;
   storage?: string;
-  storageClassName?: string;
 };
 
 export type IscsiVolumesConfig = {
   [containerName: string]: IscsiVolumeMount[];
 };
-
-const DEFAULT_ISCSI_STORAGE = "10Gi";
-const DEFAULT_ISCSI_STORAGE_CLASS = "truenas-iscsi";
 
 export function withIscsiVolumes(config: IscsiVolumesConfig): WorkloadModifier {
   return (app) => {
@@ -370,18 +351,14 @@ export function withIscsiVolumes(config: IscsiVolumesConfig): WorkloadModifier {
 
     const allMounts = Object.values(config).flat();
 
-    const pvcs: ResourceLike[] = allMounts.map((mount) => ({
-      apiVersion: "v1",
-      kind: "PersistentVolumeClaim",
-      metadata: { name: `${app.name}-${mount.name}` },
-      spec: {
-        accessModes: ["ReadWriteOnce"],
-        storageClassName: mount.storageClassName ?? DEFAULT_ISCSI_STORAGE_CLASS,
-        resources: {
-          requests: { storage: mount.storage ?? DEFAULT_ISCSI_STORAGE },
-        },
-      },
-    }));
+    const pvcs: ResourceLike[] = allMounts.map((mount) => {
+      const pvc = buildIscsiPvc(`${app.name}-${mount.name}`, mount.storage);
+      return {
+        apiVersion: "v1",
+        kind: "PersistentVolumeClaim",
+        ...pvc,
+      };
+    });
 
     const volumes: IVolume[] = allMounts.map((mount) => ({
       name: mount.name,

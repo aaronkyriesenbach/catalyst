@@ -1,5 +1,5 @@
 import { Deployment, StatefulSet } from "kubernetes-models/apps/v1";
-import type { IPersistentVolumeClaim, IPodSpec, IServicePort } from "kubernetes-models/v1";
+import type { IPersistentVolumeClaimTemplate, IPodSpec, IServicePort } from "kubernetes-models/v1";
 import { Service } from "kubernetes-models/v1";
 import { HTTPRoute } from "@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1";
 import { stringify } from "yaml";
@@ -68,10 +68,11 @@ type StatefulSetOptions = {
   revisionHistoryLimit?: number;
 };
 
+
 export function buildStatefulSet(
   name: string,
   podSpec: IPodSpec,
-  volumeClaimTemplates: IPersistentVolumeClaim[],
+  volumeClaimTemplates: IPersistentVolumeClaimTemplate[],
   options?: StatefulSetOptions,
 ) {
   return new StatefulSet({
@@ -173,6 +174,22 @@ export type GeneratedSecretKey =
 const GENERATOR_API_VERSION = "generators.external-secrets.io/v1alpha1";
 const DEFAULT_LENGTH = 64;
 const DEFAULT_ENCODING: PasswordEncoding = "hex";
+
+const DEFAULT_ISCSI_STORAGE = "10Gi";
+const DEFAULT_ISCSI_STORAGE_CLASS = "truenas-iscsi";
+
+export function buildIscsiPvc(name: string, storage?: string): IPersistentVolumeClaimTemplate {
+  return {
+    metadata: { name },
+    spec: {
+      accessModes: ["ReadWriteOnce"],
+      storageClassName: DEFAULT_ISCSI_STORAGE_CLASS,
+      resources: {
+        requests: { storage: storage ?? DEFAULT_ISCSI_STORAGE },
+      },
+    },
+  };
+}
 
 export function buildGeneratedSecret(
   name: string,
