@@ -1,12 +1,7 @@
-import { buildNasPersistentVolumePair } from "../storage";
 import type { HelmChart, StaticApp } from "../types";
-import { readFile } from "../utils";
+import { buildIscsiPvc, readFile } from "../utils";
 
-const { pv: dataPv, pvc: dataPvc } = buildNasPersistentVolumePair({
-  name: "pocket-id-data",
-  storage: "5Gi",
-  nfsPath: "/mnt/tank/data/cluster/pocket-id/data",
-});
+const dataPvc = buildIscsiPvc("pocket-id-data", "5Gi");
 
 const chart: HelmChart = {
   apiVersion: "helm.cattle.io/v1",
@@ -25,7 +20,7 @@ const chart: HelmChart = {
 const config: StaticApp = {
   kind: "static",
   name: "pocket-id",
-  resources: [dataPv, dataPvc, chart],
+  resources: [dataPvc, chart],
 };
 
 export default config;

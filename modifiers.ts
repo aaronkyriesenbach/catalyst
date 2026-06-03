@@ -85,10 +85,7 @@ export type PostgresOptions = {
   user?: string;
   password?: string;
   database?: string;
-  dataSubPath?: string;
   image?: string;
-  /** Use legacy NFS sidecar mode instead of iSCSI StatefulSet */
-  legacy?: boolean;
   /** PVC storage size for iSCSI mode (default: "10Gi") */
   storage?: string;
 };
@@ -134,35 +131,6 @@ export function withPostgres(
         failureThreshold: 3,
       },
     };
-
-    if (options?.legacy) {
-      const dataSubPath =
-        options?.dataSubPath ?? `cluster/${app.name}/postgres`;
-
-      const container: IContainer = {
-        name: "postgres",
-        image,
-        restartPolicy: "Always",
-        env: pgEnv,
-        ports: [{ name: "postgres", containerPort: 5432 }],
-        ...pgProbes,
-        volumeMounts: nasVolumeMounts([
-          { mountPath: postgresDataDir(version), subPath: dataSubPath },
-        ]),
-      };
-
-      const volumes = app.podSpec.volumes ?? [];
-      const hasNasVolume = volumes.some((v) => v.name === NAS_VOLUME_NAME);
-
-      return {
-        ...app,
-        podSpec: {
-          ...app.podSpec,
-          initContainers: [...(app.podSpec.initContainers ?? []), container],
-          volumes: hasNasVolume ? volumes : [...volumes, nasVolume()],
-        },
-      };
-    }
 
     const postgresName = `${app.name}-postgres`;
 
