@@ -389,6 +389,7 @@ export function withIscsiVolumes(config: IscsiVolumesConfig): WorkloadModifier {
 
     return {
       ...app,
+      strategy: { type: "Recreate" },
       podSpec: {
         ...app.podSpec,
         containers,

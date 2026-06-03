@@ -18,6 +18,7 @@ export async function loadAppConfig(path: string): Promise<AppConfig> {
 type DeploymentOptions = {
   replicas?: number;
   revisionHistoryLimit?: number;
+  strategy?: { type: "Recreate" | "RollingUpdate" };
 };
 
 export function buildDeployment(name: string, podSpec: IPodSpec, options?: DeploymentOptions) {
@@ -29,6 +30,7 @@ export function buildDeployment(name: string, podSpec: IPodSpec, options?: Deplo
     spec: {
       replicas: options?.replicas ?? 1,
       revisionHistoryLimit: options?.revisionHistoryLimit ?? 2,
+      strategy: options?.strategy,
       selector: {
         matchLabels: { app: name },
       },
@@ -280,7 +282,7 @@ function renderWorkload(config: WorkloadApp): string[] {
     resources.push(...extraResources.map((r) => stringify(r)));
   }
 
-  resources.push(stringify(buildDeployment(name, podSpec)));
+  resources.push(stringify(buildDeployment(name, podSpec, { strategy: app.strategy })));
 
   const ports = podSpec.containers.flatMap((c) => c.ports ?? []);
 
