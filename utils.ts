@@ -1,5 +1,5 @@
 import { Deployment, StatefulSet } from "kubernetes-models/apps/v1";
-import type { IPodSpec, IServicePort } from "kubernetes-models/v1";
+import type { IPersistentVolumeClaim, IPodSpec, IServicePort } from "kubernetes-models/v1";
 import { Service } from "kubernetes-models/v1";
 import { HTTPRoute } from "@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1";
 import { stringify } from "yaml";
@@ -15,13 +15,20 @@ export async function loadAppConfig(path: string): Promise<AppConfig> {
   return mod.default;
 }
 
-export function buildDeployment(name: string, podSpec: IPodSpec) {
+type DeploymentOptions = {
+  replicas?: number;
+  revisionHistoryLimit?: number;
+};
+
+export function buildDeployment(name: string, podSpec: IPodSpec, options?: DeploymentOptions) {
   return new Deployment({
     metadata: {
       name,
       labels: { app: name },
     },
     spec: {
+      replicas: options?.replicas ?? 1,
+      revisionHistoryLimit: options?.revisionHistoryLimit ?? 2,
       selector: {
         matchLabels: { app: name },
       },
@@ -56,21 +63,16 @@ export function buildHeadlessService(name: string, ports: IServicePort[]) {
   });
 }
 
-export type VolumeClaimTemplate = {
-  metadata: { name: string };
-  spec: {
-    accessModes: string[];
-    storageClassName: string;
-    resources: {
-      requests: { storage: string };
-    };
-  };
+type StatefulSetOptions = {
+  replicas?: number;
+  revisionHistoryLimit?: number;
 };
 
 export function buildStatefulSet(
   name: string,
   podSpec: IPodSpec,
-  volumeClaimTemplates: VolumeClaimTemplate[],
+  volumeClaimTemplates: IPersistentVolumeClaim[],
+  options?: StatefulSetOptions,
 ) {
   return new StatefulSet({
     metadata: {
@@ -79,7 +81,8 @@ export function buildStatefulSet(
     },
     spec: {
       serviceName: name,
-      replicas: 1,
+      replicas: options?.replicas ?? 1,
+      revisionHistoryLimit: options?.revisionHistoryLimit ?? 2,
       selector: {
         matchLabels: { app: name },
       },
