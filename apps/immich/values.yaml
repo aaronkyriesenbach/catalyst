@@ -3,7 +3,7 @@ controllers:
     containers:
       main:
         image:
-          tag: v2.7.0
+          tag: v2.7.5
 
 immich:
   persistence:
@@ -30,20 +30,14 @@ machine-learning:
     cache:
       enabled: true
       type: persistentVolumeClaim
-      existingClaim: immich-ml-cache
-      accessMode: ReadWriteMany
+      storageClass: truenas-iscsi
+      accessMode: ReadWriteOnce
 
 valkey:
   enabled: true
-  controllers:
-    main:
-      pod:
-        securityContext:
-          runAsUser: 999
-          runAsGroup: 1000
   persistence:
     data:
       enabled: true
       type: persistentVolumeClaim
-      existingClaim: immich-valkey
-      accessMode: ReadWriteMany
+      storageClass: truenas-iscsi
+      accessMode: ReadWriteOnce
