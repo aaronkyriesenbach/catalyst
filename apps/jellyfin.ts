@@ -1,4 +1,9 @@
-import { applyModifiers, withIscsiVolumes, withNasMounts, withOidcAuth } from "../modifiers";
+import {
+  applyModifiers,
+  withIscsiVolumes,
+  withNasMounts,
+  withOidcAuth,
+} from "../modifiers";
 import type { WorkloadApp } from "../types";
 
 const base: WorkloadApp = {
@@ -21,8 +26,8 @@ export default applyModifiers(
   base,
   withIscsiVolumes({
     main: [
-      { name: "config", mountPath: "/config", storage: "5Gi" },
-      { name: "cache", mountPath: "/cache", storage: "20Gi" },
+      { name: "config", mountPath: "/config", storage: "10Gi" },
+      { name: "cache", mountPath: "/cache", storage: "50Gi" },
     ],
   }),
   withNasMounts({
