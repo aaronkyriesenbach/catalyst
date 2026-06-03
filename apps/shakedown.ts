@@ -23,7 +23,7 @@ const base: WorkloadApp = {
           {
             name: "DATABASE_URL",
             value:
-              "postgres://shakedown:shakedown@localhost:5432/shakedown?sslmode=disable",
+              "postgres://shakedown:shakedown@shakedown-postgres:5432/shakedown?sslmode=disable",
           },
           { name: "STORAGE_ROOT", value: "/data" },
           { name: "OIDC_ISSUER", value: "https://auth.lab53.net" },
@@ -91,6 +91,6 @@ export default applyModifiers(
   withNasMounts({
     main: [{ mountPath: "/data", subPath: "cluster/shakedown" }],
   }),
-  withPostgres(16, { legacy: true }),
+  withPostgres(16),
   withOidcAuth(),
 );
