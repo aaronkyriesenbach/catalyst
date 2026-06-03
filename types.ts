@@ -1,7 +1,7 @@
 import { IPodSpec } from "kubernetes-models/v1";
 import { Model } from "@kubernetes-models/base";
 
-export type ResourceLike = Model<unknown> | Record<string, unknown>;
+export type ResourceLike = Model<unknown> | { toJSON(): unknown } | Record<string, unknown>;
 
 type BaseApp = {
   name: string;

@@ -1,32 +1,72 @@
-import type { WorkloadApp } from "../types";
+import { ExternalSecret } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
 import { applyModifiers, withNasMounts } from "../modifiers";
+import type { WorkloadApp } from "../types";
+import { GENERATED_PASSWORD_GENERATOR_NAME, readFile } from "../utils";
+
+const name = "radicale";
+const usersSecretName = `${name}-users`;
+
+const radicaleConfig = await readFile(
+  "./radicale/radicale.conf",
+  import.meta.url,
+);
+
+const usersSecret = new ExternalSecret({
+  metadata: { name: usersSecretName },
+  spec: {
+    refreshInterval: "0",
+    target: {
+      name: usersSecretName,
+      template: {
+        engineVersion: "v2",
+        data: {
+          users: '{{ htpasswd "aaron" .password "bcrypt" }}',
+          password: "{{ .password }}",
+        },
+      },
+    },
+    dataFrom: [
+      {
+        sourceRef: {
+          generatorRef: {
+            apiVersion: "generators.external-secrets.io/v1alpha1",
+            kind: "ClusterGenerator",
+            name: GENERATED_PASSWORD_GENERATOR_NAME,
+          },
+        },
+      },
+    ],
+  },
+});
 
 const base: WorkloadApp = {
   kind: "workload",
-  name: "radicale",
+  name,
   podSpec: {
     containers: [
       {
         name: "main",
-        image: "tomsquest/docker-radicale:3.6.1.0",
-        env: [{ name: "TAKE_FILE_OWNERSHIP", value: "false" }],
+        image: "docker.int.lab53.net/11notes/radicale:3.7.4",
+        env: [
+          { name: "RADICALE_CONFIG", value: radicaleConfig },
+          {
+            name: "RADICALE_USERS",
+            valueFrom: {
+              secretKeyRef: {
+                name: usersSecretName,
+                key: "users",
+              },
+            },
+          },
+        ],
         ports: [{ name: "http", containerPort: 5232 }],
         securityContext: {
           allowPrivilegeEscalation: false,
           readOnlyRootFilesystem: true,
           capabilities: {
             drop: ["ALL"],
-            add: ["SETUID", "SETGID", "KILL"],
           },
         },
-        volumeMounts: [
-          {
-            name: "nas",
-            mountPath: "/config",
-            subPath: "cluster/radicale/config",
-            readOnly: true,
-          },
-        ],
         livenessProbe: {
           httpGet: {
             path: "/",
@@ -45,15 +85,17 @@ const base: WorkloadApp = {
         },
       },
     ],
-    securityContext: {},
   },
   webPort: 5232,
   externallyAccessible: true,
+  extraResources: [usersSecret],
 };
 
 export default applyModifiers(
   base,
   withNasMounts({
-    main: [{ mountPath: "/data", subPath: "radicale/data" }],
+    main: [
+      { mountPath: "/radicale/var", subPath: "radicale/data/collections" },
+    ],
   }),
 );
