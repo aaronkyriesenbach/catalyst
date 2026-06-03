@@ -177,13 +177,16 @@ export function withPostgres(
           {
             name: "postgres",
             image,
-            env: pgEnv,
+            env: [
+              ...pgEnv,
+              { name: "PGDATA", value: "/var/lib/postgresql/data/pgdata" },
+            ],
             ports: [{ name: "postgres", containerPort: 5432 }],
             ...pgProbes,
             volumeMounts: [
               {
                 name: "data",
-                mountPath: postgresDataDir(version),
+                mountPath: "/var/lib/postgresql/data",
               },
             ],
           },
