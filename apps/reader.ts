@@ -1,5 +1,5 @@
 import type { WorkloadApp } from "../types";
-import { applyModifiers, withNasMounts, withOidcAuth } from "../modifiers";
+import { applyModifiers, withIscsiVolumes, withNasMounts, withOidcAuth } from "../modifiers";
 
 const vpnSecretName = "reader-vpn-creds";
 const mamSecretName = "reader-mam";
@@ -96,11 +96,11 @@ const base: WorkloadApp = {
 
 export default applyModifiers(
   base,
+  withIscsiVolumes({
+    qbittorrent: [{ name: "config", mountPath: "/config", storage: "2Gi" }],
+  }),
   withNasMounts({
-    qbittorrent: [
-      { mountPath: "/downloads", subPath: "downloads/reader" },
-      { mountPath: "/config", subPath: "cluster/reader/config" },
-    ],
+    qbittorrent: [{ mountPath: "/downloads", subPath: "downloads/reader" }],
   }),
   withOidcAuth({ middleware: { enabled: true } }),
 );

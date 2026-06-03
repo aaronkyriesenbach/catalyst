@@ -1,5 +1,10 @@
 import { ConfigMap } from "kubernetes-models/v1";
-import { applyModifiers, withNasMounts, withOidcAuth } from "../modifiers";
+import {
+  applyModifiers,
+  withIscsiVolumes,
+  withNasMounts,
+  withOidcAuth,
+} from "../modifiers";
 import type { WorkloadApp } from "../types";
 import { readFile } from "../utils";
 
@@ -72,14 +77,17 @@ const base: WorkloadApp = {
 
 export default applyModifiers(
   base,
-  withNasMounts({
+  withIscsiVolumes({
     main: [
       {
+        name: "data",
         mountPath: "/home/filebrowser/data",
-        subPath: "cluster/filebrowser-quantum/data",
+        storage: "1Gi",
       },
-      { mountPath: "/srv/data" },
     ],
+  }),
+  withNasMounts({
+    main: [{ mountPath: "/srv/data" }],
   }),
   withOidcAuth(),
 );

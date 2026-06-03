@@ -16,6 +16,7 @@ export type WorkloadApp = BaseApp & {
   externallyAccessible?: boolean;
   forwardAuth?: boolean;
   extraResources?: ResourceLike[];
+  strategy?: { type: "Recreate" | "RollingUpdate" };
 };
 
 export type StaticApp = BaseApp & {

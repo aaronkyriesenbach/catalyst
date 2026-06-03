@@ -1,4 +1,4 @@
-import { applyModifiers, withNasMounts, withOidcAuth } from "../modifiers";
+import { applyModifiers, withIscsiVolumes, withOidcAuth } from "../modifiers";
 import type { WorkloadApp } from "../types";
 
 const base: WorkloadApp = {
@@ -23,8 +23,8 @@ const base: WorkloadApp = {
 
 export default applyModifiers(
   base,
-  withNasMounts({
-    main: [{ mountPath: "/var/opt/memos", subPath: "notes" }],
+  withIscsiVolumes({
+    main: [{ name: "data", mountPath: "/var/opt/memos", storage: "5Gi" }],
   }),
   withOidcAuth(),
 );
