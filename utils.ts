@@ -274,7 +274,7 @@ export function buildGeneratedSecret(
     const keyName = typeof keyConfig === "string" ? keyConfig : keyConfig.key;
     const rewrite = [{ regexp: { source: "password", target: keyName } }];
 
-    if (typeof keyConfig !== "string" || keyConfig.length !== undefined) {
+    if (typeof keyConfig !== "string" && keyConfig.length !== undefined) {
       const customGeneratorRef: GeneratorRef = new GeneratorRef({
         kind: "Password",
         name: `${name}-${keyName}-gen`,
