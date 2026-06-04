@@ -1,3 +1,4 @@
+import { StorageClass } from "kubernetes-models/storage.k8s.io/v1";
 import { parseAllDocuments } from "yaml";
 import type { ResourceLike, StaticApp } from "../types";
 import { readFile } from "../utils";
@@ -8,9 +9,7 @@ const deployResources = parseAllDocuments(deployYaml)
   .map((doc) => doc.toJSON() as ResourceLike)
   .filter(Boolean);
 
-const storageClass: ResourceLike = {
-  apiVersion: "storage.k8s.io/v1",
-  kind: "StorageClass",
+const storageClass: StorageClass = new StorageClass({
   metadata: {
     name: "truenas-iscsi",
   },
@@ -24,7 +23,7 @@ const storageClass: ResourceLike = {
   reclaimPolicy: "Delete",
   volumeBindingMode: "Immediate",
   allowVolumeExpansion: true,
-};
+});
 
 const volumeSnapshotClass: ResourceLike = {
   apiVersion: "snapshot.storage.k8s.io/v1",
@@ -36,10 +35,18 @@ const volumeSnapshotClass: ResourceLike = {
   deletionPolicy: "Delete",
 };
 
+const SNAPSHOT_CRD_BASE =
+  "https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/v8.2.0/client/config/crd";
+
 const config: StaticApp = {
   kind: "static",
   name: "truenas-csi",
   resources: [...deployResources, storageClass, volumeSnapshotClass],
+  remoteResources: [
+    `${SNAPSHOT_CRD_BASE}/snapshot.storage.k8s.io_volumesnapshotclasses.yaml`,
+    `${SNAPSHOT_CRD_BASE}/snapshot.storage.k8s.io_volumesnapshots.yaml`,
+    `${SNAPSHOT_CRD_BASE}/snapshot.storage.k8s.io_volumesnapshotcontents.yaml`,
+  ],
 };
 
 export default config;

@@ -7,7 +7,7 @@ import { stringify } from "yaml";
 if (process.env.ARGOCD_ENV_APP_CONFIG) {
   const config = JSON.parse(process.env.ARGOCD_ENV_APP_CONFIG) as AppConfig;
 
-  renderAppFromConfig(config);
+  await renderAppFromConfig(config);
 } else {
   const resources: string[] = [];
 
