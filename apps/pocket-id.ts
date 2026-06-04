@@ -1,3 +1,4 @@
+import { buildBackupResources } from "../backup";
 import type { HelmChart, StaticApp } from "../types";
 import { readFile } from "../utils";
 
@@ -18,7 +19,7 @@ const chart: HelmChart = {
 const config: StaticApp = {
   kind: "static",
   name: "pocket-id",
-  resources: [chart],
+  resources: [chart, ...buildBackupResources("pocket-id", "pocket-id-data")],
 };
 
 export default config;

@@ -1,5 +1,6 @@
-import type { HelmChart, ResourceLike, StaticApp } from "../types";
-import { GENERATED_PASSWORD_GENERATOR_NAME } from "../utils";
+import { IGeneratorRef } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
+import { ClusterGenerator } from "@kubernetes-models/external-secrets/generators.external-secrets.io/v1alpha1";
+import type { HelmChart, StaticApp } from "../types";
 
 const chart: HelmChart = {
   apiVersion: "helm.cattle.io/v1",
@@ -18,22 +19,28 @@ const chart: HelmChart = {
   },
 };
 
-const clusterGenerator: ResourceLike = {
-  apiVersion: "generators.external-secrets.io/v1alpha1",
-  kind: "ClusterGenerator",
+const clusterGeneratorName = "generated-password";
+
+const clusterGenerator: ClusterGenerator = new ClusterGenerator({
   metadata: {
-    name: GENERATED_PASSWORD_GENERATOR_NAME,
+    name: clusterGeneratorName,
   },
   spec: {
     kind: "Password",
     generator: {
       passwordSpec: {
         length: 16,
-        encoding: "hex",
         allowRepeat: true,
+        noUpper: false,
       },
     },
   },
+});
+
+export const clusterGeneratorRef: IGeneratorRef = {
+  apiVersion: clusterGenerator.apiVersion,
+  kind: clusterGenerator.kind,
+  name: clusterGeneratorName,
 };
 
 const config: StaticApp = {

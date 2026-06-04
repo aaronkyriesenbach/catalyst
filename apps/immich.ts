@@ -1,3 +1,4 @@
+import { buildBackupResources } from "../backup";
 import { buildNasPersistentVolumePair } from "../storage";
 import type { HelmChart, StaticApp } from "../types";
 import {
@@ -99,6 +100,11 @@ const config: StaticApp = {
     postgresHeadlessService,
     chart,
     route,
+    ...buildBackupResources("immich", "data-immich-postgres-0", {
+      runAsUser: 999,
+      runAsGroup: 999,
+      fsGroup: 999,
+    }),
   ],
 };
 

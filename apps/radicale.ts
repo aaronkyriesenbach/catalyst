@@ -1,7 +1,8 @@
 import { ExternalSecret } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
 import { applyModifiers, withNasMounts } from "../modifiers";
 import type { WorkloadApp } from "../types";
-import { GENERATED_PASSWORD_GENERATOR_NAME, readFile } from "../utils";
+import { readFile } from "../utils";
+import { clusterGeneratorRef } from "./external-secrets";
 
 const name = "radicale";
 const usersSecretName = `${name}-users`;
@@ -28,11 +29,7 @@ const usersSecret = new ExternalSecret({
     dataFrom: [
       {
         sourceRef: {
-          generatorRef: {
-            apiVersion: "generators.external-secrets.io/v1alpha1",
-            kind: "ClusterGenerator",
-            name: GENERATED_PASSWORD_GENERATOR_NAME,
-          },
+          generatorRef: clusterGeneratorRef,
         },
       },
     ],

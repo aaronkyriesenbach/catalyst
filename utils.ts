@@ -1,9 +1,19 @@
-import { Deployment, StatefulSet } from "kubernetes-models/apps/v1";
-import type { IPersistentVolumeClaimTemplate, IPodSpec, IServicePort } from "kubernetes-models/v1";
-import { Service, PersistentVolumeClaim } from "kubernetes-models/v1";
+import {
+  ExternalSecret,
+  GeneratorRef,
+} from "@kubernetes-models/external-secrets/external-secrets.io/v1";
+import { Password } from "@kubernetes-models/external-secrets/generators.external-secrets.io/v1alpha1";
 import { HTTPRoute } from "@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1";
+import { Deployment, StatefulSet } from "kubernetes-models/apps/v1";
+import type {
+  IPersistentVolumeClaimTemplate,
+  IPodSpec,
+  IServicePort,
+} from "kubernetes-models/v1";
+import { PersistentVolumeClaim, Service } from "kubernetes-models/v1";
 import { stringify } from "yaml";
-import type { AppConfig, ResourceLike, StaticApp, WorkloadApp } from "./types";
+import { clusterGeneratorRef } from "./apps/external-secrets";
+import type { AppConfig, StaticApp, WorkloadApp } from "./types";
 
 export function readFile(relativePath: string, base: string): Promise<string> {
   return Bun.file(new URL(relativePath, base)).text();
@@ -21,7 +31,11 @@ type DeploymentOptions = {
   strategy?: { type: "Recreate" | "RollingUpdate" };
 };
 
-export function buildDeployment(name: string, podSpec: IPodSpec, options?: DeploymentOptions) {
+export function buildDeployment(
+  name: string,
+  podSpec: IPodSpec,
+  options?: DeploymentOptions,
+) {
   return new Deployment({
     metadata: {
       name,
@@ -70,7 +84,6 @@ type StatefulSetOptions = {
   revisionHistoryLimit?: number;
 };
 
-
 export function buildStatefulSet(
   name: string,
   podSpec: IPodSpec,
@@ -113,8 +126,13 @@ export function buildRoute(
   port: number,
   options?: RouteOptions,
 ): HTTPRoute {
-  const { subDomain, serviceName, namespace, externallyAccessible, forwardAuth } =
-    options ?? {};
+  const {
+    subDomain,
+    serviceName,
+    namespace,
+    externallyAccessible,
+    forwardAuth,
+  } = options ?? {};
   const hostname = `${subDomain ?? name}${externallyAccessible ? "" : ".int"}.lab53.net`;
 
   const parentRefs = externallyAccessible
@@ -161,26 +179,22 @@ export function buildRoute(
   });
 }
 
-export const GENERATED_PASSWORD_GENERATOR_NAME = "generated-password";
-
-type PasswordEncoding = "raw" | "base64" | "base64url" | "base32" | "hex";
-
 export type GeneratedSecretKey =
   | string
   | {
       key: string;
       length?: number;
-      encoding?: PasswordEncoding;
     };
 
-const GENERATOR_API_VERSION = "generators.external-secrets.io/v1alpha1";
 const DEFAULT_LENGTH = 64;
-const DEFAULT_ENCODING: PasswordEncoding = "hex";
 
 const DEFAULT_ISCSI_STORAGE = "10Gi";
 const DEFAULT_ISCSI_STORAGE_CLASS = "truenas-iscsi";
 
-export function buildIscsiPvcTemplate(name: string, storage?: string): IPersistentVolumeClaimTemplate {
+export function buildIscsiPvcTemplate(
+  name: string,
+  storage?: string,
+): IPersistentVolumeClaimTemplate {
   return {
     metadata: { name },
     spec: {
@@ -209,65 +223,57 @@ export function buildIscsiPvc(name: string, storage?: string) {
 export function buildGeneratedSecret(
   name: string,
   keys: GeneratedSecretKey[],
-): ResourceLike[] {
-  const resources: ResourceLike[] = [];
+): (ExternalSecret | Password)[] {
+  const resources: (ExternalSecret | Password)[] = [];
   const dataFrom: Record<string, unknown>[] = [];
 
   for (const keyConfig of keys) {
     const keyName = typeof keyConfig === "string" ? keyConfig : keyConfig.key;
     const rewrite = [{ regexp: { source: "password", target: keyName } }];
 
-    if (
-      typeof keyConfig !== "string" &&
-      (keyConfig.length !== undefined || keyConfig.encoding !== undefined)
-    ) {
-      const generatorName = `${name}-${keyName}-gen`;
-
-      resources.push({
-        apiVersion: GENERATOR_API_VERSION,
+    if (typeof keyConfig !== "string" || keyConfig.length !== undefined) {
+      const customGeneratorRef: GeneratorRef = new GeneratorRef({
         kind: "Password",
-        metadata: { name: generatorName },
-        spec: {
-          length: keyConfig.length ?? DEFAULT_LENGTH,
-          encoding: keyConfig.encoding ?? DEFAULT_ENCODING,
-          allowRepeat: true,
-        },
+        name: `${name}-${keyName}-gen`,
       });
+
+      resources.push(
+        new Password({
+          metadata: { name: customGeneratorRef.name },
+          spec: {
+            length: keyConfig.length ?? DEFAULT_LENGTH,
+            allowRepeat: true,
+            noUpper: false,
+          },
+        }),
+      );
 
       dataFrom.push({
         sourceRef: {
-          generatorRef: {
-            apiVersion: GENERATOR_API_VERSION,
-            kind: "Password",
-            name: generatorName,
-          },
+          generatorRef: customGeneratorRef,
         },
         rewrite,
       });
     } else {
       dataFrom.push({
         sourceRef: {
-          generatorRef: {
-            apiVersion: GENERATOR_API_VERSION,
-            kind: "ClusterGenerator",
-            name: GENERATED_PASSWORD_GENERATOR_NAME,
-          },
+          generatorRef: clusterGeneratorRef,
         },
         rewrite,
       });
     }
   }
 
-  resources.push({
-    apiVersion: "external-secrets.io/v1",
-    kind: "ExternalSecret",
-    metadata: { name },
-    spec: {
-      refreshInterval: "0",
-      target: { name },
-      dataFrom,
-    },
-  });
+  resources.push(
+    new ExternalSecret({
+      metadata: { name },
+      spec: {
+        refreshInterval: "0",
+        target: { name },
+        dataFrom,
+      },
+    }),
+  );
 
   return resources;
 }
@@ -288,14 +294,24 @@ function renderWorkload(config: WorkloadApp): string[] {
         },
       };
 
-  const { name, podSpec, webPort, subDomain, externallyAccessible, forwardAuth, extraResources } = app;
+  const {
+    name,
+    podSpec,
+    webPort,
+    subDomain,
+    externallyAccessible,
+    forwardAuth,
+    extraResources,
+  } = app;
   const resources: string[] = [];
 
   if (extraResources) {
     resources.push(...extraResources.map((r) => stringify(r)));
   }
 
-  resources.push(stringify(buildDeployment(name, podSpec, { strategy: app.strategy })));
+  resources.push(
+    stringify(buildDeployment(name, podSpec, { strategy: app.strategy })),
+  );
 
   const ports = podSpec.containers.flatMap((c) => c.ports ?? []);
 

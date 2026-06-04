@@ -69,4 +69,4 @@ const base: WorkloadApp = {
   externallyAccessible: true,
 };
 
-export default applyModifiers(base, withPostgres(18), withOidcAuth());
+export default applyModifiers(base, withPostgres(18, { backup: true }), withOidcAuth());

@@ -24,7 +24,7 @@ const base: WorkloadApp = {
 export default applyModifiers(
   base,
   withIscsiVolumes({
-    main: [{ name: "data", mountPath: "/var/opt/memos", storage: "5Gi" }],
+    main: [{ name: "data", mountPath: "/var/opt/memos", storage: "5Gi", backup: true }],
   }),
   withOidcAuth(),
 );

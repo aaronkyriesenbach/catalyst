@@ -91,6 +91,6 @@ export default applyModifiers(
   withNasMounts({
     main: [{ mountPath: "/data", subPath: "cluster/shakedown" }],
   }),
-  withPostgres(16),
+  withPostgres(16, { backup: true }),
   withOidcAuth(),
 );

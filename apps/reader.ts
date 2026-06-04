@@ -97,7 +97,7 @@ const base: WorkloadApp = {
 export default applyModifiers(
   base,
   withIscsiVolumes({
-    qbittorrent: [{ name: "config", mountPath: "/config", storage: "2Gi" }],
+    qbittorrent: [{ name: "config", mountPath: "/config", storage: "2Gi", backup: true }],
   }),
   withNasMounts({
     qbittorrent: [{ mountPath: "/downloads", subPath: "downloads/reader" }],

@@ -26,10 +26,20 @@ const storageClass: ResourceLike = {
   allowVolumeExpansion: true,
 };
 
+const volumeSnapshotClass: ResourceLike = {
+  apiVersion: "snapshot.storage.k8s.io/v1",
+  kind: "VolumeSnapshotClass",
+  metadata: {
+    name: "truenas-iscsi",
+  },
+  driver: "csi.truenas.io",
+  deletionPolicy: "Delete",
+};
+
 const config: StaticApp = {
   kind: "static",
   name: "truenas-csi",
-  resources: [...deployResources, storageClass],
+  resources: [...deployResources, storageClass, volumeSnapshotClass],
 };
 
 export default config;
