@@ -1,5 +1,7 @@
+import { ConfigMap } from "kubernetes-models/v1";
 import type { WorkloadApp } from "../types";
 import { applyModifiers, withIscsiVolumes, withNasMounts, withOidcAuth } from "../modifiers";
+import { readFile } from "../utils";
 
 const vpnSecretName = "reader-vpn-creds";
 const mamSecretName = "reader-mam";
@@ -20,6 +22,17 @@ const mamUpdaterScript = [
   `else echo "[${D}(date)] MAM update successful"; fi`,
   `sleep 1800; done`,
 ].join("; ");
+
+const qbtInitConfigMap = new ConfigMap({
+  metadata: { name: "reader-qbt-init" },
+  data: {
+    // ArgoCD CMP substitutes $VAR with empty string — escape $ as $$
+    "setup-qbittorrent.sh": (await readFile(
+      "./reader/setup-qbittorrent.sh",
+      import.meta.url,
+    )).replaceAll("$", () => "$$"),
+  },
+});
 
 const base: WorkloadApp = {
   kind: "workload",
@@ -65,17 +78,9 @@ const base: WorkloadApp = {
           { name: "PGID", value: "1000" },
           { name: "WEBUI_PORT", value: "8080" },
         ],
-        lifecycle: {
-          postStart: {
-            exec: {
-              command: [
-                "/bin/sh",
-                "-c",
-                "rm -f /config/qBittorrent/lockfile /config/qBittorrent/ipc-socket",
-              ],
-            },
-          },
-        },
+        volumeMounts: [
+          { name: "qbt-init", mountPath: "/custom-cont-init.d", readOnly: true },
+        ],
       },
       {
         name: "mam-updater",
@@ -96,6 +101,9 @@ const base: WorkloadApp = {
       },
     ],
     securityContext: {},
+    volumes: [
+      { name: "qbt-init", configMap: { name: "reader-qbt-init", defaultMode: 0o755 } },
+    ],
     dnsPolicy: "None",
     dnsConfig: {
       nameservers: ["127.0.0.1"],
@@ -103,6 +111,7 @@ const base: WorkloadApp = {
   },
   webPort: 8080,
   subDomain: "reader",
+  extraResources: [qbtInitConfigMap],
 };
 
 export default applyModifiers(
