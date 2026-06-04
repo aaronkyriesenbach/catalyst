@@ -59,7 +59,7 @@ const base: WorkloadApp = {
   },
   webPort: 5232,
   externallyAccessible: true,
-  extraResources: buildGeneratedSecret(name, usersSecretName, [{ key: "password" }], {
+  extraResources: buildGeneratedSecret(name, usersSecretName, ["password"], {
     template: {
       engineVersion: "v2",
       data: {
