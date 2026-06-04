@@ -11,7 +11,7 @@ import type {
   IServicePort,
 } from "kubernetes-models/v1";
 import { PersistentVolumeClaim, Service } from "kubernetes-models/v1";
-import { stringify } from "yaml";
+import { parseAllDocuments, stringify } from "yaml";
 import { clusterGeneratorRef } from "./apps/external-secrets";
 import type { AppConfig, StaticApp, WorkloadApp } from "./types";
 
@@ -340,11 +340,28 @@ function renderWorkload(config: WorkloadApp): string[] {
   return resources;
 }
 
-function renderStatic(config: StaticApp): string[] {
-  return config.resources.map((r) => stringify(r));
+async function renderStatic(config: StaticApp): Promise<string[]> {
+  const results = config.resources?.map((r) => stringify(r)) ?? [];
+
+  for (const url of config.remoteResources ?? []) {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`);
+    }
+
+    const text = await response.text();
+    const docs = parseAllDocuments(text)
+      .map((doc) => doc.toJSON() as Record<string, unknown>)
+      .filter(Boolean);
+
+    results.push(...docs.map((d) => stringify(d)));
+  }
+
+  return results;
 }
 
-export function renderAppFromConfig(config: AppConfig) {
+export async function renderAppFromConfig(config: AppConfig) {
   let resources: string[];
 
   switch (config.kind) {
@@ -352,7 +369,7 @@ export function renderAppFromConfig(config: AppConfig) {
       resources = renderWorkload(config);
       break;
     case "static":
-      resources = renderStatic(config);
+      resources = await renderStatic(config);
       break;
   }
 

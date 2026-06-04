@@ -21,7 +21,8 @@ export type WorkloadApp = BaseApp & {
 
 export type StaticApp = BaseApp & {
   kind: "static";
-  resources: ResourceLike[];
+  resources?: ResourceLike[];
+  remoteResources?: string[];
 };
 
 export type AppConfig = WorkloadApp | StaticApp;
