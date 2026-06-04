@@ -65,6 +65,17 @@ const base: WorkloadApp = {
           { name: "PGID", value: "1000" },
           { name: "WEBUI_PORT", value: "8080" },
         ],
+        lifecycle: {
+          postStart: {
+            exec: {
+              command: [
+                "/bin/sh",
+                "-c",
+                "rm -f /config/qBittorrent/lockfile /config/qBittorrent/ipc-socket",
+              ],
+            },
+          },
+        },
       },
       {
         name: "mam-updater",
