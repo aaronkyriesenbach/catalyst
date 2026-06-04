@@ -10,7 +10,7 @@ const base: WorkloadApp = {
         name: "main",
         image: "docker.int.lab53.net/restic/rest-server:0.14.0",
         command: ["rest-server"],
-        args: ["--no-auth"],
+        args: ["--no-auth", "--path", "/data"],
         ports: [{ name: "http", containerPort: 8000 }],
       },
     ],
