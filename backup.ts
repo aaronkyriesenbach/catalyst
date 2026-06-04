@@ -26,13 +26,11 @@ export type BackupOptions = {
     weekly?: number;
     monthly?: number;
   };
-  pushSecret?: boolean;
 };
 
 function buildResticConfigSecret(
   namespace: string,
   pvcName: string,
-  options?: { pushSecret?: boolean },
 ): ResourceLike[] {
   const secretName = `${pvcName}-restic-config`;
   const repoUrl = `${RESTIC_SERVER_URL}/${namespace}/${pvcName}`;
@@ -62,9 +60,7 @@ function buildResticConfigSecret(
     }),
   ];
 
-  if (options?.pushSecret) {
-    resources.push(buildPushSecret(namespace, secretName));
-  }
+  resources.push(buildPushSecret(namespace, secretName));
 
   return resources;
 }
@@ -111,7 +107,7 @@ export function buildBackupResources(
   options?: BackupOptions,
 ): ResourceLike[] {
   return [
-    ...buildResticConfigSecret(namespace, pvcName, { pushSecret: options?.pushSecret }),
+    ...buildResticConfigSecret(namespace, pvcName),
     buildReplicationSource(pvcName, options),
   ];
 }
