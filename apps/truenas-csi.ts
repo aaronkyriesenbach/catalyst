@@ -35,18 +35,10 @@ const volumeSnapshotClass: ResourceLike = {
   deletionPolicy: "Delete",
 };
 
-const SNAPSHOT_CRD_BASE =
-  "https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/v8.2.0/client/config/crd";
-
 const config: StaticApp = {
   kind: "static",
   name: "truenas-csi",
   resources: [...deployResources, storageClass, volumeSnapshotClass],
-  remoteResources: [
-    `${SNAPSHOT_CRD_BASE}/snapshot.storage.k8s.io_volumesnapshotclasses.yaml`,
-    `${SNAPSHOT_CRD_BASE}/snapshot.storage.k8s.io_volumesnapshots.yaml`,
-    `${SNAPSHOT_CRD_BASE}/snapshot.storage.k8s.io_volumesnapshotcontents.yaml`,
-  ],
 };
 
 export default config;
