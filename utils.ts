@@ -2,8 +2,8 @@ import {
   ExternalSecret,
   GeneratorRef,
 } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
-import { Password } from "@kubernetes-models/external-secrets/generators.external-secrets.io/v1alpha1";
 import { PushSecret } from "@kubernetes-models/external-secrets/external-secrets.io/v1alpha1";
+import { Password } from "@kubernetes-models/external-secrets/generators.external-secrets.io/v1alpha1";
 import { HTTPRoute } from "@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1";
 import { Deployment, StatefulSet } from "kubernetes-models/apps/v1";
 import type {
@@ -13,7 +13,10 @@ import type {
 } from "kubernetes-models/v1";
 import { PersistentVolumeClaim, Service } from "kubernetes-models/v1";
 import { parseAllDocuments, stringify } from "yaml";
-import { awsSecretStoreRef, clusterGeneratorRef } from "./apps/external-secrets";
+import {
+  awsSecretStoreRef,
+  clusterGeneratorRef,
+} from "./apps/external-secrets";
 import type { AppConfig, StaticApp, WorkloadApp } from "./types";
 
 export function readFile(relativePath: string, base: string): Promise<string> {
@@ -201,12 +204,15 @@ const PUSH_SECRET_PREFIX = "lab53/cluster0";
 
 const DEFAULT_LENGTH = 64;
 
-export function buildPushSecret(namespace: string, secretName: string): PushSecret {
+export function buildPushSecret(
+  namespace: string,
+  secretName: string,
+): PushSecret {
   return new PushSecret({
     metadata: { name: `${secretName}-push` },
     spec: {
       refreshInterval: "1h",
-      updatePolicy: "IfNotExists",
+      updatePolicy: "Replace",
       deletionPolicy: "None",
       secretStoreRefs: [awsSecretStoreRef],
       selector: { secret: { name: secretName } },
@@ -391,7 +397,9 @@ async function renderStatic(config: StaticApp): Promise<string[]> {
     const response = await fetch(url);
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Failed to fetch ${url}: ${response.status} ${response.statusText}`,
+      );
     }
 
     const text = await response.text();
