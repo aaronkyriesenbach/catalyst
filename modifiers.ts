@@ -241,6 +241,7 @@ function buildOidcMiddleware(
           Scopes: ["openid", "profile", "email"],
           CallbackUri: DEFAULT_MIDDLEWARE_CALLBACK_PATH,
           SessionCookie: {
+            Name: `oidc-${app.name}`,
             Domain: ".lab53.net",
             Secure: true,
             HttpOnly: true,
