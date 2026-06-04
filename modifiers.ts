@@ -2,6 +2,7 @@ import type { IContainer, IVolume, IVolumeMount } from "kubernetes-models/v1";
 import { Middleware } from "@kubernetes-models/traefik/traefik.io/v1alpha1/Middleware";
 import type { ResourceLike, WorkloadApp } from "./types";
 import { buildGeneratedSecret, buildHeadlessService, buildIscsiPvc, buildIscsiPvcTemplate, buildStatefulSet } from "./utils";
+import { buildBackupResources } from "./backup";
 
 export type NasMountConfig = {
   [containerName: string]: { mountPath: string; subPath?: string }[];
@@ -88,6 +89,8 @@ export type PostgresOptions = {
   image?: string;
   /** PVC storage size for iSCSI mode (default: "10Gi") */
   storage?: string;
+  backup?: boolean;
+  backupSchedule?: string;
 };
 
 const DEFAULT_POSTGRES_REGISTRY = "docker.int.lab53.net/library/postgres";
@@ -163,12 +166,22 @@ export function withPostgres(
       { name: "postgres", port: 5432 },
     ]);
 
+    const backupResources = options?.backup
+      ? buildBackupResources(app.name, `data-${postgresName}-0`, {
+          schedule: options.backupSchedule,
+          runAsUser: 999,
+          runAsGroup: 999,
+          fsGroup: 999,
+        })
+      : [];
+
     return {
       ...app,
       extraResources: [
         ...(app.extraResources ?? []),
         statefulSet,
         headlessService,
+        ...backupResources,
       ],
     };
   };
@@ -294,6 +307,8 @@ export type IscsiVolumeMount = {
   name: string;
   mountPath: string;
   storage?: string;
+  backup?: boolean;
+  backupSchedule?: string;
 };
 
 export type IscsiVolumesConfig = {
@@ -359,7 +374,17 @@ export function withIscsiVolumes(config: IscsiVolumesConfig): WorkloadModifier {
         ...(initContainers && { initContainers }),
         volumes: [...(app.podSpec.volumes ?? []), ...volumes],
       },
-      extraResources: [...(app.extraResources ?? []), ...pvcs],
+      extraResources: [
+        ...(app.extraResources ?? []),
+        ...pvcs,
+        ...allMounts
+          .filter((mount) => mount.backup)
+          .flatMap((mount) =>
+            buildBackupResources(app.name, `${app.name}-${mount.name}`, {
+              schedule: mount.backupSchedule,
+            }),
+          ),
+      ],
     };
   };
 }
