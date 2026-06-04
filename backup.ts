@@ -1,6 +1,7 @@
 import { ExternalSecret } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
 import { clusterGeneratorRef } from "./apps/external-secrets";
 import type { ResourceLike } from "./types";
+import { buildPushSecret } from "./utils";
 
 const RESTIC_SERVER_URL = "rest:http://restic-server.restic-server:8000";
 const VOLSYNC_API_VERSION = "volsync.backube/v1alpha1";
@@ -25,37 +26,47 @@ export type BackupOptions = {
     weekly?: number;
     monthly?: number;
   };
+  pushSecret?: boolean;
 };
 
 function buildResticConfigSecret(
-  appName: string,
+  namespace: string,
   pvcName: string,
-): ExternalSecret {
+  options?: { pushSecret?: boolean },
+): ResourceLike[] {
   const secretName = `${pvcName}-restic-config`;
-  const repoUrl = `${RESTIC_SERVER_URL}/${appName}/${pvcName}`;
+  const repoUrl = `${RESTIC_SERVER_URL}/${namespace}/${pvcName}`;
 
-  return new ExternalSecret({
-    metadata: { name: secretName },
-    spec: {
-      refreshInterval: "0",
-      target: {
-        name: secretName,
-        template: {
-          data: {
-            RESTIC_REPOSITORY: repoUrl,
-            RESTIC_PASSWORD: "{{ .password }}",
+  const resources: ResourceLike[] = [
+    new ExternalSecret({
+      metadata: { name: secretName },
+      spec: {
+        refreshInterval: "0",
+        target: {
+          name: secretName,
+          template: {
+            data: {
+              RESTIC_REPOSITORY: repoUrl,
+              RESTIC_PASSWORD: "{{ .password }}",
+            },
           },
         },
+        dataFrom: [
+          {
+            sourceRef: {
+              generatorRef: clusterGeneratorRef,
+            },
+          },
+        ],
       },
-      dataFrom: [
-        {
-          sourceRef: {
-            generatorRef: clusterGeneratorRef,
-          },
-        },
-      ],
-    },
-  });
+    }),
+  ];
+
+  if (options?.pushSecret) {
+    resources.push(buildPushSecret(namespace, secretName));
+  }
+
+  return resources;
 }
 
 function buildReplicationSource(
@@ -95,12 +106,12 @@ function buildReplicationSource(
 }
 
 export function buildBackupResources(
-  appName: string,
+  namespace: string,
   pvcName: string,
   options?: BackupOptions,
 ): ResourceLike[] {
   return [
-    buildResticConfigSecret(appName, pvcName),
+    ...buildResticConfigSecret(namespace, pvcName, { pushSecret: options?.pushSecret }),
     buildReplicationSource(pvcName, options),
   ];
 }

@@ -81,8 +81,8 @@ const base: WorkloadApp = {
   webPort: 8080,
   externallyAccessible: true,
   subDomain: "jam",
-  extraResources: buildGeneratedSecret(sessionSecretName, [
-    { key: "session-secret", length: 32, encoding: "raw" },
+  extraResources: buildGeneratedSecret(name, sessionSecretName, [
+    { key: "session-secret", length: 32 },
   ]),
 };
 

@@ -3,6 +3,7 @@ import {
   GeneratorRef,
 } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
 import { Password } from "@kubernetes-models/external-secrets/generators.external-secrets.io/v1alpha1";
+import { PushSecret } from "@kubernetes-models/external-secrets/external-secrets.io/v1alpha1";
 import { HTTPRoute } from "@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1";
 import { Deployment, StatefulSet } from "kubernetes-models/apps/v1";
 import type {
@@ -12,7 +13,7 @@ import type {
 } from "kubernetes-models/v1";
 import { PersistentVolumeClaim, Service } from "kubernetes-models/v1";
 import { parseAllDocuments, stringify } from "yaml";
-import { clusterGeneratorRef } from "./apps/external-secrets";
+import { awsSecretStoreRef, clusterGeneratorRef } from "./apps/external-secrets";
 import type { AppConfig, StaticApp, WorkloadApp } from "./types";
 
 export function readFile(relativePath: string, base: string): Promise<string> {
@@ -186,7 +187,41 @@ export type GeneratedSecretKey =
       length?: number;
     };
 
+type GeneratedSecretTemplate = {
+  engineVersion?: "v2";
+  data: Record<string, string>;
+};
+
+type GeneratedSecretOptions = {
+  pushSecret?: boolean;
+  template?: GeneratedSecretTemplate;
+};
+
+const PUSH_SECRET_PREFIX = "lab53/cluster0";
+
 const DEFAULT_LENGTH = 64;
+
+export function buildPushSecret(namespace: string, secretName: string): PushSecret {
+  return new PushSecret({
+    metadata: { name: `${secretName}-push` },
+    spec: {
+      refreshInterval: "1h",
+      updatePolicy: "IfNotExists",
+      deletionPolicy: "None",
+      secretStoreRefs: [awsSecretStoreRef],
+      selector: { secret: { name: secretName } },
+      data: [
+        {
+          match: {
+            remoteRef: {
+              remoteKey: `${PUSH_SECRET_PREFIX}/${namespace}/${secretName}`,
+            },
+          },
+        },
+      ],
+    },
+  });
+}
 
 const DEFAULT_ISCSI_STORAGE = "10Gi";
 const DEFAULT_ISCSI_STORAGE_CLASS = "truenas-iscsi";
@@ -221,10 +256,12 @@ export function buildIscsiPvc(name: string, storage?: string) {
 }
 
 export function buildGeneratedSecret(
+  namespace: string,
   name: string,
   keys: GeneratedSecretKey[],
-): (ExternalSecret | Password)[] {
-  const resources: (ExternalSecret | Password)[] = [];
+  options?: GeneratedSecretOptions,
+): (ExternalSecret | Password | PushSecret)[] {
+  const resources: (ExternalSecret | Password | PushSecret)[] = [];
   const dataFrom: Record<string, unknown>[] = [];
 
   for (const keyConfig of keys) {
@@ -269,11 +306,18 @@ export function buildGeneratedSecret(
       metadata: { name },
       spec: {
         refreshInterval: "0",
-        target: { name },
+        target: {
+          name,
+          ...(options?.template && { template: options.template }),
+        },
         dataFrom,
       },
     }),
   );
+
+  if (options?.pushSecret) {
+    resources.push(buildPushSecret(namespace, name));
+  }
 
   return resources;
 }
