@@ -167,7 +167,7 @@ export function withPostgres(
     ]);
 
     const backupResources = options?.backup
-      ? buildBackupResources(app.name, `data-${postgresName}-0`, {
+      ? buildBackupResources(app.namespace ?? app.name, `data-${postgresName}-0`, {
           schedule: options.backupSchedule,
           runAsUser: 999,
           runAsGroup: 999,
@@ -288,8 +288,8 @@ export function withOidcAuth(options?: OidcAuthOptions): WorkloadModifier {
     if (addMiddleware) {
       const pluginSecretName = `${app.name}-oidc-plugin`;
       extraResources.push(
-        ...buildGeneratedSecret(pluginSecretName, [
-          { key: "plugin-secret", length: 32, encoding: "raw" },
+        ...buildGeneratedSecret(app.namespace ?? app.name, pluginSecretName, [
+          { key: "plugin-secret", length: 32 },
         ]),
         buildOidcMiddleware(app, middlewareOptions?.bypassPaths),
       );
@@ -380,7 +380,7 @@ export function withIscsiVolumes(config: IscsiVolumesConfig): WorkloadModifier {
         ...allMounts
           .filter((mount) => mount.backup)
           .flatMap((mount) =>
-            buildBackupResources(app.name, `${app.name}-${mount.name}`, {
+            buildBackupResources(app.namespace ?? app.name, `${app.name}-${mount.name}`, {
               schedule: mount.backupSchedule,
             }),
           ),

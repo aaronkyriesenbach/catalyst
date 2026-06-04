@@ -1,6 +1,7 @@
-import { IGeneratorRef } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
+import { ClusterSecretStore, IGeneratorRef } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
 import { ClusterGenerator } from "@kubernetes-models/external-secrets/generators.external-secrets.io/v1alpha1";
 import type { HelmChart, StaticApp } from "../types";
+import type { IPushSecretStoreRef } from "@kubernetes-models/external-secrets/external-secrets.io/v1alpha1";
 
 const chart: HelmChart = {
   apiVersion: "helm.cattle.io/v1",
@@ -43,10 +44,45 @@ export const clusterGeneratorRef: IGeneratorRef = {
   name: clusterGeneratorName,
 };
 
+const AWS_SM_STORE_NAME = "aws-secrets-manager";
+const AWS_SM_CREDENTIALS_SECRET = "aws-sm-credentials";
+const AWS_SM_NAMESPACE = "external-secrets";
+
+const awsSecretStore = new ClusterSecretStore({
+  metadata: { name: AWS_SM_STORE_NAME },
+  spec: {
+    provider: {
+      aws: {
+        service: "SecretsManager",
+        region: "us-east-1",
+        auth: {
+          secretRef: {
+            accessKeyIDSecretRef: {
+              name: AWS_SM_CREDENTIALS_SECRET,
+              namespace: AWS_SM_NAMESPACE,
+              key: "access-key-id",
+            },
+            secretAccessKeySecretRef: {
+              name: AWS_SM_CREDENTIALS_SECRET,
+              namespace: AWS_SM_NAMESPACE,
+              key: "secret-access-key",
+            },
+          },
+        },
+      },
+    },
+  },
+});
+
+export const awsSecretStoreRef: IPushSecretStoreRef = {
+  name: AWS_SM_STORE_NAME,
+  kind: "ClusterSecretStore",
+};
+
 const config: StaticApp = {
   kind: "static",
   name: "external-secrets",
-  resources: [chart, clusterGenerator],
+  resources: [chart, clusterGenerator, awsSecretStore],
 };
 
 export default config;

@@ -1,8 +1,6 @@
-import { ExternalSecret } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
 import { applyModifiers, withNasMounts } from "../modifiers";
 import type { WorkloadApp } from "../types";
-import { readFile } from "../utils";
-import { clusterGeneratorRef } from "./external-secrets";
+import { buildGeneratedSecret, readFile } from "../utils";
 
 const name = "radicale";
 const usersSecretName = `${name}-users`;
@@ -11,30 +9,6 @@ const radicaleConfig = await readFile(
   "./radicale/radicale.conf",
   import.meta.url,
 );
-
-const usersSecret = new ExternalSecret({
-  metadata: { name: usersSecretName },
-  spec: {
-    refreshInterval: "0",
-    target: {
-      name: usersSecretName,
-      template: {
-        engineVersion: "v2",
-        data: {
-          users: '{{ htpasswd "aaron" .password "bcrypt" }}',
-          password: "{{ .password }}",
-        },
-      },
-    },
-    dataFrom: [
-      {
-        sourceRef: {
-          generatorRef: clusterGeneratorRef,
-        },
-      },
-    ],
-  },
-});
 
 const base: WorkloadApp = {
   kind: "workload",
@@ -85,7 +59,15 @@ const base: WorkloadApp = {
   },
   webPort: 5232,
   externallyAccessible: true,
-  extraResources: [usersSecret],
+  extraResources: buildGeneratedSecret(name, usersSecretName, [{ key: "password" }], {
+    template: {
+      engineVersion: "v2",
+      data: {
+        users: '{{ htpasswd "aaron" .password "bcrypt" }}',
+        password: "{{ .password }}",
+      },
+    },
+  }),
 };
 
 export default applyModifiers(
