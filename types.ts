@@ -47,12 +47,18 @@ export type HelmChart = {
   };
 };
 
+export type CertDeployStrategy =
+  | { type: "proxmox"; nodes: { name: string; ipAddress: string }[] }
+  | { type: "truenas"; importedNamePrefix?: string }
+  | { type: "unifi-local-api" };
+
 export type ExternalApp = {
   name: string;
   ipAddress: string;
   port: number;
   subDomain?: string;
   insecure?: boolean;
+  certDeploy?: CertDeployStrategy;
 };
 
 export type BackendTLSPolicy = {

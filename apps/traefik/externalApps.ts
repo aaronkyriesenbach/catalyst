@@ -46,12 +46,13 @@ const externalCerts = externalApps.map(
         secretName: externalAppBackendCertSecretName(a),
         commonName: externalAppBackendHostname(a),
         dnsNames: [externalAppBackendHostname(a)],
-        // These leaves are installed by hand on the external appliances, so a
-        // rotated key means a stale cert until re-pushed. Pin the key.
-        duration: "8760h",
+        // Auto-pushed to the appliances by the cert-deploy CronJobs, so leaves
+        // are short-lived and rotate their key each renewal; the root CA stays
+        // long-lived + key-pinned (see internal-ca.ts).
+        duration: "2160h",
         renewBefore: "720h",
         privateKey: {
-          rotationPolicy: "Never",
+          rotationPolicy: "Always",
         },
         issuerRef: {
           name: "internal-ca",
