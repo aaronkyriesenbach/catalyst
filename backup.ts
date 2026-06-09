@@ -2,7 +2,7 @@ import { ExternalSecret } from "@kubernetes-models/external-secrets/external-sec
 import { clusterGeneratorRef } from "./apps/external-secrets";
 import { dailyAt, type CronExpression } from "./cron";
 import type { ResourceLike } from "./types";
-import { buildPushSecret } from "./utils";
+import { AWS_STORE, awsRemoteKey, buildSeedPushSecret } from "./utils";
 
 const RESTIC_SERVER_URL = "rest:http://restic-server.restic-server:8000";
 const VOLSYNC_API_VERSION = "volsync.backube/v1alpha1";
@@ -34,13 +34,21 @@ function buildResticConfigSecret(
   pvcName: string,
 ): ResourceLike[] {
   const secretName = `${pvcName}-restic-config`;
+  const remoteKey = awsRemoteKey(namespace, secretName);
   const repoUrl = `${RESTIC_SERVER_URL}/${namespace}/${pvcName}`;
 
-  const resources: ResourceLike[] = [
+  return [
+    buildSeedPushSecret(
+      `${secretName}-seed`,
+      remoteKey,
+      "RESTIC_PASSWORD",
+      clusterGeneratorRef,
+    ),
     new ExternalSecret({
       metadata: { name: secretName },
       spec: {
-        refreshInterval: "0",
+        refreshInterval: "1h",
+        secretStoreRef: AWS_STORE,
         target: {
           name: secretName,
           template: {
@@ -50,20 +58,15 @@ function buildResticConfigSecret(
             },
           },
         },
-        dataFrom: [
+        data: [
           {
-            sourceRef: {
-              generatorRef: clusterGeneratorRef,
-            },
+            secretKey: "password",
+            remoteRef: { key: remoteKey, property: "RESTIC_PASSWORD" },
           },
         ],
       },
     }),
   ];
-
-  resources.push(buildPushSecret(namespace, secretName));
-
-  return resources;
 }
 
 function buildReplicationSource(

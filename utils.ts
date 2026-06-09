@@ -230,36 +230,15 @@ type GeneratedSecretOptions = {
 
 const PUSH_SECRET_PREFIX = "lab53/cluster0";
 
+export function awsRemoteKey(namespace: string, name: string): string {
+  return `${PUSH_SECRET_PREFIX}/${namespace}/${name}`;
+}
+
 // Source of truth for generated secrets: seed AWS once, never overwrite, read back.
-const AWS_STORE: ISecretStoreRef = {
+export const AWS_STORE: ISecretStoreRef = {
   name: awsSecretStoreRef.name,
   kind: "ClusterSecretStore",
 };
-
-export function buildPushSecret(
-  namespace: string,
-  secretName: string,
-): PushSecret {
-  return new PushSecret({
-    metadata: { name: `${secretName}-push` },
-    spec: {
-      refreshInterval: "1h",
-      updatePolicy: "Replace",
-      deletionPolicy: "None",
-      secretStoreRefs: [awsSecretStoreRef],
-      selector: { secret: { name: secretName } },
-      data: [
-        {
-          match: {
-            remoteRef: {
-              remoteKey: `${PUSH_SECRET_PREFIX}/${namespace}/${secretName}`,
-            },
-          },
-        },
-      ],
-    },
-  });
-}
 
 export function buildSeedPushSecret(
   pushSecretName: string,
@@ -328,7 +307,7 @@ export function buildGeneratedSecret(
   options?: GeneratedSecretOptions,
 ): (ExternalSecret | Password | PushSecret)[] {
   const resources: (ExternalSecret | Password | PushSecret)[] = [];
-  const remoteKey = `${PUSH_SECRET_PREFIX}/${namespace}/${name}`;
+  const remoteKey = awsRemoteKey(namespace, name);
   const data: IExternalSecretData[] = [];
   const dataFrom: IExternalSecretDataFromRemoteRef[] = [];
 
