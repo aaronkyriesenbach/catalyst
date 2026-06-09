@@ -1,6 +1,7 @@
 import {
   ExternalSecret,
   type IExternalSecretData,
+  type IExternalSecretDataFromRemoteRef,
   type IGeneratorRef,
   type ISecretStoreRef,
 } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
@@ -223,6 +224,7 @@ type GeneratedSecretTemplate = {
 };
 
 type GeneratedSecretOptions = {
+  persist?: boolean;
   template?: GeneratedSecretTemplate;
 };
 
@@ -328,6 +330,7 @@ export function buildGeneratedSecret(
   const resources: (ExternalSecret | Password | PushSecret)[] = [];
   const remoteKey = `${PUSH_SECRET_PREFIX}/${namespace}/${name}`;
   const data: IExternalSecretData[] = [];
+  const dataFrom: IExternalSecretDataFromRemoteRef[] = [];
 
   for (const keyConfig of keys) {
     const keyName = typeof keyConfig === "string" ? keyConfig : keyConfig.key;
@@ -352,24 +355,30 @@ export function buildGeneratedSecret(
       generatorRef = clusterGeneratorRef;
     }
 
-    resources.push(
-      buildSeedPushSecret(`${name}-${keyName}-seed`, remoteKey, keyName, generatorRef),
-    );
-    data.push({ secretKey: keyName, remoteRef: { key: remoteKey, property: keyName } });
+    if (options?.persist) {
+      resources.push(
+        buildSeedPushSecret(`${name}-${keyName}-seed`, remoteKey, keyName, generatorRef),
+      );
+      data.push({ secretKey: keyName, remoteRef: { key: remoteKey, property: keyName } });
+    } else {
+      dataFrom.push({
+        sourceRef: { generatorRef },
+        rewrite: [{ regexp: { source: "password", target: keyName } }],
+      });
+    }
   }
+
+  const target = {
+    name,
+    ...(options?.template && { template: options.template }),
+  };
 
   resources.push(
     new ExternalSecret({
       metadata: { name },
-      spec: {
-        refreshInterval: "1h",
-        secretStoreRef: AWS_STORE,
-        target: {
-          name,
-          ...(options?.template && { template: options.template }),
-        },
-        data,
-      },
+      spec: options?.persist
+        ? { refreshInterval: "1h", secretStoreRef: AWS_STORE, target, data }
+        : { refreshInterval: "0", target, dataFrom },
     }),
   );
 
