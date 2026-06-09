@@ -76,6 +76,11 @@ bun run install-argo                         # helm upgrade --install ArgoCD wit
 - No linter, formatter, tests, or CI. ArgoCD CMP plugin renders in-cluster.
 - **Prefer imported types over hand-rolled ones.** Before defining a new type, check whether `kubernetes-models`, `@kubernetes-models/gateway-api`, `@kubernetes-models/traefik`, or other installed packages already export a matching interface (e.g. `IPersistentVolumeClaimTemplate`, `IPodSpec`, `IServicePort`). Hand-roll types only when no package provides them (e.g. `HelmChart` for `helm.cattle.io/v1`, `BackendTLSPolicy` for the GA `gateway.networking.k8s.io/v1` API that the package hasn't caught up to yet).
 
+### ArgoCD CMP env-substitution (footgun)
+The CMP runs env-var substitution over rendered manifests: any `$VAR`/`${VAR}` is replaced with empty string — **silently, no error**. When embedding content with literal `$` (shell scripts, configs, JS template literals):
+- **Files into a ConfigMap** → `buildFileConfigMap(name, files)` in `utils.ts` (base64 `binaryData`; robust for arbitrary content).
+- **Inline string fields** (container `args`/`env.value`, HelmChart `valuesContent`) → wrap with `escapeArgoCmp(content)` in `utils.ts` (escapes `$` → `$$`); `binaryData` isn't available there.
+
 ### Infrastructure
 - NAS: IP `192.168.53.120`, base path `/mnt/tank/data`. Hardcoded in `modifiers.ts` and `storage.ts`.
 - Private registry mirror: `docker.int.lab53.net`.
@@ -88,6 +93,7 @@ bun run install-argo                         # helm upgrade --install ArgoCD wit
 - **No named-only exports** — `loadAppConfig` reads `mod.default`. Apps that only export named values produce nothing.
 - **No HelmChart from packages** — it's hand-typed in `types.ts`.
 - **Don't add apps to a registry** — discovery is automatic from the `apps/` directory.
+- **No raw `$`-bearing embeds** — ConfigMap `data` / inline strings with literal `$` get silently emptied by CMP substitution. Use `buildFileConfigMap()` (base64 binaryData) or `escapeArgoCmp()`.
 
 ## CROSS-MODULE EXPORTS
 

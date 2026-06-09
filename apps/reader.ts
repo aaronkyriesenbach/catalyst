@@ -1,37 +1,30 @@
-import { ConfigMap } from "kubernetes-models/v1";
 import type { WorkloadApp } from "../types";
 import { applyModifiers, withIscsiVolumes, withNasMounts, withOidcAuth } from "../modifiers";
-import { readFile } from "../utils";
+import { buildFileConfigMap, escapeArgoCmp, readFile } from "../utils";
 
 const vpnSecretName = "reader-vpn-creds";
 const mamSecretName = "reader-mam";
 
-// ArgoCD CMP substitutes $VAR with empty string in rendered manifests.
-// Use $$ to emit a literal $ in the final YAML.
-const D = "$$";
+const mamUpdaterScript = escapeArgoCmp(
+  [
+    "while true",
+    'do echo "[$(date)] Updating MAM dynamic seedbox IP..."',
+    'response=$(curl -s -w "\\nHTTP_STATUS:%{http_code}" -b "mam_id=${MAM_ID}" "https://t.myanonamouse.net/json/dynamicSeedbox.php")',
+    'body=$(echo "$response" | sed "/HTTP_STATUS:/d")',
+    'status=$(echo "$response" | grep "HTTP_STATUS:" | cut -d: -f2)',
+    'echo "$body"',
+    'if [ "$status" != "200" ]; then echo "[$(date)] ERROR: MAM update failed with HTTP $status"',
+    'elif echo "$body" | grep -qi "error"; then echo "[$(date)] ERROR: MAM returned error response"',
+    'else echo "[$(date)] MAM update successful"; fi',
+    "sleep 1800; done",
+  ].join("; "),
+);
 
-const mamUpdaterScript = [
-  `while true`,
-  `do echo "[${D}(date)] Updating MAM dynamic seedbox IP..."`,
-  `response=${D}(curl -s -w "\\nHTTP_STATUS:%{http_code}" -b "mam_id=${D}{MAM_ID}" "https://t.myanonamouse.net/json/dynamicSeedbox.php")`,
-  `body=${D}(echo "${D}response" | sed "/HTTP_STATUS:/d")`,
-  `status=${D}(echo "${D}response" | grep "HTTP_STATUS:" | cut -d: -f2)`,
-  `echo "${D}body"`,
-  `if [ "${D}status" != "200" ]; then echo "[${D}(date)] ERROR: MAM update failed with HTTP ${D}status"`,
-  `elif echo "${D}body" | grep -qi "error"; then echo "[${D}(date)] ERROR: MAM returned error response"`,
-  `else echo "[${D}(date)] MAM update successful"; fi`,
-  `sleep 1800; done`,
-].join("; ");
-
-const qbtInitConfigMap = new ConfigMap({
-  metadata: { name: "reader-qbt-init" },
-  data: {
-    // ArgoCD CMP substitutes $VAR with empty string — escape $ as $$
-    "setup-qbittorrent.sh": (await readFile(
-      "./reader/setup-qbittorrent.sh",
-      import.meta.url,
-    )).replaceAll("$", () => "$$"),
-  },
+const qbtInitConfigMap = buildFileConfigMap("reader-qbt-init", {
+  "setup-qbittorrent.sh": await readFile(
+    "./reader/setup-qbittorrent.sh",
+    import.meta.url,
+  ),
 });
 
 const base: WorkloadApp = {

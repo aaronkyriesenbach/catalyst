@@ -12,7 +12,7 @@ import type {
   IPodSpec,
   IServicePort,
 } from "kubernetes-models/v1";
-import { PersistentVolumeClaim, Service } from "kubernetes-models/v1";
+import { ConfigMap, PersistentVolumeClaim, Service } from "kubernetes-models/v1";
 import { parseAllDocuments, stringify } from "yaml";
 import {
   awsSecretStoreRef,
@@ -81,6 +81,29 @@ export function buildHeadlessService(name: string, ports: IServicePort[]) {
       selector: { app: name },
       ports,
     },
+  });
+}
+
+// ArgoCD's CMP substitutes $VAR/${VAR} with empty string in rendered manifests.
+// Escape $ as $$ for inline string fields (container args/env, HelmChart valuesContent).
+export function escapeArgoCmp(content: string): string {
+  return content.replaceAll("$", () => "$$");
+}
+
+// Embed files into a ConfigMap as base64 binaryData so the CMP substitution can't
+// strip ${...}/$VAR sequences; k8s decodes it back to the file on mount.
+export function buildFileConfigMap(
+  name: string,
+  files: Record<string, string>,
+): ConfigMap {
+  return new ConfigMap({
+    metadata: { name },
+    binaryData: Object.fromEntries(
+      Object.entries(files).map(([key, content]) => [
+        key,
+        Buffer.from(content).toString("base64"),
+      ]),
+    ),
   });
 }
 
