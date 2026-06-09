@@ -24,8 +24,8 @@ export const externalApps: ExternalApp[] = [
     certDeploy: {
       type: "proxmox",
       nodes: [
-        { name: "node1", ipAddress: "192.168.53.210" },
-        { name: "node2", ipAddress: "192.168.53.220" },
+        { name: "node1", ipAddress: "192.168.53.101" },
+        { name: "node2", ipAddress: "192.168.53.102" },
       ],
     },
   },
