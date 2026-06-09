@@ -1,6 +1,8 @@
 import {
   ExternalSecret,
-  GeneratorRef,
+  type IExternalSecretData,
+  type IGeneratorRef,
+  type ISecretStoreRef,
 } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
 import { PushSecret } from "@kubernetes-models/external-secrets/external-secrets.io/v1alpha1";
 import { Password } from "@kubernetes-models/external-secrets/generators.external-secrets.io/v1alpha1";
@@ -45,6 +47,7 @@ export function buildDeployment(
     metadata: {
       name,
       labels: { app: name },
+      annotations: { "reloader.stakater.com/auto": "true" },
     },
     spec: {
       replicas: options?.replicas ?? 1,
@@ -220,13 +223,16 @@ type GeneratedSecretTemplate = {
 };
 
 type GeneratedSecretOptions = {
-  pushSecret?: boolean;
   template?: GeneratedSecretTemplate;
 };
 
 const PUSH_SECRET_PREFIX = "lab53/cluster0";
 
-const DEFAULT_LENGTH = 64;
+// Source of truth for generated secrets: seed AWS once, never overwrite, read back.
+const AWS_STORE: ISecretStoreRef = {
+  name: awsSecretStoreRef.name,
+  kind: "ClusterSecretStore",
+};
 
 export function buildPushSecret(
   namespace: string,
@@ -249,6 +255,25 @@ export function buildPushSecret(
           },
         },
       ],
+    },
+  });
+}
+
+export function buildSeedPushSecret(
+  pushSecretName: string,
+  remoteKey: string,
+  property: string,
+  generatorRef: IGeneratorRef,
+): PushSecret {
+  return new PushSecret({
+    metadata: { name: pushSecretName },
+    spec: {
+      refreshInterval: "0",
+      updatePolicy: "IfNotExists",
+      deletionPolicy: "None",
+      secretStoreRefs: [awsSecretStoreRef],
+      selector: { generatorRef },
+      data: [{ match: { secretKey: "password", remoteRef: { remoteKey, property } } }],
     },
   });
 }
@@ -301,62 +326,52 @@ export function buildGeneratedSecret(
   options?: GeneratedSecretOptions,
 ): (ExternalSecret | Password | PushSecret)[] {
   const resources: (ExternalSecret | Password | PushSecret)[] = [];
-  const dataFrom: Record<string, unknown>[] = [];
+  const remoteKey = `${PUSH_SECRET_PREFIX}/${namespace}/${name}`;
+  const data: IExternalSecretData[] = [];
 
   for (const keyConfig of keys) {
     const keyName = typeof keyConfig === "string" ? keyConfig : keyConfig.key;
-    const rewrite = [{ regexp: { source: "password", target: keyName } }];
+    let generatorRef: IGeneratorRef;
 
     if (typeof keyConfig !== "string" && keyConfig.length !== undefined) {
-      const customGeneratorRef: GeneratorRef = new GeneratorRef({
+      const generator = new Password({
+        metadata: { name: `${name}-${keyName}-gen` },
+        spec: {
+          length: keyConfig.length,
+          allowRepeat: true,
+          noUpper: false,
+        },
+      });
+      resources.push(generator);
+      generatorRef = {
+        apiVersion: generator.apiVersion,
         kind: "Password",
         name: `${name}-${keyName}-gen`,
-      });
-
-      resources.push(
-        new Password({
-          metadata: { name: customGeneratorRef.name },
-          spec: {
-            length: keyConfig.length ?? DEFAULT_LENGTH,
-            allowRepeat: true,
-            noUpper: false,
-          },
-        }),
-      );
-
-      dataFrom.push({
-        sourceRef: {
-          generatorRef: customGeneratorRef,
-        },
-        rewrite,
-      });
+      };
     } else {
-      dataFrom.push({
-        sourceRef: {
-          generatorRef: clusterGeneratorRef,
-        },
-        rewrite,
-      });
+      generatorRef = clusterGeneratorRef;
     }
+
+    resources.push(
+      buildSeedPushSecret(`${name}-${keyName}-seed`, remoteKey, keyName, generatorRef),
+    );
+    data.push({ secretKey: keyName, remoteRef: { key: remoteKey, property: keyName } });
   }
 
   resources.push(
     new ExternalSecret({
       metadata: { name },
       spec: {
-        refreshInterval: "0",
+        refreshInterval: "1h",
+        secretStoreRef: AWS_STORE,
         target: {
           name,
           ...(options?.template && { template: options.template }),
         },
-        dataFrom,
+        data,
       },
     }),
   );
-
-  if (options?.pushSecret) {
-    resources.push(buildPushSecret(namespace, name));
-  }
 
   return resources;
 }
