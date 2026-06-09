@@ -246,7 +246,7 @@ async function deployTruenas(
 ): Promise<void> {
   const apiKey = requireEnv("TRUENAS_API_KEY");
   const username = process.env.TRUENAS_USERNAME ?? "truenas_admin";
-  const importName = `${prefix}-${new Date().toISOString().slice(0, 10).replace(/-/g, "")}`;
+  const importName = `${prefix}-${new Date().toISOString().replace(/[^0-9]/g, "").slice(0, 14)}`;
 
   const client = await TrueNasClient.connect(host);
 
@@ -266,6 +266,17 @@ async function deployTruenas(
 
     await client.call("core.job_wait", [createJobId]);
 
+    const jobs = (await client.call("core.get_jobs", [
+      [["id", "=", createJobId]],
+    ])) as Array<{ state: string; error: string | null }>;
+    const job = jobs[0];
+
+    if (!job || job.state !== "SUCCESS") {
+      throw new Error(
+        `TrueNAS certificate.create job failed: ${job?.error ?? job?.state ?? "unknown"}`,
+      );
+    }
+
     const certificates = (await client.call("certificate.query", [
       [["name", "=", importName]],
     ])) as TrueNasCertificate[];
@@ -273,7 +284,9 @@ async function deployTruenas(
     const created = certificates[0];
 
     if (!created) {
-      throw new Error(`TrueNAS imported cert ${importName} not found`);
+      throw new Error(
+        `TrueNAS imported cert ${importName} not found after successful create job`,
+      );
     }
 
     await client.call("system.general.update", [
