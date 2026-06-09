@@ -82,7 +82,7 @@ export default applyModifiers(
       {
         name: "data",
         mountPath: "/home/filebrowser/data",
-        storage: "1Gi",
+        storageRequest: "1Gi",
       },
     ],
   }),

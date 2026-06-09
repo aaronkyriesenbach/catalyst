@@ -7,6 +7,7 @@ import { Password } from "@kubernetes-models/external-secrets/generators.externa
 import { HTTPRoute } from "@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1";
 import { Deployment, StatefulSet } from "kubernetes-models/apps/v1";
 import type {
+  IPersistentVolumeClaimSpec,
   IPersistentVolumeClaimTemplate,
   IPodSpec,
   IServicePort,
@@ -17,7 +18,7 @@ import {
   awsSecretStoreRef,
   clusterGeneratorRef,
 } from "./apps/external-secrets";
-import type { AppConfig, StaticApp, WorkloadApp } from "./types";
+import type { AppConfig, StaticApp, StorageQuantity, WorkloadApp } from "./types";
 
 export function readFile(relativePath: string, base: string): Promise<string> {
   return Bun.file(new URL(relativePath, base)).text();
@@ -232,33 +233,42 @@ export function buildPushSecret(
 const DEFAULT_ISCSI_STORAGE = "10Gi";
 const DEFAULT_ISCSI_STORAGE_CLASS = "truenas-iscsi";
 
-export function buildIscsiPvcTemplate(
-  name: string,
-  storage?: string,
-): IPersistentVolumeClaimTemplate {
+export type PersistentVolumeAccessMode =
+  | "ReadOnlyMany"
+  | "ReadWriteMany"
+  | "ReadWriteOnce"
+  | "ReadWriteOncePod";
+
+export function buildPvcSpec(opts: {
+  storage: StorageQuantity;
+  storageClassName: string;
+  accessModes: PersistentVolumeAccessMode[];
+  volumeName?: string;
+}): IPersistentVolumeClaimSpec {
   return {
-    metadata: { name },
-    spec: {
-      accessModes: ["ReadWriteOnce"],
-      storageClassName: DEFAULT_ISCSI_STORAGE_CLASS,
-      resources: {
-        requests: { storage: storage ?? DEFAULT_ISCSI_STORAGE },
-      },
-    },
+    accessModes: opts.accessModes,
+    storageClassName: opts.storageClassName,
+    resources: { requests: { storage: opts.storage } },
+    ...(opts.volumeName ? { volumeName: opts.volumeName } : {}),
   };
 }
 
-export function buildIscsiPvc(name: string, storage?: string) {
-  return new PersistentVolumeClaim({
+export function buildIscsiPvcTemplate(
+  name: string,
+  storageRequest?: StorageQuantity,
+): IPersistentVolumeClaimTemplate {
+  return {
     metadata: { name },
-    spec: {
-      accessModes: ["ReadWriteOnce"],
+    spec: buildPvcSpec({
+      storage: storageRequest ?? DEFAULT_ISCSI_STORAGE,
       storageClassName: DEFAULT_ISCSI_STORAGE_CLASS,
-      resources: {
-        requests: { storage: storage ?? DEFAULT_ISCSI_STORAGE },
-      },
-    },
-  });
+      accessModes: ["ReadWriteOnce"],
+    }),
+  };
+}
+
+export function buildIscsiPvc(name: string, storageRequest?: StorageQuantity) {
+  return new PersistentVolumeClaim(buildIscsiPvcTemplate(name, storageRequest));
 }
 
 export function buildGeneratedSecret(

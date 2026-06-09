@@ -1,3 +1,4 @@
+import { applyModifiers, withIscsiVolumes } from "../modifiers";
 import type { WorkloadApp } from "../types";
 
 const base: WorkloadApp = {
@@ -22,4 +23,9 @@ const base: WorkloadApp = {
   subDomain: "home",
 };
 
-export default base;
+export default applyModifiers(
+  base,
+  withIscsiVolumes({
+    main: [{ name: "config", mountPath: "/config", backup: true }],
+  }),
+);

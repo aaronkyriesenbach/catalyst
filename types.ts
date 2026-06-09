@@ -3,6 +3,9 @@ import { Model } from "@kubernetes-models/base";
 
 export type ResourceLike = Model<unknown> | { toJSON(): unknown } | Record<string, unknown>;
 
+/** Kubernetes binary storage quantity, e.g. "10Gi", "1Ti". */
+export type StorageQuantity = `${number}${"Ki" | "Mi" | "Gi" | "Ti" | "Pi"}`;
+
 type BaseApp = {
   name: string;
   namespace?: string;
