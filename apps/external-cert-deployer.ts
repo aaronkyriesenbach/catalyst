@@ -27,13 +27,17 @@ const deployApps = externalApps.filter(
   (app): app is DeployApp => app.certDeploy !== undefined,
 );
 
+const scriptSource = await readFile(
+  `../scripts/${scriptFileName}`,
+  import.meta.url,
+);
+
+// base64 via binaryData so ArgoCD's CMP env-substitution can't strip the
+// script's ${...} template literals; k8s decodes it back to the file on mount.
 const scriptConfigMap = new ConfigMap({
   metadata: { name: scriptConfigMapName },
-  data: {
-    [scriptFileName]: await readFile(
-      `../scripts/${scriptFileName}`,
-      import.meta.url,
-    ),
+  binaryData: {
+    [scriptFileName]: Buffer.from(scriptSource).toString("base64"),
   },
 });
 
