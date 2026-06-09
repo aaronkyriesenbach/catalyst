@@ -46,6 +46,13 @@ const externalCerts = externalApps.map(
         secretName: externalAppBackendCertSecretName(a),
         commonName: externalAppBackendHostname(a),
         dnsNames: [externalAppBackendHostname(a)],
+        // These leaves are installed by hand on the external appliances, so a
+        // rotated key means a stale cert until re-pushed. Pin the key.
+        duration: "8760h",
+        renewBefore: "720h",
+        privateKey: {
+          rotationPolicy: "Never",
+        },
         issuerRef: {
           name: "internal-ca",
           kind: "ClusterIssuer",
