@@ -1,8 +1,9 @@
 import type { IContainer, IVolume, IVolumeMount } from "kubernetes-models/v1";
 import { Middleware } from "@kubernetes-models/traefik/traefik.io/v1alpha1/Middleware";
-import type { ResourceLike, WorkloadApp } from "./types";
+import type { ResourceLike, StorageQuantity, WorkloadApp } from "./types";
 import { buildGeneratedSecret, buildHeadlessService, buildIscsiPvc, buildIscsiPvcTemplate, buildStatefulSet } from "./utils";
 import { buildBackupResources } from "./backup";
+import type { CronExpression } from "./cron";
 
 export type NasMountConfig = {
   [containerName: string]: { mountPath: string; subPath?: string }[];
@@ -87,10 +88,10 @@ export type PostgresOptions = {
   password?: string;
   database?: string;
   image?: string;
-  /** PVC storage size for iSCSI mode (default: "10Gi") */
-  storage?: string;
+  /** PVC storage request for iSCSI mode (default: "10Gi") */
+  storageRequest?: StorageQuantity;
   backup?: boolean;
-  backupSchedule?: string;
+  backupSchedule?: CronExpression;
 };
 
 const DEFAULT_POSTGRES_REGISTRY = "docker.int.lab53.net/library/postgres";
@@ -159,7 +160,7 @@ export function withPostgres(
           },
         ],
       },
-      [buildIscsiPvcTemplate("data", options?.storage)],
+      [buildIscsiPvcTemplate("data", options?.storageRequest)],
     );
 
     const headlessService = buildHeadlessService(postgresName, [
@@ -307,9 +308,9 @@ export function withOidcAuth(options?: OidcAuthOptions): WorkloadModifier {
 export type IscsiVolumeMount = {
   name: string;
   mountPath: string;
-  storage?: string;
+  storageRequest?: StorageQuantity;
   backup?: boolean;
-  backupSchedule?: string;
+  backupSchedule?: CronExpression;
 };
 
 export type IscsiVolumesConfig = {
@@ -336,7 +337,7 @@ export function withIscsiVolumes(config: IscsiVolumesConfig): WorkloadModifier {
     const allMounts = Object.values(config).flat();
 
     const pvcs: ResourceLike[] = allMounts.map((mount) =>
-      buildIscsiPvc(`${app.name}-${mount.name}`, mount.storage),
+      buildIscsiPvc(`${app.name}-${mount.name}`, mount.storageRequest),
     );
 
     const volumes: IVolume[] = allMounts.map((mount) => ({

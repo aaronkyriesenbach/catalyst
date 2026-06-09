@@ -1,21 +1,18 @@
 import { PersistentVolume, PersistentVolumeClaim } from "kubernetes-models/v1";
+import type { StorageQuantity } from "./types";
+import type { PersistentVolumeAccessMode } from "./utils";
+import { buildPvcSpec } from "./utils";
 
 const DEFAULT_NAS_IP = "192.168.53.120";
 const DEFAULT_NAS_PATH = "/mnt/tank/data";
 const DEFAULT_RECLAIM_POLICY = "Retain";
 const DEFAULT_ACCESS_MODES = ["ReadWriteMany"] as const;
 
-type PersistentVolumeAccessMode =
-  | "ReadOnlyMany"
-  | "ReadWriteMany"
-  | "ReadWriteOnce"
-  | "ReadWriteOncePod";
-
 type PersistentVolumeReclaimPolicy = "Retain" | "Delete" | "Recycle";
 
 type BuildPersistentVolumeOptions = {
   name: string;
-  storage: string;
+  storage: StorageQuantity;
   storageClassName: string;
   accessModes: PersistentVolumeAccessMode[];
   reclaimPolicy?: PersistentVolumeReclaimPolicy;
@@ -25,7 +22,7 @@ type BuildPersistentVolumeOptions = {
 
 type BuildPersistentVolumeClaimOptions = {
   name: string;
-  storage: string;
+  storage: StorageQuantity;
   storageClassName: string;
   accessModes: PersistentVolumeAccessMode[];
   volumeName: string;
@@ -33,7 +30,7 @@ type BuildPersistentVolumeClaimOptions = {
 
 type BuildNasPersistentVolumePairOptions = {
   name: string;
-  storage: string;
+  storage: StorageQuantity;
   storageClassName?: string;
   accessModes?: PersistentVolumeAccessMode[];
   reclaimPolicy?: PersistentVolumeReclaimPolicy;
@@ -77,19 +74,8 @@ export function buildPersistentVolumeClaim(
   const { name, storage, storageClassName, accessModes, volumeName } = options;
 
   return new PersistentVolumeClaim({
-    metadata: {
-      name,
-    },
-    spec: {
-      accessModes,
-      resources: {
-        requests: {
-          storage,
-        },
-      },
-      storageClassName,
-      volumeName,
-    },
+    metadata: { name },
+    spec: buildPvcSpec({ storage, storageClassName, accessModes, volumeName }),
   });
 }
 

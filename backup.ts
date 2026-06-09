@@ -1,5 +1,6 @@
 import { ExternalSecret } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
 import { clusterGeneratorRef } from "./apps/external-secrets";
+import { dailyAt, type CronExpression } from "./cron";
 import type { ResourceLike } from "./types";
 import { buildPushSecret } from "./utils";
 
@@ -7,7 +8,7 @@ const RESTIC_SERVER_URL = "rest:http://restic-server.restic-server:8000";
 const VOLSYNC_API_VERSION = "volsync.backube/v1alpha1";
 const DEFAULT_SNAPSHOT_CLASS = "truenas-iscsi";
 const DEFAULT_STORAGE_CLASS = "truenas-iscsi";
-const DEFAULT_SCHEDULE = "0 3 * * *";
+const DEFAULT_SCHEDULE = dailyAt(3);
 const DEFAULT_PRUNE_INTERVAL_DAYS = 14;
 
 const DEFAULT_RETAIN = {
@@ -17,7 +18,7 @@ const DEFAULT_RETAIN = {
 };
 
 export type BackupOptions = {
-  schedule?: string;
+  schedule?: CronExpression;
   runAsUser?: number;
   runAsGroup?: number;
   fsGroup?: number;
