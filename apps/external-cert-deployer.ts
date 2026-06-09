@@ -1,5 +1,4 @@
 import { CronJob } from "kubernetes-models/batch/v1";
-import { ConfigMap } from "kubernetes-models/v1";
 import type { IEnvVar } from "kubernetes-models/v1";
 import { ExternalSecret } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
 import type { ExternalApp, ResourceLike, StaticApp } from "../types";
@@ -10,7 +9,7 @@ import {
   externalApps,
 } from "./traefik/externalApps.config";
 import { traefikNamespace } from "./traefik";
-import { readFile } from "../utils";
+import { buildFileConfigMap, readFile } from "../utils";
 
 type DeployApp = ExternalApp & {
   certDeploy: NonNullable<ExternalApp["certDeploy"]>;
@@ -27,18 +26,11 @@ const deployApps = externalApps.filter(
   (app): app is DeployApp => app.certDeploy !== undefined,
 );
 
-const scriptSource = await readFile(
-  `../scripts/${scriptFileName}`,
-  import.meta.url,
-);
-
-// base64 via binaryData so ArgoCD's CMP env-substitution can't strip the
-// script's ${...} template literals; k8s decodes it back to the file on mount.
-const scriptConfigMap = new ConfigMap({
-  metadata: { name: scriptConfigMapName },
-  binaryData: {
-    [scriptFileName]: Buffer.from(scriptSource).toString("base64"),
-  },
+const scriptConfigMap = buildFileConfigMap(scriptConfigMapName, {
+  [scriptFileName]: await readFile(
+    `../scripts/${scriptFileName}`,
+    import.meta.url,
+  ),
 });
 
 function secretEnv(name: string, secret: string, key: string): IEnvVar {
