@@ -99,7 +99,9 @@ function probeLiveFingerprint(
     const socket = tlsConnect(
       { host, port, servername, rejectUnauthorized: false, timeout: 10_000 },
       () => {
-        const cert = socket.getPeerCertificate(false);
+        // Bun's getPeerCertificate(false) returns {} (node:tls gap); the
+        // detailed=true form is required to get fingerprint256.
+        const cert = socket.getPeerCertificate(true);
         socket.end();
         resolve(
           cert?.fingerprint256
@@ -482,7 +484,7 @@ async function reconcileEndpoint(
   await endpoint.deploy();
 
   if (
-    !(await probeUntil(endpoint.host, endpoint.port, servername, desiredFingerprint, 6))
+    !(await probeUntil(endpoint.host, endpoint.port, servername, desiredFingerprint, 12))
   ) {
     throw new Error(
       `${endpoint.label}: still not serving the expected cert after deploy`,
