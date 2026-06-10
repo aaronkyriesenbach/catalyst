@@ -1,6 +1,7 @@
-import { Application } from "@kubernetes-models/argo-cd/argoproj.io/v1alpha1";
+import { Application, AppProject } from "@kubernetes-models/argo-cd/argoproj.io/v1alpha1";
 import { readdirSync } from "fs";
 import { stringify } from "yaml";
+import { projectDefinitions } from "./constants";
 import type { AppConfig } from "./types";
 import { loadAppConfig, renderAppFromConfig } from "./utils";
 
@@ -10,6 +11,19 @@ if (process.env.ARGOCD_ENV_APP_CONFIG) {
   await renderAppFromConfig(config);
 } else {
   const resources: string[] = [];
+
+  for (const [name, spec] of Object.entries(projectDefinitions)) {
+    const project = new AppProject({
+      metadata: {
+        name,
+        namespace: "argocd",
+        annotations: { "argocd.argoproj.io/sync-wave": "-1" },
+      },
+      spec,
+    });
+
+    resources.push(stringify(project));
+  }
 
   for (const entry of readdirSync("apps", { withFileTypes: true })
     .filter((entry) => entry.isFile())

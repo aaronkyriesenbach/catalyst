@@ -1,5 +1,9 @@
+import type { IAppProject } from "@kubernetes-models/argo-cd/argoproj.io/v1alpha1";
 import { Model } from "@kubernetes-models/base";
 import { IPodSpec } from "kubernetes-models/v1";
+import type { Project } from "./constants";
+
+export type ProjectSpec = IAppProject["spec"];
 
 export type ResourceLike =
   | Model<unknown>
