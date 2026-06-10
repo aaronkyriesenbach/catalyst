@@ -1,9 +1,15 @@
-import type { IContainer, IVolume, IVolumeMount } from "kubernetes-models/v1";
 import { Middleware } from "@kubernetes-models/traefik/traefik.io/v1alpha1/Middleware";
-import type { ResourceLike, StorageQuantity, WorkloadApp } from "./types";
-import { buildGeneratedSecret, buildHeadlessService, buildIscsiPvc, buildIscsiPvcTemplate, buildStatefulSet } from "./utils";
+import type { IContainer, IVolume, IVolumeMount } from "kubernetes-models/v1";
 import { buildBackupResources } from "./backup";
 import type { CronExpression } from "./cron";
+import type { ResourceLike, StorageQuantity, WorkloadApp } from "./types";
+import {
+  buildGeneratedSecret,
+  buildHeadlessService,
+  buildIscsiPvc,
+  buildIscsiPvcTemplate,
+  buildStatefulSet,
+} from "./utils";
 
 export type NasMountConfig = {
   [containerName: string]: { mountPath: string; subPath?: string }[];
@@ -96,11 +102,6 @@ export type PostgresOptions = {
 
 const DEFAULT_POSTGRES_REGISTRY = "docker.int.lab53.net/library/postgres";
 
-function postgresDataDir(version: number): string {
-  if (version >= 18) return `/var/lib/postgresql/${version}/docker`;
-  return "/var/lib/postgresql/data";
-}
-
 export function withPostgres(
   version: number,
   options?: PostgresOptions,
@@ -168,12 +169,16 @@ export function withPostgres(
     ]);
 
     const backupResources = options?.backup
-      ? buildBackupResources(app.namespace ?? app.name, `data-${postgresName}-0`, {
-          schedule: options.backupSchedule,
-          runAsUser: 999,
-          runAsGroup: 999,
-          fsGroup: 999,
-        })
+      ? buildBackupResources(
+          app.namespace ?? app.name,
+          `data-${postgresName}-0`,
+          {
+            schedule: options.backupSchedule,
+            runAsUser: 999,
+            runAsGroup: 999,
+            fsGroup: 999,
+          },
+        )
       : [];
 
     return {
@@ -382,9 +387,13 @@ export function withIscsiVolumes(config: IscsiVolumesConfig): WorkloadModifier {
         ...allMounts
           .filter((mount) => mount.backup)
           .flatMap((mount) =>
-            buildBackupResources(app.namespace ?? app.name, `${app.name}-${mount.name}`, {
-              schedule: mount.backupSchedule,
-            }),
+            buildBackupResources(
+              app.namespace ?? app.name,
+              `${app.name}-${mount.name}`,
+              {
+                schedule: mount.backupSchedule,
+              },
+            ),
           ),
       ],
     };
