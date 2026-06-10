@@ -1,3 +1,4 @@
+import { Project } from "../constants";
 import type { HelmChart, ResourceLike, StaticApp } from "../types";
 import { certManagerNamespace } from "./cert-manager";
 
@@ -50,6 +51,7 @@ const config: StaticApp = {
   kind: "static",
   name: "trust-manager",
   namespace: certManagerNamespace,
+  project: Project.SYSTEM,
   resources: [chart, internalRootCaBundle],
 };
 

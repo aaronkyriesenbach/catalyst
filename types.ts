@@ -1,7 +1,10 @@
-import { IPodSpec } from "kubernetes-models/v1";
 import { Model } from "@kubernetes-models/base";
+import { IPodSpec } from "kubernetes-models/v1";
 
-export type ResourceLike = Model<unknown> | { toJSON(): unknown } | Record<string, unknown>;
+export type ResourceLike =
+  | Model<unknown>
+  | { toJSON(): unknown }
+  | Record<string, unknown>;
 
 /** Kubernetes binary storage quantity, e.g. "10Gi", "1Ti". */
 export type StorageQuantity = `${number}${"Ki" | "Mi" | "Gi" | "Ti" | "Pi"}`;
@@ -9,6 +12,7 @@ export type StorageQuantity = `${number}${"Ki" | "Mi" | "Gi" | "Ti" | "Pi"}`;
 type BaseApp = {
   name: string;
   namespace?: string;
+  project?: Project;
 };
 
 export type WorkloadApp = BaseApp & {

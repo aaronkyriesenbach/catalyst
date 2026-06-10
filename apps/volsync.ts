@@ -1,3 +1,4 @@
+import { Project } from "../constants";
 import type { HelmChart, StaticApp } from "../types";
 
 const chart: HelmChart = {
@@ -18,6 +19,7 @@ const config: StaticApp = {
   kind: "static",
   name: "volsync",
   namespace: "volsync-system",
+  project: Project.SYSTEM,
   resources: [chart],
 };
 

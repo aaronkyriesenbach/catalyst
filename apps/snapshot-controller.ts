@@ -1,3 +1,4 @@
+import { Project } from "../constants";
 import type { StaticApp } from "../types";
 
 const VERSION = "v8.6.0";
@@ -7,7 +8,7 @@ const config: StaticApp = {
   kind: "static",
   name: "snapshot-controller",
   namespace: "kube-system",
-  resources: [],
+  project: Project.SYSTEM,
   remoteResources: [
     `${BASE}/deploy/kubernetes/snapshot-controller/rbac-snapshot-controller.yaml`,
     `${BASE}/deploy/kubernetes/snapshot-controller/setup-snapshot-controller.yaml`,

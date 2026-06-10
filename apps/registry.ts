@@ -1,12 +1,11 @@
+import { Project } from "../constants";
+import { applyModifiers, withNasMounts } from "../modifiers";
 import type { WorkloadApp } from "../types";
-import {
-  applyModifiers,
-  withNasMounts,
-} from "../modifiers";
 
 const base: WorkloadApp = {
   kind: "workload",
   name: "registry",
+  project: Project.SYSTEM,
   podSpec: {
     containers: [
       {

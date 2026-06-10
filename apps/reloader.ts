@@ -1,3 +1,4 @@
+import { Project } from "../constants";
 import type { HelmChart, StaticApp } from "../types";
 
 const chart: HelmChart = {
@@ -17,6 +18,7 @@ const chart: HelmChart = {
 const config: StaticApp = {
   kind: "static",
   name: "reloader",
+  project: Project.SYSTEM,
   resources: [chart],
 };
 
