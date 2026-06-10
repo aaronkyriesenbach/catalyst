@@ -4,6 +4,7 @@ import { buildBackupResources } from "./backup";
 import type { CronExpression } from "./cron";
 import type { ResourceLike, StorageQuantity, WorkloadApp } from "./types";
 import {
+  appUrl,
   buildGeneratedSecret,
   buildHeadlessService,
   buildIscsiPvc,
@@ -207,6 +208,12 @@ function buildOidcClient(app: WorkloadApp): ResourceLike {
     spec: {
       secret: { name: credentialsSecretName },
       allowedUserGroups: [{ name: app.name }],
+      ...(app.webPort && {
+        launchUrl: appUrl(app.name, {
+          subDomain: app.subDomain,
+          externallyAccessible: app.externallyAccessible,
+        }),
+      }),
     },
   };
 }
