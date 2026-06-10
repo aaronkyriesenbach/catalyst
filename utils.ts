@@ -1,4 +1,8 @@
 import {
+  Application,
+  AppProject,
+} from "@kubernetes-models/argo-cd/argoproj.io/v1alpha1";
+import {
   ExternalSecret,
   type IExternalSecretData,
   type IExternalSecretDataFromRemoteRef,
@@ -21,7 +25,7 @@ import {
   awsSecretStoreRef,
   clusterGeneratorRef,
 } from "./apps/external-secrets";
-import type { AppConfig, StaticApp, StorageQuantity, WorkloadApp } from "./types";
+import type { AppConfig, ProjectSpec, StaticApp, StorageQuantity, WorkloadApp } from "./types";
 
 export function readFile(relativePath: string, base: string): Promise<string> {
   return Bun.file(new URL(relativePath, base)).text();
@@ -31,6 +35,45 @@ export async function loadAppConfig(path: string): Promise<AppConfig> {
   const mod = await import(`./apps/${path}`);
 
   return mod.default;
+}
+
+const REPO_URL = "https://github.com/aaronkyriesenbach/catalyst";
+
+export function buildApplication(config: AppConfig): Application {
+  const { name, namespace, project } = config;
+
+  return new Application({
+    metadata: {
+      name,
+      namespace: "argocd",
+      finalizers: ["resources-finalizer.argocd.argoproj.io"],
+    },
+    spec: {
+      project: project ?? "default",
+      source: {
+        repoURL: REPO_URL,
+        path: ".",
+        plugin: {
+          env: [{ name: "APP_CONFIG", value: JSON.stringify(config) }],
+        },
+      },
+      destination: {
+        server: "https://kubernetes.default.svc",
+        namespace: namespace ?? name,
+      },
+    },
+  });
+}
+
+export function buildProject(name: string, spec: ProjectSpec): AppProject {
+  return new AppProject({
+    metadata: {
+      name,
+      namespace: "argocd",
+      annotations: { "argocd.argoproj.io/sync-wave": "-1" },
+    },
+    spec,
+  });
 }
 
 type DeploymentOptions = {
