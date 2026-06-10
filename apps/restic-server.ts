@@ -1,9 +1,11 @@
+import { Project } from "../constants";
 import { applyModifiers, withNasMounts } from "../modifiers";
 import type { WorkloadApp } from "../types";
 
 const base: WorkloadApp = {
   kind: "workload",
   name: "restic-server",
+  project: Project.SYSTEM,
   podSpec: {
     containers: [
       {

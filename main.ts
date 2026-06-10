@@ -1,8 +1,8 @@
 import { Application } from "@kubernetes-models/argo-cd/argoproj.io/v1alpha1";
 import { readdirSync } from "fs";
-import { loadAppConfig, renderAppFromConfig } from "./utils";
-import type { AppConfig } from "./types";
 import { stringify } from "yaml";
+import type { AppConfig } from "./types";
+import { loadAppConfig, renderAppFromConfig } from "./utils";
 
 if (process.env.ARGOCD_ENV_APP_CONFIG) {
   const config = JSON.parse(process.env.ARGOCD_ENV_APP_CONFIG) as AppConfig;
@@ -15,7 +15,7 @@ if (process.env.ARGOCD_ENV_APP_CONFIG) {
     .filter((entry) => entry.isFile())
     .map((entry) => entry.name)) {
     const appConfig = await loadAppConfig(entry);
-    const { name, namespace } = appConfig;
+    const { name, namespace, project } = appConfig;
 
     const app = new Application({
       metadata: {
@@ -24,7 +24,7 @@ if (process.env.ARGOCD_ENV_APP_CONFIG) {
         finalizers: ["resources-finalizer.argocd.argoproj.io"],
       },
       spec: {
-        project: "default",
+        project: project ?? "default",
         source: {
           repoURL: "https://github.com/aaronkyriesenbach/catalyst",
           path: ".",

@@ -1,3 +1,4 @@
+import { Project } from "../constants";
 import type { HelmChart, StaticApp } from "../types";
 import { internalCaResources } from "./cert-manager/internal-ca";
 import { issuers } from "./cert-manager/issuers";
@@ -23,6 +24,7 @@ const chart: HelmChart = {
 const config: StaticApp = {
   kind: "static",
   name: "cert-manager",
+  project: Project.SYSTEM,
   resources: [chart, ...issuers, ...internalCaResources],
 };
 

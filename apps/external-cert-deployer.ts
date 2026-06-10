@@ -1,6 +1,7 @@
 import { ExternalSecret } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
 import { CronJob } from "kubernetes-models/batch/v1";
 import type { IEnvVar } from "kubernetes-models/v1";
+import { Project } from "../constants";
 import type { ExternalApp, ResourceLike, StaticApp } from "../types";
 import { buildFileConfigMap, readFile } from "../utils";
 import { traefikNamespace } from "./traefik";
@@ -150,6 +151,7 @@ const config: StaticApp = {
   kind: "static",
   name: "external-cert-deployer",
   namespace: traefikNamespace,
+  project: Project.SYSTEM,
   resources,
 };
 

@@ -1,5 +1,6 @@
 import { StorageClass } from "kubernetes-models/storage.k8s.io/v1";
 import { parseAllDocuments } from "yaml";
+import { Project } from "../constants";
 import type { ResourceLike, StaticApp } from "../types";
 import { readFile } from "../utils";
 
@@ -38,6 +39,7 @@ const volumeSnapshotClass: ResourceLike = {
 const config: StaticApp = {
   kind: "static",
   name: "truenas-csi",
+  project: Project.SYSTEM,
   resources: [...deployResources, storageClass, volumeSnapshotClass],
 };
 

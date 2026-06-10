@@ -1,7 +1,11 @@
-import { ClusterSecretStore, IGeneratorRef } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
-import { ClusterGenerator } from "@kubernetes-models/external-secrets/generators.external-secrets.io/v1alpha1";
-import type { HelmChart, StaticApp } from "../types";
+import {
+  ClusterSecretStore,
+  IGeneratorRef,
+} from "@kubernetes-models/external-secrets/external-secrets.io/v1";
 import type { IPushSecretStoreRef } from "@kubernetes-models/external-secrets/external-secrets.io/v1alpha1";
+import { ClusterGenerator } from "@kubernetes-models/external-secrets/generators.external-secrets.io/v1alpha1";
+import { Project } from "../constants";
+import type { HelmChart, StaticApp } from "../types";
 
 const chart: HelmChart = {
   apiVersion: "helm.cattle.io/v1",
@@ -82,6 +86,7 @@ export const awsSecretStoreRef: IPushSecretStoreRef = {
 const config: StaticApp = {
   kind: "static",
   name: "external-secrets",
+  project: Project.SYSTEM,
   resources: [chart, clusterGenerator, awsSecretStore],
 };
 

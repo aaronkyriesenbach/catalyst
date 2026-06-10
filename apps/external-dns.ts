@@ -1,3 +1,4 @@
+import { Project } from "../constants";
 import type { HelmChart, StaticApp } from "../types";
 import { buildDeployment, readFile } from "../utils";
 
@@ -79,6 +80,7 @@ const ddnsRoute53Deployment = buildDeployment("ddns-route53", {
 const config: StaticApp = {
   kind: "static",
   name: "external-dns",
+  project: Project.SYSTEM,
   resources: [internalChart, externalChart, ddnsRoute53Deployment],
 };
 
