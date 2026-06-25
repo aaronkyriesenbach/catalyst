@@ -33,6 +33,8 @@ bun run sync-external-certs [--dry-run]      # Pull TLS certs from cluster via k
 bun run install-argo                         # helm upgrade --install ArgoCD with custom values
 ```
 
+**kubectl access**: The agent has `kubectl` configured and may query the cluster to verify live state — CIDR ranges, services, nodes, etc.
+
 **Verification**: Always run `bun run render <app-name>` after editing an app file to confirm valid YAML output.
 
 ## CONVENTIONS
@@ -84,6 +86,10 @@ The CMP runs env-var substitution over rendered manifests: any `$VAR`/`${VAR}` i
 ### Infrastructure
 - NAS: IP `192.168.53.120`, base path `/mnt/tank/data`. Hardcoded in `modifiers.ts` and `storage.ts`.
 - Private registry mirror: `docker.int.lab53.net`.
+
+### Image sources
+- **Docker Hub images** (e.g. `library/*`, `deluan/navidrome`) → use the private mirror `docker.int.lab53.net/<image>:<tag>`.
+- **All other registries** (ghcr.io, quay.io, registry.k8s.io, etc.) → use their actual source URL directly.
 - ArgoCD CMP sidecar: `oven/bun` image, plugin name "ts", discovery key `main.ts`.
 - `cluster/` manifests are applied directly to k3s server manifest dir — outside ArgoCD management.
 
