@@ -198,7 +198,7 @@ const POCKET_ID_API_VERSION = "pocketid.internal/v1alpha1";
 const POCKET_ID_URL = "https://auth.lab53.net/";
 const DEFAULT_MIDDLEWARE_CALLBACK_PATH = "/oidc/callback";
 
-function buildOidcClient(app: WorkloadApp): ResourceLike {
+export function buildOidcClient(app: WorkloadApp): ResourceLike {
   const credentialsSecretName = `${app.name}-oidc-credentials`;
 
   return {
@@ -232,6 +232,7 @@ function buildOidcGroup(app: WorkloadApp): ResourceLike {
 function buildOidcMiddleware(
   app: WorkloadApp,
   bypassPaths?: BypassPath[],
+  headers?: OidcMiddlewareHeader[],
 ): Middleware {
   const credentialsSecretName = `${app.name}-oidc-credentials`;
   const pluginSecretName = `${app.name}-oidc-plugin`;
@@ -261,6 +262,7 @@ function buildOidcMiddleware(
             SameSite: "lax",
           },
           ...(bypassRule && { BypassAuthenticationRule: bypassRule }),
+          ...(headers && headers.length > 0 && { Headers: headers.map(h => ({ Name: h.name, Value: h.value })) }),
         },
       },
     },
@@ -280,9 +282,15 @@ function buildBypassRule(paths: BypassPath[]): string {
     .join(" || ");
 }
 
+export type OidcMiddlewareHeader = {
+  name: string;
+  value: string;
+};
+
 export type OidcMiddlewareOptions = {
   enabled: boolean;
   bypassPaths?: BypassPath[];
+  headers?: OidcMiddlewareHeader[];
 };
 
 export type OidcAuthOptions = {
@@ -305,7 +313,7 @@ export function withOidcAuth(options?: OidcAuthOptions): WorkloadModifier {
         ...buildGeneratedSecret(app.namespace ?? app.name, pluginSecretName, [
           { key: "plugin-secret", length: 32 },
         ]),
-        buildOidcMiddleware(app, middlewareOptions?.bypassPaths),
+        buildOidcMiddleware(app, middlewareOptions?.bypassPaths, middlewareOptions?.headers),
       );
     }
 
