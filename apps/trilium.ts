@@ -10,7 +10,7 @@ const base: WorkloadApp = {
 				name: "main",
 				image: "docker.int.lab53.net/triliumnext/trilium:v0.104.1",
 				ports: [{ name: "http", containerPort: 8080 }],
-				env: [{ name: "TRILIUM_DATA_DIR", value: "/home/node/trilium-data" }],
+				env: [{ name: "TRILIUM_DATA_DIR", value: "/home/node/trilium-data" }, { name: "TRILIUM_PORT", value: "8080"}],
 			},
 		],
 		// Standard image's entrypoint (start-docker.sh) chowns /home/node and su's to
