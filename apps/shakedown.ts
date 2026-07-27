@@ -18,7 +18,7 @@ const base: WorkloadApp = {
     containers: [
       {
         name: "main",
-        image: "ghcr.io/aaronkyriesenbach/shakedown:0.0.3",
+        image: "ghcr.io/aaronkyriesenbach/shakedown:0.1.0",
         env: [
           {
             name: "DATABASE_URL",
