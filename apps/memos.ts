@@ -10,9 +10,7 @@ const base: WorkloadApp = {
         name: "main",
         image: "ghcr.io/usememos/memos:0.28.0",
         ports: [{ name: "http", containerPort: 5230 }],
-        env: [
-          { name: "MEMOS_INSTANCE_URL", value: "https://notes.lab53.net" },
-        ],
+        env: [{ name: "MEMOS_INSTANCE_URL", value: "https://notes.lab53.net" }],
       },
     ],
   },
@@ -24,7 +22,14 @@ const base: WorkloadApp = {
 export default applyModifiers(
   base,
   withIscsiVolumes({
-    main: [{ name: "data", mountPath: "/var/opt/memos", storageRequest: "5Gi", backup: true }],
+    main: [
+      {
+        name: "data",
+        mountPath: "/var/opt/memos",
+        storageRequest: "5Gi",
+        backup: true,
+      },
+    ],
   }),
   withOidcAuth(),
 );

@@ -11,6 +11,7 @@ The `withOidcAuth()` modifier creates Pocket ID resources for each app:
 3. Optionally, a Traefik `Middleware` + ESO-generated plugin secret for forward auth
 
 When middleware is enabled (`withOidcAuth({ middleware: true })`):
+
 - `forwardAuth: true` is set on the app, causing `buildRoute()` to add an `ExtensionRef` filter to the HTTPRoute
 - Traefik intercepts requests, redirects unauthenticated users to Pocket ID, and passes authenticated requests through
 - Session cookies are scoped to `.lab53.net`, so a single login covers all protected apps (SSO)
@@ -24,6 +25,7 @@ export default applyModifiers(base, withOidcAuth({ middleware: true }));
 ```
 
 This creates:
+
 - `PocketIDUserGroup` for the app
 - `PocketIDOIDCClient` with callback URL and credentials secret
 - ESO `Password` generator + `ExternalSecret` for the middleware plugin secret
@@ -64,10 +66,10 @@ Confirm the output includes:
 
 The modifier creates two secrets per app (when middleware is enabled):
 
-| Secret | Created by | Keys |
-|---|---|---|
+| Secret                   | Created by         | Keys                                                               |
+| ------------------------ | ------------------ | ------------------------------------------------------------------ |
 | `<app>-oidc-credentials` | pocket-id-operator | `client_id`, `client_secret`, `issuer_url`, and OIDC endpoint URLs |
-| `<app>-oidc-plugin` | External Secrets | `plugin-secret` (32-char session encryption key) |
+| `<app>-oidc-plugin`      | External Secrets   | `plugin-secret` (32-char session encryption key)                   |
 
 Without middleware, only `<app>-oidc-credentials` is created (by the operator).
 
@@ -79,10 +81,10 @@ Without middleware, only `<app>-oidc-credentials` is created (by the operator).
 
 ## Reference
 
-| Component | Location |
-|---|---|
-| `withOidcAuth()` modifier | `modifiers.ts` |
-| `forwardAuth` type field | `types.ts` (`WorkloadApp`) |
-| `ExtensionRef` filter logic | `utils.ts` (`buildRoute()`) |
-| Traefik plugin declaration | `cluster/traefik-config.yaml` |
-| Pocket ID operator app | `apps/pocket-id.ts` |
+| Component                   | Location                      |
+| --------------------------- | ----------------------------- |
+| `withOidcAuth()` modifier   | `modifiers.ts`                |
+| `forwardAuth` type field    | `types.ts` (`WorkloadApp`)    |
+| `ExtensionRef` filter logic | `utils.ts` (`buildRoute()`)   |
+| Traefik plugin declaration  | `cluster/traefik-config.yaml` |
+| Pocket ID operator app      | `apps/pocket-id.ts`           |

@@ -25,20 +25,23 @@ eliminates.
 ## The "leaves still expire in 3 months" bug
 
 ### Symptom
+
 After pinning the CA key and setting long durations (commit `ff6a5a8`,
-*"fix: pin keys for internal certs"*), the downloaded leaf certs still showed a
+_"fix: pin keys for internal certs"_), the downloaded leaf certs still showed a
 90-day validity window.
 
 ### Root cause
+
 The config was correct, but **already-issued certs were not re-issued.**
 
-| Certificate | `spec.duration` (synced to cluster) | issued cert validity |
-|---|---|---|
-| `internal-root-ca` | `87600h` (10 yr) | **90 days** |
-| `*-backend-cert` | `8760h` (1 yr) | **90 days** |
+| Certificate        | `spec.duration` (synced to cluster) | issued cert validity |
+| ------------------ | ----------------------------------- | -------------------- |
+| `internal-root-ca` | `87600h` (10 yr)                    | **90 days**          |
+| `*-backend-cert`   | `8760h` (1 yr)                      | **90 days**          |
 
 Timeline:
-- **Jun 5** — certs issued under the *old* config (no `duration`), so they got
+
+- **Jun 5** — certs issued under the _old_ config (no `duration`), so they got
   cert-manager's default **90 days** (2160h = "3 months").
 - **Jun 9 12:13** — the fix was committed/pushed and ArgoCD synced the new
   `spec.duration` + `privateKey.rotationPolicy: Never`.
@@ -52,6 +55,7 @@ and will not pick up the new duration until their natural renewal
 ("When do certs get re-issued") and the trigger policy chain.
 
 ### Remediation: force re-issuance (key-preserving)
+
 Order matters — **root CA first** (so leaves are signed under the now-long-lived
 CA), then the leaves:
 
@@ -63,7 +67,7 @@ CA), then the leaves:
 4. Re-push to the appliances (manually for now; automated by the design below).
 
 > **Do NOT delete the Secrets to force renewal.** Deleting the root CA Secret
-> discards the pinned key, generating a *new* CA key and breaking trust on every
+> discards the pinned key, generating a _new_ CA key and breaking trust on every
 > appliance. Renewal must preserve the key (`cmctl renew`, or the equivalent
 > `kubectl patch --subresource=status` setting the `Issuing` condition).
 > `cmctl` is not currently installed.
@@ -71,21 +75,22 @@ CA), then the leaves:
 ## Certificate validity policy
 
 With automated deployment in place (below), short-lived leaves become the more
-secure default — the internal CA has **no OCSP/CRL revocation**, so expiry *is*
+secure default — the internal CA has **no OCSP/CRL revocation**, so expiry _is_
 the only practical revocation mechanism, and frequent rotation keeps the deploy
 pipeline exercised and healthy. The asymmetry is the whole design:
 
 > **Long, pinned, stable CA + short, auto-rotated, freshly-keyed leaves.**
 
-| Cert | Duration | renewBefore | Key rotation | Rationale |
-|---|---|---|---|---|
-| **Root CA** (`internal-root-ca`) | `87600h` (10y) | `2160h` (90d) | `Never` (pinned) | Trust anchor in appliance stores; rotating it is the expensive manual op we engineer around. |
-| **Leaves** (`*-backend-cert`) | `2160h` (90d) | `720h` (30d) | `Always` (fresh key each renewal) | Bounds key-exposure to weeks; 30-day renewBefore gives a full month of hourly auto-retries before expiry. |
+| Cert                             | Duration       | renewBefore   | Key rotation                      | Rationale                                                                                                 |
+| -------------------------------- | -------------- | ------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| **Root CA** (`internal-root-ca`) | `87600h` (10y) | `2160h` (90d) | `Never` (pinned)                  | Trust anchor in appliance stores; rotating it is the expensive manual op we engineer around.              |
+| **Leaves** (`*-backend-cert`)    | `2160h` (90d)  | `720h` (30d)  | `Always` (fresh key each renewal) | Bounds key-exposure to weeks; 30-day renewBefore gives a full month of hourly auto-retries before expiry. |
 
 Guardrails:
+
 - **Never shorten below the automation failure-recovery runway.** `renewBefore`
   is that runway. UniFi's fragile deploy path is the binding constraint — do not
-  go sub-week. (Could tighten leaves to ~45d/15d later, *with* solid alerting.)
+  go sub-week. (Could tighten leaves to ~45d/15d later, _with_ solid alerting.)
 - **Shortening is only safe with alerting on deploy failures** — otherwise a
   broken pipeline becomes a silent outage. Alerting is a hard prerequisite (see
   Notifications, under discussion).
@@ -99,6 +104,7 @@ on the leaf `Certificate` in `apps/traefik/externalApps.ts`.
 ## Automated in-cluster deployment
 
 ### Recommended architecture: scheduled reconciliation
+
 **One `CronJob` per appliance, in the `traefik` namespace, running the stock
 `oven/bun` image with a Bun script mounted from a ConfigMap.** No custom image,
 no SSH keys, no RBAC.
@@ -121,7 +127,7 @@ CronJob (hourly, per appliance)  ──mounts──>  *-backend-cert Secret (tls
 
 1. **Trigger — CronJob, not event-driven.** Leaves renew rarely, so event speed
    buys nothing. Crucially, **UniFi firmware updates silently reset the cert** —
-   the Secret doesn't change but the appliance drifts, which only *actual-state*
+   the Secret doesn't change but the appliance drifts, which only _actual-state_
    reconciliation catches. Run hourly; worst case after a firmware reset is ~1h
    of stale cert.
 
@@ -150,6 +156,7 @@ CronJob (hourly, per appliance)  ──mounts──>  *-backend-cert Secret (tls
 ### Per-appliance deploy mechanisms
 
 **Proxmox VE** (`192.168.53.100:8006`) — clean official REST API, **per node**:
+
 - `POST /api2/json/nodes/{node}/certificates/custom` (one call per cluster node)
 - Body: `certificates` (PEM chain, leaf first), `key` (PEM), `force=1`, `restart=1`.
 - Auth: API Token header `Authorization: PVEAPIToken=USER@REALM!TOKENID=UUID`,
@@ -162,10 +169,12 @@ CronJob (hourly, per appliance)  ──mounts──>  *-backend-cert Secret (tls
 
 **TrueNAS SCALE/CE** (`192.168.53.120:443`) — official WebSocket JSON-RPC
 (legacy REST removed in v26). Stateful 4-step flow:
+
 1. `auth.login_ex` `{mechanism:"API_KEY_PLAIN", username, api_key}`
 2. `certificate.create` `{create_type:"CERTIFICATE_CREATE_IMPORTED", name:"<datestamped>", certificate, privatekey}` (job — poll it)
 3. `system.general.update` `{ui_certificate:<new_id>}` → `system.general.ui_restart`
 4. `certificate.delete(<old_id>)`
+
 - **Names must be unique** (datestamp them); imported certs **accumulate** and
   must be pruned. Prune conservatively: only old certs matching the prefix, never
   the active `ui_certificate` id.
@@ -193,8 +202,17 @@ port, strategy) — it never imports repo modules.
 type KeyedSecret<K extends string> = { name: string; keys: Record<K, string> };
 
 type CertDeployStrategy =
-  | { type: "proxmox"; node: string; credentials: KeyedSecret<"tokenId" | "tokenSecret"> }
-  | { type: "truenas"; credentials: KeyedSecret<"apiKey">; importedNamePrefix?: string; pruneKeep?: number }
+  | {
+      type: "proxmox";
+      node: string;
+      credentials: KeyedSecret<"tokenId" | "tokenSecret">;
+    }
+  | {
+      type: "truenas";
+      credentials: KeyedSecret<"apiKey">;
+      importedNamePrefix?: string;
+      pruneKeep?: number;
+    }
   | { type: "unifi-local-api"; credentials: KeyedSecret<"apiKey"> };
 
 export type ExternalApp = {
@@ -208,6 +226,7 @@ export type ExternalApp = {
 ```
 
 ### Main risk
+
 UniFi's undocumented `/api/userCertificates` can break on a firmware update.
 It's already isolated as its own CronJob, so Proxmox + TrueNAS keep working; the
 fallback is a `unifi-ssh` strategy on a small custom image, scoped to UniFi only.
@@ -215,6 +234,7 @@ fallback is a `unifi-ssh` strategy on a small custom image, scoped to UniFi only
 ## Implementation status
 
 **Done (cert work):**
+
 1. ✅ Leaf `duration`/`renewBefore`/`rotationPolicy` set to `2160h`/`720h`/`Always`
    in `externalApps.ts`; CA stays `87600h` + `Never`.
 2. ✅ `ExternalApp` extended with the `certDeploy` discriminated union (`types.ts`);
@@ -234,6 +254,7 @@ renewal** — which is therefore the soft deadline for the deploy automation to 
 working (or a one-time manual push).
 
 **Remaining manual / validation steps (before this is live):**
+
 - **Populate AWS Secrets Manager** with one JSON secret per appliance at
   `lab53/cluster0/traefik/<name>-deploy-creds`:
   - `proxmox-deploy-creds`: `{ "token-id": "user@realm!tokenid", "token-secret": "<uuid>" }`
@@ -278,19 +299,21 @@ With `--privsep 1` the token carries its own (empty-by-default) permissions, so
 the ACL is assigned to the **token**; the user itself stays permission-less.
 
 AWS SM secret `lab53/cluster0/traefik/proxmox-deploy-creds`:
+
 ```json
-{ "token-id": "cert-deploy@pve!automation", "token-secret": "<uuid from token add>" }
+{
+  "token-id": "cert-deploy@pve!automation",
+  "token-secret": "<uuid from token add>"
+}
 ```
 
 ### Routing vs. deploy IPs (Proxmox)
 
 `ExternalApp.ipAddress` is the **Traefik routing backend** (drives the
-EndpointSlice/Service), *not* deploy config. TrueNAS/UniFi deploy to it; the
+EndpointSlice/Service), _not_ deploy config. TrueNAS/UniFi deploy to it; the
 **Proxmox deploy ignores it** and uses `certDeploy.nodes[]`. Traefik currently
 routes Proxmox to a single node (no failover); making the EndpointSlice span all
 nodes would add HA and let the node list be the single source of truth.
-
-
 
 ## Notifications
 
@@ -299,6 +322,7 @@ validity. The goal is broader than these scripts: a **flexible, cluster-wide
 notification system** supporting **push + email**, reusable by any service.
 
 ### Current state (greenfield)
+
 - **No** monitoring/alerting stack exists (no Prometheus/Alertmanager/Grafana).
 - **No** existing notification tooling (no ntfy/apprise/gotify/etc.).
 - **Stalwart** mail server is bootstrapped (`apps/stalwart/`) but the repo shows
@@ -325,12 +349,12 @@ cert-deploy CronJob ──(on success) ping──> Healthchecks ──(missed pi
 ```
 
 **1. Apprise API — the universal gateway (the reusable layer).**
-`caronc/apprise` Deployment+Service, internal-only. Services POST *once* to a
+`caronc/apprise` Deployment+Service, internal-only. Services POST _once_ to a
 stored config key (`/notify/{key}` with `{title, body, type, tag}`) and Apprise
 fans out to every configured channel. **Tag routing** (`push`, `email`,
 `critical`) lets one POST hit a subset of channels. This is the piece that makes
 notifications reusable: new services just POST with a tag — they never need to
-know about ntfy/SES URLs, and adding Discord/Telegram later touches *only* the
+know about ntfy/SES URLs, and adding Discord/Telegram later touches _only_ the
 Apprise config, not any service. Auth is minimal — keep it cluster-internal
 (no external route) and/or front with basic auth.
 
@@ -352,12 +376,13 @@ arbitrary recipients.
 
 **4. Healthchecks — dead-man-switch for "the job never ran".**
 `healthchecks/healthchecks` self-hosted. The cert-deploy CronJobs **ping on
-success**; Healthchecks alerts when a ping is *missed*. This catches the failure
+success**; Healthchecks alerts when a ping is _missed_. This catches the failure
 modes in-script notification cannot — pod crash-before-script, image-pull
 failure, the CronJob never being scheduled. Its own alerts route to email and/or
 the Apprise webhook.
 
 ### How the cert-deploy jobs use it
+
 - **Handled failure** (probe/deploy threw) → the script POSTs to Apprise with
   `tag=critical` → push + email immediately. Include appliance, error, cert
   fingerprints.
@@ -372,6 +397,7 @@ this; revisit only if cluster-wide observability is wanted later.
 alerting is later desired.
 
 ### Build order
+
 1. `apps/ntfy.ts` — self-hosted ntfy (`WorkloadApp`, PVC, ACL auth-file via ESO,
    `externallyAccessible`/internal route). Install phone apps, verify push.
 2. `apps/apprise.ts` — Apprise API (`WorkloadApp`, internal-only), with a stored
@@ -390,12 +416,10 @@ Full cluster observability (metrics, dashboards, alerting) is intended later but
 kube-state-metrics / node-exporter / Grafana + storage + retention + rules) is a
 large independent project, and bundling it would balloon and delay the cert work.
 
-The part worth front-loading *is* being built now: the **Apprise gateway is the
+The part worth front-loading _is_ being built now: the **Apprise gateway is the
 shared notification control plane** observability will plug into. When the metrics
 stack lands, **Alertmanager routes to Apprise via webhook** → same push/email and
 tag routing, zero rework. To keep that seam clean, the Apprise tag taxonomy
 (`severity:info|warn|critical` + a domain tag) should be fixed up front so future
 Alertmanager routes map onto it directly. Until then, Healthchecks covers the
 cron dead-man-switch coverage you'd otherwise need `kube_job_failed` for.
-
-

@@ -94,6 +94,7 @@ bun run render miniflux
 ```
 
 Confirm the output contains:
+
 - A `StatefulSet` named `miniflux-postgres` with a `volumeClaimTemplates` entry
 - A headless `Service` named `miniflux-postgres` (with `clusterIP: None`)
 - The main `Deployment` with **no** Postgres init container
@@ -175,17 +176,17 @@ rm -rf /mnt/tank/data/cluster/miniflux/postgres
 
 ## withPostgres options
 
-| Option | Type | Default | Description |
-|---|---|---|---|
-| `legacy` | `boolean` | `false` | Use NFS sidecar mode (original behavior) |
-| `storage` | `string` | `"10Gi"` | PVC size for iSCSI mode |
-| `storageClassName` | `string` | `"truenas-iscsi"` | StorageClass for iSCSI mode |
-| `variant` | `string` | `"alpine"` | Postgres image variant |
-| `user` | `string` | app name | Postgres user |
-| `password` | `string` | app name | Postgres password |
-| `database` | `string` | app name | Postgres database name |
-| `image` | `string` | auto | Full image override |
-| `dataSubPath` | `string` | auto | NFS subpath (legacy mode only) |
+| Option             | Type      | Default           | Description                              |
+| ------------------ | --------- | ----------------- | ---------------------------------------- |
+| `legacy`           | `boolean` | `false`           | Use NFS sidecar mode (original behavior) |
+| `storage`          | `string`  | `"10Gi"`          | PVC size for iSCSI mode                  |
+| `storageClassName` | `string`  | `"truenas-iscsi"` | StorageClass for iSCSI mode              |
+| `variant`          | `string`  | `"alpine"`        | Postgres image variant                   |
+| `user`             | `string`  | app name          | Postgres user                            |
+| `password`         | `string`  | app name          | Postgres password                        |
+| `database`         | `string`  | app name          | Postgres database name                   |
+| `image`            | `string`  | auto              | Full image override                      |
+| `dataSubPath`      | `string`  | auto              | NFS subpath (legacy mode only)           |
 
 ## CSI driver configuration
 
@@ -201,7 +202,7 @@ const ssdStorageClass: ResourceLike = {
   provisioner: "csi.truenas.io",
   parameters: {
     protocol: "iscsi",
-    pool: "ssd-pool",  // overrides defaultPool
+    pool: "ssd-pool", // overrides defaultPool
     compression: "LZ4",
   },
   reclaimPolicy: "Retain",

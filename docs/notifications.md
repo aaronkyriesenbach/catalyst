@@ -57,6 +57,7 @@ deployed as a `WorkloadApp`, **internal-only** (no external route).
   a tag; adding Discord later touches **only** the Apprise config.
 
 ### API
+
 - **Stateless**: `POST /notify` with `urls` in the body.
 - **Stateful** (preferred): store config under a key, then
   `POST /notify/{key}` with `{title, body, type, tag}`.
@@ -87,6 +88,7 @@ urls:
 ```
 
 ### K8s deploy
+
 - Image `caronc/apprise`; mount `/config` for the per-service config files.
 - `WorkloadApp` shape (see `apps/miniflux.ts`), internal route only (ClusterIP,
   no `traefik-external` route).
@@ -94,11 +96,11 @@ urls:
 ### Security model (finalized)
 
 Apprise has **no authentication on any endpoint — by design** (apprise-api
-README: *"There is no authentication... this is by design"*). A `/notify/{key}`
+README: _"There is no authentication... this is by design"_). A `/notify/{key}`
 path segment is a **routing selector, not a credential**: anyone who can reach
 the server and knows the key can send. Apprise cannot provide per-key auth, OIDC
 forward-auth is browser-shaped (wrong for machine calls), and there is no service
-mesh for mTLS *yet* (planned — see [Future implementation](#future-implementation)).
+mesh for mTLS _yet_ (planned — see [Future implementation](#future-implementation)).
 So until the mesh lands, the boundary is **network reachability**: the service is
 internal-only and unreachable from outside the cluster.
 
@@ -114,7 +116,7 @@ Controls applied now (defense in depth):
    `/notify/{key}` path (obfuscation, not auth).
 4. **Secrets via ESO, never in git** — see §3 and Finalized decisions.
 
-**Interim trust model:** with no mesh and no NetworkPolicy yet, *any* in-cluster
+**Interim trust model:** with no mesh and no NetworkPolicy yet, _any_ in-cluster
 pod that knows a key can POST. That is acceptable for a single-admin homelab
 where the real exposure (the internet) is already cut off by internal-only.
 The **workload-identity boundary** (only approved services may call Apprise) is
@@ -124,7 +126,7 @@ The **workload-identity boundary** (only approved services may call Apprise) is
 simple` each key is just a config file, so we pre-seed **one file per service**
 declaratively (never via the runtime `/add` API). Use obfuscated keys (uuid) for
 guess-resistance. Their value is **blast-radius + observability + revocation**
-(kill or re-route one service without touching others), *not* a security
+(kill or re-route one service without touching others), _not_ a security
 boundary — that comes later from the mesh.
 
 **Secret seeding (finalized).** An `ExternalSecret` with a **`target.template`**
@@ -155,13 +157,13 @@ expose** — the cluster only ever makes an outbound HTTPS request.
 
 Pushover levels and the two facts that drive the mapping:
 
-| Priority | Behavior | Quiet hours |
-|---|---|---|
-| `-2` lowest | no notification, badge only | n/a |
-| `-1` low | no sound/vibration | — |
-| `0` normal | sound + vibration | **suppressed to `-1` during quiet hours** |
-| `1` high | always sound, red highlight, **no repeat** | **bypasses** quiet hours |
-| `2` emergency | **repeats until acknowledged** | bypasses |
+| Priority      | Behavior                                   | Quiet hours                               |
+| ------------- | ------------------------------------------ | ----------------------------------------- |
+| `-2` lowest   | no notification, badge only                | n/a                                       |
+| `-1` low      | no sound/vibration                         | —                                         |
+| `0` normal    | sound + vibration                          | **suppressed to `-1` during quiet hours** |
+| `1` high      | always sound, red highlight, **no repeat** | **bypasses** quiet hours                  |
+| `2` emergency | **repeats until acknowledged**             | bypasses                                  |
 
 - **Quiet hours silently downgrade `0` → `-1`** — so anything you must not miss
   overnight needs **≥ 1**.
@@ -174,10 +176,10 @@ Because cert-deploy runs **proactively** (a single handled failure has days of
 runway before actual expiry), routine failures are **not** emergencies —
 over-using emergency trains you to mute it.
 
-| Severity tag | Pushover priority | Use for |
-|---|---|---|
-| `info` | `0` normal | success notices; fine to respect quiet hours |
-| `warn` / handled `critical` | `1` high | cert-deploy *failed* but cert still valid — bypass quiet hours, no nag |
+| Severity tag                     | Pushover priority                           | Use for                                                                                  |
+| -------------------------------- | ------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `info`                           | `0` normal                                  | success notices; fine to respect quiet hours                                             |
+| `warn` / handled `critical`      | `1` high                                    | cert-deploy _failed_ but cert still valid — bypass quiet hours, no nag                   |
 | dead-man-switch / true emergency | `2` emergency (`retry=300`, `expire=10800`) | **Healthchecks missed-ping** (job never ran — silent failure that can persist to expiry) |
 
 Concretely, **two `pover://` URLs** in the Apprise config:
@@ -225,10 +227,10 @@ server is the wrong default — not because it's hard to harden, but because of
 
 - A self-hosted push server puts your **ISP + DNS + Traefik + certs + node
   health + the push pod** on the delivery path. That's the exact stack most
-  likely to be degraded *during the incident you're being alerted about*. An
+  likely to be degraded _during the incident you're being alerted about_. An
   alert whose job is to say "the homelab is broken" should not depend on the
   homelab's public ingress being healthy.
-- On iOS specifically, a self-hosted push server (e.g. ntfy) is *already*
+- On iOS specifically, a self-hosted push server (e.g. ntfy) is _already_
   partially dependent on the vendor: it must relay the APNs wake-up through
   `ntfy.sh`, and the phone then has to reach **your** server to fetch the body.
   That's the worst of both worlds — partial vendor dependence **plus** inbound
@@ -246,9 +248,10 @@ server (internal-only) was considered and **dropped** — one push service is
 enough until there's a concrete need for a second.
 
 **Caveats carried forward:**
+
 - Never single-path a critical alert: `critical` routes to **both** Pushover and
   SES email.
-- The alerting workload still runs *inside* the cluster, so a total
+- The alerting workload still runs _inside_ the cluster, so a total
   cluster-down event can't POST anything. Healthchecks covers the cron-level
   cases (missed ping); a true **external** uptime monitor is the complete answer
   and is a deferred follow-up.
@@ -328,7 +331,7 @@ dead-man-switch coverage you'd otherwise need `kube_job_failed` for.
 ## Open decisions
 
 - When to migrate SES from static credentials to IRSA (gated on `irsa.md` being
-  implemented). *Owner: deferred, handled separately.*
+  implemented). _Owner: deferred, handled separately._
 
 ## Future implementation
 
@@ -341,7 +344,7 @@ Deferred work, intentionally **not** part of the initial build:
   NetworkPolicy approach that was considered and dropped, and replaces the
   interim "any in-cluster pod that knows a key can POST" model (see §1). Until
   then, internal-only reachability + obfuscated keys are the only controls.
-  - *Note:* a Kubernetes `NetworkPolicy` (default-deny + allow-known-callers)
+  - _Note:_ a Kubernetes `NetworkPolicy` (default-deny + allow-known-callers)
     would be the lighter-weight alternative if the mesh slips — but it requires a
     CNI that enforces NetworkPolicy (currently unconfirmed in this cluster) and
     is made redundant by the mesh, so it is **not** being pursued.

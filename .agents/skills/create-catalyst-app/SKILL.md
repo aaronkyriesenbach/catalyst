@@ -19,6 +19,7 @@ AppConfig patterns, deferring to the user for conflicts or unresolved questions.
 ### 1. Understand the Request
 
 From the user's prompt, extract:
+
 - **App name** — the upstream project to deploy (e.g. "Gitea", "Plausible")
 - **Any constraints they mention** — specific version, port, domain, auth requirements
 
@@ -32,6 +33,7 @@ for (in any order):
 - Project docs for Kubernetes deployment instructions
 
 Extract from the research:
+
 - **Image** — the canonical container image and tag
 - **Ports** — which port(s) the app listens on
 - **Volumes** — what persistent storage it needs and at what mount paths
@@ -45,25 +47,25 @@ Extract from the research:
 Decide which `AppConfig` kind fits best. Read
 [references/app-kinds.md](references/app-kinds.md) for details and examples.
 
-| Signal | Kind |
-|---|---|
-| Simple container with ports, volumes, env vars | **WorkloadApp** |
+| Signal                                                                       | Kind                        |
+| ---------------------------------------------------------------------------- | --------------------------- |
+| Simple container with ports, volumes, env vars                               | **WorkloadApp**             |
 | Needs a Helm chart (no good Docker image, or chart is the canonical install) | **StaticApp** + `HelmChart` |
-| Custom resources beyond Deployment/Service/HTTPRoute | **StaticApp** |
+| Custom resources beyond Deployment/Service/HTTPRoute                         | **StaticApp**               |
 
 ### 4. Map to Catalyst Conventions
 
 Translate the upstream setup into catalyst-specific patterns:
 
-| Upstream concept | Catalyst pattern |
-|---|---|
-| `docker run -p 8080:8080` | `ports: [{ name: "http", containerPort: 8080 }]`, `webPort: 8080` |
-| `docker run -v /data` | `withIscsiVolumes({ main: [{ name: "data", mountPath: "/data" }] })` |
+| Upstream concept                 | Catalyst pattern                                                            |
+| -------------------------------- | --------------------------------------------------------------------------- |
+| `docker run -p 8080:8080`        | `ports: [{ name: "http", containerPort: 8080 }]`, `webPort: 8080`           |
+| `docker run -v /data`            | `withIscsiVolumes({ main: [{ name: "data", mountPath: "/data" }] })`        |
 | `-e DATABASE_URL=postgres://...` | `withPostgres(17)` — see [references/modifiers.md](references/modifiers.md) |
-| `docker run your/image:1.2.3` | Docker Hub → `docker.int.lab53.net/library/...`, otherwise use as-is |
-| Sign-in page in the app | `withOidcAuth({ middleware: { enabled: true, headers: [...] } })` |
-| Config files | `buildFileConfigMap(...)` and volume mount |
-| Arbitrary k8s resources | `extraResources` on a WorkloadApp, or use a StaticApp |
+| `docker run your/image:1.2.3`    | Docker Hub → `docker.int.lab53.net/library/...`, otherwise use as-is        |
+| Sign-in page in the app          | `withOidcAuth({ middleware: { enabled: true, headers: [...] } })`           |
+| Config files                     | `buildFileConfigMap(...)` and volume mount                                  |
+| Arbitrary k8s resources          | `extraResources` on a WorkloadApp, or use a StaticApp                       |
 
 ### 5. Resolve Conflicts with the User
 
@@ -80,6 +82,7 @@ multiple valid approaches, present the decision to the user. Examples:
 Write the app file at `apps/<name>.ts` following the chosen kind's pattern.
 
 **WorkloadApp checklist:**
+
 - `kind: "workload"`, `name`, `podSpec` with containers
 - `webPort` set if the app has an HTTP interface
 - `externallyAccessible: true` if it should be reachable outside the LAN
@@ -88,6 +91,7 @@ Write the app file at `apps/<name>.ts` following the chosen kind's pattern.
 - Containers named `"main"`
 
 **StaticApp checklist:**
+
 - `kind: "static"`, `name`, `resources` array
 - Each resource is an instantiated k8s model or a plain object
 - HelmChart resources use `await readFile(...)` for `valuesContent`

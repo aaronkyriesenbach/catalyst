@@ -246,7 +246,10 @@ async function deployTruenas(
 ): Promise<void> {
   const apiKey = requireEnv("TRUENAS_API_KEY");
   const username = process.env.TRUENAS_USERNAME ?? "truenas_admin";
-  const importName = `${prefix}-${new Date().toISOString().replace(/[^0-9]/g, "").slice(0, 14)}`;
+  const importName = `${prefix}-${new Date()
+    .toISOString()
+    .replace(/[^0-9]/g, "")
+    .slice(0, 14)}`;
 
   const client = await TrueNasClient.connect(host);
 
@@ -367,7 +370,9 @@ async function deployUnifi(
     throw new Error(`UniFi login failed: ${login.status}`);
   }
 
-  const { cookie, csrf } = csrfTokenFromCookies(login.headers.get("set-cookie"));
+  const { cookie, csrf } = csrfTokenFromCookies(
+    login.headers.get("set-cookie"),
+  );
   const authHeaders: Record<string, string> = {
     "Content-Type": "application/json",
     Cookie: cookie,
@@ -442,16 +447,24 @@ function strategyEndpoints(
         host: node.ipAddress,
         port: target.port,
         deploy: () =>
-          deployProxmox(node.ipAddress, target.port, node.name, certPem, keyPem),
+          deployProxmox(
+            node.ipAddress,
+            target.port,
+            node.name,
+            certPem,
+            keyPem,
+          ),
       }));
     case "truenas": {
-      const prefix = target.strategy.importedNamePrefix ?? `${target.name}-deploy`;
+      const prefix =
+        target.strategy.importedNamePrefix ?? `${target.name}-deploy`;
       return [
         {
           label: target.name,
           host: target.ipAddress,
           port: target.port,
-          deploy: () => deployTruenas(target.ipAddress, prefix, certPem, keyPem),
+          deploy: () =>
+            deployTruenas(target.ipAddress, prefix, certPem, keyPem),
         },
       ];
     }
@@ -497,7 +510,13 @@ async function reconcileEndpoint(
   await endpoint.deploy();
 
   if (
-    !(await probeUntil(endpoint.host, endpoint.port, servername, desiredFingerprint, 12))
+    !(await probeUntil(
+      endpoint.host,
+      endpoint.port,
+      servername,
+      desiredFingerprint,
+      12,
+    ))
   ) {
     throw new Error(
       `${endpoint.label}: still not serving the expected cert after deploy`,

@@ -20,9 +20,7 @@ export type Month =
   | "dec";
 
 type Atom<T extends number | string> =
-  | T
-  | { every: number }
-  | { range: [T, T]; step?: number };
+  T | { every: number } | { range: [T, T]; step?: number };
 
 type Field<T extends number | string> = "*" | Atom<T> | Atom<T>[];
 

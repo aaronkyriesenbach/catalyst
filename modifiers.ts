@@ -262,7 +262,10 @@ function buildOidcMiddleware(
             SameSite: "lax",
           },
           ...(bypassRule && { BypassAuthenticationRule: bypassRule }),
-          ...(headers && headers.length > 0 && { Headers: headers.map(h => ({ Name: h.name, Value: h.value })) }),
+          ...(headers &&
+            headers.length > 0 && {
+              Headers: headers.map((h) => ({ Name: h.name, Value: h.value })),
+            }),
         },
       },
     },
@@ -313,7 +316,11 @@ export function withOidcAuth(options?: OidcAuthOptions): WorkloadModifier {
         ...buildGeneratedSecret(app.namespace ?? app.name, pluginSecretName, [
           { key: "plugin-secret", length: 32 },
         ]),
-        buildOidcMiddleware(app, middlewareOptions?.bypassPaths, middlewareOptions?.headers),
+        buildOidcMiddleware(
+          app,
+          middlewareOptions?.bypassPaths,
+          middlewareOptions?.headers,
+        ),
       );
     }
 

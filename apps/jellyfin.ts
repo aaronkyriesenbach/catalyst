@@ -26,7 +26,12 @@ export default applyModifiers(
   base,
   withIscsiVolumes({
     main: [
-      { name: "config", mountPath: "/config", storageRequest: "10Gi", backup: true },
+      {
+        name: "config",
+        mountPath: "/config",
+        storageRequest: "10Gi",
+        backup: true,
+      },
       { name: "cache", mountPath: "/cache", storageRequest: "50Gi" },
     ],
   }),

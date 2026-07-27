@@ -136,6 +136,7 @@ go run /tmp/webhook/hack/self-hosted/main.go \
 ```
 
 Verify both files contain valid JSON before proceeding:
+
 ```bash
 jq . discovery.json
 jq . keys.json
@@ -234,6 +235,7 @@ kube-apiserver-arg:
 > **Important**: Before editing, verify the path of K3s's original SA
 > verification key. It's typically `/var/lib/rancher/k3s/server/tls/server-ca.crt`
 > but can vary. Check with:
+>
 > ```bash
 > ps aux | grep kube-apiserver | grep -o 'service-account-key-file=[^ ]*'
 > ```
@@ -352,6 +354,7 @@ This creates all resources in the `default` namespace. To use a different
 namespace, edit the namespace fields in the manifests before applying.
 
 The manifests create:
+
 - `ServiceAccount`, `Role`, `RoleBinding`, `ClusterRole`, `ClusterRoleBinding`
   (RBAC for the webhook)
 - `Deployment` (the webhook itself)
@@ -391,20 +394,20 @@ pki:
     existingIssuer:
       enabled: true
       kind: ClusterIssuer
-      name: selfsigned-bootstrap  # your existing issuer name
+      name: selfsigned-bootstrap # your existing issuer name
 ```
 
 #### Webhook CLI Flags Reference
 
-| Flag | Default | Description |
-|------|---------|-------------|
-| `--in-cluster` | `false` | Must be `false` (cert-manager mode). The old `true` (CSR mode) is deprecated. |
-| `--namespace` | `default` | Namespace where the webhook runs |
-| `--token-audience` | `sts.amazonaws.com` | Audience set on projected tokens. Must match `--api-audiences` on kube-apiserver and the IAM OIDC provider's client ID. |
-| `--token-expiration` | `86400` | Projected token lifetime in seconds (24h). Kubelet auto-rotates at ~80% of lifetime. |
-| `--annotation-prefix` | `eks.amazonaws.com` | Prefix for ServiceAccount annotations (`<prefix>/role-arn`). |
-| `--aws-default-region` | _(none)_ | If set, injects `AWS_DEFAULT_REGION` into pods. |
-| `--sts-regional-endpoint` | `false` | If true, injects `AWS_STS_REGIONAL_ENDPOINTS=regional` to use regional STS endpoints. |
+| Flag                      | Default             | Description                                                                                                             |
+| ------------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `--in-cluster`            | `false`             | Must be `false` (cert-manager mode). The old `true` (CSR mode) is deprecated.                                           |
+| `--namespace`             | `default`           | Namespace where the webhook runs                                                                                        |
+| `--token-audience`        | `sts.amazonaws.com` | Audience set on projected tokens. Must match `--api-audiences` on kube-apiserver and the IAM OIDC provider's client ID. |
+| `--token-expiration`      | `86400`             | Projected token lifetime in seconds (24h). Kubelet auto-rotates at ~80% of lifetime.                                    |
+| `--annotation-prefix`     | `eks.amazonaws.com` | Prefix for ServiceAccount annotations (`<prefix>/role-arn`).                                                            |
+| `--aws-default-region`    | _(none)_            | If set, injects `AWS_DEFAULT_REGION` into pods.                                                                         |
+| `--sts-regional-endpoint` | `false`             | If true, injects `AWS_STS_REGIONAL_ENDPOINTS=regional` to use regional STS endpoints.                                   |
 
 ---
 
@@ -492,12 +495,12 @@ spec:
 
 The trust policy `Condition` controls which ServiceAccounts can assume the role:
 
-| Scope | Condition | Example Value |
-|-------|-----------|---------------|
-| Exact SA | `StringEquals` on `:sub` | `system:serviceaccount:prod:my-sa` |
-| All SAs in a namespace | `StringLike` on `:sub` | `system:serviceaccount:prod:*` |
-| Multiple specific SAs | Multiple `Statement` entries | One per SA |
-| All SAs in cluster | `StringLike` on `:sub` | `system:serviceaccount:*:*` (avoid) |
+| Scope                  | Condition                    | Example Value                       |
+| ---------------------- | ---------------------------- | ----------------------------------- |
+| Exact SA               | `StringEquals` on `:sub`     | `system:serviceaccount:prod:my-sa`  |
+| All SAs in a namespace | `StringLike` on `:sub`       | `system:serviceaccount:prod:*`      |
+| Multiple specific SAs  | Multiple `Statement` entries | One per SA                          |
+| All SAs in cluster     | `StringLike` on `:sub`       | `system:serviceaccount:*:*` (avoid) |
 
 Multiple ServiceAccounts can assume the same role by listing multiple conditions
 or using wildcards. The IAM role is the trust boundary — one role can serve
@@ -558,6 +561,7 @@ The external-dns Helm chart's `serviceAccount.annotations` value configures IRSA
 Remove the static credential env vars from the values file.
 
 **Before** (`apps/external-dns/external-values.yaml`):
+
 ```yaml
 env:
   - name: AWS_DEFAULT_REGION
@@ -575,6 +579,7 @@ env:
 ```
 
 **After**:
+
 ```yaml
 env:
   - name: AWS_DEFAULT_REGION
@@ -591,6 +596,7 @@ env vars are removed — the webhook injects `AWS_ROLE_ARN` and
 `AWS_WEB_IDENTITY_TOKEN_FILE` instead.
 
 **IAM policy for external-dns**:
+
 ```json
 {
   "Version": "2012-10-17",
@@ -636,6 +642,7 @@ controller pod runs with a ServiceAccount that has IRSA credentials, the Route53
 DNS01 solver uses them automatically.
 
 **Before** (`apps/cert-manager/issuers.ts`):
+
 ```typescript
 dns01: {
   route53: {
@@ -653,6 +660,7 @@ dns01: {
 ```
 
 **After**:
+
 ```typescript
 dns01: {
   route53: {
@@ -666,6 +674,7 @@ cert-manager will use the ambient credentials from the IRSA-annotated
 ServiceAccount.
 
 The cert-manager Helm chart supports configuring the ServiceAccount annotation:
+
 ```yaml
 # cert-manager Helm values
 serviceAccount:
@@ -674,6 +683,7 @@ serviceAccount:
 ```
 
 **IAM policy for cert-manager**:
+
 ```json
 {
   "Version": "2012-10-17",
@@ -788,6 +798,7 @@ spec:
 ```
 
 The application code uses the AWS SDK normally with no explicit credentials:
+
 ```python
 import boto3
 client = boto3.client('secretsmanager')
@@ -849,12 +860,12 @@ replicated to CloudFront or a second static host.
 
 ## Reference: What Lives Where
 
-| Component | Managed How | Touched When |
-|-----------|-------------|--------------|
-| SA signing keypair | Manual on K3s node (or Ansible) | One-time setup, then only on key rotation |
-| K3s apiserver flags | `/etc/rancher/k3s/config.yaml` | One-time setup |
-| S3 bucket + OIDC docs | Terraform or CLI script | One-time setup, then only on key rotation |
-| IAM OIDC provider | Terraform or CLI | One-time setup |
-| Pod identity webhook | Git (K8s manifests in this repo) | Deploy once, update on version bumps |
-| IAM roles + policies | Terraform or CLI | Per workload |
-| ServiceAccount annotations | Git (in this repo) | Per workload |
+| Component                  | Managed How                      | Touched When                              |
+| -------------------------- | -------------------------------- | ----------------------------------------- |
+| SA signing keypair         | Manual on K3s node (or Ansible)  | One-time setup, then only on key rotation |
+| K3s apiserver flags        | `/etc/rancher/k3s/config.yaml`   | One-time setup                            |
+| S3 bucket + OIDC docs      | Terraform or CLI script          | One-time setup, then only on key rotation |
+| IAM OIDC provider          | Terraform or CLI                 | One-time setup                            |
+| Pod identity webhook       | Git (K8s manifests in this repo) | Deploy once, update on version bumps      |
+| IAM roles + policies       | Terraform or CLI                 | Per workload                              |
+| ServiceAccount annotations | Git (in this repo)               | Per workload                              |

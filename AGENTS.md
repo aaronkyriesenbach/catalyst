@@ -31,6 +31,7 @@ bun run render <app-name>                    # Render single app to stdout YAML 
 bun run apply-cluster <node> [--dry-run]     # Sync cluster/ manifests to k3s server via rsync+SSH
 bun run sync-external-certs [--dry-run]      # Pull TLS certs from cluster via kubectl
 bun run install-argo                         # helm upgrade --install ArgoCD with custom values
+bunx prettier --write .                      # Format the repo (config: .prettierrc, .prettierignore)
 ```
 
 **kubectl access**: The agent has `kubectl` configured and may query the cluster to verify live state — CIDR ranges, services, nodes, etc.
@@ -40,6 +41,7 @@ bun run install-argo                         # helm upgrade --install ArgoCD wit
 ## CONVENTIONS
 
 ### App System
+
 - **App discovery**: `main.ts` reads `apps/` with `readdirSync` filtering `entry.isFile()`. Only top-level `.ts` files are discovered — not subdirectories.
 - **Default export required**: `loadAppConfig` reads `mod.default`. Named-only exports will silently produce no config.
 - **Two app kinds**: `WorkloadApp` (auto-generates Deployment+Service+HTTPRoute from `podSpec`) and `StaticApp` (explicit `resources` array).
@@ -47,47 +49,58 @@ bun run install-argo                         # helm upgrade --install ArgoCD wit
 - **Security context**: `renderWorkload` auto-applies `runAsNonRoot: true, runAsUser/Group: 1000` if `podSpec.securityContext` is not set. Set it explicitly to override.
 
 ### Modifiers (WorkloadApp only)
+
 - Compose via `applyModifiers(base, ...modifiers)` — each modifier is an immutable transform.
 - `withNasMounts(config)` — adds NFS volume + mounts keyed by container name. Throws if container name doesn't exist.
 - `withPostgres(version, options?)` — adds postgres as an **init container** with NAS-backed data at `cluster/<app>/postgres`. Uses `docker.int.lab53.net/library/postgres` by default.
 - `withOidcAuth(options?)` — creates PocketID OIDC client/group resources. With `{ middleware: true }`, also adds Traefik OIDC middleware + ESO-generated plugin secret and sets `forwardAuth: true`. See `docs/forward-auth.md`.
 
 ### Generated Secrets
+
 - `buildGeneratedSecret(name, keys)` in `utils.ts` creates ExternalSecret + optional per-key Password generators.
 - Depends on the `external-secrets` app being installed (`apps/external-secrets.ts`).
 - Keys can be strings (use cluster-wide default generator) or objects with `{ key, length?, encoding? }`.
 
 ### Routing
+
 - Internal: `<name>.int.lab53.net` → gateway `traefik-internal`
 - External: `<name>.lab53.net` → gateways `traefik-external` + `traefik-internal`
 - Controlled by `externallyAccessible` flag. Override hostname with `subDomain`.
 - `forwardAuth: true` adds an `ExtensionRef` filter pointing to the `oidc-auth` Middleware.
 
 ### Helm Charts
+
 - `HelmChart` type is hand-defined in `types.ts` for `helm.cattle.io/v1` CRDs — not from kubernetes-models.
 - Embed values with `Bun.file(new URL("./app/values.yaml", import.meta.url)).text()` — this is a top-level await pattern used in several apps.
 
 ### External Apps (traefik module)
+
 - Defined in `apps/traefik/externalApps.config.ts` — proxied non-cluster services (UniFi, TrueNAS, Proxmox).
 - Auto-generates EndpointSlice, Service, Certificate, BackendTLSPolicy, and HTTPRoute per entry.
 
 ### Runtime & TypeScript
+
 - **Bun only**. Scripts use `Bun.spawn`, `Bun.file`, `Bun.write`. Bun-compatible `node:` imports are fine.
 - Strict mode, `noUncheckedIndexedAccess`, ES2022 target, ESM, `moduleResolution: bundler`.
 - Relative imports only (no path aliases). Standard for flat repo.
-- No linter, formatter, tests, or CI. ArgoCD CMP plugin renders in-cluster.
+- No linter, tests, or CI. ArgoCD CMP plugin renders in-cluster.
+- **Formatting**: Prettier is a devDependency, configured via `.prettierrc` (explicit defaults) and `.prettierignore` (`node_modules/`, `downloads/`, `bun.lock`, `.sisyphus/`, `.omo/`). Run `bunx prettier --write .` before committing.
 - **Prefer imported types over hand-rolled ones.** Before defining a new type, check whether `kubernetes-models`, `@kubernetes-models/gateway-api`, `@kubernetes-models/traefik`, or other installed packages already export a matching interface (e.g. `IPersistentVolumeClaimTemplate`, `IPodSpec`, `IServicePort`). Hand-roll types only when no package provides them (e.g. `HelmChart` for `helm.cattle.io/v1`, `BackendTLSPolicy` for the GA `gateway.networking.k8s.io/v1` API that the package hasn't caught up to yet).
 
 ### ArgoCD CMP env-substitution (footgun)
+
 The CMP runs env-var substitution over rendered manifests: any `$VAR`/`${VAR}` is replaced with empty string — **silently, no error**. When embedding content with literal `$` (shell scripts, configs, JS template literals):
+
 - **Files into a ConfigMap** → `buildFileConfigMap(name, files)` in `utils.ts` (base64 `binaryData`; robust for arbitrary content).
 - **Inline string fields** (container `args`/`env.value`, HelmChart `valuesContent`) → wrap with `escapeArgoCmp(content)` in `utils.ts` (escapes `$` → `$$`); `binaryData` isn't available there.
 
 ### Infrastructure
+
 - NAS: IP `192.168.53.120`, base path `/mnt/tank/data`. Hardcoded in `modifiers.ts` and `storage.ts`.
 - Private registry mirror: `docker.int.lab53.net`.
 
 ### Image sources
+
 - **Docker Hub images** (e.g. `library/*`, `deluan/navidrome`) → use the private mirror `docker.int.lab53.net/<image>:<tag>`.
 - **All other registries** (ghcr.io, quay.io, registry.k8s.io, etc.) → use their actual source URL directly.
 - ArgoCD CMP sidecar: `oven/bun` image, plugin name "ts", discovery key `main.ts`.
@@ -104,6 +117,7 @@ The CMP runs env-var substitution over rendered manifests: any `$VAR`/`${VAR}` i
 ## CROSS-MODULE EXPORTS
 
 Some app files export named constants used by scripts and other modules:
+
 - `apps/traefik.ts` → `traefikNamespace`
 - `apps/cert-manager.ts` → `certManagerNamespace`
 - `apps/cert-manager/internal-ca.ts` → `internalRootCaSecretName`

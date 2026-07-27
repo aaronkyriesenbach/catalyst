@@ -1,5 +1,10 @@
 import type { WorkloadApp } from "../types";
-import { applyModifiers, withIscsiVolumes, withNasMounts, withOidcAuth } from "../modifiers";
+import {
+  applyModifiers,
+  withIscsiVolumes,
+  withNasMounts,
+  withOidcAuth,
+} from "../modifiers";
 import { buildFileConfigMap, escapeArgoCmp, readFile } from "../utils";
 
 const vpnSecretName = "reader-vpn-creds";
@@ -72,7 +77,11 @@ const base: WorkloadApp = {
           { name: "WEBUI_PORT", value: "8080" },
         ],
         volumeMounts: [
-          { name: "qbt-init", mountPath: "/custom-cont-init.d", readOnly: true },
+          {
+            name: "qbt-init",
+            mountPath: "/custom-cont-init.d",
+            readOnly: true,
+          },
         ],
       },
       {
@@ -95,7 +104,10 @@ const base: WorkloadApp = {
     ],
     securityContext: {},
     volumes: [
-      { name: "qbt-init", configMap: { name: "reader-qbt-init", defaultMode: 0o755 } },
+      {
+        name: "qbt-init",
+        configMap: { name: "reader-qbt-init", defaultMode: 0o755 },
+      },
     ],
     dnsPolicy: "None",
     dnsConfig: {
@@ -110,7 +122,14 @@ const base: WorkloadApp = {
 export default applyModifiers(
   base,
   withIscsiVolumes({
-    qbittorrent: [{ name: "config", mountPath: "/config", storageRequest: "2Gi", backup: true }],
+    qbittorrent: [
+      {
+        name: "config",
+        mountPath: "/config",
+        storageRequest: "2Gi",
+        backup: true,
+      },
+    ],
   }),
   withNasMounts({
     qbittorrent: [{ mountPath: "/downloads", subPath: "downloads/reader" }],

@@ -28,9 +28,7 @@ const base: WorkloadApp = {
         name: "main",
         image: "ghcr.io/org/image:1.0.0",
         ports: [{ name: "http", containerPort: 8080 }],
-        env: [
-          { name: "CONFIG_VAR", value: "some-value" },
-        ],
+        env: [{ name: "CONFIG_VAR", value: "some-value" }],
       },
     ],
   },
@@ -102,11 +100,11 @@ a subdirectory.
 
 ## Choosing Between Them
 
-| Situation | Use |
-|---|---|
-| App has a Docker image, runs as a single pod | WorkloadApp |
-| App needs a database managed by catalyst | WorkloadApp + `withPostgres` |
-| App needs OIDC auth | WorkloadApp + `withOidcAuth` |
-| Canonical install is a Helm chart | StaticApp + HelmChart |
+| Situation                                          | Use                                          |
+| -------------------------------------------------- | -------------------------------------------- |
+| App has a Docker image, runs as a single pod       | WorkloadApp                                  |
+| App needs a database managed by catalyst           | WorkloadApp + `withPostgres`                 |
+| App needs OIDC auth                                | WorkloadApp + `withOidcAuth`                 |
+| Canonical install is a Helm chart                  | StaticApp + HelmChart                        |
 | Need resources beyond Deployment/Service/HTTPRoute | StaticApp, or WorkloadApp + `extraResources` |
-| Multiple related resources from a chart | StaticApp + HelmChart |
+| Multiple related resources from a chart            | StaticApp + HelmChart                        |

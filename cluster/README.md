@@ -30,20 +30,20 @@ When restarting a multi-node cluster, restart one server at a time and verify it
 
 Copy these files to `/var/lib/rancher/k3s/server/manifests/` on every server node. k3s automatically applies manifests in this directory on startup.
 
-| File | Purpose |
-|---|---|
-| `kube-vip-rbac.yaml` | ServiceAccount and RBAC for the kube-vip DaemonSet |
+| File                      | Purpose                                                              |
+| ------------------------- | -------------------------------------------------------------------- |
+| `kube-vip-rbac.yaml`      | ServiceAccount and RBAC for the kube-vip DaemonSet                   |
 | `kube-vip-daemonset.yaml` | kube-vip in ARP mode, provides two floating VIPs across server nodes |
-| `traefik-config.yaml` | HelmChartConfig overlay for the built-in Traefik deployment |
+| `traefik-config.yaml`     | HelmChartConfig overlay for the built-in Traefik deployment          |
 
 ### kube-vip
 
 kube-vip runs as a DaemonSet on control-plane nodes and manages two VIPs via ARP:
 
-| VIP | Address | Purpose |
-|---|---|---|
-| Control plane | `192.168.53.200` | Stable API server endpoint (port 6443) |
-| Service | `192.168.53.201` | Stable Traefik ingress endpoint (ports 80/443) |
+| VIP           | Address          | Purpose                                        |
+| ------------- | ---------------- | ---------------------------------------------- |
+| Control plane | `192.168.53.200` | Stable API server endpoint (port 6443)         |
+| Service       | `192.168.53.201` | Stable Traefik ingress endpoint (ports 80/443) |
 
 The service VIP is assigned to Traefik's LoadBalancer service via the `kube-vip.io/loadbalancerIPs` annotation in `traefik-config.yaml`.
 

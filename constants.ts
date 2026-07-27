@@ -9,7 +9,9 @@ export const projectDefinitions: Record<Project, ProjectSpec> = {
   [Project.SYSTEM]: {
     description: "Cluster infrastructure components",
     sourceRepos: ["*"],
-    destinations: [{ server: "https://kubernetes.default.svc", namespace: "*" }],
+    destinations: [
+      { server: "https://kubernetes.default.svc", namespace: "*" },
+    ],
     clusterResourceWhitelist: [{ group: "*", kind: "*" }],
   },
 };

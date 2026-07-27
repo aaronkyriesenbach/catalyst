@@ -6,9 +6,7 @@ import type { Project } from "./constants";
 export type ProjectSpec = IAppProject["spec"];
 
 export type ResourceLike =
-  | Model<unknown>
-  | { toJSON(): unknown }
-  | Record<string, unknown>;
+  Model<unknown> | { toJSON(): unknown } | Record<string, unknown>;
 
 /** Kubernetes binary storage quantity, e.g. "10Gi", "1Ti". */
 export type StorageQuantity = `${number}${"Ki" | "Mi" | "Gi" | "Ti" | "Pi"}`;
