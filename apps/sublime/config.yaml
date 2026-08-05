@@ -1,0 +1,9 @@
+---
+libraries:
+  - name: movies
+    path: /movies
+    languages: [en]
+
+  - name: tv
+    path: /tv
+    languages: [en]

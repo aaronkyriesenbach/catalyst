@@ -1,0 +1,6 @@
+node_modules/
+downloads/
+bun.lock
+bun.lockb
+.sisyphus/
+.omo/
