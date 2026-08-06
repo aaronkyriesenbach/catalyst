@@ -523,7 +523,11 @@ function renderWorkload(config: WorkloadApp): string[] {
   if (ports.length > 0) {
     const service = buildService(
       name,
-      ports.map((p) => ({ port: p.containerPort, name: p.name })),
+      ports.map((p) => ({
+        port: p.containerPort,
+        name: p.name,
+        protocol: p.protocol,
+      })),
     );
 
     resources.push(stringify(service));
