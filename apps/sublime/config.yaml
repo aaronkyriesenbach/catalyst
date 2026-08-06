@@ -7,3 +7,6 @@ libraries:
   - name: tv
     path: /tv
     languages: [en]
+
+providers:
+  chain: [opensubtitles, subdl]
