@@ -250,7 +250,7 @@ type TrueNasJob = {
 async function waitForJob(
   client: TrueNasClient,
   jobId: number,
-  attempts = 30,
+  attempts = 60,
   intervalMs = 1_000,
 ): Promise<void> {
   for (let attempt = 0; attempt < attempts; attempt += 1) {

@@ -92,7 +92,7 @@ function buildCronJob(app: DeployApp, schedule: string): CronJob {
       jobTemplate: {
         spec: {
           backoffLimit: 1,
-          activeDeadlineSeconds: 300,
+          activeDeadlineSeconds: 600,
           template: {
             spec: {
               restartPolicy: "Never",
