@@ -267,28 +267,13 @@ async function deployTruenas(
       },
     ])) as number;
 
-    await client.call("core.job_wait", [createJobId]);
+    const created = (await client.call("core.job_wait", [
+      createJobId,
+    ])) as TrueNasCertificate;
 
-    const jobs = (await client.call("core.get_jobs", [
-      [["id", "=", createJobId]],
-    ])) as Array<{ state: string; error: string | null }>;
-    const job = jobs[0];
-
-    if (!job || job.state !== "SUCCESS") {
+    if (!created?.id) {
       throw new Error(
-        `TrueNAS certificate.create job failed: ${job?.error ?? job?.state ?? "unknown"}`,
-      );
-    }
-
-    const certificates = (await client.call("certificate.query", [
-      [["name", "=", importName]],
-    ])) as TrueNasCertificate[];
-
-    const created = certificates[0];
-
-    if (!created) {
-      throw new Error(
-        `TrueNAS imported cert ${importName} not found after successful create job`,
+        `TrueNAS certificate.create job completed without a certificate result`,
       );
     }
 
