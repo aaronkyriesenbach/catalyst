@@ -238,6 +238,41 @@ class TrueNasClient {
 
 type TrueNasCertificate = { id: number; name: string };
 
+type TrueNasJob = {
+  id: number;
+  state: string;
+  error: string | null;
+};
+
+// core.job_wait is itself a job-decorated method: a plain request/response
+// call() to it resolves with the id of that wrapper job, not the awaited
+// job's result. Poll core.get_jobs on the original job id instead.
+async function waitForJob(
+  client: TrueNasClient,
+  jobId: number,
+  attempts = 30,
+  intervalMs = 1_000,
+): Promise<void> {
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    const jobs = (await client.call("core.get_jobs", [
+      [["id", "=", jobId]],
+    ])) as TrueNasJob[];
+    const job = jobs[0];
+
+    if (job?.state === "SUCCESS") {
+      return;
+    }
+
+    if (job && job.state !== "RUNNING" && job.state !== "WAITING") {
+      throw new Error(`TrueNAS job ${jobId} failed: ${job.error ?? job.state}`);
+    }
+
+    await Bun.sleep(intervalMs);
+  }
+
+  throw new Error(`TrueNAS job ${jobId} did not complete within timeout`);
+}
+
 async function deployTruenas(
   host: string,
   prefix: string,
@@ -267,13 +302,17 @@ async function deployTruenas(
       },
     ])) as number;
 
-    const created = (await client.call("core.job_wait", [
-      createJobId,
-    ])) as TrueNasCertificate;
+    await waitForJob(client, createJobId);
 
-    if (!created?.id) {
+    const certificates = (await client.call("certificate.query", [
+      [["name", "=", importName]],
+    ])) as TrueNasCertificate[];
+
+    const created = certificates[0];
+
+    if (!created) {
       throw new Error(
-        `TrueNAS certificate.create job completed without a certificate result`,
+        `TrueNAS imported cert ${importName} not found after successful create job`,
       );
     }
 
@@ -293,7 +332,7 @@ async function deployTruenas(
       const deleteJobId = (await client.call("certificate.delete", [
         cert.id,
       ])) as number;
-      await client.call("core.job_wait", [deleteJobId]);
+      await waitForJob(client, deleteJobId);
     }
 
     await client.call("system.general.ui_restart", []);
