@@ -44,7 +44,7 @@ const base: WorkloadApp = {
     containers: [
       {
         name: "main",
-        image: "ghcr.io/aaronkyriesenbach/sublime:0.2.0",
+        image: "ghcr.io/aaronkyriesenbach/sublime:0.3.0",
         env: [
           {
             name: "SUBLIME_OPENSUBTITLES_API_KEY",
