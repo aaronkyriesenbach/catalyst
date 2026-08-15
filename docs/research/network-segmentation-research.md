@@ -104,7 +104,7 @@ This is the primary-source backbone for "enterprises really do segment by functi
 blast-radius/lateral-movement limitation, not just performance." None of these controls single out storage —
 they're generic to "different function = candidate for its own segment," which matters for the answer below.
 
-### ### CIS Controls v8.1: segmentation is explicitly gated to higher "Implementation Groups"
+### CIS Controls v8.1: segmentation is explicitly gated to higher "Implementation Groups"
 
 One more standards-body data point is directly useful for the "is this overkill at single-operator
 scale" half of the question. CIS Critical Security Controls v8.1 has two safeguards that map almost
