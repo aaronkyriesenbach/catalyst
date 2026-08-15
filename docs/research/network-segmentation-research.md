@@ -54,6 +54,12 @@ re-derived.
   same VLAN) unless a BGP-speaking router is added to distribute pod-CIDR routes. This is the one place
   "running Kubernetes vs. a single server" changes the segmentation math — it constrains which CNI backend
   choices are compatible with splitting cluster nodes across VLANs, not whether segmentation is possible.
+- **A standards body independently agrees full segmentation rigor is an elective uplift, not a baseline, at
+  this scale.** CIS Controls v8.1 scopes its two safeguards closest to "segment by function"/"segment
+  storage by sensitivity" (13.4 and 3.12) to **Implementation Groups 2 and 3 only** — explicitly excluded
+  from IG1, CIS's own "essential cyber hygiene" tier for resource-constrained organizations. This is a
+  concrete, sourced data point (not just this research's opinion) that treating full network segmentation as
+  optional at single-operator scale isn't skipping a baseline — it's declining a deliberate uplift.
 - **Opinionated take (see Recommendation):** the enterprise storage-isolation rationale is legitimate but its
   *marginal* value drops fast once you're a single operator with no compliance driver and no adversary who
   specifically targets you — the blast-radius argument for storage is real but is a special case of "isolate
@@ -97,6 +103,28 @@ cross-checked against the [official catalog page](https://csrc.nist.gov/pubs/sp/
 This is the primary-source backbone for "enterprises really do segment by function, and the stated reason is
 blast-radius/lateral-movement limitation, not just performance." None of these controls single out storage —
 they're generic to "different function = candidate for its own segment," which matters for the answer below.
+
+### ### CIS Controls v8.1: segmentation is explicitly gated to higher "Implementation Groups"
+
+One more standards-body data point is directly useful for the "is this overkill at single-operator
+scale" half of the question. CIS Critical Security Controls v8.1 has two safeguards that map almost
+exactly onto "segment by function" and "segment storage by sensitivity":
+
+- **Safeguard 13.4, "Perform Traffic Filtering Between Network Segments"** (under Control 13,
+  Network Monitoring and Defense)
+- **Safeguard 3.12, "Segment Data Processing and Storage Based on Sensitivity"** (under Control 3,
+  Data Protection) — "Do not process sensitive data on enterprise assets intended for lower
+  sensitivity data," which is the closest CIS analogue to "should the NAS be walled off."
+
+Both are confirmed (via CIS's Implementation Group mapping, cross-checked against
+[csf.tools's CIS Controls v8.1 reference pages](https://csf.tools/reference/critical-security-controls/v8-1/csc-13/csc-13-4/),
+a widely-used mirror of CIS's own [Controls Navigator](https://www.cisecurity.org/controls/cis-controls-navigator))
+ to be scoped to **IG2 and IG3 only — excluded from IG1**, CIS's own "essential cyber hygiene"
+tier explicitly aimed at organizations with limited cybersecurity expertise and resources. This
+is a concrete, sourced data point (not just this research's opinion) that a standards body
+*itself* treats full network-segment traffic filtering and sensitivity-based storage segmentation
+as a deliberate maturity uplift rather than a universal minimum — directly relevant to how far a
+single-operator homelab should feel obligated to go.
 
 ### CISA's independent restatement of the same rationale
 
@@ -381,6 +409,19 @@ force all cluster nodes onto one VLAN — worth flagging explicitly if a future 
 lower-latency east-west pod traffic) considers that trade-off, since it would then constrain the IPAM/VLAN
 plan in a way today's default config does not.
 
+A second, purely-operational (not security) consideration worth flagging in the same breath: even when
+nodes *can* be split across VLANs without breaking pod-to-pod reachability, Proxmox's own clustering layer
+gives a reason to still prefer keeping them together. [Proxmox VE's "Cluster Manager" documentation](https://pve.proxmox.com/pve-docs/chapter-pvecm.html)
+recommends "a dedicated physical NIC for the cluster traffic" for its Corosync protocol, because Corosync
+needs consistent low latency and is sensitive to other traffic competing for bandwidth on the same link. The
+same reasoning generalizes to CNI overlay heartbeat traffic and kube-apiserver/etcd chatter between
+Kubernetes control-plane nodes: it benefits from staying on one low-latency segment together, not because
+any CNI *requires* it, but because inter-VLAN routing adds latency/hops that control-plane consensus
+protocols (etcd's Raft, Corosync) are more sensitive to than ordinary application traffic. This is a
+reliability/performance argument for keeping cluster nodes on one shared VLAN, not a security argument for
+isolating them — it doesn't change which *tier* the nodes belong to, only that splitting them across VLANs
+purely for segmentation's sake has a latency cost worth weighing against the isolation benefit.
+
 One secondary consideration, not a hard constraint: Kubernetes' own `NetworkPolicy` API (already decided as
 in-scope per issue [#32](https://github.com/aaronkyriesenbach/catalyst/issues/32)) operates *inside* whatever
 VLAN(s) the cluster's node/pod CIDRs live in — it's a complementary, finer-grained layer of segmentation
@@ -418,7 +459,12 @@ disproportionate to the setup cost.
 performance reasons, with a security bonus," not "the NAS is scary and must be walled off."** The
 strongest, most consistently-cited rationale across both vendor sources gathered here (VMware, TrueNAS) is
 performance/broadcast-domain isolation for iSCSI specifically, with unencrypted-protocol exposure as a real
-but secondary security argument. At single-operator homelab scale, with no adversary specifically targeting
+but secondary security argument. This reading is reinforced by CIS Controls v8.1's own Implementation Group
+scoping: Safeguard 3.12 ("Segment Data Processing and Storage Based on Sensitivity") and Safeguard 13.4
+("Perform Traffic Filtering Between Network Segments") are both scoped to IG2/IG3, not IG1 — i.e., CIS's own
+"essential cyber hygiene" baseline for resource-constrained organizations does not consider this class of
+segmentation mandatory, which is a standards body independently agreeing this is an elective uplift rather
+than a universal minimum. At single-operator homelab scale, with no adversary specifically targeting
 this network and no compliance driver, treating "isolate the NAS's data-plane traffic (iSCSI/NFS mounts to
 cluster nodes) onto its own VLAN" as **an infra/performance decision, not a hard security requirement**, is
 the honest framing — it's good practice to do if it's roughly free (which it is, since UniFi supports it
@@ -470,6 +516,13 @@ Primary/first-party sources, fetched directly during this research:
   https://www.cisa.gov/sites/default/files/2025-07/ZT-Microsegmentation-Guidance-Part-One_508c.pdf
 - CISA, "Zero Trust Maturity Model," Version 2.0 (April 2023), Table 4 "Network" pillar:
   https://www.cisa.gov/sites/default/files/2023-04/zero_trust_maturity_model_v2_508.pdf
+- CIS Critical Security Controls v8.1 — Safeguard 13.4 ("Perform Traffic Filtering Between Network
+  Segments," IG2/IG3) and Safeguard 3.12 ("Segment Data Processing and Storage Based on Sensitivity,"
+  IG2/IG3): https://www.cisecurity.org/controls/cis-controls-navigator ; Implementation Group scoping
+  cross-checked against https://csf.tools/reference/critical-security-controls/v8-1/csc-13/csc-13-4/ and
+  https://csf.tools/reference/critical-security-controls/v8-1/csc-3/csc-3-12/
+- Proxmox VE Documentation, "Cluster Manager" (dedicated-NIC recommendation for Corosync cluster traffic):
+  https://pve.proxmox.com/pve-docs/chapter-pvecm.html
 - VMware, "Best Practices For Running VMware vSphere On iSCSI" (dedicated-LAN/VLAN rationale for iSCSI,
   performance and security): https://www.vmware.com/docs/best-practices-for-running-vmware-vsphere-on-iscsi
 - TrueNAS / iX Systems, "Networking Recommendations" (iSCSI dedicated-VLAN rationale; general VLAN/broadcast
