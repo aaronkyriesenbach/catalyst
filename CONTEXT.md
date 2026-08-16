@@ -45,3 +45,10 @@ DNS entry. Still reachable by authorized remote users via the remote-access/tunn
 extends trusted-network reachability without exposing it publicly — "internal" describes ingress
 exposure, not physical LAN-only reachability.
 _Avoid_: LAN-only cluster (implies no remote access at all, which is wrong)
+
+**Secrets store**:
+Contrasts two deliberately separate stores. **Bootstrap-layer secrets** (Proxmox/TrueNAS/Unifi
+credentials, OpenTofu state) live in AWS Secrets Manager, owned by the bootstrap layer (ADR 0001).
+**App-layer secrets** (everything ESO syncs into workload/platform-cluster apps) live in self-hosted
+OpenBao on the platform cluster. See ADR 0004.
+_Avoid_: using "secrets manager" alone for either — always qualify bootstrap-layer vs. app-layer.
