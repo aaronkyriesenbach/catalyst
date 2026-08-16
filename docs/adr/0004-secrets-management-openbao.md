@@ -59,7 +59,7 @@ to whichever backup/DR solution the platform ultimately adopts — that decision
   unless paying for a cloud KMS or running a second Vault purely for Transit auto-unseal; also now
   IBM-owned BSL, not open source.
 - **Bitwarden Secrets Manager** — rejected: a real $0 free tier and a near drop-in ESO replacement, but
-  it's still a *static* secrets store like AWS SM — no dynamic-secrets/rotation capability, so it doesn't
+  it's still a _static_ secrets store like AWS SM — no dynamic-secrets/rotation capability, so it doesn't
   address the actual decision driver.
 - **Infisical / Doppler / SOPS+age / Sealed Secrets** — not pursued further: the git-native options
   (SOPS+age, Sealed Secrets) have no secret-generation equivalent at all; Infisical/Doppler are static
