@@ -46,6 +46,21 @@ extends trusted-network reachability without exposing it publicly — "internal"
 exposure, not physical LAN-only reachability.
 _Avoid_: LAN-only cluster (implies no remote access at all, which is wrong)
 
+**Shared/bulk storage**:
+File-oriented data multiple pods may legitimately read/write concurrently, or that's simply large and
+cold (media libraries, shared config/state, backups). Backed by `truenas-nfs`, `reclaimPolicy: Retain`.
+Contrasted with **Runtime storage**, which has different correctness and lifecycle needs. See ADR 0005.
+_Avoid_: "NAS storage" alone (both categories live on the NAS; the distinction is data shape, not
+physical location)
+
+**Runtime storage**:
+Block storage for a single app's own exclusive-access working data — embedded SQLite-style databases
+and Postgres, today via `truenas-iscsi`/`truenas-nvmeof` (RWO only). Never NFS: SQLite and Postgres WAL
+are both documented as architecturally incompatible with network-filesystem semantics, not merely slow
+on one. Forces Deployment `strategy: Recreate` on restart — accepted as inherent to single-writer
+workloads, not solved by any centralized-storage option surveyed (see ADR 0005, research #39). Contrasted
+with **Shared/bulk storage**.
+
 **Secrets store**:
 Contrasts two deliberately separate stores. **Bootstrap-layer secrets** (Proxmox/TrueNAS/Unifi
 credentials, OpenTofu state) live in AWS Secrets Manager, owned by the bootstrap layer (ADR 0001).
