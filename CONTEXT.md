@@ -26,8 +26,16 @@ _Avoid_: management cluster (Omni is not a Kubernetes cluster)
 **Platform cluster**:
 The dedicated, HA (3 control-plane nodes) Kubernetes cluster hosting every shared platform service
 (observability, secrets-sync, service mesh control plane, database-as-a-service operator, registry,
-identity infrastructure, etc.) and nothing else — enforced with a taint, not left as convention. See
-ADR 0002.
+identity infrastructure, the GitOps hub, etc.) and nothing else — enforced with a taint, not left as
+convention. See ADR 0002.
+
+**GitOps hub**:
+The single ArgoCD instance, hosted on the platform cluster, that renders every app's TypeScript
+config (via its Config Management Plugin) and reconciles it onto all three clusters — the platform
+cluster itself plus the External and Internal workload clusters, registered as remote destinations
+via cluster `Secret`s. Contrasted with running an independent ArgoCD instance per cluster (rejected).
+How newly-provisioned clusters get registered and authenticated is still open. See ADR 0007.
+_Avoid_: "ArgoCD" alone when the point is the hub-and-spoke topology specifically, not the tool choice
 
 **Workload cluster**:
 Runs actual apps rendered by `catalyst`'s AppConfig layer, contrasted with the platform cluster, which
