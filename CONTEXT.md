@@ -30,6 +30,18 @@ identity infrastructure, etc.) and nothing else — enforced with a taint, not l
 ADR 0002.
 
 **Workload cluster**:
-The cluster(s) that run actual apps rendered by `catalyst`'s AppConfig layer, contrasted with the
-platform cluster, which runs none. Whether there's one or several, partitioned by trust boundary, is
-still open.
+Runs actual apps rendered by `catalyst`'s AppConfig layer, contrasted with the platform cluster, which
+runs none. Partitioned by trust boundary into two dedicated clusters — see **External workload cluster**
+and **Internal workload cluster**. See ADR 0003.
+
+**External workload cluster**:
+The workload cluster holding every externally-reachable app; owns the external-facing gateway and public
+DNS entries.
+_Avoid_: public cluster
+
+**Internal workload cluster**:
+The workload cluster holding every internal-only app; never has a public-ingress-able gateway or public
+DNS entry. Still reachable by authorized remote users via the remote-access/tunnel solution (#19), which
+extends trusted-network reachability without exposing it publicly — "internal" describes ingress
+exposure, not physical LAN-only reachability.
+_Avoid_: LAN-only cluster (implies no remote access at all, which is wrong)
