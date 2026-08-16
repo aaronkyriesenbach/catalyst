@@ -61,6 +61,13 @@ on one. Forces Deployment `strategy: Recreate` on restart — accepted as inhere
 workloads, not solved by any centralized-storage option surveyed (see ADR 0005, research #39). Contrasted
 with **Shared/bulk storage**.
 
+**Database-as-a-service**:
+The CloudNativePG operator and every app's Postgres `Cluster` CR (its actual pod + PVC) — one fleet,
+hosted only on the platform cluster, never duplicated per workload cluster. A workload-cluster app's
+database is never co-located with the app; it always crosses the network to reach it. Redis/Valkey is
+deliberately not part of this term yet — no app uses one, and the choice is deferred. See ADR 0006.
+_Avoid_: "the Postgres operator" alone once Redis/Valkey is added — qualify which store.
+
 **Secrets store**:
 Contrasts two deliberately separate stores. **Bootstrap-layer secrets** (Proxmox/TrueNAS/Unifi
 credentials, OpenTofu state) live in AWS Secrets Manager, owned by the bootstrap layer (ADR 0001).
