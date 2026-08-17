@@ -72,8 +72,10 @@ with **Shared/bulk storage**.
 **Database-as-a-service**:
 The CloudNativePG operator and every app's Postgres `Cluster` CR (its actual pod + PVC) — one fleet,
 hosted only on the platform cluster, never duplicated per workload cluster. A workload-cluster app's
-database is never co-located with the app; it always crosses the network to reach it. Redis/Valkey is
-deliberately not part of this term yet — no app uses one, and the choice is deferred. See ADR 0006.
+database is never co-located with the app; it always crosses the network to reach it, via a CNPG-native
+`LoadBalancer` service and `sslmode=verify-full`, provisioned as a sibling `Application` pinned to the
+platform cluster. Redis/Valkey is deliberately not part of this term yet — no app uses one, and the
+choice is deferred. See ADR 0006, ADR 0010.
 _Avoid_: "the Postgres operator" alone once Redis/Valkey is added — qualify which store.
 
 **Secrets store**:
