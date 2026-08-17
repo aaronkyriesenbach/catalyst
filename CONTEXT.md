@@ -20,7 +20,10 @@ _Avoid_: node provisioning (as a formal term for the whole layer; fine for descr
 **Management host**:
 The standalone Proxmox VM/LXC running self-hosted Sidero Omni — the cluster-lifecycle tool itself, not a
 Kubernetes cluster. Deliberately kept outside every cluster it manages, including the platform cluster,
-to avoid Omni managing a cluster it lives inside. See ADR 0002.
+to avoid Omni managing a cluster it lives inside. Runs as a single VM (embedded etcd), a conscious,
+bounded risk acceptance: Omni is not part of the Kubernetes control plane, so an extended outage pauses
+GitOps reconciliation and external (`kubectl`) access to either workload cluster, but does not affect
+already-running workloads. See ADR 0002, ADR 0012.
 _Avoid_: management cluster (Omni is not a Kubernetes cluster)
 
 **Platform cluster**:
@@ -33,8 +36,13 @@ convention. See ADR 0002.
 The single ArgoCD instance, hosted on the platform cluster, that renders every app's TypeScript
 config (via its Config Management Plugin) and reconciles it onto all three clusters — the platform
 cluster itself plus the External and Internal workload clusters, registered as remote destinations
-via cluster `Secret`s. Contrasted with running an independent ArgoCD instance per cluster (rejected).
-How newly-provisioned clusters get registered and authenticated is still open. See ADR 0007.
+via cluster `Secret`s containing Omni-issued, per-cluster bearer tokens, auto-minted and renewed by a
+platform-cluster `CronJob` (never a manual step). Contrasted with running an independent ArgoCD
+instance per cluster (rejected) or an agent-based pull topology (`argocd-agent`, considered and
+rejected — reopens the same per-cluster-footprint tradeoff via mTLS instead of cluster `Secret`s).
+Every Omni-managed cluster is reachable only through Omni's own WireGuard-tunneled Kubernetes-API
+proxy (no native VIP, per #7) — so the hub's ongoing reconciliation of both workload clusters depends
+on the Management host's uptime, not just on cluster creation. See ADR 0007, ADR 0011.
 _Avoid_: "ArgoCD" alone when the point is the hub-and-spoke topology specifically, not the tool choice
 
 **Workload cluster**:
