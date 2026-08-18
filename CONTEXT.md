@@ -87,7 +87,7 @@ choice is deferred. See ADR 0006, ADR 0010.
 _Avoid_: "the Postgres operator" alone once Redis/Valkey is added — qualify which store.
 
 **Workload identity**:
-A SPIRE-issued SPIFFE identity (an X.509-SVID or JWT-SVID) proving what a workload *is*, presented to a
+A SPIRE-issued SPIFFE identity (an X.509-SVID or JWT-SVID) proving what a workload _is_, presented to a
 relying party (OpenBao, AWS, a peer workload's mTLS, or in future a CNPG-hosted Postgres role) instead of
 a static shared secret. One SPIRE trust domain spans all three clusters (platform, External workload,
 Internal workload) — not per-cluster federation. Distinct from **human identity** (still deferred, no

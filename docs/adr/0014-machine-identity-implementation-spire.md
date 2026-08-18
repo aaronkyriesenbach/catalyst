@@ -3,7 +3,7 @@
 Status: accepted
 
 [Decide machine-identity mechanism for workload identity across the multi-cluster platform
-(#55)](https://github.com/aaronkyriesenbach/catalyst/issues/55) settled the mechanism *family* — a
+(#55)](https://github.com/aaronkyriesenbach/catalyst/issues/55) settled the mechanism _family_ — a
 dedicated SPIFFE-based workload-identity control plane, not an identity-broker platform or this repo's
 existing IRSA pattern. This ADR picks the specific implementation and the concrete node-attestation
 mechanism on this repo's actual Talos/Omni fleet.
@@ -16,10 +16,10 @@ mechanism on this repo's actual Talos/Omni fleet.
   outright (no Workload API, no JWT-SVID, CNCF Sandbox tier). Vendor neutrality won out given SPIRE's own
   attestation downside (below) turned out to be reversible, not structural.
 - **Node attestation: `join_token`, not `k8s_psat`.** `k8s_psat` is automatic but requires the SPIRE
-  Server to hold an *ongoing*, per-(re)attestation TokenReview credential against each workload cluster's
+  Server to hold an _ongoing_, per-(re)attestation TokenReview credential against each workload cluster's
   live Kubernetes API — reachable only through Omni's WireGuard-tunneled proxy (ADR 0011). Adding that
   dependency here would undo the very thing this decision thread is trying to achieve: #47 and #49 (below)
-  are moving *away* from needing Omni's proxy for cross-cluster auth, via this same SPIFFE credential.
+  are moving _away_ from needing Omni's proxy for cross-cluster auth, via this same SPIFFE credential.
   `join_token` (a one-time pre-shared secret, manually registered per node) has no such dependency, and
   its manual-registration cost is lower in practice than it first appears: SPIRE's `disk` KeyManager
   plugin persists an Agent's keypair/SVID across ordinary restarts, so re-registration is only needed at
@@ -30,7 +30,7 @@ mechanism on this repo's actual Talos/Omni fleet.
     fog entry on the map). This de-risked the vendor-neutrality pick — reconsidering later costs a config
     change, not a re-migration.
   - Considered re-litigating Omni's own deployment model (single VM vs. HA) instead of avoiding
-    `k8s_psat` — rejected as a fix for *this* ticket: Sidero's own docs confirm the "Kubernetes deployment"
+    `k8s_psat` — rejected as a fix for _this_ ticket: Sidero's own docs confirm the "Kubernetes deployment"
     tier alone doesn't meaningfully raise availability over a single VM, and the tier that would (full
     "Omni HA") needs a second, non-OpenBao-reusable HA secrets system plus a fourth, non-Omni-managed
     cluster to host it — disproportionate to fix one attestation mechanism's dependency. Whether Omni HA
@@ -66,7 +66,7 @@ mechanism on this repo's actual Talos/Omni fleet.
 - **Teleport Workload Identity + `static_jwks`** — rejected: genuinely lighter control-plane footprint and
   no Omni-proxy dependency at all, but ties the platform to a commercial vendor's roadmap (free/AGPL-3.0
   Community Edition today, Enterprise upsell paths exist though unneeded here) instead of the vendor-neutral
-  CNCF-Graduated reference implementation. Its per-*cluster* (not per-node) JWKS registration and
+  CNCF-Graduated reference implementation. Its per-_cluster_ (not per-node) JWKS registration and
   explicitly-documented DNS-SAN-to-CN Postgres bridge were real points in its favor, but not enough to
   outweigh vendor neutrality once `join_token`'s downsides turned out to be reversible.
 - **SPIRE + `k8s_psat`** — rejected: reintroduces an ongoing, live, Omni-proxy-gated cross-cluster
