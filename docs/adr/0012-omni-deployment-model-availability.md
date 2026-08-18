@@ -73,3 +73,14 @@ workload-cluster access if it's needed mid-outage.
   SLAs, many more clusters/nodes), the external-etcd tier is the first proportionate escalation step
   — not a redesign, since Omni's own deployment model already documents it as a supported upgrade
   path from single-VM.
+- **Addendum (from [#52](https://github.com/aaronkyriesenbach/catalyst/issues/52)), re-confirming rather
+  than revising this ADR's reasoning**: break-glass access requires a live `omnictl talosconfig
+--cluster <name> --break-glass` call against a _running_ Omni instance — it mints an escape-hatch
+  credential, it cannot be minted after Omni is gone. It therefore only helps the "Omni reachable but
+  something in the managed path is degraded" case, not total Management-host loss; recovery from the
+  latter is, and remains, VM-snapshot restore (above), after which normal Omni-proxied access resumes
+  and break-glass is never needed. Pre-generating and stashing a break-glass credential ahead of time
+  as insurance against the snapshot-restore gap was considered and rejected: it trades a bounded,
+  already-accepted restore delay for a standing, dormant `os:operator`-role credential living outside
+  Omni's own revocation/audit story, undetectable until a CA rotation that nothing prompts you to run
+  proactively — a worse tradeoff for a single-operator homelab with no uptime SLA.

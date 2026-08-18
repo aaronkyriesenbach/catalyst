@@ -96,3 +96,7 @@ redesigned wholesale as part of this rearchitecture rather than a minimal patch 
   configured), run `omnictl serviceaccount create --role Operator` once, and push the resulting key to
   AWS Secrets Manager once. This is implementation-time setup work, not a further design decision, and
   isn't tracked as its own wayfinder ticket for that reason.
+- **Addendum**: [#52](https://github.com/aaronkyriesenbach/catalyst/issues/52) re-examined the Omni
+  pick this ADR builds on — against Cluster API and other Talos-compatible alternatives, on management-
+  plane merits alone — and re-confirmed it. This ADR's reasoning (including the Omni-proxy-dependency
+  finding above) is unchanged.
