@@ -86,6 +86,17 @@ platform cluster. Redis/Valkey is deliberately not part of this term yet — no 
 choice is deferred. See ADR 0006, ADR 0010.
 _Avoid_: "the Postgres operator" alone once Redis/Valkey is added — qualify which store.
 
+**Workload identity**:
+A SPIRE-issued SPIFFE identity (an X.509-SVID or JWT-SVID) proving what a workload *is*, presented to a
+relying party (OpenBao, AWS, a peer workload's mTLS, or in future a CNPG-hosted Postgres role) instead of
+a static shared secret. One SPIRE trust domain spans all three clusters (platform, External workload,
+Internal workload) — not per-cluster federation. Distinct from **human identity** (still deferred, no
+provider chosen yet) and from Istio ambient's own same-cluster mTLS identities, which SPIRE does not
+replace — ambient's identities never leave ztunnel, so they can't be presented to an external relying
+party the way a SPIRE SVID can. See ADR 0014.
+_Avoid_: "machine identity" as a formal term once this is the only mechanism in play; fine in casual prose
+for contrasting with human identity.
+
 **Secrets store**:
 Contrasts two deliberately separate stores. **Bootstrap-layer secrets** (Proxmox/TrueNAS/Unifi
 credentials, OpenTofu state) live in AWS Secrets Manager, owned by the bootstrap layer (ADR 0001).
