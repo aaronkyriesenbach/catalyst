@@ -27,7 +27,7 @@ injected by the app's own `HTTPRoute` `RequestHeaderModifier` filter, not `Host`
 Alternatives considered for the authorizer role:
 
 - **Authelia / Authentik** — rejected: neither supports acting as an OIDC relying party against an
-  external IdP; both are designed to *be* the IdP, which would mean replacing Pocket ID (out of scope —
+  external IdP; both are designed to _be_ the IdP, which would mean replacing Pocket ID (out of scope —
   human identity provider choice is deliberately deferred elsewhere on the map).
 - **Ory Oathkeeper** — rejected: ambiguous/weak browser-redirect OIDC login-flow support, and needs a
   Kratos companion service, adding real deployment weight for 3 apps.
