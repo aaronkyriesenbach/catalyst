@@ -51,8 +51,12 @@ runs none. Partitioned by trust boundary into two dedicated clusters — see **E
 and **Internal workload cluster**. See ADR 0003.
 
 **External workload cluster**:
-The workload cluster holding every externally-reachable app; owns the external-facing gateway and public
-DNS entries.
+The workload cluster holding every externally-reachable app; owns the public DNS entries (now
+Cloudflare-hosted, see ADR 0016) and the Cloudflare Tunnel's public-hostname configuration. Reached
+by LAN clients through its single Gateway like any other cluster, and by remote/internet clients via
+an outbound Cloudflare Tunnel connection forwarding into that same Gateway — there is no longer a
+separate external-facing Gateway or router port-forward (see ADR 0016, correcting ADR 0009's earlier
+two-Gateway topology).
 _Avoid_: public cluster
 
 **Internal workload cluster**:
