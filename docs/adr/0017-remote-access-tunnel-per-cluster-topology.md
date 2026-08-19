@@ -11,12 +11,12 @@ stable, LAN-reachable kube-vip VIP and exactly one Istio Gateway.
 
 **One Cloudflare Tunnel object per cluster (3 total: platform, External workload, Internal
 workload)**, each an ordinary GitOps-hub-managed app, targeted per-cluster via #42's existing
-directory-placement mechanism. Each Tunnel's ingress rules target *only that cluster's own* Istio
+directory-placement mechanism. Each Tunnel's ingress rules target _only that cluster's own_ Istio
 Gateway Service via plain in-cluster Service DNS (Host-header-routed, one rule per hostname, all
 resolving to the same in-cluster Gateway Service) — never a VIP, never another cluster's network.
 
 - **External workload cluster's Tunnel**: public hostnames only. Per ADR 0003 the External cluster
-  holds *every* externally-reachable app and nothing internal-only, so its own apps' remote-access
+  holds _every_ externally-reachable app and nothing internal-only, so its own apps' remote-access
   path is already the public hostname — no separate private/reach-in hostname needed for them.
 - **Internal workload cluster's Tunnel**: private, Access-gated hostnames for its own apps (#19's
   reach-in mechanism) — this cluster's whole reason to exist per ADR 0003.
