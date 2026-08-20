@@ -25,7 +25,7 @@ created) rather than re-running self-init from empty storage.
 External-workload-cluster ESO, Internal-workload-cluster ESO), matching [#49](https://github.com/aaronkyriesenbach/catalyst/issues/49)'s
 already-decided design and today's `external-secrets.ts` precedent (one shared `ClusterSecretStore`,
 not per-app scoped). Per-app policies were considered and rejected: SPIRE (ADR 0014) only solves
-*authentication* (proving identity), never *authorization* (OpenBao's own role/policy mapping) — so
+_authentication_ (proving identity), never _authorization_ (OpenBao's own role/policy mapping) — so
 per-app granularity is achievable in principle, but ESO has no native SPIFFE Workload API provider today
 (open upstream issue, `external-secrets/external-secrets#6235`); making it work would need a bespoke
 per-app JWT-SVID delivery/rotation sidecar per app namespace (`SecretStore` is namespace-scoped and can't
