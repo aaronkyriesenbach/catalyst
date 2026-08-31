@@ -103,95 +103,113 @@ export type PostgresOptions = {
 
 const DEFAULT_POSTGRES_REGISTRY = "docker.int.lab53.net/library/postgres";
 
+/**
+ * Build a standalone Postgres StatefulSet + headless Service (+ optional backup
+ * resources), addressable at `<name>-postgres:5432`. Shared by `withPostgres`
+ * and by apps that need more than one independent Postgres instance (where
+ * calling `withPostgres` twice on the same app would collide on the name).
+ */
+export function buildPostgresResources(
+  name: string,
+  namespace: string,
+  version: number,
+  options?: PostgresOptions,
+): ResourceLike[] {
+  const user = options?.user ?? name;
+  const password = options?.password ?? name;
+  const database = options?.database ?? name;
+  const variant = options?.variant ?? "alpine";
+  const image =
+    options?.image ?? `${DEFAULT_POSTGRES_REGISTRY}:${version}-${variant}`;
+
+  const pgEnv = [
+    { name: "POSTGRES_USER", value: user },
+    { name: "POSTGRES_PASSWORD", value: password },
+    { name: "POSTGRES_DB", value: database },
+  ];
+
+  const pgProbes = {
+    startupProbe: {
+      exec: {
+        command: ["pg_isready", "-U", user],
+      },
+      periodSeconds: 5,
+      failureThreshold: 30,
+    },
+    readinessProbe: {
+      exec: {
+        command: ["pg_isready", "-U", user],
+      },
+      periodSeconds: 10,
+      failureThreshold: 3,
+    },
+  };
+
+  const postgresName = `${name}-postgres`;
+
+  const statefulSet = buildStatefulSet(
+    postgresName,
+    {
+      securityContext: {
+        runAsNonRoot: true,
+        runAsUser: 999,
+        runAsGroup: 999,
+        fsGroup: 999,
+      },
+      containers: [
+        {
+          name: "postgres",
+          image,
+          env: [
+            ...pgEnv,
+            { name: "PGDATA", value: "/var/lib/postgresql/data/pgdata" },
+          ],
+          ports: [{ name: "postgres", containerPort: 5432 }],
+          ...pgProbes,
+          volumeMounts: [
+            {
+              name: "data",
+              mountPath: "/var/lib/postgresql/data",
+            },
+          ],
+        },
+      ],
+    },
+    [buildIscsiPvcTemplate("data", options?.storageRequest)],
+  );
+
+  const headlessService = buildHeadlessService(postgresName, [
+    { name: "postgres", port: 5432 },
+  ]);
+
+  const backupResources = options?.backup
+    ? buildBackupResources(namespace, `data-${postgresName}-0`, {
+        schedule: options.backupSchedule,
+        runAsUser: 999,
+        runAsGroup: 999,
+        fsGroup: 999,
+      })
+    : [];
+
+  return [statefulSet, headlessService, ...backupResources];
+}
+
 export function withPostgres(
   version: number,
   options?: PostgresOptions,
 ): WorkloadModifier {
-  return (app) => {
-    const user = options?.user ?? app.name;
-    const password = options?.password ?? app.name;
-    const database = options?.database ?? app.name;
-    const variant = options?.variant ?? "alpine";
-    const image =
-      options?.image ?? `${DEFAULT_POSTGRES_REGISTRY}:${version}-${variant}`;
-
-    const pgEnv = [
-      { name: "POSTGRES_USER", value: user },
-      { name: "POSTGRES_PASSWORD", value: password },
-      { name: "POSTGRES_DB", value: database },
-    ];
-
-    const pgProbes = {
-      startupProbe: {
-        exec: {
-          command: ["pg_isready", "-U", user],
-        },
-        periodSeconds: 5,
-        failureThreshold: 30,
-      },
-      readinessProbe: {
-        exec: {
-          command: ["pg_isready", "-U", user],
-        },
-        periodSeconds: 10,
-        failureThreshold: 3,
-      },
-    };
-
-    const postgresName = `${app.name}-postgres`;
-
-    const statefulSet = buildStatefulSet(
-      postgresName,
-      {
-        containers: [
-          {
-            name: "postgres",
-            image,
-            env: [
-              ...pgEnv,
-              { name: "PGDATA", value: "/var/lib/postgresql/data/pgdata" },
-            ],
-            ports: [{ name: "postgres", containerPort: 5432 }],
-            ...pgProbes,
-            volumeMounts: [
-              {
-                name: "data",
-                mountPath: "/var/lib/postgresql/data",
-              },
-            ],
-          },
-        ],
-      },
-      [buildIscsiPvcTemplate("data", options?.storageRequest)],
-    );
-
-    const headlessService = buildHeadlessService(postgresName, [
-      { name: "postgres", port: 5432 },
-    ]);
-
-    const backupResources = options?.backup
-      ? buildBackupResources(
-          app.namespace ?? app.name,
-          `data-${postgresName}-0`,
-          {
-            schedule: options.backupSchedule,
-            runAsUser: 999,
-            runAsGroup: 999,
-            fsGroup: 999,
-          },
-        )
-      : [];
-
-    return {
-      ...app,
-      extraResources: [
-        ...(app.extraResources ?? []),
-        statefulSet,
-        headlessService,
-        ...backupResources,
-      ],
-    };
-  };
+  return (app) => ({
+    ...app,
+    extraResources: [
+      ...(app.extraResources ?? []),
+      ...buildPostgresResources(
+        app.name,
+        app.namespace ?? app.name,
+        version,
+        options,
+      ),
+    ],
+  });
 }
 
 const POCKET_ID_API_VERSION = "pocketid.internal/v1alpha1";

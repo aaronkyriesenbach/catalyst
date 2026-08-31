@@ -10,7 +10,10 @@ import {
   type ISecretStoreRef,
 } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
 import { PushSecret } from "@kubernetes-models/external-secrets/external-secrets.io/v1alpha1";
-import { Password } from "@kubernetes-models/external-secrets/generators.external-secrets.io/v1alpha1";
+import {
+  Password,
+  type IPasswordSpec,
+} from "@kubernetes-models/external-secrets/generators.external-secrets.io/v1alpha1";
 import { HTTPRoute } from "@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1";
 import { Deployment, StatefulSet } from "kubernetes-models/apps/v1";
 import type {
@@ -278,11 +281,21 @@ export function buildRoute(
   });
 }
 
+export type PasswordEncoding =
+  "raw" | "base64" | "base64url" | "base32" | "hex";
+
+// encoding is missing from the installed package's types (present on the CRD since ESO chart 2.3.0).
+type PasswordGeneratorSpec = IPasswordSpec & { encoding?: PasswordEncoding };
+
 export type GeneratedSecretKey =
   | string
   | {
       key: string;
       length?: number;
+      /** Character set restricted to digits + letters (no symbols). */
+      alphanumeric?: boolean;
+      /** Re-encode the generated value, e.g. "hex" for a byte-string secret. */
+      encoding?: PasswordEncoding;
     };
 
 type GeneratedSecretTemplate = {
@@ -423,13 +436,16 @@ export function buildGeneratedSecret(
     let generatorRef: IGeneratorRef;
 
     if (typeof keyConfig !== "string" && keyConfig.length !== undefined) {
+      const spec: PasswordGeneratorSpec = {
+        length: keyConfig.length,
+        allowRepeat: true,
+        noUpper: false,
+        ...(keyConfig.alphanumeric && { symbols: 0 }),
+        ...(keyConfig.encoding && { encoding: keyConfig.encoding }),
+      };
       const generator = new Password({
         metadata: { name: `${name}-${keyName}-gen` },
-        spec: {
-          length: keyConfig.length,
-          allowRepeat: true,
-          noUpper: false,
-        },
+        spec,
       });
       resources.push(generator);
       generatorRef = {
