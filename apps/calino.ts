@@ -8,7 +8,7 @@ const base: WorkloadApp = {
     containers: [
       {
         name: "main",
-        image: "ghcr.io/ivan-malinovski/calino:0.29.1",
+        image: "ghcr.io/ivan-malinovski/calino:0.33.0",
         ports: [{ name: "http", containerPort: 8080 }],
         livenessProbe: {
           httpGet: { path: "/", port: 8080 },
