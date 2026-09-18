@@ -21,10 +21,15 @@ strategy** (iSCSI volumes can only be mounted by one pod at a time).
 
 ```typescript
 withIscsiVolumes({
-  main: [
-    { name: "data", mountPath: "/data", storageRequest: "10Gi", backup: true },
-    { name: "config", mountPath: "/config" },
-  ],
+	main: [
+		{
+			name: "data",
+			mountPath: "/data",
+			storageRequest: "10Gi",
+			backup: true,
+		},
+		{ name: "config", mountPath: "/config" },
+	],
 });
 ```
 
@@ -46,7 +51,7 @@ Use for shared data that doesn't need PVC isolation (media libraries, bulk stora
 
 ```typescript
 withNasMounts({
-  main: [{ mountPath: "/music", subPath: "music" }],
+	main: [{ mountPath: "/music", subPath: "music" }],
 });
 ```
 
@@ -64,12 +69,12 @@ Service, and env vars. The app connects to `<app-name>-postgres` on port 5432.
 
 ```typescript
 withPostgres(17, {
-  user: "myapp",
-  password: "myapp", // defaults to app name
-  database: "myapp", // defaults to app name
-  variant: "alpine", // default
-  storageRequest: "10Gi", // default
-  backup: true,
+	user: "myapp",
+	password: "myapp", // defaults to app name
+	database: "myapp", // defaults to app name
+	variant: "alpine", // default
+	storageRequest: "10Gi", // default
+	backup: true,
 });
 ```
 
@@ -103,14 +108,14 @@ withOidcAuth();
 
 ```typescript
 withOidcAuth({
-  middleware: {
-    enabled: true,
-    headers: [
-      { name: "Remote-User", value: "{{ .claims.preferred_username }}" },
-      { name: "Remote-Email", value: "{{ .claims.email }}" },
-    ],
-    bypassPaths: [{ type: "prefix", path: "/api/public" }],
-  },
+	middleware: {
+		enabled: true,
+		headers: [
+			{ name: "Remote-User", value: "{{ .claims.preferred_username }}" },
+			{ name: "Remote-Email", value: "{{ .claims.email }}" },
+		],
+		bypassPaths: [{ type: "prefix", path: "/api/public" }],
+	},
 });
 ```
 

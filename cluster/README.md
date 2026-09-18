@@ -14,9 +14,9 @@ On each server node, create/update `/etc/rancher/k3s/config.yaml`:
 ```yaml
 cluster-init: true # node 1 only
 tls-san:
-  - 192.168.53.200
+    - 192.168.53.200
 disable:
-  - servicelb
+    - servicelb
 ```
 
 - `tls-san` adds the kube-vip control plane VIP to the API server's TLS certificate

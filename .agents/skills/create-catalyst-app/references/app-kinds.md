@@ -20,27 +20,27 @@ import { applyModifiers, withIscsiVolumes } from "../modifiers";
 import type { WorkloadApp } from "../types";
 
 const base: WorkloadApp = {
-  kind: "workload",
-  name: "my-app",
-  podSpec: {
-    containers: [
-      {
-        name: "main",
-        image: "ghcr.io/org/image:1.0.0",
-        ports: [{ name: "http", containerPort: 8080 }],
-        env: [{ name: "CONFIG_VAR", value: "some-value" }],
-      },
-    ],
-  },
-  webPort: 8080,
-  externallyAccessible: true,
+	kind: "workload",
+	name: "my-app",
+	podSpec: {
+		containers: [
+			{
+				name: "main",
+				image: "ghcr.io/org/image:1.0.0",
+				ports: [{ name: "http", containerPort: 8080 }],
+				env: [{ name: "CONFIG_VAR", value: "some-value" }],
+			},
+		],
+	},
+	webPort: 8080,
+	externallyAccessible: true,
 };
 
 export default applyModifiers(
-  base,
-  withIscsiVolumes({
-    main: [{ name: "data", mountPath: "/data", backup: true }],
-  }),
+	base,
+	withIscsiVolumes({
+		main: [{ name: "data", mountPath: "/data", backup: true }],
+	}),
 );
 ```
 
@@ -69,20 +69,20 @@ doesn't fit.
 import type { HelmChart, StaticApp } from "../types";
 
 const chart: HelmChart = {
-  apiVersion: "helm.cattle.io/v1",
-  kind: "HelmChart",
-  metadata: { name: "my-app" },
-  spec: {
-    chart: "oci://ghcr.io/org/charts/my-app",
-    targetNamespace: "my-app",
-    version: "1.0.0",
-  },
+	apiVersion: "helm.cattle.io/v1",
+	kind: "HelmChart",
+	metadata: { name: "my-app" },
+	spec: {
+		chart: "oci://ghcr.io/org/charts/my-app",
+		targetNamespace: "my-app",
+		version: "1.0.0",
+	},
 };
 
 const config: StaticApp = {
-  kind: "static",
-  name: "my-app",
-  resources: [chart],
+	kind: "static",
+	name: "my-app",
+	resources: [chart],
 };
 
 export default config;

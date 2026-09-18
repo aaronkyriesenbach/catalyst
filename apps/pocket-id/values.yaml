@@ -1,26 +1,26 @@
 instance:
-  spec:
-    image: ghcr.io/pocket-id/pocket-id:v2.8.0
-    userManagement:
-      allowUserSignups: "disabled"
-    encryptionKey:
-      valueFrom:
-        secretKeyRef:
-          name: pocket-id
-          key: encryption-key
+    spec:
+        image: ghcr.io/pocket-id/pocket-id:v2.8.0
+        userManagement:
+            allowUserSignups: "disabled"
+        encryptionKey:
+            valueFrom:
+                secretKeyRef:
+                    name: pocket-id
+                    key: encryption-key
 
-    appUrl: https://auth.lab53.net
+        appUrl: https://auth.lab53.net
 
-    persistence:
-      enabled: true
-      storageClass: truenas-iscsi
+        persistence:
+            enabled: true
+            storageClass: truenas-iscsi
 
-    route:
-      enabled: true
-      parentRefs:
-        - name: traefik-external
-          namespace: traefik
-        - name: traefik-internal
-          namespace: traefik
-      hostnames:
-        - auth.lab53.net
+        route:
+            enabled: true
+            parentRefs:
+                - name: traefik-external
+                  namespace: traefik
+                - name: traefik-internal
+                  namespace: traefik
+            hostnames:
+                - auth.lab53.net

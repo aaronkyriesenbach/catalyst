@@ -217,19 +217,19 @@ Edit `/etc/rancher/k3s/config.yaml`:
 
 ```yaml
 kube-apiserver-arg:
-  # New IRSA issuer — must be listed first (first issuer is used for new tokens)
-  - "service-account-issuer=https://s3.us-east-1.amazonaws.com/your-oidc-bucket"
-  # Keep existing issuer so current SA tokens remain valid
-  - "service-account-issuer=https://kubernetes.default.svc.cluster.local"
-  # Signing key (private)
-  - "service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/irsa-signer.key"
-  # Verification keys — MUST include both original K3s key and new IRSA key,
-  # otherwise existing SA tokens across the cluster will fail validation
-  - "service-account-key-file=/var/lib/rancher/k3s/server/tls/server-ca.crt"
-  - "service-account-key-file=/var/lib/rancher/k3s/server/tls/irsa-signer.pub"
-  # Audiences — must include sts.amazonaws.com for IRSA tokens and the default
-  # audience for existing cluster-internal tokens
-  - "api-audiences=sts.amazonaws.com,https://kubernetes.default.svc.cluster.local"
+    # New IRSA issuer — must be listed first (first issuer is used for new tokens)
+    - "service-account-issuer=https://s3.us-east-1.amazonaws.com/your-oidc-bucket"
+    # Keep existing issuer so current SA tokens remain valid
+    - "service-account-issuer=https://kubernetes.default.svc.cluster.local"
+    # Signing key (private)
+    - "service-account-signing-key-file=/var/lib/rancher/k3s/server/tls/irsa-signer.key"
+    # Verification keys — MUST include both original K3s key and new IRSA key,
+    # otherwise existing SA tokens across the cluster will fail validation
+    - "service-account-key-file=/var/lib/rancher/k3s/server/tls/server-ca.crt"
+    - "service-account-key-file=/var/lib/rancher/k3s/server/tls/irsa-signer.pub"
+    # Audiences — must include sts.amazonaws.com for IRSA tokens and the default
+    # audience for existing cluster-internal tokens
+    - "api-audiences=sts.amazonaws.com,https://kubernetes.default.svc.cluster.local"
 ```
 
 > **Important**: Before editing, verify the path of K3s's original SA
@@ -389,12 +389,12 @@ webhook's TLS certificate:
 
 ```yaml
 pki:
-  certManager:
-    enabled: true
-    existingIssuer:
-      enabled: true
-      kind: ClusterIssuer
-      name: selfsigned-bootstrap # your existing issuer name
+    certManager:
+        enabled: true
+        existingIssuer:
+            enabled: true
+            kind: ClusterIssuer
+            name: selfsigned-bootstrap # your existing issuer name
 ```
 
 #### Webhook CLI Flags Reference
@@ -463,10 +463,10 @@ aws iam put-role-policy \
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: my-sa
-  namespace: my-namespace
-  annotations:
-    eks.amazonaws.com/role-arn: "arn:aws:iam::123456789012:role/k3s-my-namespace-my-sa"
+    name: my-sa
+    namespace: my-namespace
+    annotations:
+        eks.amazonaws.com/role-arn: "arn:aws:iam::123456789012:role/k3s-my-namespace-my-sa"
 ```
 
 ### 3.3 Reference the ServiceAccount in the Workload
@@ -475,20 +475,20 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-app
-  namespace: my-namespace
+    name: my-app
+    namespace: my-namespace
 spec:
-  template:
-    spec:
-      serviceAccountName: my-sa
-      containers:
-        - name: app
-          image: my-app:latest
-          # No AWS credential env vars needed.
-          # The webhook injects these automatically:
-          #   AWS_ROLE_ARN=arn:aws:iam::123456789012:role/...
-          #   AWS_WEB_IDENTITY_TOKEN_FILE=/var/run/secrets/eks.amazonaws.com/serviceaccount/token
-          #   AWS_DEFAULT_REGION=us-east-1  (if configured on the webhook)
+    template:
+        spec:
+            serviceAccountName: my-sa
+            containers:
+                - name: app
+                  image: my-app:latest
+                  # No AWS credential env vars needed.
+                  # The webhook injects these automatically:
+                  #   AWS_ROLE_ARN=arn:aws:iam::123456789012:role/...
+                  #   AWS_WEB_IDENTITY_TOKEN_FILE=/var/run/secrets/eks.amazonaws.com/serviceaccount/token
+                  #   AWS_DEFAULT_REGION=us-east-1  (if configured on the webhook)
 ```
 
 ### Trust Policy Scoping Options
@@ -564,30 +564,30 @@ Remove the static credential env vars from the values file.
 
 ```yaml
 env:
-  - name: AWS_DEFAULT_REGION
-    value: us-east-1
-  - name: AWS_ACCESS_KEY_ID
-    valueFrom:
-      secretKeyRef:
-        name: aws-credentials
-        key: access-key-id
-  - name: AWS_SECRET_ACCESS_KEY
-    valueFrom:
-      secretKeyRef:
-        name: aws-credentials
-        key: secret-access-key
+    - name: AWS_DEFAULT_REGION
+      value: us-east-1
+    - name: AWS_ACCESS_KEY_ID
+      valueFrom:
+          secretKeyRef:
+              name: aws-credentials
+              key: access-key-id
+    - name: AWS_SECRET_ACCESS_KEY
+      valueFrom:
+          secretKeyRef:
+              name: aws-credentials
+              key: secret-access-key
 ```
 
 **After**:
 
 ```yaml
 env:
-  - name: AWS_DEFAULT_REGION
-    value: us-east-1
+    - name: AWS_DEFAULT_REGION
+      value: us-east-1
 
 serviceAccount:
-  annotations:
-    eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/k3s-external-dns
+    annotations:
+        eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/k3s-external-dns
 ```
 
 The `AWS_DEFAULT_REGION` env var is kept because external-dns needs it for the
@@ -599,23 +599,23 @@ env vars are removed — the webhook injects `AWS_ROLE_ARN` and
 
 ```json
 {
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "route53:ChangeResourceRecordSets",
-        "route53:ListResourceRecordSets",
-        "route53:ListTagsForResources"
-      ],
-      "Resource": "arn:aws:route53:::hostedzone/*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": "route53:ListHostedZones",
-      "Resource": "*"
-    }
-  ]
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				"route53:ChangeResourceRecordSets",
+				"route53:ListResourceRecordSets",
+				"route53:ListTagsForResources"
+			],
+			"Resource": "arn:aws:route53:::hostedzone/*"
+		},
+		{
+			"Effect": "Allow",
+			"Action": "route53:ListHostedZones",
+			"Resource": "*"
+		}
+	]
 }
 ```
 
@@ -678,35 +678,35 @@ The cert-manager Helm chart supports configuring the ServiceAccount annotation:
 ```yaml
 # cert-manager Helm values
 serviceAccount:
-  annotations:
-    eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/k3s-cert-manager
+    annotations:
+        eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/k3s-cert-manager
 ```
 
 **IAM policy for cert-manager**:
 
 ```json
 {
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": "route53:GetChange",
-      "Resource": "arn:aws:route53:::change/*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "route53:ChangeResourceRecordSets",
-        "route53:ListResourceRecordSets"
-      ],
-      "Resource": "arn:aws:route53:::hostedzone/*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": "route53:ListHostedZonesByName",
-      "Resource": "*"
-    }
-  ]
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": "route53:GetChange",
+			"Resource": "arn:aws:route53:::change/*"
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				"route53:ChangeResourceRecordSets",
+				"route53:ListResourceRecordSets"
+			],
+			"Resource": "arn:aws:route53:::hostedzone/*"
+		},
+		{
+			"Effect": "Allow",
+			"Action": "route53:ListHostedZonesByName",
+			"Resource": "*"
+		}
+	]
 }
 ```
 
@@ -778,23 +778,23 @@ aws iam put-role-policy \
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: my-app-sa
-  namespace: my-app
-  annotations:
-    eks.amazonaws.com/role-arn: "arn:aws:iam::123456789012:role/k3s-my-app-secrets"
+    name: my-app-sa
+    namespace: my-app
+    annotations:
+        eks.amazonaws.com/role-arn: "arn:aws:iam::123456789012:role/k3s-my-app-secrets"
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-app
-  namespace: my-app
+    name: my-app
+    namespace: my-app
 spec:
-  template:
-    spec:
-      serviceAccountName: my-app-sa
-      containers:
-        - name: app
-          image: my-app:latest
+    template:
+        spec:
+            serviceAccountName: my-app-sa
+            containers:
+                - name: app
+                  image: my-app:latest
 ```
 
 The application code uses the AWS SDK normally with no explicit credentials:

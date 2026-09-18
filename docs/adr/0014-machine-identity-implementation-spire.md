@@ -24,42 +24,42 @@ mechanism on this repo's actual Talos/Omni fleet.
   its manual-registration cost is lower in practice than it first appears: SPIRE's `disk` KeyManager
   plugin persists an Agent's keypair/SVID across ordinary restarts, so re-registration is only needed at
   initial node provisioning, not on every Agent restart.
-  - **Reversible, not a one-way door**: the SPIRE server can run both `join_token` and `k8s_psat`
-    attestors simultaneously, and an individual node can be switched to `k8s_psat` later (config change +
-    Agent restart, no server downtime) if Omni's availability story changes materially (see the Omni-HA
-    fog entry on the map). This de-risked the vendor-neutrality pick — reconsidering later costs a config
-    change, not a re-migration.
-  - Considered re-litigating Omni's own deployment model (single VM vs. HA) instead of avoiding
-    `k8s_psat` — rejected as a fix for _this_ ticket: Sidero's own docs confirm the "Kubernetes deployment"
-    tier alone doesn't meaningfully raise availability over a single VM, and the tier that would (full
-    "Omni HA") needs a second, non-OpenBao-reusable HA secrets system plus a fourth, non-Omni-managed
-    cluster to host it — disproportionate to fix one attestation mechanism's dependency. Whether Omni HA
-    is worth it on its own merits (e.g., for #42's ArgoCD reconciliation) is tracked separately in the
-    map's fog, not resolved here.
+    - **Reversible, not a one-way door**: the SPIRE server can run both `join_token` and `k8s_psat`
+      attestors simultaneously, and an individual node can be switched to `k8s_psat` later (config change +
+      Agent restart, no server downtime) if Omni's availability story changes materially (see the Omni-HA
+      fog entry on the map). This de-risked the vendor-neutrality pick — reconsidering later costs a config
+      change, not a re-migration.
+    - Considered re-litigating Omni's own deployment model (single VM vs. HA) instead of avoiding
+      `k8s_psat` — rejected as a fix for _this_ ticket: Sidero's own docs confirm the "Kubernetes deployment"
+      tier alone doesn't meaningfully raise availability over a single VM, and the tier that would (full
+      "Omni HA") needs a second, non-OpenBao-reusable HA secrets system plus a fourth, non-Omni-managed
+      cluster to host it — disproportionate to fix one attestation mechanism's dependency. Whether Omni HA
+      is worth it on its own merits (e.g., for #42's ArgoCD reconciliation) is tracked separately in the
+      map's fog, not resolved here.
 - **Also adopt app-to-Postgres X.509-SVID authentication**, replacing ADR 0010's password-based Secret,
   given this is already a large migration. Mechanically: SPIRE's `dns_names` registration-entry field
   attaches a Postgres-role-mappable DNS SAN alongside the mandatory `spiffe://` URI SAN; CNPG's
   `clientCASecret` is pointed at SPIRE's trust-domain CA (replacing, not supplementing, CNPG's own
   generated client CA cluster-wide, including its internal `streaming_replica` cert); a `pg_hba`/`pg_ident`
   rule maps the promoted Common Name to the app's database role.
-  - **Open implementation risk, not yet confirmed**: whether SPIRE's issuance path actually promotes a
-    registered `dns_names` entry into the SVID's Subject/CN the way Postgres needs (Teleport's equivalent
-    behavior is explicitly documented; SPIRE's is not, per research). Verify against a running SPIRE
-    instance before committing to this in implementation planning — ADR 0010's password Secret is the
-    fallback if it doesn't pan out cleanly.
+    - **Open implementation risk, not yet confirmed**: whether SPIRE's issuance path actually promotes a
+      registered `dns_names` entry into the SVID's Subject/CN the way Postgres needs (Teleport's equivalent
+      behavior is explicitly documented; SPIRE's is not, per research). Verify against a running SPIRE
+      instance before committing to this in implementation planning — ADR 0010's password Secret is the
+      fallback if it doesn't pan out cleanly.
 - **Composition with #47 and #49**: both re-pointed to block on this decision (per #55) resolve their
   identity-mechanism sub-questions as a direct consequence, without resolving in full:
-  - [#49](https://github.com/aaronkyriesenbach/catalyst/issues/49) — ESO on a workload cluster
-    authenticates to OpenBao via its SPIRE-issued JWT-SVID against OpenBao's already-generic `jwt` auth
-    method (`oidc_discovery_url` pointed at a SPIRE OIDC Discovery Provider instance), instead of OpenBao's
-    Kubernetes auth method (which would need the same cross-cluster TokenReview dependency this ADR just
-    avoided). #49's remaining scope — where ESO itself runs, how secrets are actually distributed to
-    consumers — stays open on that ticket.
-  - [#47](https://github.com/aaronkyriesenbach/catalyst/issues/47) — `external-dns`'s Route53 credential
-    question resolves the same way: a SPIRE OIDC Discovery Provider federates to an AWS IAM OIDC Identity
-    Provider, giving `external-dns` AWS credentials wherever it runs, without reusing #42's Omni-bearer-token
-    mechanism or extending `irsa.md`. #47's broader routing questions (kube-vip/MetalLB IP assignment,
-    internal DNS mapping across 3 clusters) are unrelated to identity and stay independently decided there.
+    - [#49](https://github.com/aaronkyriesenbach/catalyst/issues/49) — ESO on a workload cluster
+      authenticates to OpenBao via its SPIRE-issued JWT-SVID against OpenBao's already-generic `jwt` auth
+      method (`oidc_discovery_url` pointed at a SPIRE OIDC Discovery Provider instance), instead of OpenBao's
+      Kubernetes auth method (which would need the same cross-cluster TokenReview dependency this ADR just
+      avoided). #49's remaining scope — where ESO itself runs, how secrets are actually distributed to
+      consumers — stays open on that ticket.
+    - [#47](https://github.com/aaronkyriesenbach/catalyst/issues/47) — `external-dns`'s Route53 credential
+      question resolves the same way: a SPIRE OIDC Discovery Provider federates to an AWS IAM OIDC Identity
+      Provider, giving `external-dns` AWS credentials wherever it runs, without reusing #42's Omni-bearer-token
+      mechanism or extending `irsa.md`. #47's broader routing questions (kube-vip/MetalLB IP assignment,
+      internal DNS mapping across 3 clusters) are unrelated to identity and stay independently decided there.
 
 ## Considered Options
 

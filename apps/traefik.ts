@@ -9,17 +9,17 @@ import { routes } from "./traefik/routes";
 export const traefikNamespace = "traefik";
 
 const config: StaticApp = {
-  kind: "static",
-  name: "traefik",
-  project: Project.SYSTEM,
-  resources: [
-    ...certs,
-    internalGateway,
-    externalGateway,
-    httpRedirect,
-    ...routes,
-    ...externalAppResources,
-  ],
+	kind: "static",
+	name: "traefik",
+	project: Project.SYSTEM,
+	resources: [
+		...certs,
+		internalGateway,
+		externalGateway,
+		httpRedirect,
+		...routes,
+		...externalAppResources,
+	],
 };
 
 export default config;

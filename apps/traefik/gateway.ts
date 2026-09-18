@@ -1,96 +1,96 @@
 import { Gateway } from "@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1";
 
 export const internalGateway = new Gateway({
-  metadata: {
-    name: "traefik-internal",
-    annotations: {
-      "external-dns.alpha.kubernetes.io/target": "192.168.53.201",
-    },
-  },
-  spec: {
-    gatewayClassName: "traefik",
-    listeners: [
-      {
-        name: "http",
-        protocol: "HTTP",
-        port: 80,
-      },
-      {
-        name: "https-int",
-        protocol: "HTTPS",
-        port: 443,
-        hostname: "*.int.lab53.net",
-        allowedRoutes: {
-          namespaces: {
-            from: "All",
-          },
-        },
-        tls: {
-          certificateRefs: [
-            {
-              kind: "Secret",
-              name: "int-lab53-net-prod",
-            },
-          ],
-        },
-      },
-      {
-        name: "https-ext",
-        protocol: "HTTPS",
-        port: 443,
-        hostname: "*.lab53.net",
-        allowedRoutes: {
-          namespaces: {
-            from: "All",
-          },
-        },
-        tls: {
-          certificateRefs: [
-            {
-              kind: "Secret",
-              name: "lab53-net-prod",
-            },
-          ],
-        },
-      },
-    ],
-  },
+	metadata: {
+		name: "traefik-internal",
+		annotations: {
+			"external-dns.alpha.kubernetes.io/target": "192.168.53.201",
+		},
+	},
+	spec: {
+		gatewayClassName: "traefik",
+		listeners: [
+			{
+				name: "http",
+				protocol: "HTTP",
+				port: 80,
+			},
+			{
+				name: "https-int",
+				protocol: "HTTPS",
+				port: 443,
+				hostname: "*.int.lab53.net",
+				allowedRoutes: {
+					namespaces: {
+						from: "All",
+					},
+				},
+				tls: {
+					certificateRefs: [
+						{
+							kind: "Secret",
+							name: "int-lab53-net-prod",
+						},
+					],
+				},
+			},
+			{
+				name: "https-ext",
+				protocol: "HTTPS",
+				port: 443,
+				hostname: "*.lab53.net",
+				allowedRoutes: {
+					namespaces: {
+						from: "All",
+					},
+				},
+				tls: {
+					certificateRefs: [
+						{
+							kind: "Secret",
+							name: "lab53-net-prod",
+						},
+					],
+				},
+			},
+		],
+	},
 });
 
 export const externalGateway = new Gateway({
-  metadata: {
-    name: "traefik-external",
-    annotations: {
-      "external-dns.alpha.kubernetes.io/target": "home.lab53.net",
-    },
-  },
-  spec: {
-    gatewayClassName: "traefik",
-    listeners: [
-      {
-        name: "http",
-        protocol: "HTTP",
-        port: 80,
-      },
-      {
-        name: "https",
-        protocol: "HTTPS",
-        port: 443,
-        hostname: "*.lab53.net",
-        allowedRoutes: {
-          namespaces: {
-            from: "All",
-          },
-        },
-        tls: {
-          certificateRefs: [
-            {
-              kind: "Secret",
-              name: "lab53-net-prod",
-            },
-          ],
-        },
-      },
-    ],
-  },
+	metadata: {
+		name: "traefik-external",
+		annotations: {
+			"external-dns.alpha.kubernetes.io/target": "home.lab53.net",
+		},
+	},
+	spec: {
+		gatewayClassName: "traefik",
+		listeners: [
+			{
+				name: "http",
+				protocol: "HTTP",
+				port: 80,
+			},
+			{
+				name: "https",
+				protocol: "HTTPS",
+				port: 443,
+				hostname: "*.lab53.net",
+				allowedRoutes: {
+					namespaces: {
+						from: "All",
+					},
+				},
+				tls: {
+					certificateRefs: [
+						{
+							kind: "Secret",
+							name: "lab53-net-prod",
+						},
+					],
+				},
+			},
+		],
+	},
 });

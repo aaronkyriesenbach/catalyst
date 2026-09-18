@@ -1,43 +1,43 @@
 controllers:
-  main:
-    containers:
-      main:
-        image:
-          tag: v2.7.5
+    main:
+        containers:
+            main:
+                image:
+                    tag: v2.7.5
 
 immich:
-  persistence:
-    library:
-      existingClaim: immich-library
+    persistence:
+        library:
+            existingClaim: immich-library
 
 server:
-  ingress:
-    main:
-      enabled: false
-  controllers:
-    main:
-      containers:
+    ingress:
         main:
-          envFrom:
-            - secretRef:
-                name: immich-db
-          env:
-            DB_VECTOR_EXTENSION: vectorchord
+            enabled: false
+    controllers:
+        main:
+            containers:
+                main:
+                    envFrom:
+                        - secretRef:
+                              name: immich-db
+                    env:
+                        DB_VECTOR_EXTENSION: vectorchord
 
 machine-learning:
-  enabled: true
-  persistence:
-    cache:
-      enabled: true
-      type: persistentVolumeClaim
-      storageClass: truenas-iscsi
-      accessMode: ReadWriteOnce
+    enabled: true
+    persistence:
+        cache:
+            enabled: true
+            type: persistentVolumeClaim
+            storageClass: truenas-iscsi
+            accessMode: ReadWriteOnce
 
 valkey:
-  enabled: true
-  persistence:
-    data:
-      enabled: true
-      type: persistentVolumeClaim
-      storageClass: truenas-iscsi
-      accessMode: ReadWriteOnce
+    enabled: true
+    persistence:
+        data:
+            enabled: true
+            type: persistentVolumeClaim
+            storageClass: truenas-iscsi
+            accessMode: ReadWriteOnce

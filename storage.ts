@@ -11,103 +11,109 @@ const DEFAULT_ACCESS_MODES = ["ReadWriteMany"] as const;
 type PersistentVolumeReclaimPolicy = "Retain" | "Delete" | "Recycle";
 
 type BuildPersistentVolumeOptions = {
-  name: string;
-  storage: StorageQuantity;
-  storageClassName: string;
-  accessModes: PersistentVolumeAccessMode[];
-  reclaimPolicy?: PersistentVolumeReclaimPolicy;
-  nfsServer?: string;
-  nfsPath?: string;
+	name: string;
+	storage: StorageQuantity;
+	storageClassName: string;
+	accessModes: PersistentVolumeAccessMode[];
+	reclaimPolicy?: PersistentVolumeReclaimPolicy;
+	nfsServer?: string;
+	nfsPath?: string;
 };
 
 type BuildPersistentVolumeClaimOptions = {
-  name: string;
-  storage: StorageQuantity;
-  storageClassName: string;
-  accessModes: PersistentVolumeAccessMode[];
-  volumeName: string;
+	name: string;
+	storage: StorageQuantity;
+	storageClassName: string;
+	accessModes: PersistentVolumeAccessMode[];
+	volumeName: string;
 };
 
 type BuildNasPersistentVolumePairOptions = {
-  name: string;
-  storage: StorageQuantity;
-  storageClassName?: string;
-  accessModes?: PersistentVolumeAccessMode[];
-  reclaimPolicy?: PersistentVolumeReclaimPolicy;
-  nfsServer?: string;
-  nfsPath?: string;
+	name: string;
+	storage: StorageQuantity;
+	storageClassName?: string;
+	accessModes?: PersistentVolumeAccessMode[];
+	reclaimPolicy?: PersistentVolumeReclaimPolicy;
+	nfsServer?: string;
+	nfsPath?: string;
 };
 
 export function buildPersistentVolume(options: BuildPersistentVolumeOptions) {
-  const {
-    name,
-    storage,
-    storageClassName,
-    accessModes,
-    reclaimPolicy = DEFAULT_RECLAIM_POLICY,
-    nfsServer = DEFAULT_NAS_IP,
-    nfsPath = DEFAULT_NAS_PATH,
-  } = options;
+	const {
+		name,
+		storage,
+		storageClassName,
+		accessModes,
+		reclaimPolicy = DEFAULT_RECLAIM_POLICY,
+		nfsServer = DEFAULT_NAS_IP,
+		nfsPath = DEFAULT_NAS_PATH,
+	} = options;
 
-  return new PersistentVolume({
-    metadata: {
-      name,
-    },
-    spec: {
-      capacity: {
-        storage,
-      },
-      accessModes,
-      persistentVolumeReclaimPolicy: reclaimPolicy,
-      storageClassName,
-      nfs: {
-        server: nfsServer,
-        path: nfsPath,
-      },
-    },
-  });
+	return new PersistentVolume({
+		metadata: {
+			name,
+		},
+		spec: {
+			capacity: {
+				storage,
+			},
+			accessModes,
+			persistentVolumeReclaimPolicy: reclaimPolicy,
+			storageClassName,
+			nfs: {
+				server: nfsServer,
+				path: nfsPath,
+			},
+		},
+	});
 }
 
 export function buildPersistentVolumeClaim(
-  options: BuildPersistentVolumeClaimOptions,
+	options: BuildPersistentVolumeClaimOptions,
 ) {
-  const { name, storage, storageClassName, accessModes, volumeName } = options;
+	const { name, storage, storageClassName, accessModes, volumeName } =
+		options;
 
-  return new PersistentVolumeClaim({
-    metadata: { name },
-    spec: buildPvcSpec({ storage, storageClassName, accessModes, volumeName }),
-  });
+	return new PersistentVolumeClaim({
+		metadata: { name },
+		spec: buildPvcSpec({
+			storage,
+			storageClassName,
+			accessModes,
+			volumeName,
+		}),
+	});
 }
 
 export function buildNasPersistentVolumePair(
-  options: BuildNasPersistentVolumePairOptions,
+	options: BuildNasPersistentVolumePairOptions,
 ) {
-  const {
-    name,
-    storage,
-    storageClassName = name,
-    accessModes = [...DEFAULT_ACCESS_MODES],
-    nfsServer,
-    nfsPath,
-    reclaimPolicy,
-  } = options;
+	const {
+		name,
+		storage,
+		storageClassName = name,
+		accessModes = [...DEFAULT_ACCESS_MODES],
+		nfsServer,
+		nfsPath,
+		reclaimPolicy,
+	} = options;
 
-  return {
-    pv: buildPersistentVolume({
-      name,
-      storage,
-      storageClassName,
-      accessModes,
-      nfsServer,
-      nfsPath,
-      reclaimPolicy,
-    }),
-    pvc: buildPersistentVolumeClaim({
-      name,
-      storage,
-      storageClassName,
-      accessModes,
-      volumeName: name,
-    }),
-  };
+	return {
+		pv: buildPersistentVolume({
+			name,
+			storage,
+			storageClassName,
+			accessModes,
+			nfsServer,
+			nfsPath,
+			reclaimPolicy,
+		}),
+		pvc: buildPersistentVolumeClaim({
+			name,
+			storage,
+			storageClassName,
+			accessModes,
+			volumeName: name,
+		}),
+	};
 }

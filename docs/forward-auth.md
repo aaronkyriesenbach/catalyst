@@ -43,9 +43,9 @@ This creates only the `PocketIDUserGroup` and `PocketIDOIDCClient`. The app is r
 
 ```typescript
 export default applyModifiers(
-  base,
-  withPostgres(18),
-  withOidcAuth({ middleware: true }),
+	base,
+	withPostgres(18),
+	withOidcAuth({ middleware: true }),
 );
 ```
 

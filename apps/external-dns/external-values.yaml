@@ -1,5 +1,5 @@
 provider:
-  name: aws
+    name: aws
 
 policy: sync
 txtOwnerId: external-dns-ext-route53
@@ -8,20 +8,20 @@ domainFilters: ["lab53.net"]
 excludeDomains: ["int.lab53.net"]
 
 env:
-  - name: AWS_DEFAULT_REGION
-    value: us-east-1
-  - name: AWS_ACCESS_KEY_ID
-    valueFrom:
-      secretKeyRef:
-        name: aws-credentials
-        key: access-key-id
-  - name: AWS_SECRET_ACCESS_KEY
-    valueFrom:
-      secretKeyRef:
-        name: aws-credentials
-        key: secret-access-key
+    - name: AWS_DEFAULT_REGION
+      value: us-east-1
+    - name: AWS_ACCESS_KEY_ID
+      valueFrom:
+          secretKeyRef:
+              name: aws-credentials
+              key: access-key-id
+    - name: AWS_SECRET_ACCESS_KEY
+      valueFrom:
+          secretKeyRef:
+              name: aws-credentials
+              key: secret-access-key
 
 extraArgs:
-  aws-zone-type: public
-  gateway-name: traefik-external
-  gateway-namespace: traefik
+    aws-zone-type: public
+    gateway-name: traefik-external
+    gateway-namespace: traefik

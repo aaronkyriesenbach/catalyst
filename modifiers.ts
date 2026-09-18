@@ -4,16 +4,16 @@ import { buildBackupResources } from "./backup";
 import type { CronExpression } from "./cron";
 import type { ResourceLike, StorageQuantity, WorkloadApp } from "./types";
 import {
-  appUrl,
-  buildGeneratedSecret,
-  buildHeadlessService,
-  buildIscsiPvc,
-  buildIscsiPvcTemplate,
-  buildStatefulSet,
+	appUrl,
+	buildGeneratedSecret,
+	buildHeadlessService,
+	buildIscsiPvc,
+	buildIscsiPvcTemplate,
+	buildStatefulSet,
 } from "./utils";
 
 export type NasMountConfig = {
-  [containerName: string]: { mountPath: string; subPath?: string }[];
+	[containerName: string]: { mountPath: string; subPath?: string }[];
 };
 
 export type WorkloadModifier = (app: WorkloadApp) => WorkloadApp;
@@ -23,82 +23,82 @@ const NAS_SERVER = "192.168.53.120";
 const NAS_PATH = "/mnt/tank/data";
 
 export function nasVolume(): IVolume {
-  return {
-    name: NAS_VOLUME_NAME,
-    nfs: { server: NAS_SERVER, path: NAS_PATH },
-  };
+	return {
+		name: NAS_VOLUME_NAME,
+		nfs: { server: NAS_SERVER, path: NAS_PATH },
+	};
 }
 
 export function nasVolumeMounts(
-  mounts: { mountPath: string; subPath?: string }[],
+	mounts: { mountPath: string; subPath?: string }[],
 ): IVolumeMount[] {
-  return mounts.map((m) => ({
-    name: NAS_VOLUME_NAME,
-    mountPath: m.mountPath,
-    subPath: m.subPath,
-  }));
+	return mounts.map((m) => ({
+		name: NAS_VOLUME_NAME,
+		mountPath: m.mountPath,
+		subPath: m.subPath,
+	}));
 }
 
 export function withNasMounts(mounts: NasMountConfig): WorkloadModifier {
-  return (app) => {
-    const applyMounts = (containers: IContainer[]): IContainer[] =>
-      containers.map((container) => {
-        const containerMounts = mounts[container.name];
-        if (!containerMounts) return container;
+	return (app) => {
+		const applyMounts = (containers: IContainer[]): IContainer[] =>
+			containers.map((container) => {
+				const containerMounts = mounts[container.name];
+				if (!containerMounts) return container;
 
-        return {
-          ...container,
-          volumeMounts: [
-            ...(container.volumeMounts ?? []),
-            ...nasVolumeMounts(containerMounts),
-          ],
-        };
-      });
+				return {
+					...container,
+					volumeMounts: [
+						...(container.volumeMounts ?? []),
+						...nasVolumeMounts(containerMounts),
+					],
+				};
+			});
 
-    const containers = applyMounts(app.podSpec.containers);
-    const initContainers = app.podSpec.initContainers
-      ? applyMounts(app.podSpec.initContainers as IContainer[])
-      : undefined;
+		const containers = applyMounts(app.podSpec.containers);
+		const initContainers = app.podSpec.initContainers
+			? applyMounts(app.podSpec.initContainers as IContainer[])
+			: undefined;
 
-    const requestedContainers = Object.keys(mounts);
-    const existingContainerNames = [
-      ...app.podSpec.containers.map((c) => c.name),
-      ...(app.podSpec.initContainers ?? []).map((c) => c.name),
-    ];
-    const missing = requestedContainers.filter(
-      (name) => !existingContainerNames.includes(name),
-    );
+		const requestedContainers = Object.keys(mounts);
+		const existingContainerNames = [
+			...app.podSpec.containers.map((c) => c.name),
+			...(app.podSpec.initContainers ?? []).map((c) => c.name),
+		];
+		const missing = requestedContainers.filter(
+			(name) => !existingContainerNames.includes(name),
+		);
 
-    if (missing.length > 0) {
-      throw new Error(
-        `NAS mount config references non-existent containers: ${missing.join(", ")}`,
-      );
-    }
+		if (missing.length > 0) {
+			throw new Error(
+				`NAS mount config references non-existent containers: ${missing.join(", ")}`,
+			);
+		}
 
-    return {
-      ...app,
-      podSpec: {
-        ...app.podSpec,
-        containers,
-        ...(initContainers && { initContainers }),
-        volumes: [...(app.podSpec.volumes ?? []), nasVolume()],
-      },
-    };
-  };
+		return {
+			...app,
+			podSpec: {
+				...app.podSpec,
+				containers,
+				...(initContainers && { initContainers }),
+				volumes: [...(app.podSpec.volumes ?? []), nasVolume()],
+			},
+		};
+	};
 }
 
 export type PostgresVariant = "alpine" | "bookworm" | "trixie";
 
 export type PostgresOptions = {
-  variant?: PostgresVariant;
-  user?: string;
-  password?: string;
-  database?: string;
-  image?: string;
-  /** PVC storage request for iSCSI mode (default: "10Gi") */
-  storageRequest?: StorageQuantity;
-  backup?: boolean;
-  backupSchedule?: CronExpression;
+	variant?: PostgresVariant;
+	user?: string;
+	password?: string;
+	database?: string;
+	image?: string;
+	/** PVC storage request for iSCSI mode (default: "10Gi") */
+	storageRequest?: StorageQuantity;
+	backup?: boolean;
+	backupSchedule?: CronExpression;
 };
 
 const DEFAULT_POSTGRES_REGISTRY = "docker.int.lab53.net/library/postgres";
@@ -110,106 +110,109 @@ const DEFAULT_POSTGRES_REGISTRY = "docker.int.lab53.net/library/postgres";
  * calling `withPostgres` twice on the same app would collide on the name).
  */
 export function buildPostgresResources(
-  name: string,
-  namespace: string,
-  version: number,
-  options?: PostgresOptions,
+	name: string,
+	namespace: string,
+	version: number,
+	options?: PostgresOptions,
 ): ResourceLike[] {
-  const user = options?.user ?? name;
-  const password = options?.password ?? name;
-  const database = options?.database ?? name;
-  const variant = options?.variant ?? "alpine";
-  const image =
-    options?.image ?? `${DEFAULT_POSTGRES_REGISTRY}:${version}-${variant}`;
+	const user = options?.user ?? name;
+	const password = options?.password ?? name;
+	const database = options?.database ?? name;
+	const variant = options?.variant ?? "alpine";
+	const image =
+		options?.image ?? `${DEFAULT_POSTGRES_REGISTRY}:${version}-${variant}`;
 
-  const pgEnv = [
-    { name: "POSTGRES_USER", value: user },
-    { name: "POSTGRES_PASSWORD", value: password },
-    { name: "POSTGRES_DB", value: database },
-  ];
+	const pgEnv = [
+		{ name: "POSTGRES_USER", value: user },
+		{ name: "POSTGRES_PASSWORD", value: password },
+		{ name: "POSTGRES_DB", value: database },
+	];
 
-  const pgProbes = {
-    startupProbe: {
-      exec: {
-        command: ["pg_isready", "-U", user],
-      },
-      periodSeconds: 5,
-      failureThreshold: 30,
-    },
-    readinessProbe: {
-      exec: {
-        command: ["pg_isready", "-U", user],
-      },
-      periodSeconds: 10,
-      failureThreshold: 3,
-    },
-  };
+	const pgProbes = {
+		startupProbe: {
+			exec: {
+				command: ["pg_isready", "-U", user],
+			},
+			periodSeconds: 5,
+			failureThreshold: 30,
+		},
+		readinessProbe: {
+			exec: {
+				command: ["pg_isready", "-U", user],
+			},
+			periodSeconds: 10,
+			failureThreshold: 3,
+		},
+	};
 
-  const postgresName = `${name}-postgres`;
+	const postgresName = `${name}-postgres`;
 
-  const statefulSet = buildStatefulSet(
-    postgresName,
-    {
-      securityContext: {
-        runAsNonRoot: true,
-        runAsUser: 999,
-        runAsGroup: 999,
-        fsGroup: 999,
-      },
-      containers: [
-        {
-          name: "postgres",
-          image,
-          env: [
-            ...pgEnv,
-            { name: "PGDATA", value: "/var/lib/postgresql/data/pgdata" },
-          ],
-          ports: [{ name: "postgres", containerPort: 5432 }],
-          ...pgProbes,
-          volumeMounts: [
-            {
-              name: "data",
-              mountPath: "/var/lib/postgresql/data",
-            },
-          ],
-        },
-      ],
-    },
-    [buildIscsiPvcTemplate("data", options?.storageRequest)],
-  );
+	const statefulSet = buildStatefulSet(
+		postgresName,
+		{
+			securityContext: {
+				runAsNonRoot: true,
+				runAsUser: 999,
+				runAsGroup: 999,
+				fsGroup: 999,
+			},
+			containers: [
+				{
+					name: "postgres",
+					image,
+					env: [
+						...pgEnv,
+						{
+							name: "PGDATA",
+							value: "/var/lib/postgresql/data/pgdata",
+						},
+					],
+					ports: [{ name: "postgres", containerPort: 5432 }],
+					...pgProbes,
+					volumeMounts: [
+						{
+							name: "data",
+							mountPath: "/var/lib/postgresql/data",
+						},
+					],
+				},
+			],
+		},
+		[buildIscsiPvcTemplate("data", options?.storageRequest)],
+	);
 
-  const headlessService = buildHeadlessService(postgresName, [
-    { name: "postgres", port: 5432 },
-  ]);
+	const headlessService = buildHeadlessService(postgresName, [
+		{ name: "postgres", port: 5432 },
+	]);
 
-  const backupResources = options?.backup
-    ? buildBackupResources(namespace, `data-${postgresName}-0`, {
-        schedule: options.backupSchedule,
-        runAsUser: 999,
-        runAsGroup: 999,
-        fsGroup: 999,
-      })
-    : [];
+	const backupResources = options?.backup
+		? buildBackupResources(namespace, `data-${postgresName}-0`, {
+				schedule: options.backupSchedule,
+				runAsUser: 999,
+				runAsGroup: 999,
+				fsGroup: 999,
+			})
+		: [];
 
-  return [statefulSet, headlessService, ...backupResources];
+	return [statefulSet, headlessService, ...backupResources];
 }
 
 export function withPostgres(
-  version: number,
-  options?: PostgresOptions,
+	version: number,
+	options?: PostgresOptions,
 ): WorkloadModifier {
-  return (app) => ({
-    ...app,
-    extraResources: [
-      ...(app.extraResources ?? []),
-      ...buildPostgresResources(
-        app.name,
-        app.namespace ?? app.name,
-        version,
-        options,
-      ),
-    ],
-  });
+	return (app) => ({
+		...app,
+		extraResources: [
+			...(app.extraResources ?? []),
+			...buildPostgresResources(
+				app.name,
+				app.namespace ?? app.name,
+				version,
+				options,
+			),
+		],
+	});
 }
 
 const POCKET_ID_API_VERSION = "pocketid.internal/v1alpha1";
@@ -217,232 +220,237 @@ const POCKET_ID_URL = "https://auth.lab53.net/";
 const DEFAULT_MIDDLEWARE_CALLBACK_PATH = "/oidc/callback";
 
 export function buildOidcClient(app: WorkloadApp): ResourceLike {
-  const credentialsSecretName = `${app.name}-oidc-credentials`;
+	const credentialsSecretName = `${app.name}-oidc-credentials`;
 
-  return {
-    apiVersion: POCKET_ID_API_VERSION,
-    kind: "PocketIDOIDCClient",
-    metadata: { name: app.name },
-    spec: {
-      secret: { name: credentialsSecretName },
-      allowedUserGroups: [{ name: app.name }],
-      ...(app.webPort && {
-        launchUrl: appUrl(app.name, {
-          subDomain: app.subDomain,
-          externallyAccessible: app.externallyAccessible,
-        }),
-      }),
-    },
-  };
+	return {
+		apiVersion: POCKET_ID_API_VERSION,
+		kind: "PocketIDOIDCClient",
+		metadata: { name: app.name },
+		spec: {
+			secret: { name: credentialsSecretName },
+			allowedUserGroups: [{ name: app.name }],
+			...(app.webPort && {
+				launchUrl: appUrl(app.name, {
+					subDomain: app.subDomain,
+					externallyAccessible: app.externallyAccessible,
+				}),
+			}),
+		},
+	};
 }
 
 function buildOidcGroup(app: WorkloadApp): ResourceLike {
-  return {
-    apiVersion: POCKET_ID_API_VERSION,
-    kind: "PocketIDUserGroup",
-    metadata: { name: app.name },
-    spec: {
-      friendlyName: app.name,
-    },
-  };
+	return {
+		apiVersion: POCKET_ID_API_VERSION,
+		kind: "PocketIDUserGroup",
+		metadata: { name: app.name },
+		spec: {
+			friendlyName: app.name,
+		},
+	};
 }
 
 function buildOidcMiddleware(
-  app: WorkloadApp,
-  bypassPaths?: BypassPath[],
-  headers?: OidcMiddlewareHeader[],
+	app: WorkloadApp,
+	bypassPaths?: BypassPath[],
+	headers?: OidcMiddlewareHeader[],
 ): Middleware {
-  const credentialsSecretName = `${app.name}-oidc-credentials`;
-  const pluginSecretName = `${app.name}-oidc-plugin`;
-  const bypassRule =
-    bypassPaths && bypassPaths.length > 0
-      ? buildBypassRule(bypassPaths)
-      : undefined;
+	const credentialsSecretName = `${app.name}-oidc-credentials`;
+	const pluginSecretName = `${app.name}-oidc-plugin`;
+	const bypassRule =
+		bypassPaths && bypassPaths.length > 0
+			? buildBypassRule(bypassPaths)
+			: undefined;
 
-  return new Middleware({
-    metadata: { name: "oidc-auth" },
-    spec: {
-      plugin: {
-        "traefik-oidc-auth": {
-          Secret: `urn:k8s:secret:${pluginSecretName}:plugin-secret`,
-          Provider: {
-            Url: POCKET_ID_URL,
-            ClientId: `urn:k8s:secret:${credentialsSecretName}:client_id`,
-            ClientSecret: `urn:k8s:secret:${credentialsSecretName}:client_secret`,
-          },
-          Scopes: ["openid", "profile", "email"],
-          CallbackUri: DEFAULT_MIDDLEWARE_CALLBACK_PATH,
-          SessionCookie: {
-            Name: `oidc-${app.name}`,
-            Domain: ".lab53.net",
-            Secure: true,
-            HttpOnly: true,
-            SameSite: "lax",
-          },
-          ...(bypassRule && { BypassAuthenticationRule: bypassRule }),
-          ...(headers &&
-            headers.length > 0 && {
-              Headers: headers.map((h) => ({ Name: h.name, Value: h.value })),
-            }),
-        },
-      },
-    },
-  });
+	return new Middleware({
+		metadata: { name: "oidc-auth" },
+		spec: {
+			plugin: {
+				"traefik-oidc-auth": {
+					Secret: `urn:k8s:secret:${pluginSecretName}:plugin-secret`,
+					Provider: {
+						Url: POCKET_ID_URL,
+						ClientId: `urn:k8s:secret:${credentialsSecretName}:client_id`,
+						ClientSecret: `urn:k8s:secret:${credentialsSecretName}:client_secret`,
+					},
+					Scopes: ["openid", "profile", "email"],
+					CallbackUri: DEFAULT_MIDDLEWARE_CALLBACK_PATH,
+					SessionCookie: {
+						Name: `oidc-${app.name}`,
+						Domain: ".lab53.net",
+						Secure: true,
+						HttpOnly: true,
+						SameSite: "lax",
+					},
+					...(bypassRule && { BypassAuthenticationRule: bypassRule }),
+					...(headers &&
+						headers.length > 0 && {
+							Headers: headers.map((h) => ({
+								Name: h.name,
+								Value: h.value,
+							})),
+						}),
+				},
+			},
+		},
+	});
 }
 
 export type BypassPath = {
-  type: "exact" | "prefix";
-  path: `/${string}`;
+	type: "exact" | "prefix";
+	path: `/${string}`;
 };
 
 function buildBypassRule(paths: BypassPath[]): string {
-  return paths
-    .map(({ type, path }) =>
-      type === "exact" ? `Path(\`${path}\`)` : `PathPrefix(\`${path}\`)`,
-    )
-    .join(" || ");
+	return paths
+		.map(({ type, path }) =>
+			type === "exact" ? `Path(\`${path}\`)` : `PathPrefix(\`${path}\`)`,
+		)
+		.join(" || ");
 }
 
 export type OidcMiddlewareHeader = {
-  name: string;
-  value: string;
+	name: string;
+	value: string;
 };
 
 export type OidcMiddlewareOptions = {
-  enabled: boolean;
-  bypassPaths?: BypassPath[];
-  headers?: OidcMiddlewareHeader[];
+	enabled: boolean;
+	bypassPaths?: BypassPath[];
+	headers?: OidcMiddlewareHeader[];
 };
 
 export type OidcAuthOptions = {
-  middleware?: OidcMiddlewareOptions;
+	middleware?: OidcMiddlewareOptions;
 };
 
 export function withOidcAuth(options?: OidcAuthOptions): WorkloadModifier {
-  const middlewareOptions = options?.middleware;
-  const addMiddleware = middlewareOptions?.enabled ?? false;
+	const middlewareOptions = options?.middleware;
+	const addMiddleware = middlewareOptions?.enabled ?? false;
 
-  return (app) => {
-    const extraResources: ResourceLike[] = [
-      buildOidcGroup(app),
-      buildOidcClient(app),
-    ];
+	return (app) => {
+		const extraResources: ResourceLike[] = [
+			buildOidcGroup(app),
+			buildOidcClient(app),
+		];
 
-    if (addMiddleware) {
-      const pluginSecretName = `${app.name}-oidc-plugin`;
-      extraResources.push(
-        ...buildGeneratedSecret(app.namespace ?? app.name, pluginSecretName, [
-          { key: "plugin-secret", length: 32 },
-        ]),
-        buildOidcMiddleware(
-          app,
-          middlewareOptions?.bypassPaths,
-          middlewareOptions?.headers,
-        ),
-      );
-    }
+		if (addMiddleware) {
+			const pluginSecretName = `${app.name}-oidc-plugin`;
+			extraResources.push(
+				...buildGeneratedSecret(
+					app.namespace ?? app.name,
+					pluginSecretName,
+					[{ key: "plugin-secret", length: 32 }],
+				),
+				buildOidcMiddleware(
+					app,
+					middlewareOptions?.bypassPaths,
+					middlewareOptions?.headers,
+				),
+			);
+		}
 
-    return {
-      ...app,
-      forwardAuth: addMiddleware ? true : app.forwardAuth,
-      extraResources: [...(app.extraResources ?? []), ...extraResources],
-    };
-  };
+		return {
+			...app,
+			forwardAuth: addMiddleware ? true : app.forwardAuth,
+			extraResources: [...(app.extraResources ?? []), ...extraResources],
+		};
+	};
 }
 
 export type IscsiVolumeMount = {
-  name: string;
-  mountPath: string;
-  storageRequest?: StorageQuantity;
-  backup?: boolean;
-  backupSchedule?: CronExpression;
+	name: string;
+	mountPath: string;
+	storageRequest?: StorageQuantity;
+	backup?: boolean;
+	backupSchedule?: CronExpression;
 };
 
 export type IscsiVolumesConfig = {
-  [containerName: string]: IscsiVolumeMount[];
+	[containerName: string]: IscsiVolumeMount[];
 };
 
 export function withIscsiVolumes(config: IscsiVolumesConfig): WorkloadModifier {
-  return (app) => {
-    const requestedContainers = Object.keys(config);
-    const existingContainerNames = [
-      ...app.podSpec.containers.map((c) => c.name),
-      ...(app.podSpec.initContainers ?? []).map((c) => c.name),
-    ];
-    const missing = requestedContainers.filter(
-      (name) => !existingContainerNames.includes(name),
-    );
+	return (app) => {
+		const requestedContainers = Object.keys(config);
+		const existingContainerNames = [
+			...app.podSpec.containers.map((c) => c.name),
+			...(app.podSpec.initContainers ?? []).map((c) => c.name),
+		];
+		const missing = requestedContainers.filter(
+			(name) => !existingContainerNames.includes(name),
+		);
 
-    if (missing.length > 0) {
-      throw new Error(
-        `iSCSI volume config references non-existent containers: ${missing.join(", ")}`,
-      );
-    }
+		if (missing.length > 0) {
+			throw new Error(
+				`iSCSI volume config references non-existent containers: ${missing.join(", ")}`,
+			);
+		}
 
-    const allMounts = Object.values(config).flat();
+		const allMounts = Object.values(config).flat();
 
-    const pvcs: ResourceLike[] = allMounts.map((mount) =>
-      buildIscsiPvc(`${app.name}-${mount.name}`, mount.storageRequest),
-    );
+		const pvcs: ResourceLike[] = allMounts.map((mount) =>
+			buildIscsiPvc(`${app.name}-${mount.name}`, mount.storageRequest),
+		);
 
-    const volumes: IVolume[] = allMounts.map((mount) => ({
-      name: mount.name,
-      persistentVolumeClaim: { claimName: `${app.name}-${mount.name}` },
-    }));
+		const volumes: IVolume[] = allMounts.map((mount) => ({
+			name: mount.name,
+			persistentVolumeClaim: { claimName: `${app.name}-${mount.name}` },
+		}));
 
-    const applyMounts = (containers: IContainer[]): IContainer[] =>
-      containers.map((container) => {
-        const containerMounts = config[container.name];
-        if (!containerMounts) return container;
+		const applyMounts = (containers: IContainer[]): IContainer[] =>
+			containers.map((container) => {
+				const containerMounts = config[container.name];
+				if (!containerMounts) return container;
 
-        return {
-          ...container,
-          volumeMounts: [
-            ...(container.volumeMounts ?? []),
-            ...containerMounts.map((m) => ({
-              name: m.name,
-              mountPath: m.mountPath,
-            })),
-          ],
-        };
-      });
+				return {
+					...container,
+					volumeMounts: [
+						...(container.volumeMounts ?? []),
+						...containerMounts.map((m) => ({
+							name: m.name,
+							mountPath: m.mountPath,
+						})),
+					],
+				};
+			});
 
-    const containers = applyMounts(app.podSpec.containers);
-    const initContainers = app.podSpec.initContainers
-      ? applyMounts(app.podSpec.initContainers as IContainer[])
-      : undefined;
+		const containers = applyMounts(app.podSpec.containers);
+		const initContainers = app.podSpec.initContainers
+			? applyMounts(app.podSpec.initContainers as IContainer[])
+			: undefined;
 
-    return {
-      ...app,
-      strategy: { type: "Recreate" },
-      podSpec: {
-        ...app.podSpec,
-        containers,
-        ...(initContainers && { initContainers }),
-        volumes: [...(app.podSpec.volumes ?? []), ...volumes],
-      },
-      extraResources: [
-        ...(app.extraResources ?? []),
-        ...pvcs,
-        ...allMounts
-          .filter((mount) => mount.backup)
-          .flatMap((mount) =>
-            buildBackupResources(
-              app.namespace ?? app.name,
-              `${app.name}-${mount.name}`,
-              {
-                schedule: mount.backupSchedule,
-              },
-            ),
-          ),
-      ],
-    };
-  };
+		return {
+			...app,
+			strategy: { type: "Recreate" },
+			podSpec: {
+				...app.podSpec,
+				containers,
+				...(initContainers && { initContainers }),
+				volumes: [...(app.podSpec.volumes ?? []), ...volumes],
+			},
+			extraResources: [
+				...(app.extraResources ?? []),
+				...pvcs,
+				...allMounts
+					.filter((mount) => mount.backup)
+					.flatMap((mount) =>
+						buildBackupResources(
+							app.namespace ?? app.name,
+							`${app.name}-${mount.name}`,
+							{
+								schedule: mount.backupSchedule,
+							},
+						),
+					),
+			],
+		};
+	};
 }
 
 export function applyModifiers(
-  app: WorkloadApp,
-  ...modifiers: WorkloadModifier[]
+	app: WorkloadApp,
+	...modifiers: WorkloadModifier[]
 ): WorkloadApp {
-  return modifiers.reduce((current, modifier) => modifier(current), app);
+	return modifiers.reduce((current, modifier) => modifier(current), app);
 }

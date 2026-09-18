@@ -1,97 +1,97 @@
 # install: helm upgrade --install -n argocd --create-namespace -f argocd-values.yaml argocd argocd/argo-cd
 
 global:
-  domain: argocd.int.lab53.net
+    domain: argocd.int.lab53.net
 
 configs:
-  cm:
-    exec.enabled: true
-    resource.exclusions:
-      | # Default exclusion list minus Endpoints and EndpointSlices because we managed EndpointSlices in Argo to route traffic to external hosts.
-      ### Internal Kubernetes resources excluded reduce the number of watched events
-      - apiGroups:
-        - coordination.k8s.io
-        kinds:
-        - Lease
-      ### Internal Kubernetes Authz/Authn resources excluded reduce the number of watched events
-      - apiGroups:
-        - authentication.k8s.io
-        - authorization.k8s.io
-        kinds:
-        - SelfSubjectReview
-        - TokenReview
-        - LocalSubjectAccessReview
-        - SelfSubjectAccessReview
-        - SelfSubjectRulesReview
-        - SubjectAccessReview
-      ### Intermediate Certificate Request excluded reduce the number of watched events
-      - apiGroups:
-        - certificates.k8s.io
-        kinds:
-        - CertificateSigningRequest
-      - apiGroups:
-        - cert-manager.io
-        kinds:
-        - CertificateRequest
-      ### Cilium internal resources excluded reduce the number of watched events and UI Clutter
-      - apiGroups:
-        - cilium.io
-        kinds:
-        - CiliumIdentity
-        - CiliumEndpoint
-        - CiliumEndpointSlice
-      ### Kyverno intermediate and reporting resources excluded reduce the number of watched events and improve performance
-      - apiGroups:
-        - kyverno.io
-        - reports.kyverno.io
-        - wgpolicyk8s.io
-        kinds:
-        - PolicyReport
-        - ClusterPolicyReport
-        - EphemeralReport
-        - ClusterEphemeralReport
-        - AdmissionReport
-        - ClusterAdmissionReport
-        - BackgroundScanReport
-        - ClusterBackgroundScanReport
-        - UpdateRequest
-  cmp:
-    create: true
-    plugins:
-      ts:
-        generate:
-          command: ["bun", "run", "main.ts"]
-        discover:
-          fileName: main.ts
-  params:
-    server.insecure: true # This is the Argo project's recommendation for TLS termination at the Gateway level; terminate there, connect to Argo at :80.
+    cm:
+        exec.enabled: true
+        resource.exclusions:
+            | # Default exclusion list minus Endpoints and EndpointSlices because we managed EndpointSlices in Argo to route traffic to external hosts.
+            ### Internal Kubernetes resources excluded reduce the number of watched events
+            - apiGroups:
+              - coordination.k8s.io
+              kinds:
+              - Lease
+            ### Internal Kubernetes Authz/Authn resources excluded reduce the number of watched events
+            - apiGroups:
+              - authentication.k8s.io
+              - authorization.k8s.io
+              kinds:
+              - SelfSubjectReview
+              - TokenReview
+              - LocalSubjectAccessReview
+              - SelfSubjectAccessReview
+              - SelfSubjectRulesReview
+              - SubjectAccessReview
+            ### Intermediate Certificate Request excluded reduce the number of watched events
+            - apiGroups:
+              - certificates.k8s.io
+              kinds:
+              - CertificateSigningRequest
+            - apiGroups:
+              - cert-manager.io
+              kinds:
+              - CertificateRequest
+            ### Cilium internal resources excluded reduce the number of watched events and UI Clutter
+            - apiGroups:
+              - cilium.io
+              kinds:
+              - CiliumIdentity
+              - CiliumEndpoint
+              - CiliumEndpointSlice
+            ### Kyverno intermediate and reporting resources excluded reduce the number of watched events and improve performance
+            - apiGroups:
+              - kyverno.io
+              - reports.kyverno.io
+              - wgpolicyk8s.io
+              kinds:
+              - PolicyReport
+              - ClusterPolicyReport
+              - EphemeralReport
+              - ClusterEphemeralReport
+              - AdmissionReport
+              - ClusterAdmissionReport
+              - BackgroundScanReport
+              - ClusterBackgroundScanReport
+              - UpdateRequest
+    cmp:
+        create: true
+        plugins:
+            ts:
+                generate:
+                    command: ["bun", "run", "main.ts"]
+                discover:
+                    fileName: main.ts
+    params:
+        server.insecure: true # This is the Argo project's recommendation for TLS termination at the Gateway level; terminate there, connect to Argo at :80.
 
 repoServer:
-  extraContainers:
-    - name: ts-cmp
-      command: ["/var/run/argocd/argocd-cmp-server"]
-      image: oven/bun:1.3.11
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 999
-      env: # This is required to allow Bun to install dependencies at a path it has write access to
-        - name: BUN_INSTALL_CACHE_DIR
-          value: /tmp
-      volumeMounts:
-        - mountPath: /tmp
-          name: cmp-tmp
-        - mountPath: /home/bun/app
-          name: cmp-tmp
-        - mountPath: /var/run/argocd
-          name: var-files
-        - mountPath: /home/argocd/cmp-server/plugins
-          name: plugins
-        - mountPath: /home/argocd/cmp-server/config/plugin.yaml
-          name: argocd-cmp-cm
-          subPath: ts.yaml
-  volumes:
-    - name: argocd-cmp-cm
-      configMap:
-        name: argocd-cmp-cm
-    - name: cmp-tmp
-      emptyDir: {}
+    extraContainers:
+        - name: ts-cmp
+          command: ["/var/run/argocd/argocd-cmp-server"]
+          image: oven/bun:1.3.11
+          securityContext:
+              runAsNonRoot: true
+              runAsUser: 999
+          env: # This is required to allow Bun to install dependencies at a path it has write access to
+              - name: BUN_INSTALL_CACHE_DIR
+                value: /tmp
+          volumeMounts:
+              - mountPath: /tmp
+                name: cmp-tmp
+              - mountPath: /home/bun/app
+                name: cmp-tmp
+              - mountPath: /var/run/argocd
+                name: var-files
+              - mountPath: /home/argocd/cmp-server/plugins
+                name: plugins
+              - mountPath: /home/argocd/cmp-server/config/plugin.yaml
+                name: argocd-cmp-cm
+                subPath: ts.yaml
+    volumes:
+        - name: argocd-cmp-cm
+          configMap:
+              name: argocd-cmp-cm
+        - name: cmp-tmp
+          emptyDir: {}

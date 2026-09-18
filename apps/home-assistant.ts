@@ -2,30 +2,30 @@ import { applyModifiers, withIscsiVolumes } from "../modifiers";
 import type { WorkloadApp } from "../types";
 
 const base: WorkloadApp = {
-  kind: "workload",
-  name: "home-assistant",
-  podSpec: {
-    containers: [
-      {
-        name: "main",
-        image: "ghcr.io/home-assistant/home-assistant:2026.6.1",
-        env: [
-          {
-            name: "TZ",
-            value: "America/New_York",
-          },
-        ],
-        ports: [{ name: "http", containerPort: 8123 }],
-      },
-    ],
-  },
-  webPort: 8123,
-  subDomain: "home",
+	kind: "workload",
+	name: "home-assistant",
+	podSpec: {
+		containers: [
+			{
+				name: "main",
+				image: "ghcr.io/home-assistant/home-assistant:2026.6.1",
+				env: [
+					{
+						name: "TZ",
+						value: "America/New_York",
+					},
+				],
+				ports: [{ name: "http", containerPort: 8123 }],
+			},
+		],
+	},
+	webPort: 8123,
+	subDomain: "home",
 };
 
 export default applyModifiers(
-  base,
-  withIscsiVolumes({
-    main: [{ name: "config", mountPath: "/config", backup: true }],
-  }),
+	base,
+	withIscsiVolumes({
+		main: [{ name: "config", mountPath: "/config", backup: true }],
+	}),
 );

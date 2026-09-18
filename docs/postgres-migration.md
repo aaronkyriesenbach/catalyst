@@ -26,44 +26,44 @@ Postgres instances are migrating from NFS-backed sidecar containers to standalon
 
 1. **Install `open-iscsi` on all k3s nodes:**
 
-   ```bash
-   sudo apt install open-iscsi
-   sudo systemctl enable --now iscsid
-   ```
+    ```bash
+    sudo apt install open-iscsi
+    sudo systemctl enable --now iscsid
+    ```
 
 2. **Enable iSCSI on TrueNAS:**
 
-   TrueNAS Web UI → Shares → iSCSI → enable the service.
+    TrueNAS Web UI → Shares → iSCSI → enable the service.
 
 3. **Create a TrueNAS API key:**
 
-   TrueNAS Web UI → Profile → API Keys → create a new key.
+    TrueNAS Web UI → Profile → API Keys → create a new key.
 
 4. **Create the CSI driver secret:**
 
-   ```bash
-   kubectl create namespace truenas-csi
-   kubectl create secret generic truenas-api-credentials \
-     --namespace truenas-csi \
-     --from-literal=api-key='<your-truenas-api-key>'
-   ```
+    ```bash
+    kubectl create namespace truenas-csi
+    kubectl create secret generic truenas-api-credentials \
+      --namespace truenas-csi \
+      --from-literal=api-key='<your-truenas-api-key>'
+    ```
 
 5. **Deploy the CSI driver:**
 
-   ```bash
-   bun run render truenas-csi  # verify output
-   git add apps/truenas-csi.ts apps/truenas-csi/
-   git commit -m "feat: add truenas-csi driver"
-   git push  # ArgoCD picks it up
-   ```
+    ```bash
+    bun run render truenas-csi  # verify output
+    git add apps/truenas-csi.ts apps/truenas-csi/
+    git commit -m "feat: add truenas-csi driver"
+    git push  # ArgoCD picks it up
+    ```
 
 6. **Verify the driver is running:**
 
-   ```bash
-   kubectl get pods -n truenas-csi
-   kubectl get csidrivers  # should show csi.truenas.io
-   kubectl get storageclass truenas-iscsi
-   ```
+    ```bash
+    kubectl get pods -n truenas-csi
+    kubectl get csidrivers  # should show csi.truenas.io
+    kubectl get storageclass truenas-iscsi
+    ```
 
 ## Migrating an app
 
@@ -196,18 +196,18 @@ The default ZFS pool is set in `apps/truenas-csi/deploy.yaml` via the `defaultPo
 
 ```typescript
 const ssdStorageClass: ResourceLike = {
-  apiVersion: "storage.k8s.io/v1",
-  kind: "StorageClass",
-  metadata: { name: "truenas-iscsi-ssd" },
-  provisioner: "csi.truenas.io",
-  parameters: {
-    protocol: "iscsi",
-    pool: "ssd-pool", // overrides defaultPool
-    compression: "LZ4",
-  },
-  reclaimPolicy: "Retain",
-  volumeBindingMode: "Immediate",
-  allowVolumeExpansion: true,
+	apiVersion: "storage.k8s.io/v1",
+	kind: "StorageClass",
+	metadata: { name: "truenas-iscsi-ssd" },
+	provisioner: "csi.truenas.io",
+	parameters: {
+		protocol: "iscsi",
+		pool: "ssd-pool", // overrides defaultPool
+		compression: "LZ4",
+	},
+	reclaimPolicy: "Retain",
+	volumeBindingMode: "Immediate",
+	allowVolumeExpansion: true,
 };
 ```
 

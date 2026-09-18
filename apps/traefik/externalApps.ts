@@ -4,122 +4,122 @@ import { Certificate } from "@kubernetes-models/cert-manager/cert-manager.io/v1"
 import type { BackendTLSPolicy } from "../../types";
 import { buildRoute } from "../../utils";
 import {
-  externalAppBackendCertSecretName,
-  externalAppBackendHostname,
-  externalApps,
+	externalAppBackendCertSecretName,
+	externalAppBackendHostname,
+	externalApps,
 } from "./externalApps.config";
 
 const externalEndpointSlices = externalApps.map(
-  (a) =>
-    new EndpointSlice({
-      metadata: {
-        name: `${a.name}-external`,
-        labels: {
-          "kubernetes.io/service-name": `${a.name}-external`,
-        },
-      },
-      addressType: "IPv4",
-      ports: [
-        {
-          name: "https",
-          port: a.port,
-        },
-      ],
-      endpoints: [
-        {
-          addresses: [a.ipAddress],
-          conditions: {
-            ready: true,
-          },
-        },
-      ],
-    }),
+	(a) =>
+		new EndpointSlice({
+			metadata: {
+				name: `${a.name}-external`,
+				labels: {
+					"kubernetes.io/service-name": `${a.name}-external`,
+				},
+			},
+			addressType: "IPv4",
+			ports: [
+				{
+					name: "https",
+					port: a.port,
+				},
+			],
+			endpoints: [
+				{
+					addresses: [a.ipAddress],
+					conditions: {
+						ready: true,
+					},
+				},
+			],
+		}),
 );
 
 const externalCerts = externalApps.map(
-  (a) =>
-    new Certificate({
-      metadata: {
-        name: `${a.name}-backend-cert`,
-      },
-      spec: {
-        secretName: externalAppBackendCertSecretName(a),
-        commonName: externalAppBackendHostname(a),
-        dnsNames: [externalAppBackendHostname(a)],
-        // Auto-pushed to the appliances by the cert-deploy CronJobs, so leaves
-        // are short-lived and rotate their key each renewal; the root CA stays
-        // long-lived + key-pinned (see internal-ca.ts).
-        duration: "2160h",
-        renewBefore: "720h",
-        privateKey: {
-          rotationPolicy: "Always",
-        },
-        issuerRef: {
-          name: "internal-ca",
-          kind: "ClusterIssuer",
-        },
-      },
-    }),
+	(a) =>
+		new Certificate({
+			metadata: {
+				name: `${a.name}-backend-cert`,
+			},
+			spec: {
+				secretName: externalAppBackendCertSecretName(a),
+				commonName: externalAppBackendHostname(a),
+				dnsNames: [externalAppBackendHostname(a)],
+				// Auto-pushed to the appliances by the cert-deploy CronJobs, so leaves
+				// are short-lived and rotate their key each renewal; the root CA stays
+				// long-lived + key-pinned (see internal-ca.ts).
+				duration: "2160h",
+				renewBefore: "720h",
+				privateKey: {
+					rotationPolicy: "Always",
+				},
+				issuerRef: {
+					name: "internal-ca",
+					kind: "ClusterIssuer",
+				},
+			},
+		}),
 );
 
 const externalBackendTlsPolicies: BackendTLSPolicy[] = externalApps.map(
-  (a) => ({
-    apiVersion: "gateway.networking.k8s.io/v1" as const,
-    kind: "BackendTLSPolicy" as const,
-    metadata: {
-      name: `${a.name}-external-tls`,
-    },
-    spec: {
-      targetRefs: [
-        {
-          name: `${a.name}-external`,
-          group: "",
-          kind: "Service",
-          sectionName: "https",
-        },
-      ],
-      validation: {
-        hostname: externalAppBackendHostname(a),
-        caCertificateRefs: [
-          {
-            group: "",
-            kind: "ConfigMap",
-            name: "internal-root-ca-bundle",
-          },
-        ],
-      },
-    },
-  }),
+	(a) => ({
+		apiVersion: "gateway.networking.k8s.io/v1" as const,
+		kind: "BackendTLSPolicy" as const,
+		metadata: {
+			name: `${a.name}-external-tls`,
+		},
+		spec: {
+			targetRefs: [
+				{
+					name: `${a.name}-external`,
+					group: "",
+					kind: "Service",
+					sectionName: "https",
+				},
+			],
+			validation: {
+				hostname: externalAppBackendHostname(a),
+				caCertificateRefs: [
+					{
+						group: "",
+						kind: "ConfigMap",
+						name: "internal-root-ca-bundle",
+					},
+				],
+			},
+		},
+	}),
 );
 
 const externalServices = externalApps.map(
-  (a) =>
-    new Service({
-      metadata: {
-        name: `${a.name}-external`,
-      },
-      spec: {
-        ports: [
-          {
-            name: "https",
-            port: a.port,
-            targetPort: a.port,
-          },
-        ],
-      },
-    }),
+	(a) =>
+		new Service({
+			metadata: {
+				name: `${a.name}-external`,
+			},
+			spec: {
+				ports: [
+					{
+						name: "https",
+						port: a.port,
+						targetPort: a.port,
+					},
+				],
+			},
+		}),
 );
 
 const externalRoutes = externalApps.map((a) =>
-  buildRoute(`${a.name}-external`, a.port, {
-    subDomain: a.subDomain ?? a.name,
-  }),
+	buildRoute(`${a.name}-external`, a.port, {
+		subDomain: a.subDomain ?? a.name,
+	}),
 );
 
 export const externalAppResources = [
-  ...externalEndpointSlices,
-  ...externalCerts,
-  ...externalBackendTlsPolicies,
-  ...externalServices,
-  ...externalRoutes,
+	...externalEndpointSlices,
+	...externalCerts,
+	...externalBackendTlsPolicies,
+	...externalServices,
+	...externalRoutes,
 ];

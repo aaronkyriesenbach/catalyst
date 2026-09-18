@@ -4,37 +4,37 @@
 apiVersion: helm.cattle.io/v1
 kind: HelmChartConfig
 metadata:
-  name: traefik
-  namespace: kube-system
+    name: traefik
+    namespace: kube-system
 spec:
-  valuesContent: |-
-    service:
-      annotations:
-        kube-vip.io/loadbalancerIPs: 192.168.53.201
-    providers:
-      kubernetesGateway:
-        enabled: true
-    experimental:
-      plugins:
-        traefik-oidc-auth:
-          moduleName: github.com/sevensolutions/traefik-oidc-auth
-          version: v0.19.0
-    gateway:
-      enabled: false # Disable the default gateway - we manage a gateway w/ TLS settings in the traefik namespace
-    ports:
-      http:
-        port: 80
-        exposedPort: 80
-        expose:
-          default: true
-      https:
-        port: 443
-        exposedPort: 443
-        expose:
-          default: true
-      web:
-        expose:
-          default: false
-      websecure:
-        expose:
-          default: false
+    valuesContent: |-
+        service:
+          annotations:
+            kube-vip.io/loadbalancerIPs: 192.168.53.201
+        providers:
+          kubernetesGateway:
+            enabled: true
+        experimental:
+          plugins:
+            traefik-oidc-auth:
+              moduleName: github.com/sevensolutions/traefik-oidc-auth
+              version: v0.19.0
+        gateway:
+          enabled: false # Disable the default gateway - we manage a gateway w/ TLS settings in the traefik namespace
+        ports:
+          http:
+            port: 80
+            exposedPort: 80
+            expose:
+              default: true
+          https:
+            port: 443
+            exposedPort: 443
+            expose:
+              default: true
+          web:
+            expose:
+              default: false
+          websecure:
+            expose:
+              default: false

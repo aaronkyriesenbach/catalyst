@@ -79,12 +79,12 @@ Secrets Manager) defines the tag routing, e.g.:
 ```yaml
 version: 1
 urls:
-  - pover://USER_KEY@APP_TOKEN?priority=high:
-      tag: push,warn,critical
-  - pover://USER_KEY@APP_TOKEN?priority=emergency&retry=300&expire=10800:
-      tag: emergency
-  - ses://...:
-      tag: email,critical
+    - pover://USER_KEY@APP_TOKEN?priority=high:
+          tag: push,warn,critical
+    - pover://USER_KEY@APP_TOKEN?priority=emergency&retry=300&expire=10800:
+          tag: emergency
+    - ses://...:
+          tag: email,critical
 ```
 
 ### K8s deploy
@@ -274,8 +274,8 @@ Hooks already exist in `scripts/deploy-external-certs.ts` and
 
 - Create a `cert-deploy-notify` ConfigMap in `traefik` (the CronJobs already
   reference it via `envFrom … optional: true`) with:
-  - `APPRISE_URL` = `http://apprise.<ns>.svc:8000`
-  - `APPRISE_KEY` = the stored Apprise config key
+    - `APPRISE_URL` = `http://apprise.<ns>.svc:8000`
+    - `APPRISE_KEY` = the stored Apprise config key
 - Add a per-job `HEALTHCHECK_URL` env (each appliance = its own check).
 - Behaviour: handled failure → Apprise `tag=critical` (push+email); success →
   Healthchecks ping; never-ran/crashed → Healthchecks missed-ping alert.
@@ -344,10 +344,10 @@ Deferred work, intentionally **not** part of the initial build:
   NetworkPolicy approach that was considered and dropped, and replaces the
   interim "any in-cluster pod that knows a key can POST" model (see §1). Until
   then, internal-only reachability + obfuscated keys are the only controls.
-  - _Note:_ a Kubernetes `NetworkPolicy` (default-deny + allow-known-callers)
-    would be the lighter-weight alternative if the mesh slips — but it requires a
-    CNI that enforces NetworkPolicy (currently unconfirmed in this cluster) and
-    is made redundant by the mesh, so it is **not** being pursued.
+    - _Note:_ a Kubernetes `NetworkPolicy` (default-deny + allow-known-callers)
+      would be the lighter-weight alternative if the mesh slips — but it requires a
+      CNI that enforces NetworkPolicy (currently unconfirmed in this cluster) and
+      is made redundant by the mesh, so it is **not** being pursued.
 - **External uptime monitor.** The alerting workload runs inside the cluster, so
   a total cluster-down event can't POST anything. Healthchecks covers cron-level
   misses; a true external monitor closes the remaining gap.

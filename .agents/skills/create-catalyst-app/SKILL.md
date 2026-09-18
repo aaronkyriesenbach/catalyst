@@ -1,11 +1,11 @@
 ---
 name: create-catalyst-app
 description: >
-  Create a new app in the catalyst cluster repository. Use when the user asks
-  to create, add, scaffold, or deploy a new app, service, or workload on the
-  cluster. Covers all three app kinds — WorkloadApp, StaticApp, HelmChart —
-  and auto-discovers the app's recommended installation method before adapting
-  it to catalyst's conventions.
+    Create a new app in the catalyst cluster repository. Use when the user asks
+    to create, add, scaffold, or deploy a new app, service, or workload on the
+    cluster. Covers all three app kinds — WorkloadApp, StaticApp, HelmChart —
+    and auto-discovers the app's recommended installation method before adapting
+    it to catalyst's conventions.
 ---
 
 # Create Catalyst App

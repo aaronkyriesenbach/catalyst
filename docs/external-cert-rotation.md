@@ -202,26 +202,26 @@ port, strategy) — it never imports repo modules.
 type KeyedSecret<K extends string> = { name: string; keys: Record<K, string> };
 
 type CertDeployStrategy =
-  | {
-      type: "proxmox";
-      node: string;
-      credentials: KeyedSecret<"tokenId" | "tokenSecret">;
-    }
-  | {
-      type: "truenas";
-      credentials: KeyedSecret<"apiKey">;
-      importedNamePrefix?: string;
-      pruneKeep?: number;
-    }
-  | { type: "unifi-local-api"; credentials: KeyedSecret<"apiKey"> };
+	| {
+			type: "proxmox";
+			node: string;
+			credentials: KeyedSecret<"tokenId" | "tokenSecret">;
+	  }
+	| {
+			type: "truenas";
+			credentials: KeyedSecret<"apiKey">;
+			importedNamePrefix?: string;
+			pruneKeep?: number;
+	  }
+	| { type: "unifi-local-api"; credentials: KeyedSecret<"apiKey"> };
 
 export type ExternalApp = {
-  name: string;
-  ipAddress: string;
-  port: number;
-  subDomain?: string;
-  insecure?: boolean;
-  certDeploy?: CertDeployStrategy; // ← new
+	name: string;
+	ipAddress: string;
+	port: number;
+	subDomain?: string;
+	insecure?: boolean;
+	certDeploy?: CertDeployStrategy; // ← new
 };
 ```
 
@@ -257,13 +257,13 @@ working (or a one-time manual push).
 
 - **Populate AWS Secrets Manager** with one JSON secret per appliance at
   `lab53/cluster0/traefik/<name>-deploy-creds`:
-  - `proxmox-deploy-creds`: `{ "token-id": "user@realm!tokenid", "token-secret": "<uuid>" }`
-  - `truenas-deploy-creds`: `{ "api-key": "<key>" }`
-  - `unifi-deploy-creds`: `{ "username": "<user>", "password": "<pass>" }`
-    — must be a **local-only UniFi OS admin** account (not a Ubiquiti cloud/SSO
-    login). UniFi's `X-API-KEY` keys only cover the Network Integration API, not
-    the console `/api/userCertificates` endpoint, so a session login
-    (username/password) is required.
+    - `proxmox-deploy-creds`: `{ "token-id": "user@realm!tokenid", "token-secret": "<uuid>" }`
+    - `truenas-deploy-creds`: `{ "api-key": "<key>" }`
+    - `unifi-deploy-creds`: `{ "username": "<user>", "password": "<pass>" }`
+      — must be a **local-only UniFi OS admin** account (not a Ubiquiti cloud/SSO
+      login). UniFi's `X-API-KEY` keys only cover the Network Integration API, not
+      the console `/api/userCertificates` endpoint, so a session login
+      (username/password) is required.
 - **Confirm the Proxmox node list** — `externalApps.config.ts` lists
   `node1` (192.168.53.100) and `node2` (192.168.53.101). Verify node2's IP and
   **append any future nodes** to the `nodes` array; each is probed/deployed
@@ -302,8 +302,8 @@ AWS SM secret `lab53/cluster0/traefik/proxmox-deploy-creds`:
 
 ```json
 {
-  "token-id": "cert-deploy@pve!automation",
-  "token-secret": "<uuid from token add>"
+	"token-id": "cert-deploy@pve!automation",
+	"token-secret": "<uuid from token add>"
 }
 ```
 

@@ -7,40 +7,40 @@ import { readFile } from "../utils";
 const deployYaml = await readFile("./truenas-csi/deploy.yaml", import.meta.url);
 
 const deployResources = parseAllDocuments(deployYaml)
-  .map((doc) => doc.toJSON() as ResourceLike)
-  .filter(Boolean);
+	.map((doc) => doc.toJSON() as ResourceLike)
+	.filter(Boolean);
 
 const storageClass: StorageClass = new StorageClass({
-  metadata: {
-    name: "truenas-iscsi",
-  },
-  provisioner: "csi.truenas.io",
-  parameters: {
-    protocol: "iscsi",
-    compression: "LZ4",
-    volblocksize: "16K",
-    "iscsi.blocksize": "4096",
-  },
-  reclaimPolicy: "Delete",
-  volumeBindingMode: "Immediate",
-  allowVolumeExpansion: true,
+	metadata: {
+		name: "truenas-iscsi",
+	},
+	provisioner: "csi.truenas.io",
+	parameters: {
+		protocol: "iscsi",
+		compression: "LZ4",
+		volblocksize: "16K",
+		"iscsi.blocksize": "4096",
+	},
+	reclaimPolicy: "Delete",
+	volumeBindingMode: "Immediate",
+	allowVolumeExpansion: true,
 });
 
 const volumeSnapshotClass: ResourceLike = {
-  apiVersion: "snapshot.storage.k8s.io/v1",
-  kind: "VolumeSnapshotClass",
-  metadata: {
-    name: "truenas-iscsi",
-  },
-  driver: "csi.truenas.io",
-  deletionPolicy: "Delete",
+	apiVersion: "snapshot.storage.k8s.io/v1",
+	kind: "VolumeSnapshotClass",
+	metadata: {
+		name: "truenas-iscsi",
+	},
+	driver: "csi.truenas.io",
+	deletionPolicy: "Delete",
 };
 
 const config: StaticApp = {
-  kind: "static",
-  name: "truenas-csi",
-  project: Project.SYSTEM,
-  resources: [...deployResources, storageClass, volumeSnapshotClass],
+	kind: "static",
+	name: "truenas-csi",
+	project: Project.SYSTEM,
+	resources: [...deployResources, storageClass, volumeSnapshotClass],
 };
 
 export default config;
