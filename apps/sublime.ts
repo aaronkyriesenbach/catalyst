@@ -93,7 +93,7 @@ const base: WorkloadApp = {
 			},
 			{
 				name: "whisper",
-				image: "ghcr.io/ggml-org/whisper.cpp:main",
+				image: "ghcr.io/ggml-org/whisper.cpp:main-c62adfbd1ecdaea9e295c72d672992514a2d887c",
 				command: ["whisper-server"],
 				args: [
 					"--host",
