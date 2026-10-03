@@ -9,4 +9,8 @@ libraries:
       languages: [en]
 
 providers:
-    chain: [opensubtitles, subdl]
+    chain: [whisper, opensubtitles, subdl]
+    whisper:
+        # Sidecar container in the same pod
+        endpoint: http://localhost:8081
+        worker_count: 1
