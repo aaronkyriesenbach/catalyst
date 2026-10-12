@@ -1,17 +1,18 @@
 import { buildBackupResources } from "../backup";
 import type { StaticApp } from "../types";
-import { readFile, buildHelmChart } from "../utils";
-
-const chart = buildHelmChart("pocketIdOperator", {
-	name: "pocket-id-operator",
-	targetNamespace: "pocket-id",
-	valuesContent: await readFile("./pocket-id/values.yaml", import.meta.url),
-});
+import { readYaml } from "../utils";
 
 const config: StaticApp = {
 	kind: "static",
 	name: "pocket-id",
-	resources: [chart, ...buildBackupResources("pocket-id", "pocket-id-data")],
+	resources: buildBackupResources("pocket-id", "pocket-id-data"),
+	helmReleases: [
+		{
+			chart: "pocketIdOperator",
+			releaseName: "pocket-id-operator",
+			values: await readYaml("./pocket-id/values.yaml", import.meta.url),
+		},
+	],
 };
 
 export default config;
