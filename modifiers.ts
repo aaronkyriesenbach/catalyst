@@ -150,12 +150,6 @@ export function buildPostgresResources(
 	const statefulSet = buildStatefulSet(
 		postgresName,
 		{
-			securityContext: {
-				runAsNonRoot: true,
-				runAsUser: 999,
-				runAsGroup: 999,
-				fsGroup: 999,
-			},
 			containers: [
 				{
 					name: "postgres",
