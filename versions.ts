@@ -105,7 +105,7 @@ export const images = {
 	},
 	navidrome: {
 		name: "ghcr.io/navidrome/navidrome",
-		tag: "0.62.0",
+		tag: "0.64.2",
 	},
 	resticServer: {
 		name: "docker.io/restic/rest-server",
