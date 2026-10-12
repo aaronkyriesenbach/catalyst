@@ -58,7 +58,7 @@ export const images = {
 	},
 	miniflux: {
 		name: "docker.io/miniflux/miniflux",
-		tag: "2.2.19",
+		tag: "2.3.3",
 		mirrored: true,
 	},
 	linkwarden: {
