@@ -124,7 +124,7 @@ Mend Renovate (GitHub App) opens PRs for images, charts and npm packages from `r
 
 - **What it reads:** custom regex managers over `versions.ts` (images, repo charts, OCI charts; `depType` `image` / `helm-chart`), the built-in `helm-values` manager over `apps/**/*values.yaml`, `bun` (`package.json`/`bun.lock`) and `github-actions`. `cluster/**` is ignored (manual), and the ArgoCD chart is pinned by `--version` in the `install-argo` script, so Renovate never sees it.
 - **`versions.ts` shape:** the regexes live in `renovate.json` and `scripts/check-versions.ts` reads them from there. Keep the file Prettier-formatted, one entry per object, fields in the existing order, no computed values. Run `bun run check-versions`.
-- **Timing:** updates are created once a version is 7 days old (`minimumReleaseAge`), only in the weekly window (before 6am Saturday, America/New_York). The Dependency Dashboard issue is not schedule-bound.
+- **Timing:** Docker Hub, Helm-repo and npm updates are created once a version is 7 days old (`minimumReleaseAge`). `ghcr.io`, `quay.io` and `docker.dragonflydb.io` expose no registry-provided release date, so a rule sets `minimumReleaseAgeBehaviour: timestamp-optional` and they skip the age check. Updates are only created in the weekly window (before 6am Saturday, America/New_York). The Dependency Dashboard issue is not schedule-bound.
 - **Verify:** `.github/workflows/verify.yml` (required check `verify`) runs typecheck, Prettier, `check-versions` and `render-all`. On PRs it posts a sticky comment with the rendered-manifest and chart diff against the base.
 
 | Update                               | Behaviour                                                                     |
