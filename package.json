@@ -4,6 +4,7 @@
 	"type": "module",
 	"scripts": {
 		"render": "bun run scripts/render.ts",
+		"render-chart": "bun run scripts/render-chart.ts",
 		"typecheck": "tsc --noEmit",
 		"check-versions": "bun run scripts/check-versions.ts",
 		"sync-external-certs": "bun run scripts/sync-external-certs.ts",
