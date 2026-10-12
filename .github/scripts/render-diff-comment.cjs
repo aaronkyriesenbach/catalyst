@@ -68,6 +68,57 @@ function section(title, diff, limit, artifactUrl, emptyMessage) {
 	return `### ${title}\n\n${FENCE}diff\n${text}\n${FENCE}\n${notice}`;
 }
 
+const MAX_FAILURES_SHOWN = 3;
+const MAX_ERROR_CHARS = 1200;
+// helm output is prefixed with progress lines that bury the actual error.
+const NOISE = /^(\$ bun run|Pulled:|Digest:)/;
+
+function failedCharts(chartsDir) {
+	if (!chartsDir || !fs.existsSync(chartsDir)) {
+		return [];
+	}
+
+	return fs
+		.readdirSync(chartsDir)
+		.filter((file) => file.endsWith(".exit"))
+		.filter(
+			(file) =>
+				fs.readFileSync(path.join(chartsDir, file), "utf8").trim() !==
+				"0",
+		)
+		.map((file) => file.replace(/\.exit$/, ""))
+		.sort();
+}
+
+function chartFailureBanner(chartsDir) {
+	const failed = failedCharts(chartsDir);
+
+	if (failed.length === 0) {
+		return "";
+	}
+
+	const details = failed.slice(0, MAX_FAILURES_SHOWN).map((name) => {
+		const errFile = path.join(chartsDir, `${name}.err`);
+		const err = fs.existsSync(errFile)
+			? fs.readFileSync(errFile, "utf8")
+			: "";
+		const lines = err.split("\n").filter((line) => !NOISE.test(line));
+		const { text } = truncate(lines.join("\n").trim(), MAX_ERROR_CHARS);
+		const app = name.replace(/^chart-/, "");
+
+		return `**\`${app}\`**\n\n${FENCE}\n${text}\n${FENCE}\n`;
+	});
+	const hidden = failed.length - details.length;
+	const more =
+		hidden > 0 ? `\n_${hidden} more failed; see the job logs._\n` : "";
+
+	return [
+		"### Helm chart render failed\n",
+		"`helm template` fails with this change, so `verify` is red and it must not be merged.\n",
+		`${details.join("\n")}${more}`,
+	].join("\n");
+}
+
 module.exports = async ({ github, context, core }) => {
 	const diffDir = process.env.DIFF_DIR;
 	const manifestDiff = readDiff(path.join(diffDir, "render.diff"));
@@ -84,6 +135,7 @@ module.exports = async ({ github, context, core }) => {
 		MARKER,
 		"## Rendered manifest diff",
 		`<sub>Base \`${pullRequest.base.sha.slice(0, 7)}\` vs merge result of \`${pullRequest.head.sha.slice(0, 7)}\`</sub>\n`,
+		chartFailureBanner(process.env.HEAD_CHARTS_DIR),
 		section(
 			"App manifests (`render-all`)",
 			manifestDiff,
