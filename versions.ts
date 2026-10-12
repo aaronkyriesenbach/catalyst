@@ -34,10 +34,6 @@ export type HelmChartEntry =
 	  };
 
 export const images = {
-	poznote: {
-		name: "ghcr.io/timothepoznanski/poznote",
-		tag: "6.115.0",
-	},
 	transmission: {
 		name: "docker.io/haugene/transmission-openvpn",
 		tag: "5.5.2",
@@ -140,10 +136,6 @@ export const images = {
 	typetypeToken: {
 		name: "ghcr.io/typetype-video/typetype-token",
 		tag: "1.9.0",
-	},
-	filebrowserQuantum: {
-		name: "ghcr.io/gtsteffaniak/filebrowser",
-		tag: "1.5.8-stable",
 	},
 	immichPostgres: {
 		name: "ghcr.io/immich-app/postgres",

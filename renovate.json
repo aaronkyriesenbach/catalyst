@@ -93,10 +93,8 @@
 			"matchPackageNames": [
 				"ghcr.io/navidrome/navidrome",
 				"docker.io/jellyfin/jellyfin",
-				"ghcr.io/timothepoznanski/poznote",
 				"ghcr.io/ivan-malinovski/calino",
 				"ghcr.io/aaronkyriesenbach/forscoreviewer",
-				"ghcr.io/gtsteffaniak/filebrowser",
 				"ghcr.io/open-webui/open-webui",
 				"docker.io/linuxserver/qbittorrent",
 				"docker.io/haugene/transmission-openvpn",
