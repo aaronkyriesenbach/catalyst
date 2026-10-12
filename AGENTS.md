@@ -32,6 +32,8 @@ bun run render <app-name>                    # Render single app to stdout YAML 
 bun run apply-cluster <node> [--dry-run]     # Sync cluster/ manifests to k3s server via rsync+SSH
 bun run sync-external-certs [--dry-run]      # Pull TLS certs from cluster via kubectl
 bun run typecheck                            # tsc --noEmit
+bun run render-all <outdir>                  # Render every app + project + enumerate-all into <outdir> (what CI runs)
+bun run render-charts <outdir>               # render-chart for every app with helmReleases (needs helm)
 bun run check-versions                       # Verify versions.ts matches the Renovate-parsed format
 bun run install-argo                         # helm upgrade --install ArgoCD with custom values
 bunx prettier --write .                      # Format the repo (config: .prettierrc, .prettierignore)
@@ -115,6 +117,30 @@ bunx prettier --write .                      # Format the repo (config: .prettie
 - Exceptions: digest-pinned images (`apps/iso-archive.ts`) and images inside YAML files (`cluster/*.yaml`, `apps/*/values.yaml`).
 - ArgoCD CMP sidecar: `oven/bun` image, plugin name "ts", discovery key `main.ts`.
 - `cluster/` manifests are applied directly to k3s server manifest dir — outside ArgoCD management.
+
+## Dependency updates (Renovate)
+
+Mend Renovate (GitHub App) opens PRs for images, charts and npm packages from `renovate.json`. Merging only updates git: every Argo Application is manual-sync, so you still sync in Argo, whose OutOfSync diff is the last review gate.
+
+- **What it reads:** custom regex managers over `versions.ts` (images, repo charts, OCI charts; `depType` `image` / `helm-chart`), the built-in `helm-values` manager over `apps/**/*values.yaml`, `bun` (`package.json`/`bun.lock`) and `github-actions`. `cluster/**` is ignored (manual), and the ArgoCD chart is pinned by `--version` in the `install-argo` script, so Renovate never sees it.
+- **`versions.ts` shape:** the regexes live in `renovate.json` and `scripts/check-versions.ts` reads them from there. Keep the file Prettier-formatted, one entry per object, fields in the existing order, no computed values. Run `bun run check-versions`.
+- **Timing:** updates are created once a version is 7 days old (`minimumReleaseAge`), only in the weekly window (before 6am Saturday, America/New_York). The Dependency Dashboard issue is not schedule-bound.
+- **Verify:** `.github/workflows/verify.yml` (required check `verify`) runs typecheck, Prettier, `check-versions` and `render-all`. On PRs it posts a sticky comment with the rendered-manifest and chart diff against the base.
+
+| Update                               | Behaviour                                                                     |
+| ------------------------------------ | ----------------------------------------------------------------------------- |
+| patch, digest                        | auto-merge (GitHub auto-merge once `verify` is green)                         |
+| minor on the allowlist               | auto-merge                                                                    |
+| any other minor                      | PR only                                                                       |
+| major                                | PR only, `needs-review` label                                                 |
+| Helm charts (`depType` `helm-chart`) | PR only                                                                       |
+| denylist                             | PR only, always                                                               |
+| disabled                             | no PR (`ddns-route53`, `whisper.cpp`, `immich-app/postgres`, Postgres majors) |
+
+- **Where the lists live:** the minor allowlist and the denylist are `matchPackageNames` rules in `renovate.json`. Denylist: immich (chart + server image, grouped), pocket-id (operator chart + image), cert-manager and trust-manager charts, external-secrets, volsync, home-assistant. Groups: `immich`, `typetype`, `bun` (image + `bun-types`).
+- **Enable chart auto-merge later:** set `automerge` to `true` in the "Charts" rule (optionally narrow with `matchPackageNames`). The denylist rule comes later in the file and still wins.
+- **Vulnerability alerts** are disabled so security updates follow the same rules.
+- PR titles must stay within 80 characters; `commitMessageTopic` is `{{{depName}}}` to keep long OCI names short.
 
 ## ANTI-PATTERNS
 

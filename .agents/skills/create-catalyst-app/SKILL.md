@@ -119,6 +119,7 @@ gotchas specific to scaffold decisions:
 
 - **`withIscsiVolumes` forces `Recreate` strategy.** If the app needs `RollingUpdate`, use `withNasMounts` instead.
 - **Images and chart versions go in `versions.ts`**, never as literals in the app file. Docker Hub images are `docker.io/<path>` with `mirrored: true` (only `registry` is `false`); other registries omit `mirrored`. Keep the entry shape/field order exactly like its neighbours (Renovate parses it) and run `bun run check-versions` and `bun run typecheck`.
+- **Decide how Renovate treats the new app.** A new `versions.ts` entry is tracked automatically (patch bumps auto-merge). Add it to the minor-update allowlist or the never-auto-merge denylist in `renovate.json` if it deserves that; see AGENTS.md "Dependency updates (Renovate)". Floating or compound tags (`latest`, `main-<sha>`) need a `enabled: false` rule.
 - **Postgres images come from `postgresImages` in `versions.ts`** — `withPostgres` only accepts the majors listed there; add a new major entry to use one.
 - **Modifier container names must match exactly.** If `podSpec.containers[0].name` is `"main"`, the modifier key must also be `"main"`. Mismatches throw at render time, not at build time.
 
