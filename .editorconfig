@@ -3,3 +3,13 @@ root = true
 [*]
 indent_style = tab
 indent_size = 4
+
+# Files embedded in ConfigMaps must not contain tabs: Go/JS YAML encoders fall
+# back to a quoted "\n"-escaped string for any value with a tab.
+[*.sh]
+indent_style = space
+indent_size = 2
+
+[scripts/deploy-external-certs.ts]
+indent_style = space
+indent_size = 4
