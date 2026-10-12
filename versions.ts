@@ -53,7 +53,7 @@ export const images = {
 	},
 	curl: {
 		name: "docker.io/curlimages/curl",
-		tag: "8.12.1",
+		tag: "8.22.0",
 		mirrored: true,
 	},
 	miniflux: {
