@@ -8,7 +8,7 @@
         "@kubernetes-models/argo-cd": "^2.7.2",
         "@kubernetes-models/cert-manager": "^6.0.0",
         "@kubernetes-models/external-secrets": "^2.0.0",
-        "@kubernetes-models/gateway-api": "^0.7.4",
+        "@kubernetes-models/gateway-api": "^2.0.0",
         "@kubernetes-models/traefik": "^0.2.4",
         "kubernetes-models": "5.1.0",
         "yaml": "^2.7.0",
@@ -31,7 +31,7 @@
 
     "@kubernetes-models/external-secrets": ["@kubernetes-models/external-secrets@2.0.0", "", { "dependencies": { "@kubernetes-models/apimachinery": "^3.0.2", "@kubernetes-models/base": "^6.0.1", "@kubernetes-models/validate": "^5.0.2", "kubernetes-models": "^5.1.0" } }, "sha512-IpwAaO1m67oVMvhvaVrdj18nNUG5aDXFL3S0RerILGenb0MvsjiSCnjAUW1P10gRz7rIEayhFRbtvlDSFBqeEA=="],
 
-    "@kubernetes-models/gateway-api": ["@kubernetes-models/gateway-api@0.7.4", "", { "dependencies": { "@kubernetes-models/apimachinery": "^2.2.0", "@kubernetes-models/base": "^5.0.1", "@kubernetes-models/validate": "^4.0.0", "@swc/helpers": "^0.5.8" } }, "sha512-nOxmTEqvEIZtp4xDvrxo1JCfmnozisJF4Y05hyhszZtqgfSLaVkAJI6fQOpzNH38yJA8sCo6GtyaoaJRryI/Ag=="],
+    "@kubernetes-models/gateway-api": ["@kubernetes-models/gateway-api@2.0.0", "", { "dependencies": { "@kubernetes-models/apimachinery": "^3.0.2", "@kubernetes-models/base": "^6.0.1", "@kubernetes-models/validate": "^5.0.2", "kubernetes-models": "^5.1.0" } }, "sha512-e7SY7EkCGRHy5wHkaGhP32v7V1L+gBalfoqZDFDWn5k9Q7+IW6uz9jNWgOZ9R/Hv5NWyAFYaA01ET2qsysVt5A=="],
 
     "@kubernetes-models/traefik": ["@kubernetes-models/traefik@0.2.4", "", { "dependencies": { "@kubernetes-models/apimachinery": "^2.2.0", "@kubernetes-models/base": "^5.0.1", "@kubernetes-models/validate": "^4.0.0", "@swc/helpers": "^0.5.8" } }, "sha512-mnZ3JJWZQJ7w0jC+Ew+kK0iHpiMFYK4xxmJWGk5c6SNtW1W+NcoU0w41yqjbuWssUX+08L0JKiFcXVZE1H/Aog=="],
 
@@ -159,6 +159,12 @@
 
     "@kubernetes-models/external-secrets/@kubernetes-models/validate": ["@kubernetes-models/validate@5.0.2", "", { "dependencies": { "ajv": "^8.12.0", "ajv-formats": "^3.0.1", "ajv-formats-draft2019": "^1.6.1", "ajv-i18n": "^4.2.0", "is-cidr": "^6.0.4" }, "optionalDependencies": { "re2-wasm": "^1.0.2" } }, "sha512-EzfxB8mu2VPlFYSwsMlZdgTeeqJGI2R58irUrZJWHxJqOqOhnau/oS9KNCZKXjdC2vFubU6v81m2CrIoU+/pxQ=="],
 
+    "@kubernetes-models/gateway-api/@kubernetes-models/apimachinery": ["@kubernetes-models/apimachinery@3.0.2", "", { "dependencies": { "@kubernetes-models/base": "^6.0.0", "@kubernetes-models/validate": "^5.0.1" } }, "sha512-6Vbzr/tinxPBGGdfYjXiV9WPj8PEhyiqGJiWhXrsihK7h6glPj4HKUxZ0YwYXH/5uucm/NVef/xY3vZ4Crj1Fg=="],
+
+    "@kubernetes-models/gateway-api/@kubernetes-models/base": ["@kubernetes-models/base@6.0.1", "", { "dependencies": { "@kubernetes-models/validate": "^5.0.2" } }, "sha512-pXKCFeSoL6RsMxoPDwaJ5JtijVjeuNCacgtYS9dImF7qFdzdc9lcQbem6y6Ug7/K6/bFOWdTu3qIX88IK81o0A=="],
+
+    "@kubernetes-models/gateway-api/@kubernetes-models/validate": ["@kubernetes-models/validate@5.0.2", "", { "dependencies": { "ajv": "^8.12.0", "ajv-formats": "^3.0.1", "ajv-formats-draft2019": "^1.6.1", "ajv-i18n": "^4.2.0", "is-cidr": "^6.0.4" }, "optionalDependencies": { "re2-wasm": "^1.0.2" } }, "sha512-EzfxB8mu2VPlFYSwsMlZdgTeeqJGI2R58irUrZJWHxJqOqOhnau/oS9KNCZKXjdC2vFubU6v81m2CrIoU+/pxQ=="],
+
     "kubernetes-models/@kubernetes-models/apimachinery": ["@kubernetes-models/apimachinery@3.0.2", "", { "dependencies": { "@kubernetes-models/base": "^6.0.0", "@kubernetes-models/validate": "^5.0.1" } }, "sha512-6Vbzr/tinxPBGGdfYjXiV9WPj8PEhyiqGJiWhXrsihK7h6glPj4HKUxZ0YwYXH/5uucm/NVef/xY3vZ4Crj1Fg=="],
 
     "kubernetes-models/@kubernetes-models/base": ["@kubernetes-models/base@6.0.1", "", { "dependencies": { "@kubernetes-models/validate": "^5.0.2" } }, "sha512-pXKCFeSoL6RsMxoPDwaJ5JtijVjeuNCacgtYS9dImF7qFdzdc9lcQbem6y6Ug7/K6/bFOWdTu3qIX88IK81o0A=="],
@@ -173,6 +179,10 @@
 
     "@kubernetes-models/external-secrets/@kubernetes-models/validate/is-cidr": ["is-cidr@6.0.4", "", { "dependencies": { "cidr-regex": "^5.0.4" } }, "sha512-tOIBU3QiXy0W4LvHbcKWAWSuQfGwDiEILphFCAZtDqj7C57uv3ClO6K8aNEGV4VTA7bWJlpQ0suKQkUe6Rd6ag=="],
 
+    "@kubernetes-models/gateway-api/@kubernetes-models/validate/ajv-formats": ["ajv-formats@3.0.1", "", { "dependencies": { "ajv": "^8.0.0" } }, "sha512-8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ=="],
+
+    "@kubernetes-models/gateway-api/@kubernetes-models/validate/is-cidr": ["is-cidr@6.0.4", "", { "dependencies": { "cidr-regex": "^5.0.4" } }, "sha512-tOIBU3QiXy0W4LvHbcKWAWSuQfGwDiEILphFCAZtDqj7C57uv3ClO6K8aNEGV4VTA7bWJlpQ0suKQkUe6Rd6ag=="],
+
     "kubernetes-models/@kubernetes-models/validate/ajv-formats": ["ajv-formats@3.0.1", "", { "dependencies": { "ajv": "^8.0.0" } }, "sha512-8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ=="],
 
     "kubernetes-models/@kubernetes-models/validate/is-cidr": ["is-cidr@6.0.4", "", { "dependencies": { "cidr-regex": "^5.0.4" } }, "sha512-tOIBU3QiXy0W4LvHbcKWAWSuQfGwDiEILphFCAZtDqj7C57uv3ClO6K8aNEGV4VTA7bWJlpQ0suKQkUe6Rd6ag=="],
@@ -180,6 +190,8 @@
     "@kubernetes-models/cert-manager/@kubernetes-models/validate/is-cidr/cidr-regex": ["cidr-regex@5.0.5", "", {}, "sha512-59tdLZcC+BJXa4C5rOmVSuJTy/UneqfJJtCraqwdx5BDHTkGrBtKCUl3u2uiCFvXu+wk0kVuX8axX7yHCZOI9w=="],
 
     "@kubernetes-models/external-secrets/@kubernetes-models/validate/is-cidr/cidr-regex": ["cidr-regex@5.0.5", "", {}, "sha512-59tdLZcC+BJXa4C5rOmVSuJTy/UneqfJJtCraqwdx5BDHTkGrBtKCUl3u2uiCFvXu+wk0kVuX8axX7yHCZOI9w=="],
+
+    "@kubernetes-models/gateway-api/@kubernetes-models/validate/is-cidr/cidr-regex": ["cidr-regex@5.0.5", "", {}, "sha512-59tdLZcC+BJXa4C5rOmVSuJTy/UneqfJJtCraqwdx5BDHTkGrBtKCUl3u2uiCFvXu+wk0kVuX8axX7yHCZOI9w=="],
 
     "kubernetes-models/@kubernetes-models/validate/is-cidr/cidr-regex": ["cidr-regex@5.0.5", "", {}, "sha512-59tdLZcC+BJXa4C5rOmVSuJTy/UneqfJJtCraqwdx5BDHTkGrBtKCUl3u2uiCFvXu+wk0kVuX8axX7yHCZOI9w=="],
   }
