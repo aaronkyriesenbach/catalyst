@@ -19,7 +19,7 @@
 		"@kubernetes-models/external-secrets": "^2.0.0",
 		"@kubernetes-models/gateway-api": "^0.7.4",
 		"@kubernetes-models/traefik": "^0.2.4",
-		"kubernetes-models": "4.5.1",
+		"kubernetes-models": "5.1.0",
 		"yaml": "^2.7.0"
 	},
 	"devDependencies": {
