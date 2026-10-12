@@ -218,20 +218,13 @@ export function buildHeadlessService(name: string, ports: IServicePort[]) {
 	});
 }
 
-// Embed files into a ConfigMap as base64 binaryData so the CMP substitution can't
-// strip ${...}/$VAR sequences; k8s decodes it back to the file on mount.
 export function buildFileConfigMap(
 	name: string,
 	files: Record<string, string>,
 ): ConfigMap {
 	return new ConfigMap({
 		metadata: { name },
-		binaryData: Object.fromEntries(
-			Object.entries(files).map(([key, content]) => [
-				key,
-				Buffer.from(content).toString("base64"),
-			]),
-		),
+		data: files,
 	});
 }
 
