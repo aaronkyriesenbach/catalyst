@@ -118,7 +118,7 @@ export const images = {
 	},
 	dragonfly: {
 		name: "docker.dragonflydb.io/dragonflydb/dragonfly",
-		tag: "v1.39.0",
+		tag: "v1.40.2",
 	},
 	garage: {
 		name: "docker.io/dxflrs/garage",
