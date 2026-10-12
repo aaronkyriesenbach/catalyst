@@ -11,7 +11,7 @@ catalyst/
 ├── modifiers.ts         # WorkloadModifier pattern: withNasMounts, withPostgres, withOidcAuth, applyModifiers
 ├── storage.ts           # PV/PVC builders for NAS-backed NFS storage
 ├── versions.ts          # Typed image + Helm chart version registry (Renovate-parsed; see Image sources)
-├── types.ts             # AppConfig = WorkloadApp | StaticApp; HelmChart, ExternalApp, BackendTLSPolicy
+├── types.ts             # AppConfig = WorkloadApp | StaticApp; HelmRelease, ExternalApp, BackendTLSPolicy
 ├── apps/                # Each *.ts exports default AppConfig — auto-discovered by main.ts
 │   ├── traefik/         # Submodule: gateways, routes, certs, external app proxy config
 │   ├── cert-manager/    # Submodule: internal CA, issuers
@@ -73,9 +73,14 @@ bunx prettier --write .                      # Format the repo (config: .prettie
 
 ### Helm Charts
 
-- `HelmChart` type is hand-defined in `types.ts` for `helm.cattle.io/v1` CRDs — not from kubernetes-models.
-- Chart repo/name/version live in `helmCharts` in `versions.ts`; build the resource with `buildHelmChart(key, { name, targetNamespace?, valuesContent?, set? })` from `utils.ts` — never hand-write a `HelmChart` literal.
-- Embed values with `Bun.file(new URL("./app/values.yaml", import.meta.url)).text()` — this is a top-level await pattern used in several apps.
+- Declare charts with `helmReleases: [{ chart, releaseName, values?, parameters?, skipCrds? }]` on the app. `buildApplication` turns each release into a native ArgoCD Helm source (multi-source Application), so chart resources are tracked by Argo with diffs in its UI. Helm is **not** in the CMP sidecar, and the k3s `HelmChart` CRD is not used for apps (only k3s's bundled `traefik`/`traefik-crd`).
+- Chart repo/name/version live in `helmCharts` in `versions.ts` (`chart` is a `HelmChartKey`). Never write repo URLs or versions in `apps/*.ts`.
+- `releaseName` must equal the live Helm release name when adopting an existing install. Charts install into the app's destination namespace (`namespace ?? name`); adopted releases are pinned in `helmReleaseNamespaces` (`constants.ts`) so a namespace change fails the render.
+- Load values from a file with `await readYaml("./app/values.yaml", import.meta.url)`; `--set` equivalents go in `parameters`.
+- When several releases of one chart share a namespace, set `skipCrds: true` on all but one so a `crds/` directory is not rendered twice.
+- Use `ignoreDifferences` (typed from `@kubernetes-models/argo-cd`) for fields written at runtime by controllers. Apps with `helmReleases` get `ServerSideApply=true` and `ServerSideDiff=true`; automated sync stays off.
+- `bun run render <app>` only shows CMP-rendered resources. Chart output is visible in ArgoCD (`argocd app manifests <app>`) or via `bun run render-chart <app>` (needs the `helm` CLI; an approximation of Argo's output).
+- Migrating a live `HelmChart` to `helmReleases` must not uninstall the release. Detach it first: annotate the `HelmChart` with `helmcharts.helm.cattle.io/unmanaged=true`, clear its finalizers, then delete it, and verify resource UIDs are unchanged. Deleting a `HelmChart` that still has the `wrangler.cattle.io/on-helm-chart-remove` finalizer runs `helm uninstall`.
 
 ### Scripts and embedded files
 
@@ -94,7 +99,7 @@ bunx prettier --write .                      # Format the repo (config: .prettie
 - Relative imports only (no path aliases). Standard for flat repo.
 - No linter, tests, or CI. ArgoCD CMP plugin renders in-cluster.
 - **Formatting**: Prettier is a devDependency, configured via `.prettierrc` (explicit defaults) and `.prettierignore` (`node_modules/`, `downloads/`, `bun.lock`, `.sisyphus/`, `.omo/`). Run `bunx prettier --write .` before committing.
-- **Prefer imported types over hand-rolled ones.** Before defining a new type, check whether `kubernetes-models`, `@kubernetes-models/gateway-api`, `@kubernetes-models/traefik`, or other installed packages already export a matching interface (e.g. `IPersistentVolumeClaimTemplate`, `IPodSpec`, `IServicePort`). Hand-roll types only when no package provides them (e.g. `HelmChart` for `helm.cattle.io/v1`, `BackendTLSPolicy` for the GA `gateway.networking.k8s.io/v1` API that the package hasn't caught up to yet).
+- **Prefer imported types over hand-rolled ones.** Before defining a new type, check whether `kubernetes-models`, `@kubernetes-models/gateway-api`, `@kubernetes-models/traefik`, or other installed packages already export a matching interface (e.g. `IPersistentVolumeClaimTemplate`, `IPodSpec`, `IServicePort`). Hand-roll types only when no package provides them (e.g. `BackendTLSPolicy` for the GA `gateway.networking.k8s.io/v1` API that the package hasn't caught up to yet).
 
 ### Infrastructure
 
@@ -103,7 +108,7 @@ bunx prettier --write .                      # Format the repo (config: .prettie
 
 ### Image sources
 
-- Every container image and Helm chart version is declared in `versions.ts` (`images`, `postgresImages`, `helmCharts`) and consumed via `image(key)`, `postgresImage(major)` and `buildHelmChart(key, ...)` from `utils.ts`. Do not write image strings in `apps/*.ts`.
+- Every container image and Helm chart version is declared in `versions.ts` (`images`, `postgresImages`, `helmCharts`) and consumed via `image(key)`, `postgresImage(major)` and `HelmRelease.chart` keys. Do not write image strings in `apps/*.ts`.
 - **Docker Hub images** (`docker.io/...`) are `mirrored: true` — rendered via `docker.int.lab53.net/<path>:<tag>` — except `registry`, which is the mirror itself and stays `mirrored: false`.
 - **All other registries** (ghcr.io, docker.dragonflydb.io) → no `mirrored` field; rendered with their actual source URL. Adding a registry means extending `NonHubRegistry` in `versions.ts`.
 - `versions.ts` is parsed by Renovate regexes: keep the exact field order and one-entry-per-object shape, then run `bun run check-versions` and `bun run typecheck`.
@@ -115,7 +120,7 @@ bunx prettier --write .                      # Format the repo (config: .prettie
 
 - **No `index.ts` in `apps/`** — `main.ts` filters `entry.isFile()`, directories with index exports won't be discovered.
 - **No named-only exports** — `loadAppConfig` reads `mod.default`. Apps that only export named values produce nothing.
-- **No HelmChart from packages** — it's hand-typed in `types.ts`.
+- **No `HelmChart` CRD resources for apps** — use `helmReleases`; the helm-controller would own (and on delete, uninstall) the release.
 - **Don't add apps to a registry** — discovery is automatic from the `apps/` directory.
 
 ## CROSS-MODULE EXPORTS

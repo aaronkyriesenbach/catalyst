@@ -3,7 +3,7 @@ name: create-catalyst-app
 description: >
     Create a new app in the catalyst cluster repository. Use when the user asks
     to create, add, scaffold, or deploy a new app, service, or workload on the
-    cluster. Covers all three app kinds — WorkloadApp, StaticApp, HelmChart —
+    cluster. Covers all three app kinds — WorkloadApp, StaticApp, Helm releases —
     and auto-discovers the app's recommended installation method before adapting
     it to catalyst's conventions.
 ---
@@ -40,18 +40,18 @@ Extract from the research:
 - **Environment variables** — required or recommended env vars for production
 - **Database** — whether it needs Postgres (and which version)
 - **Sign-in / auth** — whether it supports header-based auth (for OIDC forwarding)
-- **Helm chart** — whether a Helm chart exists (for StaticApp/HelmChart)
+- **Helm chart** — whether a Helm chart exists (for StaticApp + `helmReleases`)
 
 ### 3. Choose the App Kind
 
 Decide which `AppConfig` kind fits best. Read
 [references/app-kinds.md](references/app-kinds.md) for details and examples.
 
-| Signal                                                                       | Kind                        |
-| ---------------------------------------------------------------------------- | --------------------------- |
-| Simple container with ports, volumes, env vars                               | **WorkloadApp**             |
-| Needs a Helm chart (no good Docker image, or chart is the canonical install) | **StaticApp** + `HelmChart` |
-| Custom resources beyond Deployment/Service/HTTPRoute                         | **StaticApp**               |
+| Signal                                                                       | Kind                           |
+| ---------------------------------------------------------------------------- | ------------------------------ |
+| Simple container with ports, volumes, env vars                               | **WorkloadApp**                |
+| Needs a Helm chart (no good Docker image, or chart is the canonical install) | **StaticApp** + `helmReleases` |
+| Custom resources beyond Deployment/Service/HTTPRoute                         | **StaticApp**                  |
 
 ### 4. Map to Catalyst Conventions
 
@@ -94,7 +94,7 @@ Write the app file at `apps/<name>.ts` following the chosen kind's pattern.
 
 - `kind: "static"`, `name`, `resources` array
 - Each resource is an instantiated k8s model or a plain object
-- HelmChart resources use `buildHelmChart(key, ...)` with an entry in `versions.ts` `helmCharts`, and `await readFile(...)` for `valuesContent`
+- Helm charts go in `helmReleases: [{ chart, releaseName, values?, parameters? }]`, where `chart` is an entry in `versions.ts` `helmCharts` and `values` comes from `await readYaml(...)`. Chart output is only visible in ArgoCD or via `bun run render-chart <app>`, not `bun run render`.
 
 If the app needs a subdirectory (e.g. `apps/<name>/values.yaml`), create it.
 If files go into a ConfigMap, use `buildFileConfigMap(name, files)`. Shell scripts

@@ -58,7 +58,7 @@ Minimal — just a container, port, and iSCSI volume.
 ## StaticApp
 
 Provides an explicit `resources` array. Nothing is auto-generated — you control
-every resource. Often used to wrap a HelmChart.
+every resource. Often used to install Helm charts via `helmReleases`.
 
 **When to use:** The app is best installed via a Helm chart, needs custom
 resource types, or the auto-generated Deployment/Service/HTTPRoute pattern
@@ -68,32 +68,34 @@ doesn't fit.
 
 ```typescript
 import type { StaticApp } from "../types";
-import { buildHelmChart } from "../utils";
-
-// "myApp" is an entry in versions.ts `helmCharts`
-const chart = buildHelmChart("myApp", {
-	name: "my-app",
-	targetNamespace: "my-app",
-});
+import { readYaml } from "../utils";
 
 const config: StaticApp = {
 	kind: "static",
 	name: "my-app",
-	resources: [chart],
+	// "myApp" is an entry in versions.ts `helmCharts`; the chart installs into
+	// the app's namespace (`namespace ?? name`) as a native ArgoCD Helm source.
+	helmReleases: [
+		{
+			chart: "myApp",
+			releaseName: "my-app",
+			values: await readYaml("./my-app/values.yaml", import.meta.url),
+		},
+	],
 };
 
 export default config;
 ```
 
 **Example — VolSync** (`apps/volsync.ts`):
-Simple HelmChart wrapper with a custom namespace.
+Single helm release with a custom namespace.
 
 **Example — Pocket ID** (`apps/pocket-id.ts`):
-HelmChart with `valuesContent` loaded from a file, plus backup resources.
+Helm release with `values` loaded from a file, plus backup resources.
 
 **Example — Cert Manager** (`apps/cert-manager.ts`):
-HelmChart with `set` for Helm values, plus hand-crafted custom resources from
-a subdirectory.
+Helm release with `parameters` (`--set`), plus hand-crafted custom resources
+from a subdirectory.
 
 ## Choosing Between Them
 
@@ -102,6 +104,6 @@ a subdirectory.
 | App has a Docker image, runs as a single pod       | WorkloadApp                                  |
 | App needs a database managed by catalyst           | WorkloadApp + `withPostgres`                 |
 | App needs OIDC auth                                | WorkloadApp + `withOidcAuth`                 |
-| Canonical install is a Helm chart                  | StaticApp + HelmChart                        |
+| Canonical install is a Helm chart                  | StaticApp + `helmReleases`                   |
 | Need resources beyond Deployment/Service/HTTPRoute | StaticApp, or WorkloadApp + `extraResources` |
-| Multiple related resources from a chart            | StaticApp + HelmChart                        |
+| Multiple related resources from a chart            | StaticApp + `helmReleases`                   |
