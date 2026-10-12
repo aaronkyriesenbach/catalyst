@@ -95,7 +95,7 @@ export const images = {
 	},
 	registry: {
 		name: "docker.io/library/registry",
-		tag: "2",
+		tag: "3",
 		mirrored: false,
 	},
 	bun: {
