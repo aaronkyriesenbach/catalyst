@@ -204,7 +204,7 @@ export const helmCharts = {
 		kind: "repo",
 		repo: "https://charts.external-secrets.io",
 		chart: "external-secrets",
-		version: "2.3.0",
+		version: "2.11.0",
 	},
 	externalDns: {
 		kind: "repo",
