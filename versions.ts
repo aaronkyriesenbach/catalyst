@@ -161,7 +161,7 @@ export const images = {
 	},
 	calino: {
 		name: "ghcr.io/ivan-malinovski/calino",
-		tag: "0.33.0",
+		tag: "0.39.1",
 	},
 	forscore: {
 		name: "ghcr.io/aaronkyriesenbach/forscoreviewer",
