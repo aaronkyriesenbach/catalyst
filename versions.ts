@@ -63,7 +63,7 @@ export const images = {
 	},
 	linkwarden: {
 		name: "ghcr.io/linkwarden/linkwarden",
-		tag: "v2.16.1",
+		tag: "v2.16.3",
 	},
 	trilium: {
 		name: "docker.io/triliumnext/trilium",
