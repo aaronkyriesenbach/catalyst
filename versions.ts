@@ -127,19 +127,19 @@ export const images = {
 	},
 	typetype: {
 		name: "ghcr.io/typetype-video/typetype",
-		tag: "1.6.0",
+		tag: "1.9.0",
 	},
 	typetypeServer: {
 		name: "ghcr.io/typetype-video/typetype-server",
-		tag: "1.6.0",
+		tag: "1.9.0",
 	},
 	typetypeDownloader: {
 		name: "ghcr.io/typetype-video/typetype-downloader",
-		tag: "1.6.0",
+		tag: "1.9.0",
 	},
 	typetypeToken: {
 		name: "ghcr.io/typetype-video/typetype-token",
-		tag: "1.6.0",
+		tag: "1.9.0",
 	},
 	filebrowserQuantum: {
 		name: "ghcr.io/gtsteffaniak/filebrowser",
