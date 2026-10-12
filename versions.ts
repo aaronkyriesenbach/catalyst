@@ -151,7 +151,7 @@ export const images = {
 	},
 	gluetun: {
 		name: "docker.io/qmcgaw/gluetun",
-		tag: "v3.41.1",
+		tag: "v3.41.3",
 		mirrored: true,
 	},
 	qbittorrent: {
