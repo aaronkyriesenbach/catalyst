@@ -122,7 +122,7 @@ export const images = {
 	},
 	garage: {
 		name: "docker.io/dxflrs/garage",
-		tag: "v2.2.0",
+		tag: "v2.4.1",
 		mirrored: true,
 	},
 	typetype: {
