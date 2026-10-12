@@ -198,7 +198,7 @@ export const helmCharts = {
 		kind: "repo",
 		repo: "https://backube.github.io/helm-charts",
 		chart: "volsync",
-		version: "0.15.0",
+		version: "0.16.0",
 	},
 	externalSecrets: {
 		kind: "repo",
