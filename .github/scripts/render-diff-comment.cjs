@@ -1,0 +1,137 @@
+// Builds the sticky "rendered manifest diff" PR comment and job summary.
+// Run from actions/github-script; reads the diffs written by verify.yml.
+const fs = require("node:fs");
+const path = require("node:path");
+
+const MARKER = "<!-- render-diff -->";
+// GitHub rejects comments over 65536 chars; leave room for markdown wrappers.
+const BODY_BUDGET = 58000;
+const FENCE = "````";
+
+function readDiff(file) {
+	if (!fs.existsSync(file)) {
+		return null;
+	}
+
+	return fs.readFileSync(file, "utf8").trim();
+}
+
+function allocate(manifestLength, chartLength) {
+	if (manifestLength + chartLength <= BODY_BUDGET) {
+		return { manifest: manifestLength, chart: chartLength };
+	}
+
+	const half = Math.floor(BODY_BUDGET / 2);
+
+	if (manifestLength <= half) {
+		return {
+			manifest: manifestLength,
+			chart: BODY_BUDGET - manifestLength,
+		};
+	}
+
+	if (chartLength <= half) {
+		return { manifest: BODY_BUDGET - chartLength, chart: chartLength };
+	}
+
+	return { manifest: half, chart: half };
+}
+
+function truncate(text, limit) {
+	if (text.length <= limit) {
+		return { text, truncated: false };
+	}
+
+	const cut = text.slice(0, limit);
+	const lastNewline = cut.lastIndexOf("\n");
+
+	return {
+		text: lastNewline > 0 ? cut.slice(0, lastNewline) : cut,
+		truncated: true,
+	};
+}
+
+function section(title, diff, limit, artifactUrl, emptyMessage) {
+	if (diff === null) {
+		return `### ${title}\n\n_Not available (the render step did not run or produced no output)._\n`;
+	}
+
+	if (diff === "") {
+		return `### ${title}\n\n${emptyMessage}\n`;
+	}
+
+	const { text, truncated } = truncate(diff, limit);
+	const notice = truncated
+		? `\n_Truncated to ~${BODY_BUDGET} characters (${text.length} of ${diff.length} shown). Full diff: [\`render-diff\` artifact](${artifactUrl})._\n`
+		: "";
+
+	return `### ${title}\n\n${FENCE}diff\n${text}\n${FENCE}\n${notice}`;
+}
+
+module.exports = async ({ github, context, core }) => {
+	const diffDir = process.env.DIFF_DIR;
+	const manifestDiff = readDiff(path.join(diffDir, "render.diff"));
+	const chartDiff = readDiff(path.join(diffDir, "charts.diff"));
+	const pullRequest = context.payload.pull_request;
+	const { owner, repo } = context.repo;
+	const artifactUrl = `${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}`;
+	const limits = allocate(
+		(manifestDiff ?? "").length,
+		(chartDiff ?? "").length,
+	);
+
+	const body = [
+		MARKER,
+		"## Rendered manifest diff",
+		`<sub>Base \`${pullRequest.base.sha.slice(0, 7)}\` vs merge result of \`${pullRequest.head.sha.slice(0, 7)}\`</sub>\n`,
+		section(
+			"App manifests (`render-all`)",
+			manifestDiff,
+			limits.manifest,
+			artifactUrl,
+			"No rendered manifest changes.",
+		),
+		section(
+			"Helm chart output (`render-chart`)",
+			chartDiff,
+			limits.chart,
+			artifactUrl,
+			"No rendered chart changes.",
+		),
+	].join("\n");
+
+	await core.summary.addRaw(body).write();
+
+	// Fork PRs only get a read-only token, so commenting would fail anyway.
+	if (pullRequest.head.repo.full_name !== `${owner}/${repo}`) {
+		core.info("PR head is not in this repository; skipping comment.");
+		return;
+	}
+
+	const comments = await github.paginate(github.rest.issues.listComments, {
+		owner,
+		repo,
+		issue_number: pullRequest.number,
+		per_page: 100,
+	});
+	const existing = comments.find(
+		(comment) =>
+			comment.user?.type === "Bot" && comment.body?.includes(MARKER),
+	);
+
+	if (existing) {
+		await github.rest.issues.updateComment({
+			owner,
+			repo,
+			comment_id: existing.id,
+			body,
+		});
+	} else {
+		await github.rest.issues.createComment({
+			owner,
+			repo,
+			issue_number: pullRequest.number,
+			body,
+		});
+	}
+};
