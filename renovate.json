@@ -70,6 +70,15 @@
 			"minimumReleaseAge": "7d"
 		},
 		{
+			"description": "GHCR, Quay and dragonflydb.io expose no trusted release timestamp, so with the default timestamp-required their updates would sit in Pending Status Checks forever. Raise them without an age check; the 7d age only applies to Docker Hub, Helm repo and npm updates.",
+			"matchPackageNames": [
+				"ghcr.io/**",
+				"quay.io/**",
+				"docker.dragonflydb.io/**"
+			],
+			"minimumReleaseAgeBehaviour": "timestamp-optional"
+		},
+		{
 			"description": "Short PR titles: the default topics append 'Docker tag' or 'helm values', which pushes long OCI names past 80 characters.",
 			"matchPackageNames": ["*"],
 			"commitMessageTopic": "{{{depName}}}"
