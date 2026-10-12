@@ -5,6 +5,8 @@
 	"scripts": {
 		"render": "bun run scripts/render.ts",
 		"render-chart": "bun run scripts/render-chart.ts",
+		"render-all": "bun run scripts/render-all.ts",
+		"render-charts": "bun run scripts/render-charts.ts",
 		"typecheck": "tsc --noEmit",
 		"check-versions": "bun run scripts/check-versions.ts",
 		"sync-external-certs": "bun run scripts/sync-external-certs.ts",
