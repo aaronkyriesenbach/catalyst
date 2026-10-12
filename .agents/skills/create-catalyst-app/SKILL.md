@@ -97,8 +97,7 @@ Write the app file at `apps/<name>.ts` following the chosen kind's pattern.
 - HelmChart resources use `buildHelmChart(key, ...)` with an entry in `versions.ts` `helmCharts`, and `await readFile(...)` for `valuesContent`
 
 If the app needs a subdirectory (e.g. `apps/<name>/values.yaml`), create it.
-If files go into a ConfigMap, use `buildFileConfigMap(name, files)` —
-**not** raw `data:` — to avoid CMP `$` substitution.
+If files go into a ConfigMap, use `buildFileConfigMap(name, files)`.
 
 ### 7. Validate
 
@@ -113,7 +112,7 @@ If it fails, read the error, fix, and re-render. Do not proceed until it passes.
 ## Gotchas
 
 The AGENTS.md covers general conventions (image mirroring, default export,
-CMP `$` substitution, security context). Read that first. These are additional
+security context). Read that first. These are additional
 gotchas specific to scaffold decisions:
 
 - **`withIscsiVolumes` forces `Recreate` strategy.** If the app needs `RollingUpdate`, use `withNasMounts` instead.

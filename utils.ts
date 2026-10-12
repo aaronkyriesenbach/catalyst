@@ -218,12 +218,6 @@ export function buildHeadlessService(name: string, ports: IServicePort[]) {
 	});
 }
 
-// ArgoCD's CMP substitutes $VAR/${VAR} with empty string in rendered manifests.
-// Escape $ as $$ for inline string fields (container args/env, HelmChart valuesContent).
-export function escapeArgoCmp(content: string): string {
-	return content.replaceAll("$", () => "$$");
-}
-
 // Embed files into a ConfigMap as base64 binaryData so the CMP substitution can't
 // strip ${...}/$VAR sequences; k8s decodes it back to the file on mount.
 export function buildFileConfigMap(
