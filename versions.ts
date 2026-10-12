@@ -85,7 +85,7 @@ export const images = {
 	},
 	radicale: {
 		name: "docker.io/11notes/radicale",
-		tag: "3.7.4",
+		tag: "3.8.1",
 		mirrored: true,
 	},
 	ddnsRoute53: {
