@@ -14,7 +14,7 @@
 		"install-argo": "helm upgrade --install -n argocd --create-namespace -f ./cluster/argocd-values.yaml --version 9.4.17 argocd argocd/argo-cd"
 	},
 	"dependencies": {
-		"@kubernetes-models/argo-cd": "^2.7.2",
+		"@kubernetes-models/argo-cd": "^4.0.0",
 		"@kubernetes-models/cert-manager": "^6.0.0",
 		"@kubernetes-models/external-secrets": "^2.0.0",
 		"@kubernetes-models/gateway-api": "^2.0.0",
