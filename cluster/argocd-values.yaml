@@ -1,4 +1,5 @@
-# install: helm upgrade --install -n argocd --create-namespace -f argocd-values.yaml argocd argocd/argo-cd
+# install: helm upgrade --install -n argocd --create-namespace \
+#   -f argocd-values.yaml --version 9.4.17 argocd argocd/argo-cd
 
 global:
     domain: argocd.int.lab53.net
