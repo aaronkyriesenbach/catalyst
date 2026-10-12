@@ -222,7 +222,7 @@ export const helmCharts = {
 	immich: {
 		kind: "oci",
 		chart: "oci://ghcr.io/immich-app/immich-charts/immich",
-		version: "0.12.0",
+		version: "0.13.4",
 	},
 } as const satisfies Record<string, HelmChartEntry>;
 
