@@ -76,7 +76,7 @@ export const images = {
 	},
 	openWebui: {
 		name: "ghcr.io/open-webui/open-webui",
-		tag: "v0.9.6",
+		tag: "v0.12.0",
 	},
 	jellyfin: {
 		name: "docker.io/jellyfin/jellyfin",
