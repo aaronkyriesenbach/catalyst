@@ -141,9 +141,19 @@
 			"groupName": "typetype"
 		},
 		{
-			"description": "The bun image and bun-types track the same runtime.",
-			"matchPackageNames": ["docker.io/oven/bun", "bun-types"],
+			"description": "The bun image, bun-types and the CI setup-bun version track the same runtime.",
+			"matchPackageNames": [
+				"docker.io/oven/bun",
+				"bun-types",
+				"bun",
+				"oven-sh/bun"
+			],
 			"groupName": "bun"
+		},
+		{
+			"description": "linuxserver also publishes Ubuntu-style tags such as 20.04.1 that look like a major update; only accept plain x.y.z app versions.",
+			"matchPackageNames": ["docker.io/linuxserver/qbittorrent"],
+			"allowedVersions": "/^[1-9]\\.\\d+\\.\\d+$/"
 		},
 		{
 			"description": "Disabled: floating or compound tags Renovate cannot order, and Postgres majors (see docs/postgres-migration.md).",
