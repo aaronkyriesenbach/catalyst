@@ -40,7 +40,7 @@ export const images = {
 	},
 	transmission: {
 		name: "docker.io/haugene/transmission-openvpn",
-		tag: "5.4.1",
+		tag: "5.5.2",
 		mirrored: true,
 	},
 	sublime: {
