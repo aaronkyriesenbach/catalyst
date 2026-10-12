@@ -36,7 +36,7 @@ export type HelmChartEntry =
 export const images = {
 	poznote: {
 		name: "ghcr.io/timothepoznanski/poznote",
-		tag: "6.19.1",
+		tag: "6.115.0",
 	},
 	transmission: {
 		name: "docker.io/haugene/transmission-openvpn",
