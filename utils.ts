@@ -28,7 +28,6 @@ import {
 	Service,
 } from "kubernetes-models/v1";
 import { parse, parseAllDocuments, stringify } from "yaml";
-// Import-cycle guard: ./apps/external-secrets calls buildHelmChart at load, so versions must evaluate first.
 import {
 	helmCharts,
 	images,
@@ -46,7 +45,6 @@ import {
 import { DOCKER_MIRROR_HOST, helmReleaseNamespaces } from "./constants";
 import type {
 	AppConfig,
-	HelmChart,
 	HelmRelease,
 	ProjectSpec,
 	StaticApp,
@@ -102,38 +100,6 @@ export function image(key: ImageKey): string {
 
 export function postgresImage(major: PostgresMajor): string {
 	return renderImage(postgresImages[major]);
-}
-
-export type HelmChartOptions = {
-	name: string;
-	targetNamespace?: string;
-	valuesContent?: string;
-	set?: Record<string, string>;
-};
-
-export function buildHelmChart(
-	key: HelmChartKey,
-	options: HelmChartOptions,
-): HelmChart {
-	const entry: HelmChartEntry = helmCharts[key];
-
-	return {
-		apiVersion: "helm.cattle.io/v1",
-		kind: "HelmChart",
-		metadata: { name: options.name },
-		spec: {
-			...(entry.kind === "repo" && { repo: entry.repo }),
-			chart: entry.chart,
-			...(options.targetNamespace !== undefined && {
-				targetNamespace: options.targetNamespace,
-			}),
-			version: entry.version,
-			...(options.valuesContent !== undefined && {
-				valuesContent: options.valuesContent,
-			}),
-			...(options.set !== undefined && { set: options.set }),
-		},
-	};
 }
 
 export async function loadAppConfig(path: string): Promise<AppConfig> {

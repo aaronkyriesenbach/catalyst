@@ -20,7 +20,7 @@ export type HelmRelease = {
 	/** Must equal the existing helm release name when adopting a live install. */
 	releaseName: string;
 	values?: Record<string, unknown>;
-	/** Same semantics as the old HelmChart `spec.set` (`--set`). */
+	/** Passed to Helm as `--set`. */
 	parameters?: Record<string, string>;
 	/** Set on all but one release when several releases of a chart share a namespace, so a `crds/` directory is not rendered twice. */
 	skipCrds?: boolean;
@@ -54,23 +54,6 @@ export type StaticApp = BaseApp & {
 };
 
 export type AppConfig = WorkloadApp | StaticApp;
-
-export type HelmChart = {
-	apiVersion: "helm.cattle.io/v1";
-	kind: "HelmChart";
-	metadata: {
-		name: string;
-		namespace?: string;
-	};
-	spec: {
-		repo?: string;
-		chart: string;
-		targetNamespace?: string;
-		version: string;
-		valuesContent?: string;
-		set?: { [key: string]: string };
-	};
-};
 
 export type CertDeployStrategy =
 	| { type: "proxmox"; nodes: { name: string; ipAddress: string }[] }
