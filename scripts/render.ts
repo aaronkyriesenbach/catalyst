@@ -43,9 +43,7 @@ if (arg1 === "argo") {
 		process.exit(1);
 	}
 
-	const appConfig = await loadAppConfig(moduleName(arg1));
-
-	process.env.ARGOCD_ENV_APP_CONFIG = JSON.stringify(appConfig);
+	process.env.ARGOCD_ENV_APP = arg1.replace(/\.ts$/, "");
 
 	await import("../main");
 }

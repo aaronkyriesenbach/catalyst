@@ -6,7 +6,7 @@ Kubernetes infrastructure-as-TypeScript repo. Defines cluster apps as typed conf
 
 ```
 catalyst/
-├── main.ts              # CMP plugin entrypoint — two modes: single app (ARGOCD_ENV_APP_CONFIG) or enumerate all
+├── main.ts              # CMP plugin entrypoint — two modes: single app (ARGOCD_ENV_APP = module name) or enumerate all
 ├── utils.ts             # Builders: Deployment, Service, HTTPRoute, GeneratedSecret + loadAppConfig
 ├── modifiers.ts         # WorkloadModifier pattern: withNasMounts, withPostgres, withOidcAuth, applyModifiers
 ├── storage.ts           # PV/PVC builders for NAS-backed NFS storage

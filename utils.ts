@@ -141,9 +141,7 @@ export function buildApplication(config: AppConfig): Application {
 				repoURL: REPO_URL,
 				path: ".",
 				plugin: {
-					env: [
-						{ name: "APP_CONFIG", value: JSON.stringify(config) },
-					],
+					env: [{ name: "APP", value: name }],
 				},
 			},
 			destination: {

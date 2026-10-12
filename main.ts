@@ -1,7 +1,6 @@
 import { readdirSync } from "fs";
 import { stringify } from "yaml";
 import { projectDefinitions } from "./constants";
-import type { AppConfig } from "./types";
 import {
 	buildApplication,
 	buildProject,
@@ -9,10 +8,10 @@ import {
 	renderAppFromConfig,
 } from "./utils";
 
-if (process.env.ARGOCD_ENV_APP_CONFIG) {
-	const config = JSON.parse(process.env.ARGOCD_ENV_APP_CONFIG) as AppConfig;
+const appName = process.env.ARGOCD_ENV_APP;
 
-	await renderAppFromConfig(config);
+if (appName) {
+	await renderAppFromConfig(await loadAppConfig(`${appName}.ts`));
 } else {
 	const resources: string[] = [];
 
