@@ -77,6 +77,11 @@ bunx prettier --write .                      # Format the repo (config: .prettie
 - Chart repo/name/version live in `helmCharts` in `versions.ts`; build the resource with `buildHelmChart(key, { name, targetNamespace?, valuesContent?, set? })` from `utils.ts` — never hand-write a `HelmChart` literal.
 - Embed values with `Bun.file(new URL("./app/values.yaml", import.meta.url)).text()` — this is a top-level await pattern used in several apps.
 
+### Scripts and embedded files
+
+- Never inline shell scripts in `apps/*.ts`. Put them in a file next to the app (e.g. `apps/<app>/<name>.sh`), load with `readFile(...)` into `buildFileConfigMap(...)`, mount the ConfigMap, and run it with `command: ["/bin/sh", "/scripts/<name>.sh"]`. Pass values the script needs as container `env`, not TS string interpolation, so the file stays a plain, lintable script.
+- Indent anything embedded in a ConfigMap with **spaces, not tabs** (`.editorconfig` enforces this for `*.sh`). A tab makes Go/JS YAML encoders (kubectl, ArgoCD UI) render the whole value as one quoted `\n`-escaped string.
+
 ### External Apps (traefik module)
 
 - Defined in `apps/traefik/externalApps.config.ts` — proxied non-cluster services (UniFi, TrueNAS, Proxmox).

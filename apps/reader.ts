@@ -10,22 +10,16 @@ import { buildFileConfigMap, readFile, image } from "../utils";
 const vpnSecretName = "reader-vpn-creds";
 const mamSecretName = "reader-mam";
 
-const mamUpdaterScript = [
-	"while true",
-	'do echo "[$(date)] Updating MAM dynamic seedbox IP..."',
-	'response=$(curl -s -w "\\nHTTP_STATUS:%{http_code}" -b "mam_id=${MAM_ID}" "https://t.myanonamouse.net/json/dynamicSeedbox.php")',
-	'body=$(echo "$response" | sed "/HTTP_STATUS:/d")',
-	'status=$(echo "$response" | grep "HTTP_STATUS:" | cut -d: -f2)',
-	'echo "$body"',
-	'if [ "$status" != "200" ]; then echo "[$(date)] ERROR: MAM update failed with HTTP $status"',
-	'elif echo "$body" | grep -qi "error"; then echo "[$(date)] ERROR: MAM returned error response"',
-	'else echo "[$(date)] MAM update successful"; fi',
-	"sleep 1800; done",
-].join("; ");
-
 const qbtInitConfigMap = buildFileConfigMap("reader-qbt-init", {
 	"setup-qbittorrent.sh": await readFile(
 		"./reader/setup-qbittorrent.sh",
+		import.meta.url,
+	),
+});
+
+const mamUpdaterConfigMap = buildFileConfigMap("reader-mam-updater", {
+	"mam-updater.sh": await readFile(
+		"./reader/mam-updater.sh",
 		import.meta.url,
 	),
 });
@@ -91,8 +85,7 @@ const base: WorkloadApp = {
 			{
 				name: "mam-updater",
 				image: image("curl"),
-				command: ["/bin/sh", "-c"],
-				args: [mamUpdaterScript],
+				command: ["/bin/sh", "/scripts/mam-updater.sh"],
 				env: [
 					{
 						name: "MAM_ID",
@@ -104,6 +97,13 @@ const base: WorkloadApp = {
 						},
 					},
 				],
+				volumeMounts: [
+					{
+						name: "mam-updater-script",
+						mountPath: "/scripts",
+						readOnly: true,
+					},
+				],
 			},
 		],
 		securityContext: {},
@@ -111,6 +111,10 @@ const base: WorkloadApp = {
 			{
 				name: "qbt-init",
 				configMap: { name: "reader-qbt-init", defaultMode: 0o755 },
+			},
+			{
+				name: "mam-updater-script",
+				configMap: { name: "reader-mam-updater" },
 			},
 		],
 		dnsPolicy: "None",
@@ -120,7 +124,7 @@ const base: WorkloadApp = {
 	},
 	webPort: 8080,
 	subDomain: "reader",
-	extraResources: [qbtInitConfigMap],
+	extraResources: [qbtInitConfigMap, mamUpdaterConfigMap],
 };
 
 export default applyModifiers(

@@ -5,6 +5,7 @@ import {
 	buildIscsiPvcTemplate,
 	buildStatefulSet,
 	image,
+	readFile,
 } from "../../utils";
 import { DOWNLOADER_S3_CREDENTIALS_SECRET, GARAGE_RPC_SECRET } from "./secrets";
 
@@ -35,25 +36,15 @@ const garageConfigMap = buildFileConfigMap(configMapName, {
 	"garage.toml": garageToml,
 });
 
-// No declarative Garage CRD exists, so this loop re-runs upstream's imperative
-// setup (layout/bucket/key) every 5 minutes, converging instead of running once.
-const provisionScript = [
-	"while true",
-	"do NODE_ID=$(/garage node id 2>/dev/null | head -n1 | cut -d@ -f1)",
-	'if [ -n "$NODE_ID" ] && ! /garage layout show 2>/dev/null | sed -n "/CURRENT CLUSTER LAYOUT/,/^$/p" | grep -q "$NODE_ID"',
-	'then /garage layout assign -z dc1 -c 20GB "$NODE_ID"',
-	'CURRENT_VERSION=$(/garage layout show 2>/dev/null | grep -oE "Current cluster layout version: [0-9]+" | grep -oE "[0-9]+" | head -n1)',
-	'/garage layout apply --version "$((${CURRENT_VERSION:-0} + 1))"',
-	"fi",
-	`if ! /garage bucket list 2>/dev/null | grep -q "${GARAGE_BUCKET}"`,
-	`then /garage bucket create "${GARAGE_BUCKET}"`,
-	"fi",
-	'if ! /garage key info "$DOWNLOADER_S3_ACCESS_KEY" >/dev/null 2>&1',
-	`then /garage key import --yes -n "${GARAGE_KEY_NAME}" "$DOWNLOADER_S3_ACCESS_KEY" "$DOWNLOADER_S3_SECRET_KEY"`,
-	"fi",
-	`/garage bucket allow --read --write --owner --key "$DOWNLOADER_S3_ACCESS_KEY" "${GARAGE_BUCKET}"`,
-	"sleep 300; done",
-].join("; ");
+const provisionScriptName = "provision-garage.sh";
+const provisionConfigMapName = "typetype-garage-provision";
+
+const provisionConfigMap = buildFileConfigMap(provisionConfigMapName, {
+	[provisionScriptName]: await readFile(
+		`./${provisionScriptName}`,
+		import.meta.url,
+	),
+});
 
 const garageEnv = [
 	{ name: "GARAGE_CONFIG_FILE", value: "/etc/garage/garage.toml" },
@@ -91,9 +82,11 @@ const garageStatefulSet = buildStatefulSet(
 			{
 				name: "provision",
 				image: image("garage"),
-				command: ["/bin/sh", "-ec", provisionScript],
+				command: ["/bin/sh", `/scripts/${provisionScriptName}`],
 				env: [
 					...garageEnv,
+					{ name: "GARAGE_BUCKET", value: GARAGE_BUCKET },
+					{ name: "GARAGE_KEY_NAME", value: GARAGE_KEY_NAME },
 					{
 						name: "DOWNLOADER_S3_ACCESS_KEY",
 						valueFrom: {
@@ -119,10 +112,21 @@ const garageStatefulSet = buildStatefulSet(
 						mountPath: "/etc/garage",
 						readOnly: true,
 					},
+					{
+						name: "provision-script",
+						mountPath: "/scripts",
+						readOnly: true,
+					},
 				],
 			},
 		],
-		volumes: [{ name: "config", configMap: { name: configMapName } }],
+		volumes: [
+			{ name: "config", configMap: { name: configMapName } },
+			{
+				name: "provision-script",
+				configMap: { name: provisionConfigMapName },
+			},
+		],
 		// FROM-scratch static binary: no /etc/passwd, so any UID/GID works.
 		securityContext: {
 			runAsNonRoot: true,
@@ -143,6 +147,7 @@ const garageService = buildHeadlessService(GARAGE_NAME, [
 
 export const garageResources: ResourceLike[] = [
 	garageConfigMap,
+	provisionConfigMap,
 	garageStatefulSet,
 	garageService,
 ];

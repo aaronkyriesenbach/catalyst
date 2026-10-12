@@ -97,7 +97,9 @@ Write the app file at `apps/<name>.ts` following the chosen kind's pattern.
 - HelmChart resources use `buildHelmChart(key, ...)` with an entry in `versions.ts` `helmCharts`, and `await readFile(...)` for `valuesContent`
 
 If the app needs a subdirectory (e.g. `apps/<name>/values.yaml`), create it.
-If files go into a ConfigMap, use `buildFileConfigMap(name, files)`.
+If files go into a ConfigMap, use `buildFileConfigMap(name, files)`. Shell scripts
+belong in their own `.sh` file (space-indented, not tabs) read with `readFile`,
+not inline in the TS; see AGENTS.md "Scripts and embedded files".
 
 ### 7. Validate
 
