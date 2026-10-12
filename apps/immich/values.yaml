@@ -31,7 +31,6 @@ machine-learning:
         cache:
             enabled: true
             type: persistentVolumeClaim
-            size: 10Gi
             storageClass: truenas-iscsi
             accessMode: ReadWriteOnce
 
@@ -41,6 +40,5 @@ valkey:
         data:
             enabled: true
             type: persistentVolumeClaim
-            size: 1Gi
             storageClass: truenas-iscsi
             accessMode: ReadWriteOnce
