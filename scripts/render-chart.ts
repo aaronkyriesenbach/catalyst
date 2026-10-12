@@ -33,12 +33,12 @@ async function templateRelease(
 	tempDir: string,
 ): Promise<string> {
 	const entry: HelmChartEntry = helmCharts[release.chart];
-	const valuesFile = join(tempDir, `-values.yaml`);
+	const valuesFile = join(tempDir, `${release.releaseName}-values.yaml`);
 
 	writeFileSync(valuesFile, stringify(release.values ?? {}));
 
 	const setArgs = Object.entries(release.parameters ?? {}).flatMap(
-		([key, value]) => ["--set", `=`],
+		([key, value]) => ["--set", `${key}=${value}`],
 	);
 	const proc = Bun.spawn(
 		[
@@ -63,17 +63,17 @@ async function templateRelease(
 	]);
 
 	if (exitCode !== 0) {
-		throw new Error(`helm template failed for `);
+		throw new Error(`helm template failed for ${release.releaseName}`);
 	}
 
 	return output;
 }
 
 const name = arg.replace(/\.ts$/, "");
-const config = await loadAppConfig(`.ts`);
+const config = await loadAppConfig(`${name}.ts`);
 
 if (!config.helmReleases?.length) {
-	console.error(`App '' has no helmReleases`);
+	console.error(`App '${name}' has no helmReleases`);
 	process.exit(1);
 }
 
@@ -82,7 +82,7 @@ const tempDir = mkdtempSync(join(tmpdir(), "render-chart-"));
 
 try {
 	for (const release of config.helmReleases) {
-		console.log(`# release: `);
+		console.log(`# release: ${release.releaseName}`);
 		console.log(await templateRelease(release, namespace, tempDir));
 	}
 } finally {
