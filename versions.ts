@@ -225,7 +225,7 @@ export const helmCharts = {
 	pocketIdOperator: {
 		kind: "oci",
 		chart: "oci://ghcr.io/aclerici38/charts/pocket-id-operator",
-		version: "0.7.2",
+		version: "0.15.0",
 	},
 	immich: {
 		kind: "oci",
