@@ -192,7 +192,7 @@ export const helmCharts = {
 		kind: "repo",
 		repo: "https://stakater.github.io/stakater-charts",
 		chart: "reloader",
-		version: "2.2.12",
+		version: "2.2.18",
 	},
 	volsync: {
 		kind: "repo",
