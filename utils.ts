@@ -238,6 +238,13 @@ export function buildApplication(config: AppConfig): Application {
 			name,
 			namespace: "argocd",
 			finalizers: ["resources-finalizer.argocd.argoproj.io"],
+			// ServerSideApply leaves no last-applied annotation, so client-side diffs
+			// report API-defaulted fields (HTTPRoute, ExternalSecret, ...) as drift.
+			...(hasHelm && {
+				annotations: {
+					"argocd.argoproj.io/compare-options": "ServerSideDiff=true",
+				},
+			}),
 		},
 		spec: {
 			project: project ?? "default",
