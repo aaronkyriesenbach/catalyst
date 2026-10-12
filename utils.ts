@@ -567,6 +567,11 @@ export function buildGeneratedSecret(
 	return resources;
 }
 
+// Literal blocks keep embedded scripts readable; the default folds long lines into `>` blocks.
+function toYaml(value: unknown): string {
+	return stringify(value, { blockQuote: "literal" });
+}
+
 function renderWorkload(config: WorkloadApp): string[] {
 	const app = config.podSpec.securityContext
 		? config
@@ -595,11 +600,11 @@ function renderWorkload(config: WorkloadApp): string[] {
 	const resources: string[] = [];
 
 	if (extraResources) {
-		resources.push(...extraResources.map((r) => stringify(r)));
+		resources.push(...extraResources.map((r) => toYaml(r)));
 	}
 
 	resources.push(
-		stringify(buildDeployment(name, podSpec, { strategy: app.strategy })),
+		toYaml(buildDeployment(name, podSpec, { strategy: app.strategy })),
 	);
 
 	const ports = podSpec.containers.flatMap((c) => c.ports ?? []);
@@ -618,7 +623,7 @@ function renderWorkload(config: WorkloadApp): string[] {
 			})),
 		);
 
-		resources.push(stringify(service));
+		resources.push(toYaml(service));
 
 		if (webPort) {
 			const route = buildRoute(name, webPort, {
@@ -626,7 +631,7 @@ function renderWorkload(config: WorkloadApp): string[] {
 				externallyAccessible,
 				forwardAuth,
 			});
-			resources.push(stringify(route));
+			resources.push(toYaml(route));
 		}
 	}
 
@@ -634,7 +639,7 @@ function renderWorkload(config: WorkloadApp): string[] {
 }
 
 async function renderStatic(config: StaticApp): Promise<string[]> {
-	const results = config.resources?.map((r) => stringify(r)) ?? [];
+	const results = config.resources?.map((r) => toYaml(r)) ?? [];
 
 	for (const url of config.remoteResources ?? []) {
 		const response = await fetch(url);
@@ -650,7 +655,7 @@ async function renderStatic(config: StaticApp): Promise<string[]> {
 			.map((doc) => doc.toJSON() as Record<string, unknown>)
 			.filter(Boolean);
 
-		results.push(...docs.map((d) => stringify(d)));
+		results.push(...docs.map((d) => toYaml(d)));
 	}
 
 	return results;
