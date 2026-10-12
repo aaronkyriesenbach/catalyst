@@ -27,7 +27,7 @@ import {
 	PersistentVolumeClaim,
 	Service,
 } from "kubernetes-models/v1";
-import { parseAllDocuments, stringify } from "yaml";
+import { parse, parseAllDocuments, stringify } from "yaml";
 // Import-cycle guard: ./apps/external-secrets calls buildHelmChart at load, so versions must evaluate first.
 import {
 	helmCharts,
@@ -43,10 +43,11 @@ import {
 	awsSecretStoreRef,
 	clusterGeneratorRef,
 } from "./apps/external-secrets";
-import { DOCKER_MIRROR_HOST } from "./constants";
+import { DOCKER_MIRROR_HOST, helmReleaseNamespaces } from "./constants";
 import type {
 	AppConfig,
 	HelmChart,
+	HelmRelease,
 	ProjectSpec,
 	StaticApp,
 	StorageQuantity,
@@ -55,6 +56,23 @@ import type {
 
 export function readFile(relativePath: string, base: string): Promise<string> {
 	return Bun.file(new URL(relativePath, base)).text();
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+export async function readYaml(
+	relativePath: string,
+	base: string,
+): Promise<Record<string, unknown>> {
+	const parsed: unknown = parse(await readFile(relativePath, base));
+
+	if (!isRecord(parsed)) {
+		throw new Error(`${relativePath} must contain a YAML mapping`);
+	}
+
+	return parsed;
 }
 
 const DOCKER_HUB_PREFIX = "docker.io/";
@@ -126,8 +144,93 @@ export async function loadAppConfig(path: string): Promise<AppConfig> {
 
 const REPO_URL = "https://github.com/aaronkyriesenbach/catalyst";
 
+type ApplicationSource = NonNullable<Application["spec"]["sources"]>[number];
+
+const OCI_PREFIX = "oci://";
+
+/** Argo wants OCI `repoURL`s without the scheme, with the chart name split off. */
+export function splitOciChart(chart: `oci://${string}`): {
+	repoURL: string;
+	chart: string;
+} {
+	const ref = chart.slice(OCI_PREFIX.length);
+	const lastSlash = ref.lastIndexOf("/");
+
+	return {
+		repoURL: ref.slice(0, lastSlash),
+		chart: ref.slice(lastSlash + 1),
+	};
+}
+
+function buildHelmSource(release: HelmRelease): ApplicationSource {
+	const entry: HelmChartEntry = helmCharts[release.chart];
+	const location =
+		entry.kind === "repo"
+			? { repoURL: entry.repo, chart: entry.chart }
+			: splitOciChart(entry.chart);
+	const parameters = Object.entries(release.parameters ?? {}).map(
+		([name, value]) => ({ name, value }),
+	);
+
+	return {
+		...location,
+		targetRevision: entry.version,
+		helm: {
+			releaseName: release.releaseName,
+			...(release.values !== undefined && {
+				valuesObject: release.values,
+			}),
+			...(parameters.length > 0 && { parameters }),
+		},
+	};
+}
+
+function hasCmpContent(config: AppConfig): boolean {
+	if (config.kind === "workload") {
+		return true;
+	}
+
+	return (
+		(config.resources?.length ?? 0) > 0 ||
+		(config.remoteResources?.length ?? 0) > 0
+	);
+}
+
+function assertHelmReleaseNamespaces(
+	config: AppConfig,
+	destinationNamespace: string,
+): void {
+	for (const { releaseName } of config.helmReleases ?? []) {
+		const pinned = helmReleaseNamespaces[releaseName];
+
+		if (pinned !== undefined && pinned !== destinationNamespace) {
+			throw new Error(
+				`Helm release '${releaseName}' is installed in '${pinned}' but app '${config.name}' targets '${destinationNamespace}'`,
+			);
+		}
+	}
+}
+
+export function appNamespace(config: AppConfig): string {
+	return config.namespace ?? config.name;
+}
+
 export function buildApplication(config: AppConfig): Application {
-	const { name, namespace, project } = config;
+	const { name, project, helmReleases, ignoreDifferences } = config;
+	const destinationNamespace = appNamespace(config);
+
+	assertHelmReleaseNamespaces(config, destinationNamespace);
+
+	const cmpSource: ApplicationSource = {
+		repoURL: REPO_URL,
+		path: ".",
+		plugin: {
+			env: [{ name: "APP", value: name }],
+		},
+	};
+	const helmSources = (helmReleases ?? []).map(buildHelmSource);
+	const hasHelm = helmSources.length > 0;
+	const cmpSources = !hasHelm || hasCmpContent(config) ? [cmpSource] : [];
 
 	return new Application({
 		metadata: {
@@ -137,17 +240,17 @@ export function buildApplication(config: AppConfig): Application {
 		},
 		spec: {
 			project: project ?? "default",
-			source: {
-				repoURL: REPO_URL,
-				path: ".",
-				plugin: {
-					env: [{ name: "APP", value: name }],
-				},
-			},
+			...(hasHelm
+				? { sources: [...cmpSources, ...helmSources] }
+				: { source: cmpSource }),
 			destination: {
 				server: "https://kubernetes.default.svc",
-				namespace: namespace ?? name,
+				namespace: destinationNamespace,
 			},
+			...(hasHelm && {
+				syncPolicy: { syncOptions: ["ServerSideApply=true"] },
+			}),
+			...(ignoreDifferences !== undefined && { ignoreDifferences }),
 		},
 	});
 }

@@ -1,7 +1,11 @@
-import type { IAppProject } from "@kubernetes-models/argo-cd/argoproj.io/v1alpha1";
+import type {
+	IAppProject,
+	IApplication,
+} from "@kubernetes-models/argo-cd/argoproj.io/v1alpha1";
 import { Model } from "@kubernetes-models/base";
 import { IPodSpec } from "kubernetes-models/v1";
 import type { Project } from "./constants";
+import type { HelmChartKey } from "./versions";
 
 export type ProjectSpec = IAppProject["spec"];
 
@@ -11,10 +15,23 @@ export type ResourceLike =
 /** Kubernetes binary storage quantity, e.g. "10Gi", "1Ti". */
 export type StorageQuantity = `${number}${"Ki" | "Mi" | "Gi" | "Ti" | "Pi"}`;
 
+export type HelmRelease = {
+	chart: HelmChartKey;
+	/** Must equal the existing helm release name when adopting a live install. */
+	releaseName: string;
+	values?: Record<string, unknown>;
+	/** Same semantics as the old HelmChart `spec.set` (`--set`). */
+	parameters?: Record<string, string>;
+};
+
 type BaseApp = {
 	name: string;
 	namespace?: string;
 	project?: Project;
+	/** Charts are installed into the app's destination namespace. */
+	helmReleases?: HelmRelease[];
+	/** For fields written at runtime (e.g. webhook `caBundle`). */
+	ignoreDifferences?: IApplication["spec"]["ignoreDifferences"];
 };
 
 export type WorkloadApp = BaseApp & {
