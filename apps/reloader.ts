@@ -1,19 +1,11 @@
 import { Project } from "../constants";
-import type { HelmChart, StaticApp } from "../types";
+import type { StaticApp } from "../types";
+import { buildHelmChart } from "../utils";
 
-const chart: HelmChart = {
-	apiVersion: "helm.cattle.io/v1",
-	kind: "HelmChart",
-	metadata: {
-		name: "reloader",
-	},
-	spec: {
-		repo: "https://stakater.github.io/stakater-charts",
-		chart: "reloader",
-		targetNamespace: "reloader",
-		version: "2.2.12",
-	},
-};
+const chart = buildHelmChart("reloader", {
+	name: "reloader",
+	targetNamespace: "reloader",
+});
 
 const config: StaticApp = {
 	kind: "static",

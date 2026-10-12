@@ -1,5 +1,5 @@
 import type { ResourceLike } from "../../types";
-import { buildDeployment, buildService } from "../../utils";
+import { buildDeployment, buildService, image } from "../../utils";
 import { YOUTUBE_REMOTE_LOGIN_TOKEN_SECRET } from "./secrets";
 
 export const TOKEN_NAME = "typetype-token";
@@ -9,7 +9,7 @@ const deployment = buildDeployment(TOKEN_NAME, {
 	containers: [
 		{
 			name: "main",
-			image: "ghcr.io/typetype-video/typetype-token:1.6.0",
+			image: image("typetypeToken"),
 			ports: [{ name: "http", containerPort: TOKEN_PORT }],
 			env: [
 				{ name: "NODE_ENV", value: "production" },

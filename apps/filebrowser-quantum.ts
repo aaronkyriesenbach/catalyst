@@ -6,7 +6,7 @@ import {
 	withOidcAuth,
 } from "../modifiers";
 import type { WorkloadApp } from "../types";
-import { readFile } from "../utils";
+import { readFile, image } from "../utils";
 
 const name = "filebrowser-quantum";
 const oidcCredentialsSecret = `${name}-oidc-credentials`;
@@ -28,7 +28,7 @@ const base: WorkloadApp = {
 		containers: [
 			{
 				name: "main",
-				image: "ghcr.io/gtsteffaniak/filebrowser:1.3.0-stable",
+				image: image("filebrowserQuantum"),
 				env: [
 					{
 						name: "FILEBROWSER_CONFIG",

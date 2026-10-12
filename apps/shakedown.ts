@@ -5,7 +5,7 @@ import {
 	withPostgres,
 } from "../modifiers";
 import type { WorkloadApp } from "../types";
-import { buildGeneratedSecret } from "../utils";
+import { buildGeneratedSecret, image } from "../utils";
 
 const name = "shakedown";
 const oidcCredentialsSecret = `${name}-oidc-credentials`;
@@ -18,7 +18,7 @@ const base: WorkloadApp = {
 		containers: [
 			{
 				name: "main",
-				image: "ghcr.io/aaronkyriesenbach/shakedown:0.1.0",
+				image: image("shakedown"),
 				env: [
 					{
 						name: "DATABASE_URL",

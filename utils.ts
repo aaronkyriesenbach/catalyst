@@ -28,12 +28,25 @@ import {
 	Service,
 } from "kubernetes-models/v1";
 import { parseAllDocuments, stringify } from "yaml";
+// Import-cycle guard: ./apps/external-secrets calls buildHelmChart at load, so versions must evaluate first.
+import {
+	helmCharts,
+	images,
+	postgresImages,
+	type HelmChartEntry,
+	type HelmChartKey,
+	type ImageEntry,
+	type ImageKey,
+	type PostgresMajor,
+} from "./versions";
 import {
 	awsSecretStoreRef,
 	clusterGeneratorRef,
 } from "./apps/external-secrets";
+import { DOCKER_MIRROR_HOST } from "./constants";
 import type {
 	AppConfig,
+	HelmChart,
 	ProjectSpec,
 	StaticApp,
 	StorageQuantity,
@@ -42,6 +55,67 @@ import type {
 
 export function readFile(relativePath: string, base: string): Promise<string> {
 	return Bun.file(new URL(relativePath, base)).text();
+}
+
+const DOCKER_HUB_PREFIX = "docker.io/";
+const DOCKER_HUB_LIBRARY_PREFIX = "library/";
+
+function renderImage(entry: ImageEntry): string {
+	if (entry.mirrored === undefined) {
+		return `${entry.name}:${entry.tag}`;
+	}
+
+	const path = entry.name.slice(DOCKER_HUB_PREFIX.length);
+
+	if (entry.mirrored) {
+		return `${DOCKER_MIRROR_HOST}/${path}:${entry.tag}`;
+	}
+
+	const unprefixed = path.startsWith(DOCKER_HUB_LIBRARY_PREFIX)
+		? path.slice(DOCKER_HUB_LIBRARY_PREFIX.length)
+		: path;
+
+	return `${unprefixed}:${entry.tag}`;
+}
+
+export function image(key: ImageKey): string {
+	return renderImage(images[key]);
+}
+
+export function postgresImage(major: PostgresMajor): string {
+	return renderImage(postgresImages[major]);
+}
+
+export type HelmChartOptions = {
+	name: string;
+	targetNamespace?: string;
+	valuesContent?: string;
+	set?: Record<string, string>;
+};
+
+export function buildHelmChart(
+	key: HelmChartKey,
+	options: HelmChartOptions,
+): HelmChart {
+	const entry: HelmChartEntry = helmCharts[key];
+
+	return {
+		apiVersion: "helm.cattle.io/v1",
+		kind: "HelmChart",
+		metadata: { name: options.name },
+		spec: {
+			...(entry.kind === "repo" && { repo: entry.repo }),
+			chart: entry.chart,
+			...(options.targetNamespace !== undefined && {
+				targetNamespace: options.targetNamespace,
+			}),
+			version: entry.version,
+			...(options.valuesContent !== undefined && {
+				valuesContent: options.valuesContent,
+			}),
+			...(options.set !== undefined && { set: options.set }),
+		},
+	};
 }
 
 export async function loadAppConfig(path: string): Promise<AppConfig> {

@@ -1,5 +1,5 @@
 import type { ResourceLike } from "../../types";
-import { buildDeployment, buildService } from "../../utils";
+import { buildDeployment, buildService, image } from "../../utils";
 import { DRAGONFLY_NAME, DRAGONFLY_PORT } from "./dragonfly";
 import { GARAGE_BUCKET, GARAGE_NAME, GARAGE_S3_PORT } from "./garage";
 import { DOWNLOADER_S3_CREDENTIALS_SECRET } from "./secrets";
@@ -11,7 +11,7 @@ const deployment = buildDeployment(DOWNLOADER_NAME, {
 	containers: [
 		{
 			name: "main",
-			image: "ghcr.io/typetype-video/typetype-downloader:1.6.0",
+			image: image("typetypeDownloader"),
 			ports: [{ name: "http", containerPort: DOWNLOADER_PORT }],
 			env: [
 				{ name: "HTTP_PORT", value: `${DOWNLOADER_PORT}` },

@@ -1,6 +1,7 @@
 import { Project } from "../constants";
 import { applyModifiers, withNasMounts } from "../modifiers";
 import type { WorkloadApp } from "../types";
+import { image } from "../utils";
 
 const base: WorkloadApp = {
 	kind: "workload",
@@ -10,7 +11,7 @@ const base: WorkloadApp = {
 		containers: [
 			{
 				name: "main",
-				image: "docker.int.lab53.net/restic/rest-server:0.14.0",
+				image: image("resticServer"),
 				command: ["rest-server"],
 				args: ["--no-auth", "--path", "/data"],
 				ports: [{ name: "http", containerPort: 8000 }],

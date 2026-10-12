@@ -62,7 +62,7 @@ Translate the upstream setup into catalyst-specific patterns:
 | `docker run -p 8080:8080`        | `ports: [{ name: "http", containerPort: 8080 }]`, `webPort: 8080`           |
 | `docker run -v /data`            | `withIscsiVolumes({ main: [{ name: "data", mountPath: "/data" }] })`        |
 | `-e DATABASE_URL=postgres://...` | `withPostgres(17)` — see [references/modifiers.md](references/modifiers.md) |
-| `docker run your/image:1.2.3`    | Docker Hub → `docker.int.lab53.net/library/...`, otherwise use as-is        |
+| `docker run your/image:1.2.3`    | Add an entry to `versions.ts` and use `image("key")`                        |
 | Sign-in page in the app          | `withOidcAuth({ middleware: { enabled: true, headers: [...] } })`           |
 | Config files                     | `buildFileConfigMap(...)` and volume mount                                  |
 | Arbitrary k8s resources          | `extraResources` on a WorkloadApp, or use a StaticApp                       |
@@ -94,7 +94,7 @@ Write the app file at `apps/<name>.ts` following the chosen kind's pattern.
 
 - `kind: "static"`, `name`, `resources` array
 - Each resource is an instantiated k8s model or a plain object
-- HelmChart resources use `await readFile(...)` for `valuesContent`
+- HelmChart resources use `buildHelmChart(key, ...)` with an entry in `versions.ts` `helmCharts`, and `await readFile(...)` for `valuesContent`
 
 If the app needs a subdirectory (e.g. `apps/<name>/values.yaml`), create it.
 If files go into a ConfigMap, use `buildFileConfigMap(name, files)` —
@@ -117,7 +117,8 @@ CMP `$` substitution, security context). Read that first. These are additional
 gotchas specific to scaffold decisions:
 
 - **`withIscsiVolumes` forces `Recreate` strategy.** If the app needs `RollingUpdate`, use `withNasMounts` instead.
-- **Postgres images come from `docker.int.lab53.net/library/postgres`** — this is the Docker Hub mirror path, not ghcr.io.
+- **Images and chart versions go in `versions.ts`**, never as literals in the app file. Docker Hub images are `docker.io/<path>` with `mirrored: true` (only `registry` is `false`); other registries omit `mirrored`. Keep the entry shape/field order exactly like its neighbours (Renovate parses it) and run `bun run check-versions` and `bun run typecheck`.
+- **Postgres images come from `postgresImages` in `versions.ts`** — `withPostgres` only accepts the majors listed there; add a new major entry to use one.
 - **Modifier container names must match exactly.** If `podSpec.containers[0].name` is `"main"`, the modifier key must also be `"main"`. Mismatches throw at render time, not at build time.
 
 ## Reference Files

@@ -5,24 +5,16 @@ import {
 import type { IPushSecretStoreRef } from "@kubernetes-models/external-secrets/external-secrets.io/v1alpha1";
 import { ClusterGenerator } from "@kubernetes-models/external-secrets/generators.external-secrets.io/v1alpha1";
 import { Project } from "../constants";
-import type { HelmChart, StaticApp } from "../types";
+import type { StaticApp } from "../types";
+import { buildHelmChart } from "../utils";
 
-const chart: HelmChart = {
-	apiVersion: "helm.cattle.io/v1",
-	kind: "HelmChart",
-	metadata: {
-		name: "external-secrets",
+const chart = buildHelmChart("externalSecrets", {
+	name: "external-secrets",
+	targetNamespace: "external-secrets",
+	set: {
+		installCRDs: "true",
 	},
-	spec: {
-		repo: "https://charts.external-secrets.io",
-		chart: "external-secrets",
-		targetNamespace: "external-secrets",
-		version: "2.3.0",
-		set: {
-			installCRDs: "true",
-		},
-	},
-};
+});
 
 const clusterGeneratorName = "generated-password";
 

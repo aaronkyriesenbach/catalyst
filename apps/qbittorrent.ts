@@ -5,6 +5,7 @@ import {
 	withOidcAuth,
 } from "../modifiers";
 import type { WorkloadApp } from "../types";
+import { image } from "../utils";
 
 const base: WorkloadApp = {
 	kind: "workload",
@@ -13,7 +14,7 @@ const base: WorkloadApp = {
 		containers: [
 			{
 				name: "main",
-				image: "docker.int.lab53.net/linuxserver/qbittorrent:5.2.3",
+				image: image("qbittorrent"),
 				env: [
 					{ name: "PUID", value: "1000" },
 					{ name: "PGID", value: "1000" },

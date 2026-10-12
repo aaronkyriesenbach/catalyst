@@ -1,5 +1,6 @@
 import { applyModifiers, withNasMounts, withOidcAuth } from "../modifiers";
 import type { WorkloadApp } from "../types";
+import { image } from "../utils";
 
 const base: WorkloadApp = {
 	kind: "workload",
@@ -8,7 +9,7 @@ const base: WorkloadApp = {
 		containers: [
 			{
 				name: "main",
-				image: "ghcr.io/aaronkyriesenbach/forscoreviewer:0.2.0",
+				image: image("forscore"),
 				ports: [{ name: "http", containerPort: 3000 }],
 			},
 		],

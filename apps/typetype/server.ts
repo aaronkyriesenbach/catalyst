@@ -1,5 +1,5 @@
 import type { ResourceLike } from "../../types";
-import { buildDeployment, buildService } from "../../utils";
+import { buildDeployment, buildService, image } from "../../utils";
 import { DRAGONFLY_NAME, DRAGONFLY_PORT } from "./dragonfly";
 import { DOWNLOADER_NAME, DOWNLOADER_PORT } from "./downloader";
 import { TOKEN_NAME, TOKEN_PORT } from "./token";
@@ -17,7 +17,7 @@ const deployment = buildDeployment(SERVER_NAME, {
 	containers: [
 		{
 			name: "main",
-			image: "ghcr.io/typetype-video/typetype-server:1.6.0",
+			image: image("typetypeServer"),
 			ports: [{ name: "http", containerPort: SERVER_PORT }],
 			env: [
 				{

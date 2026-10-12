@@ -1,26 +1,20 @@
 import { buildBackupResources } from "../backup";
 import { buildNasPersistentVolumePair } from "../storage";
-import type { HelmChart, StaticApp } from "../types";
+import type { StaticApp } from "../types";
 import {
 	buildHeadlessService,
 	buildIscsiPvcTemplate,
 	buildRoute,
 	buildStatefulSet,
 	readFile,
+	image,
+	buildHelmChart,
 } from "../utils";
 
-const chart: HelmChart = {
-	apiVersion: "helm.cattle.io/v1",
-	kind: "HelmChart",
-	metadata: {
-		name: "immich",
-	},
-	spec: {
-		chart: "oci://ghcr.io/immich-app/immich-charts/immich",
-		version: "0.12.0",
-		valuesContent: await readFile("./immich/values.yaml", import.meta.url),
-	},
-};
+const chart = buildHelmChart("immich", {
+	name: "immich",
+	valuesContent: await readFile("./immich/values.yaml", import.meta.url),
+});
 
 const { pv: libraryPv, pvc: libraryPvc } = buildNasPersistentVolumePair({
 	name: "immich-library",
@@ -34,7 +28,7 @@ const postgresStatefulSet = buildStatefulSet(
 		containers: [
 			{
 				name: "postgres",
-				image: "ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0",
+				image: image("immichPostgres"),
 				env: [
 					{
 						name: "POSTGRES_USER",

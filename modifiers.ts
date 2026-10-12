@@ -10,7 +10,9 @@ import {
 	buildIscsiPvc,
 	buildIscsiPvcTemplate,
 	buildStatefulSet,
+	postgresImage,
 } from "./utils";
+import type { PostgresMajor } from "./versions";
 
 export type NasMountConfig = {
 	[containerName: string]: { mountPath: string; subPath?: string }[];
@@ -87,10 +89,7 @@ export function withNasMounts(mounts: NasMountConfig): WorkloadModifier {
 	};
 }
 
-export type PostgresVariant = "alpine" | "bookworm" | "trixie";
-
 export type PostgresOptions = {
-	variant?: PostgresVariant;
 	user?: string;
 	password?: string;
 	database?: string;
@@ -101,8 +100,6 @@ export type PostgresOptions = {
 	backupSchedule?: CronExpression;
 };
 
-const DEFAULT_POSTGRES_REGISTRY = "docker.int.lab53.net/library/postgres";
-
 /**
  * Build a standalone Postgres StatefulSet + headless Service (+ optional backup
  * resources), addressable at `<name>-postgres:5432`. Shared by `withPostgres`
@@ -112,15 +109,13 @@ const DEFAULT_POSTGRES_REGISTRY = "docker.int.lab53.net/library/postgres";
 export function buildPostgresResources(
 	name: string,
 	namespace: string,
-	version: number,
+	version: PostgresMajor,
 	options?: PostgresOptions,
 ): ResourceLike[] {
 	const user = options?.user ?? name;
 	const password = options?.password ?? name;
 	const database = options?.database ?? name;
-	const variant = options?.variant ?? "alpine";
-	const image =
-		options?.image ?? `${DEFAULT_POSTGRES_REGISTRY}:${version}-${variant}`;
+	const image = options?.image ?? postgresImage(version);
 
 	const pgEnv = [
 		{ name: "POSTGRES_USER", value: user },
@@ -192,7 +187,7 @@ export function buildPostgresResources(
 }
 
 export function withPostgres(
-	version: number,
+	version: PostgresMajor,
 	options?: PostgresOptions,
 ): WorkloadModifier {
 	return (app) => ({

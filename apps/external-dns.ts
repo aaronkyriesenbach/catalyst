@@ -1,42 +1,24 @@
 import { Project } from "../constants";
-import type { HelmChart, StaticApp } from "../types";
-import { buildDeployment, readFile } from "../utils";
+import type { StaticApp } from "../types";
+import { buildDeployment, readFile, image, buildHelmChart } from "../utils";
 
-const internalChart: HelmChart = {
-	apiVersion: "helm.cattle.io/v1",
-	kind: "HelmChart",
-	metadata: {
-		name: "external-dns-int",
-	},
-	spec: {
-		repo: "https://kubernetes-sigs.github.io/external-dns/",
-		chart: "external-dns",
-		targetNamespace: "external-dns",
-		version: "1.20.0",
-		valuesContent: await readFile(
-			"./external-dns/internal-values.yaml",
-			import.meta.url,
-		),
-	},
-};
+const internalChart = buildHelmChart("externalDns", {
+	name: "external-dns-int",
+	targetNamespace: "external-dns",
+	valuesContent: await readFile(
+		"./external-dns/internal-values.yaml",
+		import.meta.url,
+	),
+});
 
-const externalChart: HelmChart = {
-	apiVersion: "helm.cattle.io/v1",
-	kind: "HelmChart",
-	metadata: {
-		name: "external-dns-ext",
-	},
-	spec: {
-		repo: "https://kubernetes-sigs.github.io/external-dns/",
-		chart: "external-dns",
-		targetNamespace: "external-dns",
-		version: "1.20.0",
-		valuesContent: await readFile(
-			"./external-dns/external-values.yaml",
-			import.meta.url,
-		),
-	},
-};
+const externalChart = buildHelmChart("externalDns", {
+	name: "external-dns-ext",
+	targetNamespace: "external-dns",
+	valuesContent: await readFile(
+		"./external-dns/external-values.yaml",
+		import.meta.url,
+	),
+});
 
 const awsCredentialsSecretName = "aws-credentials";
 
@@ -44,7 +26,7 @@ const ddnsRoute53Deployment = buildDeployment("ddns-route53", {
 	containers: [
 		{
 			name: "ddns-route53",
-			image: "crazymax/ddns-route53:latest",
+			image: image("ddnsRoute53"),
 			env: [
 				{
 					name: "AWS_ACCESS_KEY_ID",

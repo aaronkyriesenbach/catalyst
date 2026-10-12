@@ -1,6 +1,6 @@
 import { applyModifiers, withIscsiVolumes, withOidcAuth } from "../modifiers";
 import type { WorkloadApp } from "../types";
-import { buildAwsExternalSecret, buildGeneratedSecret } from "../utils";
+import { buildAwsExternalSecret, buildGeneratedSecret, image } from "../utils";
 
 const name = "open-webui";
 const namespace = "chat";
@@ -19,7 +19,7 @@ const base: WorkloadApp = {
 		containers: [
 			{
 				name: "main",
-				image: "ghcr.io/open-webui/open-webui:v0.9.6",
+				image: image("openWebui"),
 				ports: [{ name: "http", containerPort: 8080 }],
 				env: [
 					// App config

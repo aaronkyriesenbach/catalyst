@@ -1,6 +1,7 @@
 import { Project } from "../constants";
 import { applyModifiers, withNasMounts } from "../modifiers";
 import type { WorkloadApp } from "../types";
+import { image } from "../utils";
 
 const base: WorkloadApp = {
 	kind: "workload",
@@ -10,7 +11,7 @@ const base: WorkloadApp = {
 		containers: [
 			{
 				name: "main",
-				image: "registry:2",
+				image: image("registry"),
 				env: [
 					{
 						name: "REGISTRY_PROXY_REMOTEURL",

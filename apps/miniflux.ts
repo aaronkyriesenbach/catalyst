@@ -1,5 +1,6 @@
 import { applyModifiers, withOidcAuth, withPostgres } from "../modifiers";
 import type { WorkloadApp } from "../types";
+import { image } from "../utils";
 
 const name = "miniflux";
 const oidcCredentialsSecret = `${name}-oidc-credentials`;
@@ -11,7 +12,7 @@ const base: WorkloadApp = {
 		containers: [
 			{
 				name: "main",
-				image: "docker.int.lab53.net/miniflux/miniflux:2.2.19",
+				image: image("miniflux"),
 				env: [
 					{
 						name: "DATABASE_URL",

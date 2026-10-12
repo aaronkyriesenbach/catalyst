@@ -18,6 +18,7 @@ containers, ports, volumes, and env vars.
 ```typescript
 import { applyModifiers, withIscsiVolumes } from "../modifiers";
 import type { WorkloadApp } from "../types";
+import { image } from "../utils";
 
 const base: WorkloadApp = {
 	kind: "workload",
@@ -26,7 +27,7 @@ const base: WorkloadApp = {
 		containers: [
 			{
 				name: "main",
-				image: "ghcr.io/org/image:1.0.0",
+				image: image("myApp"), // entry in versions.ts `images`
 				ports: [{ name: "http", containerPort: 8080 }],
 				env: [{ name: "CONFIG_VAR", value: "some-value" }],
 			},
@@ -66,18 +67,14 @@ doesn't fit.
 **Structure:**
 
 ```typescript
-import type { HelmChart, StaticApp } from "../types";
+import type { StaticApp } from "../types";
+import { buildHelmChart } from "../utils";
 
-const chart: HelmChart = {
-	apiVersion: "helm.cattle.io/v1",
-	kind: "HelmChart",
-	metadata: { name: "my-app" },
-	spec: {
-		chart: "oci://ghcr.io/org/charts/my-app",
-		targetNamespace: "my-app",
-		version: "1.0.0",
-	},
-};
+// "myApp" is an entry in versions.ts `helmCharts`
+const chart = buildHelmChart("myApp", {
+	name: "my-app",
+	targetNamespace: "my-app",
+});
 
 const config: StaticApp = {
 	kind: "static",

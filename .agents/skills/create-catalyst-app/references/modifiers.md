@@ -78,16 +78,15 @@ withPostgres(17, {
 });
 ```
 
-| Field                  | Required | Description                                                                                 |
-| ---------------------- | -------- | ------------------------------------------------------------------------------------------- |
-| `version` (positional) | Yes      | Postgres major version (e.g. `17`)                                                          |
-| `user`                 | No       | Defaults to app name                                                                        |
-| `password`             | No       | Defaults to app name                                                                        |
-| `database`             | No       | Defaults to app name                                                                        |
-| `variant`              | No       | `"alpine"` (default), `"bookworm"`, or `"trixie"`                                           |
-| `image`                | No       | Override the image. Defaults to `docker.int.lab53.net/library/postgres:<version>-<variant>` |
-| `storageRequest`       | No       | PVC size. Defaults to `"10Gi"`                                                              |
-| `backup`               | No       | If `true`, creates VolSync backup resources for the Postgres data                           |
+| Field                  | Required | Description                                                                            |
+| ---------------------- | -------- | -------------------------------------------------------------------------------------- |
+| `version` (positional) | Yes      | Postgres major in `postgresImages` in `versions.ts` (`16`, `17`, `18`)                 |
+| `user`                 | No       | Defaults to app name                                                                   |
+| `password`             | No       | Defaults to app name                                                                   |
+| `database`             | No       | Defaults to app name                                                                   |
+| `image`                | No       | Override the image. Defaults to `postgresImage(version)` (mirrored `<version>-alpine`) |
+| `storageRequest`       | No       | PVC size. Defaults to `"10Gi"`                                                         |
+| `backup`               | No       | If `true`, creates VolSync backup resources for the Postgres data                      |
 
 The Postgres container includes startup and readiness probes using `pg_isready`.
 Environment variables are: `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `PGDATA`.

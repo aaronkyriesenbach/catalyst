@@ -1,5 +1,6 @@
 import { applyModifiers, withIscsiVolumes, withNasMounts } from "../modifiers";
 import type { WorkloadApp } from "../types";
+import { image } from "../utils";
 
 const base: WorkloadApp = {
 	kind: "workload",
@@ -10,7 +11,7 @@ const base: WorkloadApp = {
 		containers: [
 			{
 				name: "main",
-				image: "ghcr.io/navidrome/navidrome:0.62.0",
+				image: image("navidrome"),
 				ports: [{ name: "http", containerPort: 4533 }],
 				env: [
 					{ name: "ND_MUSICFOLDER", value: "/music" },

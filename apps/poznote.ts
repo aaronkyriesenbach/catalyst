@@ -1,5 +1,6 @@
 import { applyModifiers, withIscsiVolumes, withOidcAuth } from "../modifiers";
 import type { WorkloadApp } from "../types";
+import { image } from "../utils";
 
 const name = "poznote";
 const oidcCredentialsSecret = `${name}-oidc-credentials`;
@@ -11,7 +12,7 @@ const base: WorkloadApp = {
 		containers: [
 			{
 				name: "main",
-				image: "ghcr.io/timothepoznanski/poznote:6.19.1",
+				image: image("poznote"),
 				env: [
 					{
 						name: "SQLITE_DATABASE",

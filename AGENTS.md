@@ -10,6 +10,7 @@ catalyst/
 ├── utils.ts             # Builders: Deployment, Service, HTTPRoute, GeneratedSecret + loadAppConfig
 ├── modifiers.ts         # WorkloadModifier pattern: withNasMounts, withPostgres, withOidcAuth, applyModifiers
 ├── storage.ts           # PV/PVC builders for NAS-backed NFS storage
+├── versions.ts          # Typed image + Helm chart version registry (Renovate-parsed; see Image sources)
 ├── types.ts             # AppConfig = WorkloadApp | StaticApp; HelmChart, ExternalApp, BackendTLSPolicy
 ├── apps/                # Each *.ts exports default AppConfig — auto-discovered by main.ts
 │   ├── traefik/         # Submodule: gateways, routes, certs, external app proxy config
@@ -30,6 +31,8 @@ catalyst/
 bun run render <app-name>                    # Render single app to stdout YAML (verify changes)
 bun run apply-cluster <node> [--dry-run]     # Sync cluster/ manifests to k3s server via rsync+SSH
 bun run sync-external-certs [--dry-run]      # Pull TLS certs from cluster via kubectl
+bun run typecheck                            # tsc --noEmit
+bun run check-versions                       # Verify versions.ts matches the Renovate-parsed format
 bun run install-argo                         # helm upgrade --install ArgoCD with custom values
 bunx prettier --write .                      # Format the repo (config: .prettierrc, .prettierignore)
 ```
@@ -52,7 +55,7 @@ bunx prettier --write .                      # Format the repo (config: .prettie
 
 - Compose via `applyModifiers(base, ...modifiers)` — each modifier is an immutable transform.
 - `withNasMounts(config)` — adds NFS volume + mounts keyed by container name. Throws if container name doesn't exist.
-- `withPostgres(version, options?)` — adds postgres as an **init container** with NAS-backed data at `cluster/<app>/postgres`. Uses `docker.int.lab53.net/library/postgres` by default.
+- `withPostgres(version, options?)` — adds postgres as an **init container** with NAS-backed data at `cluster/<app>/postgres`. `version` is restricted to the majors in `postgresImages` (`versions.ts`); the image comes from there (mirrored `library/postgres:<major>-alpine`) unless `options.image` overrides it.
 - `withOidcAuth(options?)` — creates PocketID OIDC client/group resources. With `{ middleware: true }`, also adds Traefik OIDC middleware + ESO-generated plugin secret and sets `forwardAuth: true`. See `docs/forward-auth.md`.
 
 ### Generated Secrets
@@ -71,6 +74,7 @@ bunx prettier --write .                      # Format the repo (config: .prettie
 ### Helm Charts
 
 - `HelmChart` type is hand-defined in `types.ts` for `helm.cattle.io/v1` CRDs — not from kubernetes-models.
+- Chart repo/name/version live in `helmCharts` in `versions.ts`; build the resource with `buildHelmChart(key, { name, targetNamespace?, valuesContent?, set? })` from `utils.ts` — never hand-write a `HelmChart` literal.
 - Embed values with `Bun.file(new URL("./app/values.yaml", import.meta.url)).text()` — this is a top-level await pattern used in several apps.
 
 ### External Apps (traefik module)
@@ -101,8 +105,11 @@ The CMP runs env-var substitution over rendered manifests: any `$VAR`/`${VAR}` i
 
 ### Image sources
 
-- **Docker Hub images** (e.g. `library/*`, `deluan/navidrome`) → use the private mirror `docker.int.lab53.net/<image>:<tag>`.
-- **All other registries** (ghcr.io, quay.io, registry.k8s.io, etc.) → use their actual source URL directly.
+- Every container image and Helm chart version is declared in `versions.ts` (`images`, `postgresImages`, `helmCharts`) and consumed via `image(key)`, `postgresImage(major)` and `buildHelmChart(key, ...)` from `utils.ts`. Do not write image strings in `apps/*.ts`.
+- **Docker Hub images** (`docker.io/...`) are `mirrored: true` — rendered via `docker.int.lab53.net/<path>:<tag>` — except `registry`, which is the mirror itself and stays `mirrored: false`.
+- **All other registries** (ghcr.io, docker.dragonflydb.io) → no `mirrored` field; rendered with their actual source URL. Adding a registry means extending `NonHubRegistry` in `versions.ts`.
+- `versions.ts` is parsed by Renovate regexes: keep the exact field order and one-entry-per-object shape, then run `bun run check-versions` and `bun run typecheck`.
+- Exceptions: digest-pinned images (`apps/iso-archive.ts`) and images inside YAML files (`cluster/*.yaml`, `apps/*/values.yaml`).
 - ArgoCD CMP sidecar: `oven/bun` image, plugin name "ts", discovery key `main.ts`.
 - `cluster/` manifests are applied directly to k3s server manifest dir — outside ArgoCD management.
 

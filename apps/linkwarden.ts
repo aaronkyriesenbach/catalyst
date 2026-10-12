@@ -5,7 +5,7 @@ import {
 	withPostgres,
 } from "../modifiers";
 import type { WorkloadApp } from "../types";
-import { buildGeneratedSecret } from "../utils";
+import { buildGeneratedSecret, image } from "../utils";
 
 const name = "linkwarden";
 const oidcCredentialsSecret = `${name}-oidc-credentials`;
@@ -18,7 +18,7 @@ const base: WorkloadApp = {
 		containers: [
 			{
 				name: "main",
-				image: "ghcr.io/linkwarden/linkwarden:v2.16.1",
+				image: image("linkwarden"),
 				ports: [{ name: "http", containerPort: 3000 }],
 				env: [
 					{

@@ -1,5 +1,6 @@
 import { applyModifiers, withIscsiVolumes } from "../modifiers";
 import type { WorkloadApp } from "../types";
+import { image } from "../utils";
 
 const base: WorkloadApp = {
 	kind: "workload",
@@ -8,7 +9,7 @@ const base: WorkloadApp = {
 		containers: [
 			{
 				name: "main",
-				image: "ghcr.io/home-assistant/home-assistant:2026.6.1",
+				image: image("homeAssistant"),
 				env: [
 					{
 						name: "TZ",

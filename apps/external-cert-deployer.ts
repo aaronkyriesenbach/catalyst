@@ -3,7 +3,7 @@ import { CronJob } from "kubernetes-models/batch/v1";
 import type { IEnvVar } from "kubernetes-models/v1";
 import { Project } from "../constants";
 import type { ExternalApp, ResourceLike, StaticApp } from "../types";
-import { buildFileConfigMap, readFile } from "../utils";
+import { buildFileConfigMap, readFile, image } from "../utils";
 import { traefikNamespace } from "./traefik";
 import {
 	externalAppBackendCertSecretName,
@@ -20,7 +20,7 @@ const scriptConfigMapName = "external-cert-deployer-script";
 const scriptFileName = "deploy-external-certs.ts";
 const notifyConfigName = "cert-deploy-notify";
 const awsStoreName = "aws-secrets-manager";
-const image = "docker.int.lab53.net/oven/bun:1.3.14";
+const imageRef = image("bun");
 const schedules = ["7 * * * *", "23 * * * *", "41 * * * *"];
 
 const deployApps = externalApps.filter(
@@ -109,7 +109,7 @@ function buildCronJob(app: DeployApp, schedule: string): CronJob {
 							containers: [
 								{
 									name: "deploy",
-									image,
+									image: imageRef,
 									command: [
 										"bun",
 										"run",

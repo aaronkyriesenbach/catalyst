@@ -1,5 +1,6 @@
 import type { WorkloadApp } from "../types";
 import { applyModifiers, withNasMounts } from "../modifiers";
+import { image } from "../utils";
 
 const openvpnSecretName = "openvpn-creds";
 
@@ -10,7 +11,7 @@ const base: WorkloadApp = {
 		containers: [
 			{
 				name: "main",
-				image: "haugene/transmission-openvpn:5.4.1",
+				image: image("transmission"),
 				env: [
 					{ name: "OPENVPN_PROVIDER", value: "custom" },
 					{ name: "OPENVPN_CONFIG", value: "us-ma-37.protonvpn.udp" },

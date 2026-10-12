@@ -1,6 +1,6 @@
 import { applyModifiers, withNasMounts } from "../modifiers";
 import type { WorkloadApp } from "../types";
-import { buildGeneratedSecret, readFile } from "../utils";
+import { buildGeneratedSecret, readFile, image } from "../utils";
 
 const name = "radicale";
 const usersSecretName = `${name}-users`;
@@ -17,7 +17,7 @@ const base: WorkloadApp = {
 		containers: [
 			{
 				name: "main",
-				image: "docker.int.lab53.net/11notes/radicale:3.7.4",
+				image: image("radicale"),
 				env: [
 					{ name: "RADICALE_CONFIG", value: radicaleConfig },
 					{

@@ -10,6 +10,7 @@ import { garageResources } from "./typetype/garage";
 import { serverResources } from "./typetype/server";
 import { secretsResources } from "./typetype/secrets";
 import { tokenResources } from "./typetype/token";
+import { image } from "../utils";
 
 const namespace = "typetype";
 
@@ -37,7 +38,7 @@ const base: WorkloadApp = {
 		containers: [
 			{
 				name: "main",
-				image: "ghcr.io/typetype-video/typetype:1.6.0",
+				image: image("typetype"),
 				ports: [{ name: "http", containerPort: 80 }],
 				livenessProbe: {
 					httpGet: { path: "/api/version/web", port: 80 },

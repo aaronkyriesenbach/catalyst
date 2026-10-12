@@ -1,5 +1,7 @@
 import type { ProjectSpec } from "./types";
 
+export const DOCKER_MIRROR_HOST = "docker.int.lab53.net";
+
 export enum Project {
 	SYSTEM = "system",
 }

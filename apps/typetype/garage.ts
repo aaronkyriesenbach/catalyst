@@ -5,6 +5,7 @@ import {
 	buildIscsiPvcTemplate,
 	buildStatefulSet,
 	escapeArgoCmp,
+	image,
 } from "../../utils";
 import { DOWNLOADER_S3_CREDENTIALS_SECRET, GARAGE_RPC_SECRET } from "./secrets";
 
@@ -71,7 +72,7 @@ const garageStatefulSet = buildStatefulSet(
 		containers: [
 			{
 				name: "garage",
-				image: "dxflrs/garage:v2.2.0",
+				image: image("garage"),
 				env: garageEnv,
 				ports: [{ name: "s3", containerPort: GARAGE_S3_PORT }],
 				startupProbe: {
@@ -92,7 +93,7 @@ const garageStatefulSet = buildStatefulSet(
 			},
 			{
 				name: "provision",
-				image: "dxflrs/garage:v2.2.0",
+				image: image("garage"),
 				command: ["/bin/sh", "-ec", provisionScript],
 				env: [
 					...garageEnv,

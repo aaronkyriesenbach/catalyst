@@ -1,19 +1,12 @@
 import { Project } from "../constants";
-import type { HelmChart, ResourceLike, StaticApp } from "../types";
+import type { ResourceLike, StaticApp } from "../types";
 import { certManagerNamespace } from "./cert-manager";
+import { buildHelmChart } from "../utils";
 
-const chart: HelmChart = {
-	apiVersion: "helm.cattle.io/v1",
-	kind: "HelmChart",
-	metadata: {
-		name: "trust-manager",
-	},
-	spec: {
-		chart: "oci://quay.io/jetstack/charts/trust-manager",
-		targetNamespace: certManagerNamespace,
-		version: "v0.22.0",
-	},
-};
+const chart = buildHelmChart("trustManager", {
+	name: "trust-manager",
+	targetNamespace: certManagerNamespace,
+});
 
 const internalRootCaBundle: ResourceLike = {
 	apiVersion: "trust.cert-manager.io/v1alpha1",

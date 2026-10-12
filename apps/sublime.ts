@@ -1,6 +1,11 @@
 import { applyModifiers, withIscsiVolumes, withNasMounts } from "../modifiers";
 import type { WorkloadApp } from "../types";
-import { buildAwsExternalSecret, buildFileConfigMap, readFile } from "../utils";
+import {
+	buildAwsExternalSecret,
+	buildFileConfigMap,
+	readFile,
+	image,
+} from "../utils";
 
 const name = "sublime";
 const configConfigMapName = `${name}-config`;
@@ -48,7 +53,7 @@ const base: WorkloadApp = {
 		containers: [
 			{
 				name: "main",
-				image: "ghcr.io/aaronkyriesenbach/sublime:0.4.0",
+				image: image("sublime"),
 				env: [
 					{
 						name: "SUBLIME_OPENSUBTITLES_API_KEY",
@@ -93,7 +98,7 @@ const base: WorkloadApp = {
 			},
 			{
 				name: "whisper",
-				image: "ghcr.io/ggml-org/whisper.cpp:main-c62adfbd1ecdaea9e295c72d672992514a2d887c",
+				image: image("whisperCpp"),
 				command: ["whisper-server"],
 				args: [
 					"--host",
@@ -128,7 +133,7 @@ const base: WorkloadApp = {
 		initContainers: [
 			{
 				name: "download-whisper-model",
-				image: "docker.int.lab53.net/curlimages/curl:8.12.1",
+				image: image("curl"),
 				command: [
 					"sh",
 					"-c",

@@ -5,7 +5,7 @@ import {
 	withNasMounts,
 	withOidcAuth,
 } from "../modifiers";
-import { buildFileConfigMap, escapeArgoCmp, readFile } from "../utils";
+import { buildFileConfigMap, escapeArgoCmp, readFile, image } from "../utils";
 
 const vpnSecretName = "reader-vpn-creds";
 const mamSecretName = "reader-mam";
@@ -39,7 +39,7 @@ const base: WorkloadApp = {
 		containers: [
 			{
 				name: "gluetun",
-				image: "docker.int.lab53.net/qmcgaw/gluetun:v3.41.1",
+				image: image("gluetun"),
 				env: [
 					{ name: "VPN_SERVICE_PROVIDER", value: "protonvpn" },
 					{ name: "VPN_TYPE", value: "wireguard" },
@@ -76,7 +76,7 @@ const base: WorkloadApp = {
 			},
 			{
 				name: "qbittorrent",
-				image: "docker.int.lab53.net/linuxserver/qbittorrent:5.2.1",
+				image: image("qbittorrent"),
 				env: [
 					{ name: "PUID", value: "1000" },
 					{ name: "PGID", value: "1000" },
@@ -92,7 +92,7 @@ const base: WorkloadApp = {
 			},
 			{
 				name: "mam-updater",
-				image: "docker.int.lab53.net/curlimages/curl:8.12.1",
+				image: image("curl"),
 				command: ["/bin/sh", "-c"],
 				args: [mamUpdaterScript],
 				env: [

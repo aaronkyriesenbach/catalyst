@@ -5,6 +5,7 @@ import {
 	withOidcAuth,
 } from "../modifiers";
 import type { WorkloadApp } from "../types";
+import { image } from "../utils";
 
 const base: WorkloadApp = {
 	kind: "workload",
@@ -13,7 +14,7 @@ const base: WorkloadApp = {
 		containers: [
 			{
 				name: "main",
-				image: "docker.int.lab53.net/jellyfin/jellyfin:10.11.10",
+				image: image("jellyfin"),
 				ports: [{ name: "http", containerPort: 8096 }],
 			},
 		],
