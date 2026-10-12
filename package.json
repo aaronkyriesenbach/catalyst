@@ -15,7 +15,7 @@
 	},
 	"dependencies": {
 		"@kubernetes-models/argo-cd": "^2.7.2",
-		"@kubernetes-models/cert-manager": "^4.4.4",
+		"@kubernetes-models/cert-manager": "^6.0.0",
 		"@kubernetes-models/external-secrets": "^2.0.0",
 		"@kubernetes-models/gateway-api": "^0.7.4",
 		"@kubernetes-models/traefik": "^0.2.4",
