@@ -143,7 +143,7 @@ export const images = {
 	},
 	filebrowserQuantum: {
 		name: "ghcr.io/gtsteffaniak/filebrowser",
-		tag: "1.3.0-stable",
+		tag: "1.5.8-stable",
 	},
 	immichPostgres: {
 		name: "ghcr.io/immich-app/postgres",
