@@ -6,15 +6,9 @@ import {
 	buildIscsiPvcTemplate,
 	buildRoute,
 	buildStatefulSet,
-	readFile,
 	image,
-	buildHelmChart,
+	readYaml,
 } from "../utils";
-
-const chart = buildHelmChart("immich", {
-	name: "immich",
-	valuesContent: await readFile("./immich/values.yaml", import.meta.url),
-});
 
 const { pv: libraryPv, pvc: libraryPvc } = buildNasPersistentVolumePair({
 	name: "immich-library",
@@ -92,13 +86,19 @@ const config: StaticApp = {
 		libraryPvc,
 		postgresStatefulSet,
 		postgresHeadlessService,
-		chart,
 		route,
 		...buildBackupResources("immich", "data-immich-postgres-0", {
 			runAsUser: 999,
 			runAsGroup: 999,
 			fsGroup: 999,
 		}),
+	],
+	helmReleases: [
+		{
+			chart: "immich",
+			releaseName: "immich",
+			values: await readYaml("./immich/values.yaml", import.meta.url),
+		},
 	],
 };
 
