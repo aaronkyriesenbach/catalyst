@@ -90,7 +90,7 @@ urls:
 ### K8s deploy
 
 - Image `caronc/apprise`; mount `/config` for the per-service config files.
-- `WorkloadApp` shape (see `apps/miniflux.ts`), internal route only (ClusterIP,
+- `WorkloadApp` shape (see `apps/shakedown.ts`), internal route only (ClusterIP,
   no `traefik-external` route).
 
 ### Security model (finalized)

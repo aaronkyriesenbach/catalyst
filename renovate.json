@@ -95,7 +95,6 @@
 				"docker.io/jellyfin/jellyfin",
 				"ghcr.io/ivan-malinovski/calino",
 				"ghcr.io/aaronkyriesenbach/forscoreviewer",
-				"ghcr.io/open-webui/open-webui",
 				"docker.io/linuxserver/qbittorrent",
 				"docker.io/haugene/transmission-openvpn",
 				"docker.io/qmcgaw/gluetun",

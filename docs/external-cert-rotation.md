@@ -329,7 +329,7 @@ notification system** supporting **push + email**, reusable by any service.
   **no exposed SMTP submission Service/port** — usability as a relay must be
   verified before relying on it for email.
 - ESO secret pattern (`buildGeneratedSecret` in `utils.ts`) and the idiomatic
-  `WorkloadApp` shape (e.g. `apps/miniflux.ts`) are the templates to copy.
+  `WorkloadApp` shape (e.g. `apps/shakedown.ts`) are the templates to copy.
 
 ### Recommended stack: Apprise gateway + ntfy push + AWS SES email
 

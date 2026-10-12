@@ -52,11 +52,6 @@ export const images = {
 		tag: "8.22.0",
 		mirrored: true,
 	},
-	miniflux: {
-		name: "docker.io/miniflux/miniflux",
-		tag: "2.3.3",
-		mirrored: true,
-	},
 	linkwarden: {
 		name: "ghcr.io/linkwarden/linkwarden",
 		tag: "v2.16.3",
@@ -69,10 +64,6 @@ export const images = {
 	shakedown: {
 		name: "ghcr.io/aaronkyriesenbach/shakedown",
 		tag: "0.1.0",
-	},
-	openWebui: {
-		name: "ghcr.io/open-webui/open-webui",
-		tag: "v0.12.0",
 	},
 	jellyfin: {
 		name: "docker.io/jellyfin/jellyfin",
