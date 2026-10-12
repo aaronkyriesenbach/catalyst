@@ -165,7 +165,7 @@ export const images = {
 	},
 	forscore: {
 		name: "ghcr.io/aaronkyriesenbach/forscoreviewer",
-		tag: "0.2.0",
+		tag: "0.3.0",
 	},
 } as const satisfies Record<string, ImageEntry>;
 
