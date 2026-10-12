@@ -6,15 +6,6 @@ import type { IPushSecretStoreRef } from "@kubernetes-models/external-secrets/ex
 import { ClusterGenerator } from "@kubernetes-models/external-secrets/generators.external-secrets.io/v1alpha1";
 import { Project } from "../constants";
 import type { StaticApp } from "../types";
-import { buildHelmChart } from "../utils";
-
-const chart = buildHelmChart("externalSecrets", {
-	name: "external-secrets",
-	targetNamespace: "external-secrets",
-	set: {
-		installCRDs: "true",
-	},
-});
 
 const clusterGeneratorName = "generated-password";
 
@@ -79,7 +70,14 @@ const config: StaticApp = {
 	kind: "static",
 	name: "external-secrets",
 	project: Project.SYSTEM,
-	resources: [chart, clusterGenerator, awsSecretStore],
+	resources: [clusterGenerator, awsSecretStore],
+	helmReleases: [
+		{
+			chart: "externalSecrets",
+			releaseName: "external-secrets",
+			parameters: { installCRDs: "true" },
+		},
+	],
 };
 
 export default config;
