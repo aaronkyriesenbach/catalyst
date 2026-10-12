@@ -50,7 +50,7 @@ async function templateRelease(
 			entry.version,
 			"--namespace",
 			namespace,
-			"--include-crds",
+			release.skipCrds ? "--skip-crds" : "--include-crds",
 			"-f",
 			valuesFile,
 			...setArgs,

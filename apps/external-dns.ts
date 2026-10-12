@@ -1,24 +1,6 @@
 import { Project } from "../constants";
 import type { StaticApp } from "../types";
-import { buildDeployment, readFile, image, buildHelmChart } from "../utils";
-
-const internalChart = buildHelmChart("externalDns", {
-	name: "external-dns-int",
-	targetNamespace: "external-dns",
-	valuesContent: await readFile(
-		"./external-dns/internal-values.yaml",
-		import.meta.url,
-	),
-});
-
-const externalChart = buildHelmChart("externalDns", {
-	name: "external-dns-ext",
-	targetNamespace: "external-dns",
-	valuesContent: await readFile(
-		"./external-dns/external-values.yaml",
-		import.meta.url,
-	),
-});
+import { buildDeployment, image, readYaml } from "../utils";
 
 const awsCredentialsSecretName = "aws-credentials";
 
@@ -66,7 +48,26 @@ const config: StaticApp = {
 	kind: "static",
 	name: "external-dns",
 	project: Project.SYSTEM,
-	resources: [internalChart, externalChart, ddnsRoute53Deployment],
+	resources: [ddnsRoute53Deployment],
+	helmReleases: [
+		{
+			chart: "externalDns",
+			releaseName: "external-dns-int",
+			values: await readYaml(
+				"./external-dns/internal-values.yaml",
+				import.meta.url,
+			),
+		},
+		{
+			chart: "externalDns",
+			releaseName: "external-dns-ext",
+			skipCrds: true,
+			values: await readYaml(
+				"./external-dns/external-values.yaml",
+				import.meta.url,
+			),
+		},
+	],
 };
 
 export default config;

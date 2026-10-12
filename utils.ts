@@ -177,6 +177,7 @@ function buildHelmSource(release: HelmRelease): ApplicationSource {
 		targetRevision: entry.version,
 		helm: {
 			releaseName: release.releaseName,
+			...(release.skipCrds && { skipCrds: true }),
 			...(release.values !== undefined && {
 				valuesObject: release.values,
 			}),

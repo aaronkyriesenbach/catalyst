@@ -22,6 +22,8 @@ export type HelmRelease = {
 	values?: Record<string, unknown>;
 	/** Same semantics as the old HelmChart `spec.set` (`--set`). */
 	parameters?: Record<string, string>;
+	/** Set on all but one release when several releases of a chart share a namespace, so a `crds/` directory is not rendered twice. */
+	skipCrds?: boolean;
 };
 
 type BaseApp = {
