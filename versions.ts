@@ -210,7 +210,7 @@ export const helmCharts = {
 		kind: "repo",
 		repo: "https://kubernetes-sigs.github.io/external-dns/",
 		chart: "external-dns",
-		version: "1.20.0",
+		version: "1.23.0",
 	},
 	certManager: {
 		kind: "oci",
