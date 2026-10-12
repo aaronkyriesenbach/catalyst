@@ -23,7 +23,6 @@
 	"semanticCommitType": "chore",
 	"semanticCommitScope": null,
 	"labels": ["dependencies"],
-	"dependencyDashboardApproval": true,
 	"customManagers": [
 		{
 			"description": "Images in versions.ts. check-versions.ts reads this regex, so keep it as the single source of truth.",
@@ -178,11 +177,6 @@
 			"matchPackageNames": ["docker.io/library/postgres"],
 			"matchUpdateTypes": ["major"],
 			"enabled": false
-		},
-		{
-			"description": "TEMPORARY (safe mode, remove in the go-live PR): nothing auto-merges.",
-			"matchPackageNames": ["*"],
-			"automerge": false
 		}
 	]
 }
