@@ -1,5 +1,6 @@
 import { Project } from "../constants";
 import { applyModifiers, withNasMounts } from "../modifiers";
+import { readiness, tcpCheck } from "../probes";
 import type { WorkloadApp } from "../types";
 import { image } from "../utils";
 
@@ -15,6 +16,7 @@ const base: WorkloadApp = {
 				command: ["rest-server"],
 				args: ["--no-auth", "--path", "/data"],
 				ports: [{ name: "http", containerPort: 8000 }],
+				readinessProbe: readiness(tcpCheck(8000)),
 			},
 		],
 	},

@@ -1,6 +1,7 @@
 import { applyModifiers, withOidcAuth } from "../modifiers";
 import type { WorkloadApp } from "../types";
 import { image } from "../utils";
+import { httpCheck, readiness } from "../probes";
 
 const base: WorkloadApp = {
 	kind: "workload",
@@ -17,11 +18,7 @@ const base: WorkloadApp = {
 					periodSeconds: 30,
 					failureThreshold: 3,
 				},
-				readinessProbe: {
-					httpGet: { path: "/", port: 8080 },
-					periodSeconds: 10,
-					failureThreshold: 3,
-				},
+				readinessProbe: readiness(httpCheck("/", 8080)),
 			},
 		],
 	},

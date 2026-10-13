@@ -1,4 +1,5 @@
 import type { ResourceLike } from "../../types";
+import { httpCheck, readiness, startup } from "../../probes";
 import { buildDeployment, buildService, image } from "../../utils";
 import { DRAGONFLY_NAME, DRAGONFLY_PORT } from "./dragonfly";
 import { GARAGE_BUCKET, GARAGE_NAME, GARAGE_S3_PORT } from "./garage";
@@ -13,6 +14,14 @@ const deployment = buildDeployment(DOWNLOADER_NAME, {
 			name: "main",
 			image: image("typetypeDownloader"),
 			ports: [{ name: "http", containerPort: DOWNLOADER_PORT }],
+			// /health/deep pings Postgres, Dragonfly and storage with a 3s internal timeout.
+			readinessProbe: readiness(
+				httpCheck("/health/deep", DOWNLOADER_PORT),
+				{
+					timeoutSeconds: 5,
+				},
+			),
+			startupProbe: startup(httpCheck("/health", DOWNLOADER_PORT), 120),
 			env: [
 				{ name: "HTTP_PORT", value: `${DOWNLOADER_PORT}` },
 				{ name: "PUBLIC_BASE_URL", value: "/api/downloader" },

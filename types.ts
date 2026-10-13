@@ -45,6 +45,10 @@ export type WorkloadApp = BaseApp & {
 	forwardAuth?: boolean;
 	extraResources?: ResourceLike[];
 	strategy?: { type: "Recreate" | "RollingUpdate" };
+	/** Seconds a rollout may go without progress before Argo reports it Degraded. */
+	progressDeadlineSeconds?: number;
+	/** Why no container has a readiness probe; required when none does. */
+	probeExempt?: string;
 };
 
 export type StaticApp = BaseApp & {

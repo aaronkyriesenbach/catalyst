@@ -1,3 +1,4 @@
+import { execCheck, readiness, startup, tcpCheck } from "../probes";
 import type { WorkloadApp } from "../types";
 import {
 	applyModifiers,
@@ -23,6 +24,14 @@ const mamUpdaterConfigMap = buildFileConfigMap("reader-mam-updater", {
 		import.meta.url,
 	),
 });
+
+const gluetunHealthCheck = execCheck(
+	"wget",
+	"-q",
+	"-O",
+	"/dev/null",
+	"http://127.0.0.1:9999",
+);
 
 const base: WorkloadApp = {
 	kind: "workload",
@@ -60,6 +69,9 @@ const base: WorkloadApp = {
 					{ name: "FIREWALL_INPUT_PORTS", value: "8080" },
 				],
 				ports: [{ name: "http", containerPort: 8080 }],
+				// Gluetun's health server binds to loopback, so only an exec probe can reach it.
+				readinessProbe: readiness(gluetunHealthCheck),
+				startupProbe: startup(gluetunHealthCheck, 180),
 				securityContext: {
 					capabilities: {
 						add: ["NET_ADMIN"],
@@ -74,6 +86,7 @@ const base: WorkloadApp = {
 					{ name: "PGID", value: "1000" },
 					{ name: "WEBUI_PORT", value: "8080" },
 				],
+				readinessProbe: readiness(tcpCheck(8080)),
 				volumeMounts: [
 					{
 						name: "qbt-init",

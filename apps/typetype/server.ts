@@ -7,6 +7,7 @@ import {
 	YOUTUBE_REMOTE_LOGIN_TOKEN_SECRET,
 	YOUTUBE_SESSION_ENCRYPTION_KEY_SECRET,
 } from "./secrets";
+import { httpCheck, readiness, startup } from "../../probes";
 
 export const SERVER_NAME = "typetype-server";
 export const SERVER_PORT = 8080;
@@ -99,11 +100,8 @@ const deployment = buildDeployment(SERVER_NAME, {
 					},
 				},
 			],
-			readinessProbe: {
-				httpGet: { path: "/health", port: SERVER_PORT },
-				periodSeconds: 10,
-				failureThreshold: 3,
-			},
+			readinessProbe: readiness(httpCheck("/health", SERVER_PORT)),
+			startupProbe: startup(httpCheck("/health", SERVER_PORT), 180),
 		},
 	],
 	securityContext: {

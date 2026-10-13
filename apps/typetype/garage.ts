@@ -8,6 +8,7 @@ import {
 	readFile,
 } from "../../utils";
 import { DOWNLOADER_S3_CREDENTIALS_SECRET, GARAGE_RPC_SECRET } from "./secrets";
+import { execCheck, readiness, startup } from "../../probes";
 
 export const GARAGE_NAME = "garage";
 export const GARAGE_S3_PORT = 3900;
@@ -54,6 +55,8 @@ const garageEnv = [
 	},
 ];
 
+const garageStatus = execCheck("/garage", "status");
+
 const garageStatefulSet = buildStatefulSet(
 	GARAGE_NAME,
 	{
@@ -63,16 +66,8 @@ const garageStatefulSet = buildStatefulSet(
 				image: image("garage"),
 				env: garageEnv,
 				ports: [{ name: "s3", containerPort: GARAGE_S3_PORT }],
-				startupProbe: {
-					exec: { command: ["/garage", "status"] },
-					periodSeconds: 5,
-					failureThreshold: 24,
-				},
-				readinessProbe: {
-					exec: { command: ["/garage", "status"] },
-					periodSeconds: 10,
-					failureThreshold: 3,
-				},
+				readinessProbe: readiness(garageStatus),
+				startupProbe: startup(garageStatus, 120),
 				volumeMounts: [
 					{ name: "config", mountPath: "/etc/garage" },
 					{ name: "meta", mountPath: "/var/lib/garage/meta" },

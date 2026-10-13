@@ -1,6 +1,7 @@
 import { applyModifiers, withNasMounts } from "../modifiers";
 import type { WorkloadApp } from "../types";
 import { buildGeneratedSecret, readFile, image } from "../utils";
+import { httpCheck, readiness } from "../probes";
 
 const name = "radicale";
 const usersSecretName = `${name}-users`;
@@ -46,14 +47,7 @@ const base: WorkloadApp = {
 					periodSeconds: 30,
 					failureThreshold: 3,
 				},
-				readinessProbe: {
-					httpGet: {
-						path: "/",
-						port: 5232,
-					},
-					periodSeconds: 30,
-					failureThreshold: 3,
-				},
+				readinessProbe: readiness(httpCheck("/", 5232)),
 			},
 		],
 	},

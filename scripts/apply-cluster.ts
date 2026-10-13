@@ -3,7 +3,11 @@ import { join, resolve } from "node:path";
 
 const clusterDir = resolve(import.meta.dir, "..", "cluster");
 const remotePath = "/var/lib/rancher/k3s/server/manifests";
-const excludedFiles = new Set(["argocd-values.yaml", "README.md"]);
+const excludedFiles = new Set([
+	"argocd-values.yaml",
+	"catalyst-app.yaml",
+	"README.md",
+]);
 
 type Options = {
 	node: string;

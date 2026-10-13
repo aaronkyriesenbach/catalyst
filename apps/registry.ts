@@ -2,6 +2,7 @@ import { Project } from "../constants";
 import { applyModifiers, withNasMounts } from "../modifiers";
 import type { WorkloadApp } from "../types";
 import { image } from "../utils";
+import { httpCheck, readiness } from "../probes";
 
 const base: WorkloadApp = {
 	kind: "workload",
@@ -24,11 +25,7 @@ const base: WorkloadApp = {
 					periodSeconds: 30,
 					failureThreshold: 3,
 				},
-				readinessProbe: {
-					httpGet: { path: "/", port: 5000 },
-					periodSeconds: 10,
-					failureThreshold: 3,
-				},
+				readinessProbe: readiness(httpCheck("/", 5000)),
 			},
 		],
 	},

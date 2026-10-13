@@ -1,6 +1,7 @@
 import type { ResourceLike } from "../../types";
 import { buildDeployment, buildService, image } from "../../utils";
 import { YOUTUBE_REMOTE_LOGIN_TOKEN_SECRET } from "./secrets";
+import { httpCheck, readiness, startup } from "../../probes";
 
 export const TOKEN_NAME = "typetype-token";
 export const TOKEN_PORT = 8081;
@@ -34,11 +35,8 @@ const deployment = buildDeployment(TOKEN_NAME, {
 					value: "524288",
 				},
 			],
-			readinessProbe: {
-				httpGet: { path: "/health", port: TOKEN_PORT },
-				periodSeconds: 10,
-				failureThreshold: 3,
-			},
+			readinessProbe: readiness(httpCheck("/health", TOKEN_PORT)),
+			startupProbe: startup(httpCheck("/health", TOKEN_PORT), 120),
 			// Chromium needs real /dev/shm; a sized tmpfs avoids upstream's `ipc: host` (host IPC namespace escalation).
 			volumeMounts: [{ name: "dshm", mountPath: "/dev/shm" }],
 			resources: {

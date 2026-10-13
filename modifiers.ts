@@ -2,6 +2,7 @@ import { Middleware } from "@kubernetes-models/traefik/traefik.io/v1alpha1/Middl
 import type { IContainer, IVolume, IVolumeMount } from "kubernetes-models/v1";
 import { buildBackupResources } from "./backup";
 import type { CronExpression } from "./cron";
+import { postgresProbes } from "./probes";
 import type { ResourceLike, StorageQuantity, WorkloadApp } from "./types";
 import {
 	appUrl,
@@ -123,22 +124,7 @@ export function buildPostgresResources(
 		{ name: "POSTGRES_DB", value: database },
 	];
 
-	const pgProbes = {
-		startupProbe: {
-			exec: {
-				command: ["pg_isready", "-U", user],
-			},
-			periodSeconds: 5,
-			failureThreshold: 30,
-		},
-		readinessProbe: {
-			exec: {
-				command: ["pg_isready", "-U", user],
-			},
-			periodSeconds: 10,
-			failureThreshold: 3,
-		},
-	};
+	const pgProbes = postgresProbes("pg_isready", "-U", user);
 
 	const postgresName = `${name}-postgres`;
 

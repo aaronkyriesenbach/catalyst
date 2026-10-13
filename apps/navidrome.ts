@@ -1,6 +1,7 @@
 import { applyModifiers, withIscsiVolumes, withNasMounts } from "../modifiers";
 import type { WorkloadApp } from "../types";
 import { image } from "../utils";
+import { httpCheck, readiness } from "../probes";
 
 const base: WorkloadApp = {
 	kind: "workload",
@@ -24,11 +25,7 @@ const base: WorkloadApp = {
 					periodSeconds: 30,
 					failureThreshold: 3,
 				},
-				readinessProbe: {
-					httpGet: { path: "/ping", port: 4533 },
-					periodSeconds: 10,
-					failureThreshold: 3,
-				},
+				readinessProbe: readiness(httpCheck("/ping", 4533)),
 			},
 		],
 	},

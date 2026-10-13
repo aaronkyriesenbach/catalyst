@@ -1,4 +1,5 @@
 import { applyModifiers, withIscsiVolumes } from "../modifiers";
+import { httpCheck, readiness, startup } from "../probes";
 import type { WorkloadApp } from "../types";
 import { image } from "../utils";
 
@@ -11,6 +12,11 @@ const base: WorkloadApp = {
 				name: "main",
 				image: image("trilium"),
 				ports: [{ name: "http", containerPort: 8080 }],
+				readinessProbe: readiness(httpCheck("/api/health-check", 8080)),
+				startupProbe: startup(
+					httpCheck("/api/health-check", 8080),
+					120,
+				),
 				env: [
 					{
 						name: "TRILIUM_DATA_DIR",

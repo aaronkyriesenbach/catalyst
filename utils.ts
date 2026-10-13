@@ -43,6 +43,7 @@ import {
 	clusterGeneratorRef,
 } from "./apps/external-secrets";
 import { DOCKER_MIRROR_HOST, helmReleaseNamespaces } from "./constants";
+import { assertReadinessProbe } from "./probes";
 import type {
 	AppConfig,
 	HelmRelease,
@@ -221,9 +222,17 @@ export function buildApplication(config: AppConfig): Application {
 				server: "https://kubernetes.default.svc",
 				namespace: destinationNamespace,
 			},
-			...(hasHelm && {
-				syncPolicy: { syncOptions: ["ServerSideApply=true"] },
-			}),
+			syncPolicy: {
+				automated: { prune: true, selfHeal: false },
+				syncOptions: [
+					"CreateNamespace=true",
+					...(hasHelm ? ["ServerSideApply=true"] : []),
+				],
+				retry: {
+					limit: 5,
+					backoff: { duration: "30s", factor: 2, maxDuration: "5m" },
+				},
+			},
 			...(ignoreDifferences !== undefined && { ignoreDifferences }),
 		},
 	});
@@ -240,17 +249,36 @@ export function buildProject(name: string, spec: ProjectSpec): AppProject {
 	});
 }
 
-type DeploymentOptions = {
+// minReadySeconds keeps a pod that passes its probe once and then crashes from
+// counting as Available, so the old pod isn't removed on a false positive.
+const DEFAULT_MIN_READY_SECONDS = 15;
+const DEFAULT_PROGRESS_DEADLINE_SECONDS = 300;
+
+type RolloutOptions = {
+	/** Reason this pod can't be probed; skips the readiness probe requirement. */
+	probeExempt?: string;
+};
+
+type DeploymentOptions = RolloutOptions & {
 	replicas?: number;
 	revisionHistoryLimit?: number;
 	strategy?: { type: "Recreate" | "RollingUpdate" };
+	progressDeadlineSeconds?: number;
 };
+
+function buildStrategy(type: "Recreate" | "RollingUpdate" = "RollingUpdate") {
+	return type === "Recreate"
+		? { type }
+		: { type, rollingUpdate: { maxSurge: 1, maxUnavailable: 0 } };
+}
 
 export function buildDeployment(
 	name: string,
 	podSpec: IPodSpec,
 	options?: DeploymentOptions,
 ) {
+	assertReadinessProbe(name, podSpec, options?.probeExempt);
+
 	return new Deployment({
 		metadata: {
 			name,
@@ -260,7 +288,11 @@ export function buildDeployment(
 		spec: {
 			replicas: options?.replicas ?? 1,
 			revisionHistoryLimit: options?.revisionHistoryLimit ?? 2,
-			strategy: options?.strategy,
+			strategy: buildStrategy(options?.strategy?.type),
+			minReadySeconds: DEFAULT_MIN_READY_SECONDS,
+			progressDeadlineSeconds:
+				options?.progressDeadlineSeconds ??
+				DEFAULT_PROGRESS_DEADLINE_SECONDS,
 			selector: {
 				matchLabels: { app: name },
 			},
@@ -305,7 +337,7 @@ export function buildFileConfigMap(
 	});
 }
 
-type StatefulSetOptions = {
+type StatefulSetOptions = RolloutOptions & {
 	replicas?: number;
 	revisionHistoryLimit?: number;
 };
@@ -316,6 +348,8 @@ export function buildStatefulSet(
 	volumeClaimTemplates: IPersistentVolumeClaimTemplate[],
 	options?: StatefulSetOptions,
 ) {
+	assertReadinessProbe(name, podSpec, options?.probeExempt);
+
 	return new StatefulSet({
 		metadata: {
 			name,
@@ -325,6 +359,7 @@ export function buildStatefulSet(
 			serviceName: name,
 			replicas: options?.replicas ?? 1,
 			revisionHistoryLimit: options?.revisionHistoryLimit ?? 2,
+			minReadySeconds: DEFAULT_MIN_READY_SECONDS,
 			selector: {
 				matchLabels: { app: name },
 			},
@@ -681,7 +716,13 @@ function renderWorkload(config: WorkloadApp): string[] {
 	}
 
 	resources.push(
-		toYaml(buildDeployment(name, podSpec, { strategy: app.strategy })),
+		toYaml(
+			buildDeployment(name, podSpec, {
+				strategy: app.strategy,
+				progressDeadlineSeconds: app.progressDeadlineSeconds,
+				probeExempt: app.probeExempt,
+			}),
+		),
 	);
 
 	const ports = podSpec.containers.flatMap((c) => c.ports ?? []);

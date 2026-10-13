@@ -1,3 +1,4 @@
+import { readiness, startup, tcpCheck } from "../probes";
 import type { WorkloadApp } from "../types";
 import { applyModifiers, withNasMounts } from "../modifiers";
 import { image } from "../utils";
@@ -40,6 +41,8 @@ const base: WorkloadApp = {
 					{ name: "PGID", value: "1000" },
 				],
 				ports: [{ name: "http", containerPort: 9091 }],
+				readinessProbe: readiness(tcpCheck(9091)),
+				startupProbe: startup(tcpCheck(9091), 180),
 				securityContext: {
 					capabilities: {
 						add: ["NET_ADMIN"],

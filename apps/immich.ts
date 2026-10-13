@@ -9,6 +9,7 @@ import {
 	image,
 	readYaml,
 } from "../utils";
+import { postgresProbes } from "../probes";
 
 const { pv: libraryPv, pvc: libraryPvc } = buildNasPersistentVolumePair({
 	name: "immich-library",
@@ -57,6 +58,11 @@ const postgresStatefulSet = buildStatefulSet(
 					},
 				],
 				ports: [{ name: "postgres", containerPort: 5432 }],
+				...postgresProbes(
+					"sh",
+					"-c",
+					'pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB"',
+				),
 				volumeMounts: [
 					{
 						name: "data",

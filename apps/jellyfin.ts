@@ -4,6 +4,7 @@ import {
 	withNasMounts,
 	withOidcAuth,
 } from "../modifiers";
+import { httpCheck, readiness, startup } from "../probes";
 import type { WorkloadApp } from "../types";
 import { image } from "../utils";
 
@@ -16,10 +17,13 @@ const base: WorkloadApp = {
 				name: "main",
 				image: image("jellyfin"),
 				ports: [{ name: "http", containerPort: 8096 }],
+				readinessProbe: readiness(httpCheck("/health", 8096)),
+				startupProbe: startup(httpCheck("/health", 8096), 300),
 			},
 		],
 	},
 	webPort: 8096,
+	progressDeadlineSeconds: 600,
 	externallyAccessible: true,
 };
 

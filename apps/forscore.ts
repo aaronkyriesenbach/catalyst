@@ -1,4 +1,5 @@
 import { applyModifiers, withNasMounts, withOidcAuth } from "../modifiers";
+import { httpCheck, readiness } from "../probes";
 import type { WorkloadApp } from "../types";
 import { image } from "../utils";
 
@@ -11,6 +12,7 @@ const base: WorkloadApp = {
 				name: "main",
 				image: image("forscore"),
 				ports: [{ name: "http", containerPort: 3000 }],
+				readinessProbe: readiness(httpCheck("/health", 3000)),
 			},
 		],
 	},

@@ -1,4 +1,5 @@
 import { applyModifiers, withIscsiVolumes, withNasMounts } from "../modifiers";
+import { readiness, startup, tcpCheck } from "../probes";
 import type { WorkloadApp } from "../types";
 import {
 	buildAwsExternalSecret,
@@ -101,8 +102,9 @@ const base: WorkloadApp = {
 				image: image("whisperCpp"),
 				command: ["whisper-server"],
 				args: [
+					// Not loopback: kubelet probes the pod IP. No Service selects this port.
 					"--host",
-					"127.0.0.1",
+					"0.0.0.0",
 					"--port",
 					String(whisperPort),
 					"-m",
@@ -114,6 +116,8 @@ const base: WorkloadApp = {
 					// Returns an empty result instead of HTTP 500 for chunks with no speech.
 					"-nlp",
 				],
+				readinessProbe: readiness(tcpCheck(whisperPort)),
+				startupProbe: startup(tcpCheck(whisperPort), 180),
 				// Model is ~1 GiB resident plus ~14 MiB per minute of chunk audio, so the
 				// limit is a hard cap with headroom rather than something to tune down;
 				// CPU can be throttled freely at the cost of speed.
@@ -150,6 +154,8 @@ const base: WorkloadApp = {
 		],
 	},
 	extraResources: [configConfigMap, opensubtitlesSecret, subdlSecret],
+	// The init container re-downloads ~1 GiB to an emptyDir on every new pod.
+	progressDeadlineSeconds: 900,
 };
 
 export default applyModifiers(

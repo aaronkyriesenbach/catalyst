@@ -4,6 +4,7 @@ import {
 	withNasMounts,
 	withOidcAuth,
 } from "../modifiers";
+import { readiness, startup, tcpCheck } from "../probes";
 import type { WorkloadApp } from "../types";
 import { image } from "../utils";
 
@@ -30,6 +31,8 @@ const base: WorkloadApp = {
 						protocol: "UDP",
 					},
 				],
+				readinessProbe: readiness(tcpCheck(8080)),
+				startupProbe: startup(tcpCheck(8080), 120),
 			},
 		],
 		// securityContext: {},

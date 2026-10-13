@@ -1,4 +1,5 @@
 import { applyModifiers, withIscsiVolumes } from "../modifiers";
+import { httpCheck, readiness, startup } from "../probes";
 import type { WorkloadApp } from "../types";
 import { image } from "../utils";
 
@@ -17,10 +18,13 @@ const base: WorkloadApp = {
 					},
 				],
 				ports: [{ name: "http", containerPort: 8123 }],
+				readinessProbe: readiness(httpCheck("/manifest.json", 8123)),
+				startupProbe: startup(httpCheck("/manifest.json", 8123), 300),
 			},
 		],
 	},
 	webPort: 8123,
+	progressDeadlineSeconds: 600,
 	subDomain: "home",
 };
 

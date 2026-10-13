@@ -6,6 +6,7 @@ import {
 } from "../modifiers";
 import type { WorkloadApp } from "../types";
 import { buildGeneratedSecret, image } from "../utils";
+import { httpCheck, readiness, startup } from "../probes";
 
 const name = "linkwarden";
 const oidcCredentialsSecret = `${name}-oidc-credentials`;
@@ -70,16 +71,11 @@ const base: WorkloadApp = {
 				],
 				livenessProbe: {
 					httpGet: { path: "/", port: 3000 },
-					initialDelaySeconds: 30,
 					periodSeconds: 30,
 					failureThreshold: 3,
 				},
-				readinessProbe: {
-					httpGet: { path: "/", port: 3000 },
-					initialDelaySeconds: 15,
-					periodSeconds: 10,
-					failureThreshold: 3,
-				},
+				readinessProbe: readiness(httpCheck("/", 3000)),
+				startupProbe: startup(httpCheck("/", 3000), 180),
 			},
 		],
 	},

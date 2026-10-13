@@ -27,6 +27,10 @@ server:
 
 machine-learning:
     enabled: true
+    controllers:
+        main:
+            # RWO cache PVC: a surge pod scheduled on the other node can't attach it.
+            strategy: Recreate
     persistence:
         cache:
             enabled: true

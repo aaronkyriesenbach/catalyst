@@ -60,6 +60,14 @@ bunx prettier --write .                      # Format the repo (config: .prettie
 - `withPostgres(version, options?)` — adds postgres as an **init container** with NAS-backed data at `cluster/<app>/postgres`. `version` is restricted to the majors in `postgresImages` (`versions.ts`); the image comes from there (mirrored `library/postgres:<major>-alpine`) unless `options.image` overrides it.
 - `withOidcAuth(options?)` — creates PocketID OIDC client/group resources. With `{ middleware: true }`, also adds Traefik OIDC middleware + ESO-generated plugin secret and sets `forwardAuth: true`. See `docs/forward-auth.md`.
 
+### Rollouts and probes
+
+- `buildDeployment`/`buildStatefulSet` throw unless some container has a `readinessProbe`, because without one a pod is Ready at container start and the old pod is dropped immediately. Set `probeExempt: "<reason>"` (on `WorkloadApp` or the builder options) only when nothing can be probed.
+- Build probes with `probes.ts` (`readiness`, `startup`, `httpCheck`/`tcpCheck`/`execCheck`) instead of hand-writing them. Prefer the app's real health endpoint; use `tcpCheck` on the web port when `/` needs auth or returns non-2xx/3xx. Add `startup(..., budgetSeconds)` for slow boots rather than `initialDelaySeconds`.
+- Deployments default to `RollingUpdate` (`maxSurge: 1`, `maxUnavailable: 0`), `minReadySeconds: 15` and `progressDeadlineSeconds: 300`. Raise `progressDeadlineSeconds` on the app when startup plus image pulls can exceed that.
+- `withIscsiVolumes` forces `Recreate` (RWO volume); those apps have a short outage on every rollout. NFS-only apps may overlap.
+- external-dns stays `Recreate`: upstream says it has no leader election and must not run duplicate instances.
+
 ### Generated Secrets
 
 - `buildGeneratedSecret(name, keys)` in `utils.ts` creates ExternalSecret + optional per-key Password generators.
@@ -80,7 +88,7 @@ bunx prettier --write .                      # Format the repo (config: .prettie
 - `releaseName` must equal the live Helm release name when adopting an existing install. Charts install into the app's destination namespace (`namespace ?? name`); adopted releases are pinned in `helmReleaseNamespaces` (`constants.ts`) so a namespace change fails the render.
 - Load values from a file with `await readYaml("./app/values.yaml", import.meta.url)`; `--set` equivalents go in `parameters`.
 - When several releases of one chart share a namespace, set `skipCrds: true` on all but one so a `crds/` directory is not rendered twice.
-- Use `ignoreDifferences` (typed from `@kubernetes-models/argo-cd`) for fields written at runtime by controllers. Apps with `helmReleases` get `ServerSideApply=true` and `ServerSideDiff=true`; automated sync stays off.
+- Use `ignoreDifferences` (typed from `@kubernetes-models/argo-cd`) for fields written at runtime by controllers. Apps with `helmReleases` also get `ServerSideApply=true` and `ServerSideDiff=true`.
 - `bun run render <app>` only shows CMP-rendered resources. Chart output is visible in ArgoCD (`argocd app manifests <app>`) or via `bun run render-chart <app>` (needs the `helm` CLI; an approximation of Argo's output).
 - Migrating a live `HelmChart` to `helmReleases` must not uninstall the release. Detach it first: annotate the `HelmChart` with `helmcharts.helm.cattle.io/unmanaged=true`, clear its finalizers, then delete it, and verify resource UIDs are unchanged. Deleting a `HelmChart` that still has the `wrangler.cattle.io/on-helm-chart-remove` finalizer runs `helm uninstall`.
 
@@ -120,7 +128,7 @@ bunx prettier --write .                      # Format the repo (config: .prettie
 
 ## Dependency updates (Renovate)
 
-Mend Renovate (GitHub App) opens PRs for images, charts and npm packages from `renovate.json`. Merging only updates git: every Argo Application is manual-sync, so you still sync in Argo, whose OutOfSync diff is the last review gate.
+Mend Renovate (GitHub App) opens PRs for images, charts and npm packages from `renovate.json`. Merging updates git and Argo auto-syncs every Application (`prune: true`, `selfHeal: false`, `CreateNamespace=true`, retry with backoff), so a merged PR is applied without a manual sync.
 
 - **What it reads:** custom regex managers over `versions.ts` (images, repo charts, OCI charts; `depType` `image` / `helm-chart`), the built-in `helm-values` manager over `apps/**/*values.yaml`, `bun` (`package.json`/`bun.lock`) and `github-actions`. `cluster/**` is ignored (manual), and the ArgoCD chart is pinned by `--version` in the `install-argo` script, so Renovate never sees it.
 - **`versions.ts` shape:** the regexes live in `renovate.json` and `scripts/check-versions.ts` reads them from there. Keep the file Prettier-formatted, one entry per object, fields in the existing order, no computed values. Run `bun run check-versions`.

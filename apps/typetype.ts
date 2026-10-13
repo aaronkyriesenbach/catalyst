@@ -11,6 +11,7 @@ import { serverResources } from "./typetype/server";
 import { secretsResources } from "./typetype/secrets";
 import { tokenResources } from "./typetype/token";
 import { image } from "../utils";
+import { httpCheck, readiness } from "../probes";
 
 const namespace = "typetype";
 
@@ -46,11 +47,7 @@ const base: WorkloadApp = {
 					periodSeconds: 30,
 					failureThreshold: 3,
 				},
-				readinessProbe: {
-					httpGet: { path: "/api/version/web", port: 80 },
-					periodSeconds: 10,
-					failureThreshold: 3,
-				},
+				readinessProbe: readiness(httpCheck("/api/version/web", 80)),
 			},
 		],
 	},

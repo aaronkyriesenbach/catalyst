@@ -6,6 +6,7 @@ import {
 } from "../modifiers";
 import type { WorkloadApp } from "../types";
 import { buildGeneratedSecret, image } from "../utils";
+import { httpCheck, readiness } from "../probes";
 
 const name = "shakedown";
 const oidcCredentialsSecret = `${name}-oidc-credentials`;
@@ -69,11 +70,7 @@ const base: WorkloadApp = {
 					periodSeconds: 30,
 					failureThreshold: 3,
 				},
-				readinessProbe: {
-					httpGet: { path: "/api/health", port: 8080 },
-					periodSeconds: 10,
-					failureThreshold: 3,
-				},
+				readinessProbe: readiness(httpCheck("/api/health", 8080)),
 			},
 		],
 	},
