@@ -128,7 +128,7 @@ bunx prettier --write .                      # Format the repo (config: .prettie
 
 ## Dependency updates (Renovate)
 
-Mend Renovate (GitHub App) opens PRs for images, charts and npm packages from `renovate.json`. Merging updates git and Argo auto-syncs every Application (`prune: true`, `selfHeal: false`, `CreateNamespace=true`, retry with backoff), so a merged PR is applied without a manual sync.
+Mend Renovate (GitHub App) opens PRs for images, charts and npm packages from `renovate.json`. Merging updates git and Argo auto-syncs every Application (`prune: true`, `selfHeal: false`, `CreateNamespace=true`, retry with backoff), so a merged PR is applied without a manual sync. Set `autoSync: false` on an app (e.g. work in progress) to omit `automated` and sync it by hand.
 
 - **What it reads:** custom regex managers over `versions.ts` (images, repo charts, OCI charts; `depType` `image` / `helm-chart`), the built-in `helm-values` manager over `apps/**/*values.yaml`, `bun` (`package.json`/`bun.lock`) and `github-actions`. `cluster/**` is ignored (manual), and the ArgoCD chart is pinned by `--version` in the `install-argo` script, so Renovate never sees it.
 - **`versions.ts` shape:** the regexes live in `renovate.json` and `scripts/check-versions.ts` reads them from there. Keep the file Prettier-formatted, one entry per object, fields in the existing order, no computed values. Run `bun run check-versions`.

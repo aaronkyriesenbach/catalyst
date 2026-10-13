@@ -184,7 +184,7 @@ export function appNamespace(config: AppConfig): string {
 }
 
 export function buildApplication(config: AppConfig): Application {
-	const { name, project, helmReleases, ignoreDifferences } = config;
+	const { name, project, helmReleases, ignoreDifferences, autoSync } = config;
 	const destinationNamespace = appNamespace(config);
 
 	assertHelmReleaseNamespaces(config, destinationNamespace);
@@ -223,7 +223,9 @@ export function buildApplication(config: AppConfig): Application {
 				namespace: destinationNamespace,
 			},
 			syncPolicy: {
-				automated: { prune: true, selfHeal: false },
+				...(autoSync !== false && {
+					automated: { prune: true, selfHeal: false },
+				}),
 				syncOptions: [
 					"CreateNamespace=true",
 					...(hasHelm ? ["ServerSideApply=true"] : []),

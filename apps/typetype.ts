@@ -53,6 +53,8 @@ const base: WorkloadApp = {
 	},
 	webPort: 80,
 	externallyAccessible: true,
+	// Work in progress: sync by hand until it is ready.
+	autoSync: false,
 	extraResources: [
 		...secretsResources,
 		...garageResources,

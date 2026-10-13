@@ -34,6 +34,8 @@ type BaseApp = {
 	helmReleases?: HelmRelease[];
 	/** For fields written at runtime (e.g. webhook `caBundle`). */
 	ignoreDifferences?: IApplication["spec"]["ignoreDifferences"];
+	/** Set to `false` for apps that should only sync when triggered by hand. Defaults to `true`. */
+	autoSync?: boolean;
 };
 
 export type WorkloadApp = BaseApp & {
