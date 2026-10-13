@@ -600,6 +600,11 @@ export function buildIscsiPvc(name: string, storageRequest?: StorageQuantity) {
 	);
 }
 
+// Get valid name for resource
+function resourceName(...parts: string[]): string {
+	return parts.join("-").replaceAll("_", "-").toLowerCase();
+}
+
 export function buildGeneratedSecret(
 	namespace: string,
 	name: string,
@@ -625,14 +630,14 @@ export function buildGeneratedSecret(
 				...(keyConfig.encoding && { encoding: keyConfig.encoding }),
 			};
 			const generator = new Password({
-				metadata: { name: `${name}-${keyName}-gen` },
+				metadata: { name: resourceName(name, keyName, "gen") },
 				spec,
 			});
 			resources.push(generator);
 			generatorRef = {
 				apiVersion: generator.apiVersion,
 				kind: "Password",
-				name: `${name}-${keyName}-gen`,
+				name: resourceName(name, keyName, "gen"),
 			};
 		} else {
 			generatorRef = clusterGeneratorRef;
@@ -641,7 +646,7 @@ export function buildGeneratedSecret(
 		if (options?.persist) {
 			resources.push(
 				buildSeedPushSecret(
-					`${name}-${keyName}-seed`,
+					resourceName(name, keyName, "seed"),
 					remoteKey,
 					keyName,
 					generatorRef,
