@@ -150,6 +150,16 @@ export const images = {
 		name: "ghcr.io/aaronkyriesenbach/forscoreviewer",
 		tag: "0.3.0",
 	},
+	apprise: {
+		name: "docker.io/caronc/apprise",
+		tag: "2.0.1",
+		mirrored: true,
+	},
+	healthchecks: {
+		name: "docker.io/healthchecks/healthchecks",
+		tag: "v4.4",
+		mirrored: true,
+	},
 } as const satisfies Record<string, ImageEntry>;
 
 export const postgresImages = {

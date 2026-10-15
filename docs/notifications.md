@@ -1,9 +1,9 @@
 # Notification Stack
 
 A flexible, cluster-wide notification system: **push + email, reusable by any
-service** (not just the cert-deploy jobs). Status: **designed, not yet built.**
-The cert-deploy jobs already have dormant hooks for it (see
-`external-cert-rotation.md`).
+service** (not just the cert-deploy jobs). Status: **implemented** (`apps/apprise.ts`,
+`apps/healthchecks.ts`, wired into `apps/external-cert-deployer.ts`); the manual
+setup steps are under [Manual setup](#manual-setup).
 
 Push is delivered via **Pushover** (a hosted relay), not a self-hosted push
 server. The rationale — and why it matters specifically for infra alerts — is in
@@ -20,7 +20,7 @@ server. The rationale — and why it matters specifically for infra alerts — i
 
 ## Architecture
 
-```
+```text
 any service ──POST /notify/{key} {title,body,tag}──┐
 cert-deploy CronJob ─(on failure)─────────────────┤
 (future) Alertmanager ─(webhook)──────────────────┤
@@ -60,45 +60,65 @@ deployed as a `WorkloadApp`, **internal-only** (no external route).
 
 - **Stateless**: `POST /notify` with `urls` in the body.
 - **Stateful** (preferred): store config under a key, then
-  `POST /notify/{key}` with `{title, body, type, tag}`.
+  `POST /notify/{key}` with `{title, body, type, tag}`. The key is the **name of
+  the notifying app** (e.g. `external-cert-deployer`).
 - Config management (`POST /add/{key}`, `GET /get/{key}`, `POST /del/{key}`) is
   **disabled in our deploy** (`APPRISE_CONFIG_LOCK=yes`) — config is file-seeded,
   read-only. Only `/notify/{key}` is live. See §1 "Security model".
 - Health: `GET /status`; metrics at `/metrics`.
 
 ```bash
-# Send: target only push endpoints by tag (config is pre-seeded, not added here)
-curl -X POST http://apprise.<ns>.svc:8000/notify/cert-deploy \
+# Send: tag selects endpoints; space = AND, comma = OR (config is pre-seeded)
+curl -X POST http://apprise.apprise.svc:8000/notify/external-cert-deployer \
   -H 'Content-Type: application/json' \
-  -d '{"title":"Disk full","body":"/var 98%","type":"warning","tag":"push"}'
+  -d '{"title":"Disk full","body":"/var 98%","type":"warning","tag":"warn"}'
 ```
 
-The per-service config file (pre-seeded into `/config/cert-deploy.yaml` from AWS
-Secrets Manager) defines the tag routing, e.g.:
+The per-service config file (pre-seeded into `/config/external-cert-deployer.yml`
+from AWS Secrets Manager) defines the tag routing. Simple stateful mode only
+reads `.yml`/`.cfg`, never `.yaml`. The checked-in template is
+`apps/apprise/notifier.yml`; its shape is:
 
 ```yaml
 version: 1
 urls:
+    - pover://USER_KEY@APP_TOKEN?priority=normal:
+          - tag: info, push
     - pover://USER_KEY@APP_TOKEN?priority=high:
-          tag: push,warn,critical
-    - pover://USER_KEY@APP_TOKEN?priority=emergency&retry=300&expire=10800:
-          tag: emergency
-    - ses://...:
-          tag: email,critical
+          - tag: warn, critical, push
+    - pover://USER_KEY@APP_TOKEN?priority=emergency&interval=300&expire=10800:
+          - tag: emergency, push
+    - ses://FROM/ACCESS_KEY/SECRET_KEY/REGION/TO:
+          - tag: critical, emergency, email
 ```
+
+A URL's tags are a **set**, so a request is matched by any tag the URL carries:
+`tag=critical` hits Pushover (high) and SES, `tag=critical email` (AND) hits
+SES only, and `tag=info` hits Pushover (normal) only. A tag that matches no URL
+returns HTTP 424.
 
 ### K8s deploy
 
-- Image `caronc/apprise`; mount `/config` for the per-service config files.
-- `WorkloadApp` shape (see `apps/shakedown.ts`), internal route only (ClusterIP,
-  no `traefik-external` route).
+- Image `caronc/apprise` (pinned in `versions.ts`), port 8000, in-cluster URL
+  `http://apprise.apprise.svc:8000`.
+- `WorkloadApp` with **no `webPort`**, so only a ClusterIP Service exists: no
+  HTTPRoute at all, not even on the internal gateway (the LAN could otherwise
+  send notifications).
+- Runs as uid 1000 with a read-only root filesystem; `/tmp` is an `emptyDir` and
+  `/config` is the rendered Secret, mounted read-only.
+- `APPRISE_STORAGE_DIR=""` and `APPRISE_ATTACH_SIZE=0` keep `/status` healthy
+  with no writable `/config` or `/attach`.
+- `appriseNotifiers` in `apps/apprise.ts` lists the notifying apps; each gets
+  its own `<app>.yml`. Add a name there to onboard a new service.
 
 ### Security model (finalized)
 
 Apprise has **no authentication on any endpoint — by design** (apprise-api
 README: _"There is no authentication... this is by design"_). A `/notify/{key}`
 path segment is a **routing selector, not a credential**: anyone who can reach
-the server and knows the key can send. Apprise cannot provide per-key auth, OIDC
+the server can send, and keys are plain app names, so they are trivially
+guessable. We deliberately do not obscure them: the worst case is a compromised
+pod sending us notifications, which is a minor problem. Apprise cannot provide per-key auth, OIDC
 forward-auth is browser-shaped (wrong for machine calls), and there is no service
 mesh for mTLS _yet_ (planned — see [Future implementation](#future-implementation)).
 So until the mesh lands, the boundary is **network reachability**: the service is
@@ -111,21 +131,21 @@ Controls applied now (defense in depth):
 2. **File-based, read-only config** — `APPRISE_STATEFUL_MODE=simple` +
    `APPRISE_CONFIG_LOCK=yes` + `APPRISE_API_ONLY=yes`. This **disables the
    runtime `/add`/`/del` config API** (removing that attack surface); only
-   `/notify/{key}` stays live. Each key maps to a `/config/{key}.yaml` file.
-3. **Obfuscated per-service keys** (uuid) — guess-resistance for the
-   `/notify/{key}` path (obfuscation, not auth).
-4. **Secrets via ESO, never in git** — see §3 and Finalized decisions.
+   `/notify/{key}` stays live. Each key is an app name and maps to a
+   `/config/{key}.yml` file.
+3. **Secrets via ESO, never in git** — see §3 and Finalized decisions.
 
 **Interim trust model:** with no mesh and no NetworkPolicy yet, _any_ in-cluster
-pod that knows a key can POST. That is acceptable for a single-admin homelab
+pod can POST. That is acceptable for a single-admin homelab
 where the real exposure (the internet) is already cut off by internal-only.
 The **workload-identity boundary** (only approved services may call Apprise) is
 **deferred to the service mesh** — see [Future implementation](#future-implementation).
 
 **Per-service keys: yes — as routing handles, not auth.** With `stateful_mode=
 simple` each key is just a config file, so we pre-seed **one file per service**
-declaratively (never via the runtime `/add` API). Use obfuscated keys (uuid) for
-guess-resistance. Their value is **blast-radius + observability + revocation**
+declaratively (never via the runtime `/add` API). Keys are the notifying app's name
+(no obfuscation: it would add no real protection). Their value is
+**blast-radius + observability + revocation**
 (kill or re-route one service without touching others), _not_ a security
 boundary — that comes later from the mesh.
 
@@ -176,16 +196,18 @@ Because cert-deploy runs **proactively** (a single handled failure has days of
 runway before actual expiry), routine failures are **not** emergencies —
 over-using emergency trains you to mute it.
 
-| Severity tag                     | Pushover priority                           | Use for                                                                                  |
-| -------------------------------- | ------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `info`                           | `0` normal                                  | success notices; fine to respect quiet hours                                             |
-| `warn` / handled `critical`      | `1` high                                    | cert-deploy _failed_ but cert still valid — bypass quiet hours, no nag                   |
-| dead-man-switch / true emergency | `2` emergency (`retry=300`, `expire=10800`) | **Healthchecks missed-ping** (job never ran — silent failure that can persist to expiry) |
+| Severity tag                     | Pushover priority                              | Use for                                                                                  |
+| -------------------------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `info`                           | `0` normal                                     | success notices; fine to respect quiet hours                                             |
+| `warn` / handled `critical`      | `1` high                                       | cert-deploy _failed_ but cert still valid — bypass quiet hours, no nag                   |
+| dead-man-switch / true emergency | `2` emergency (`interval=300`, `expire=10800`) | **Healthchecks missed-ping** (job never ran — silent failure that can persist to expiry) |
 
-Concretely, **two `pover://` URLs** in the Apprise config:
-`?priority=high` (tag `push,warn,critical`) and
-`?priority=emergency&retry=300&expire=10800` (tag `emergency`, used by the
-Healthchecks alert route). Handled failure → high + email; "job isn't running at
+Concretely, **three `pover://` URLs** in the Apprise config:
+`?priority=normal` (tag `info,push`), `?priority=high` (tag
+`warn,critical,push`) and
+`?priority=emergency&interval=300&expire=10800` (tag `emergency`, used by the
+Healthchecks alert route). Apprise calls Pushover's `retry` parameter
+`interval`. Handled failure → high + email; "job isn't running at
 all" → emergency.
 
 ## 3. AWS SES — email
@@ -194,7 +216,8 @@ Apprise has a **native Amazon SES** plugin (`ses://`) — no SMTP needed.
 
 - **Auth (current): static AWS credentials, stored in AWS Secrets Manager.**
   IRSA is **not yet set up** in this cluster (`irsa.md` is a design doc, not
-  implemented). For now, an IAM access key/secret scoped to `ses:SendEmail` lives
+  implemented). For now, an IAM access key/secret scoped to `ses:SendRawEmail` (the action Apprise's
+  SES plugin calls; also allow `ses:SendEmail`) lives
   in AWS Secrets Manager and is pulled via the existing `aws-secrets-manager`
   `ClusterSecretStore`. Apprise's `ses://` URL embeds the access key, secret,
   region, and from/to addresses, so the creds are interpolated into the Apprise
@@ -204,7 +227,7 @@ Apprise has a **native Amazon SES** plugin (`ses://`) — no SMTP needed.
   request are needed to email arbitrary recipients.
 - **Future migration (deferred):** once IRSA is implemented per `irsa.md`,
   replace the static key with an IRSA-annotated ServiceAccount granting
-  `ses:SendEmail` (zero static credentials). This is the only part of the stack
+  `ses:SendRawEmail` (zero static credentials). This is the only part of the stack
   that changes when IRSA lands; the Apprise `ses://` config swaps from
   embedded-key to environment/role-based creds.
 
@@ -215,8 +238,23 @@ a **missed** ping. Catches what in-script notification cannot:
 
 - pod crash-before-script, image-pull failure, the CronJob never being scheduled.
 
-Its own alerts route to email and/or the Apprise webhook. One check per
-cert-deploy CronJob.
+Its own alerts route through a **Webhook integration** to
+`http://apprise.apprise.svc:8000/notify/healthchecks` with tag `emergency`, so
+no SMTP is configured. One check per cert-deploy CronJob (one per appliance).
+
+Deployment notes (`apps/healthchecks.ts`):
+
+- Postgres via `withPostgres(17, { backup: true })`; `Recreate` rollouts because
+  the entrypoint runs `manage.py migrate`.
+- `SECRET_KEY` is generated by ESO and persisted to
+  `lab53/cluster0/healthchecks/healthchecks-secret-key`.
+- `INTEGRATIONS_ALLOW_PRIVATE_IPS=True` is required, because webhooks to private
+  IPs (the Apprise ClusterIP) are blocked by default. `ALLOWED_HOSTS=*` lets
+  in-cluster pings and kubelet probes through; it is internal-only
+  (`healthchecks.int.lab53.net`).
+- Pings use slug URLs, `http://healthchecks.healthchecks.svc:8000/ping/<ping-key>/<slug>`
+  (plus `/fail`), where the slug is the CronJob name, e.g. `proxmox-cert-deploy`.
+  One project-wide ping key replaces a per-check UUID.
 
 ## Design rationale: why a hosted relay, not self-hosted push
 
@@ -269,16 +307,18 @@ push only).
 
 ## How the cert-deploy jobs wire in
 
-Hooks already exist in `scripts/deploy-external-certs.ts` and
-`apps/external-cert-deployer.ts` (dormant until env is set):
+`apps/external-cert-deployer.ts` sets these env vars on every CronJob, read by
+`scripts/deploy-external-certs.ts`:
 
-- Create a `cert-deploy-notify` ConfigMap in `traefik` (the CronJobs already
-  reference it via `envFrom … optional: true`) with:
-    - `APPRISE_URL` = `http://apprise.<ns>.svc:8000`
-    - `APPRISE_KEY` = the stored Apprise config key
-- Add a per-job `HEALTHCHECK_URL` env (each appliance = its own check).
-- Behaviour: handled failure → Apprise `tag=critical` (push+email); success →
-  Healthchecks ping; never-ran/crashed → Healthchecks missed-ping alert.
+- `APPRISE_URL` = `http://apprise.apprise.svc:8000`, imported from
+  `apps/apprise.ts`.
+- `APPRISE_KEY` = `external-cert-deployer`, the app's name.
+- `HEALTHCHECK_URL`, `HEALTHCHECK_SLUG` (the CronJob name) and
+  `HEALTHCHECK_PING_KEY`, which comes from the optional `healthchecks-ping-key`
+  Secret. Pings are skipped until that secret exists.
+- Behaviour: handled failure → Apprise `tag=critical` (push+email); a deploy
+  that renewed a cert → `tag=info`; success → Healthchecks ping;
+  never-ran/crashed → Healthchecks missed-ping alert.
 
 ## Observability seam (deferred)
 
@@ -289,43 +329,54 @@ webhook** reuses the same push/email/tag routing. Keep the tag taxonomy stable s
 those routes map directly. Until then, Healthchecks covers the cron
 dead-man-switch coverage you'd otherwise need `kube_job_failed` for.
 
-## Build order
+## Manual setup
 
-1. `apps/apprise.ts` — Apprise API (internal-only, ClusterIP). Set
-   `APPRISE_STATEFUL_MODE=simple`, `APPRISE_CONFIG_LOCK=yes`,
-   `APPRISE_API_ONLY=yes`. Seed per-service config files into `/config` from an
-   `ExternalSecret` `target.template` (AWS SM → `pover://` + `ses://` with tag
-   routing). (Workload-identity restriction deferred to the service mesh — see
-   [Future implementation](#future-implementation).)
-2. Pushover — buy the iOS/Android license, install the apps, create an
-   application token, capture the user key + app token, and store them in AWS
-   Secrets Manager (consumed into the Apprise config template). Verify push
-   end-to-end, including an `emergency`-priority test (repeat-until-ack).
-3. AWS SES — verify sender/domain, request production access, and store a static
-   IAM access key/secret with `ses:SendEmail` in AWS Secrets Manager (IRSA
-   migration deferred — see §3).
-4. `apps/healthchecks.ts` — self-hosted Healthchecks; one check per cert-deploy
-   CronJob.
-5. Wire cert-deploy: create the `cert-deploy-notify` ConfigMap + per-job
-   `HEALTHCHECK_URL`.
+Code is built (see the status line). These steps need a human:
+
+1. **Pushover** — buy the iOS/Android license, install the apps, create an
+   application token, and store `{ "user-key", "app-token" }` at
+   `lab53/cluster0/apprise/pushover-credentials`.
+2. **AWS SES** — verify the sender/domain, request production access, create an
+   IAM user allowed `ses:SendRawEmail` + `ses:SendEmail`, and store
+   `{ "access-key-id", "secret-access-key", "region", "from", "to" }` at
+   `lab53/cluster0/apprise/ses-credentials`. (IRSA migration deferred — see §3.)
+3. **Sync `apprise`**, then verify with a `POST /notify/external-cert-deployer`
+   for each of `tag=info`, `critical` and `emergency` (the last repeats until
+   acknowledged in the app).
+4. **Sync `healthchecks`**, then create the admin user (there is no env var):
+   `kubectl -n healthchecks exec deploy/healthchecks -- /opt/healthchecks/manage.py createsuperuser --email <you> --password <pw>`
+5. In Healthchecks, create a project and add a **Webhook** integration: POST to
+   `http://apprise.apprise.svc:8000/notify/healthchecks`, header
+   `Content-Type: application/json`, body
+   `{"title":"Cron job missed: $NAME","body":"Status: $STATUS","type":"failure","tag":"emergency"}`
+   (confirm the available placeholders in the form).
+6. Create one check per CronJob (`unifi-cert-deploy`, `truenas-cert-deploy`,
+   `proxmox-cert-deploy`). Set the **slug** to the CronJob name, a cron schedule
+   matching the CronJob, and a grace time; attach the webhook.
+7. Copy the project's **ping key** into
+   `lab53/cluster0/traefik/healthchecks-ping-key` as `{ "ping-key": "..." }`.
+   Until then the `healthchecks-ping-key` ExternalSecret shows a sync error and
+   the jobs skip pings.
 
 ## Finalized decisions
 
 - **Apprise config security:** internal-only (ClusterIP, no external route) +
   file-based read-only config (`stateful_mode=simple`, `config_lock=yes`,
-  `api_only=yes`, no runtime `/add` API) + obfuscated per-service keys. Apprise
-  keys carry no auth — treated as routing handles only. The workload-identity
+  `api_only=yes`, no runtime `/add` API). Apprise keys carry no auth — they are
+  plain app names, treated as routing handles only. The workload-identity
   boundary (only approved services may call Apprise) is **deferred to the service
   mesh** — see [Future implementation](#future-implementation). See §1 "Security
   model".
-- **Per-service keys:** yes, one config file per service, for blast-radius /
+- **Per-service keys:** yes, one config file per service, keyed by the
+  notifying app's name (e.g. `external-cert-deployer`; no uuids/obfuscation —
+  the service mesh is the real boundary), for blast-radius /
   observability / revocation — not as an auth boundary. Pre-seeded declaratively,
   never via the runtime API.
 - **Secrets:** live in **AWS Secrets Manager**, pulled via the existing
   `aws-secrets-manager` `ClusterSecretStore`, and rendered into the Apprise
   `/config` by an `ExternalSecret` `target.template`. Nothing in git.
 - **Pushover priority:** `info`→`0`, `warn`/handled-`critical`→`1` (high),
-  dead-man-switch/true-emergency→`2` (emergency, `retry=300`, `expire=10800`).
+  dead-man-switch/true-emergency→`2` (emergency, `interval=300`, `expire=10800`).
   See §2 "Severity → priority mapping".
 
 ## Open decisions
@@ -342,8 +393,8 @@ Deferred work, intentionally **not** part of the initial build:
   via **mTLS + per-workload identity** — only approved services (cert-deploy
   CronJobs, Alertmanager, etc.) may call the Apprise Service. This supersedes the
   NetworkPolicy approach that was considered and dropped, and replaces the
-  interim "any in-cluster pod that knows a key can POST" model (see §1). Until
-  then, internal-only reachability + obfuscated keys are the only controls.
+  interim "any in-cluster pod can POST" model (see §1). Until
+  then, internal-only reachability is the only control.
     - _Note:_ a Kubernetes `NetworkPolicy` (default-deny + allow-known-callers)
       would be the lighter-weight alternative if the mesh slips — but it requires a
       CNI that enforces NetworkPolicy (currently unconfirmed in this cluster) and

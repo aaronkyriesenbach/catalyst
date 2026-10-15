@@ -3,7 +3,15 @@ import { CronJob } from "kubernetes-models/batch/v1";
 import type { IEnvVar } from "kubernetes-models/v1";
 import { Project } from "../constants";
 import type { ExternalApp, ResourceLike, StaticApp } from "../types";
-import { buildFileConfigMap, readFile, image } from "../utils";
+import {
+	AWS_STORE,
+	awsRemoteKey,
+	buildFileConfigMap,
+	readFile,
+	image,
+} from "../utils";
+import { appriseNotifiers, appriseUrl } from "./apprise";
+import { healthchecksUrl } from "./healthchecks";
 import { traefikNamespace } from "./traefik";
 import {
 	externalAppBackendCertSecretName,
@@ -18,9 +26,14 @@ type DeployApp = ExternalApp & {
 
 const scriptConfigMapName = "external-cert-deployer-script";
 const scriptFileName = "deploy-external-certs.ts";
-const notifyConfigName = "cert-deploy-notify";
+const appName = "external-cert-deployer";
+const pingKeySecretName = "healthchecks-ping-key";
 const awsStoreName = "aws-secrets-manager";
 const imageRef = image("bun");
+
+if (!appriseNotifiers.includes(appName)) {
+	throw new Error(`${appName} has no Apprise config in apps/apprise.ts`);
+}
 const schedules = ["7 * * * *", "23 * * * *", "41 * * * *"];
 
 const deployApps = externalApps.filter(
@@ -57,6 +70,48 @@ function credentialEnv(app: DeployApp): IEnvVar[] {
 	}
 }
 
+// Created after Healthchecks is up; until then the optional env skips pings.
+const pingKeySecret = new ExternalSecret({
+	metadata: { name: pingKeySecretName },
+	spec: {
+		refreshInterval: "1h",
+		secretStoreRef: AWS_STORE,
+		target: { name: pingKeySecretName },
+		data: [
+			{
+				secretKey: "ping-key",
+				remoteRef: {
+					key: awsRemoteKey(traefikNamespace, pingKeySecretName),
+					property: "ping-key",
+				},
+			},
+		],
+	},
+});
+
+function cronJobName(app: DeployApp): string {
+	return `${app.name}-cert-deploy`;
+}
+
+function notifyEnv(app: DeployApp): IEnvVar[] {
+	return [
+		{ name: "APPRISE_URL", value: appriseUrl },
+		{ name: "APPRISE_KEY", value: appName },
+		{ name: "HEALTHCHECK_URL", value: `${healthchecksUrl}/ping` },
+		{ name: "HEALTHCHECK_SLUG", value: cronJobName(app) },
+		{
+			name: "HEALTHCHECK_PING_KEY",
+			valueFrom: {
+				secretKeyRef: {
+					name: pingKeySecretName,
+					key: "ping-key",
+					optional: true,
+				},
+			},
+		},
+	];
+}
+
 function buildCredentialsSecret(app: DeployApp): ExternalSecret {
 	const name = externalAppDeployCredsSecretName(app);
 
@@ -87,7 +142,7 @@ function buildCronJob(app: DeployApp, schedule: string): CronJob {
 	};
 
 	return new CronJob({
-		metadata: { name: `${app.name}-cert-deploy` },
+		metadata: { name: cronJobName(app) },
 		spec: {
 			schedule,
 			concurrencyPolicy: "Forbid",
@@ -121,14 +176,7 @@ function buildCronJob(app: DeployApp, schedule: string): CronJob {
 											value: JSON.stringify(target),
 										},
 										...credentialEnv(app),
-									],
-									envFrom: [
-										{
-											configMapRef: {
-												name: notifyConfigName,
-												optional: true,
-											},
-										},
+										...notifyEnv(app),
 									],
 									volumeMounts: [
 										{
@@ -169,6 +217,7 @@ function buildCronJob(app: DeployApp, schedule: string): CronJob {
 
 const resources: ResourceLike[] = [
 	scriptConfigMap,
+	pingKeySecret,
 	...deployApps.flatMap((app, index) => [
 		buildCredentialsSecret(app),
 		buildCronJob(app, schedules[index % schedules.length] ?? "0 * * * *"),
@@ -177,7 +226,7 @@ const resources: ResourceLike[] = [
 
 const config: StaticApp = {
 	kind: "static",
-	name: "external-cert-deployer",
+	name: appName,
 	namespace: traefikNamespace,
 	project: Project.SYSTEM,
 	resources,

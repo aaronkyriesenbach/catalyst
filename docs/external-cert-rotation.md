@@ -274,9 +274,8 @@ working (or a one-time manual push).
   before trusting it. The UniFi local API (`/api/userCertificates`) and the
   TrueNAS WS flow especially need a live test. The probe→compare logic makes the
   jobs safe to run repeatedly (no-op when in sync).
-- **Wire failure alerting** (Notifications, below) — set `APPRISE_URL`/
-  `APPRISE_KEY` via the optional `cert-deploy-notify` ConfigMap and add a per-job
-  `HEALTHCHECK_URL`.
+- **Failure alerting** is wired; see `notifications.md` for the env vars and the
+  manual setup steps.
 
 ### Proxmox API token & permissions
 
@@ -406,8 +405,8 @@ alerting is later desired.
    the Apprise pod an IRSA role with `ses:SendEmail` (no static creds).
 4. `apps/healthchecks.ts` — self-hosted Healthchecks; create a check per
    cert-deploy CronJob.
-5. Wire the cert-deploy script: set `APPRISE_URL`/`APPRISE_KEY` via the optional
-   `cert-deploy-notify` ConfigMap and a per-job `HEALTHCHECK_URL`.
+5. Wire the cert-deploy script: done in `apps/external-cert-deployer.ts` (see
+   `notifications.md`).
 
 ## Observability (deferred, designed-for)
 

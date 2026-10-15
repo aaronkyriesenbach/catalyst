@@ -64,7 +64,7 @@ async function notify(
                 title,
                 body,
                 type: level === "success" ? "success" : "failure",
-                tag: level === "success" ? "deploy" : "critical",
+                tag: level === "success" ? "info" : "critical",
             }),
         });
     } catch (error) {
@@ -73,11 +73,15 @@ async function notify(
 }
 
 async function pingHealthcheck(ok: boolean): Promise<void> {
-    const base = process.env.HEALTHCHECK_URL;
+    const baseUrl = process.env.HEALTHCHECK_URL;
+    const pingKey = process.env.HEALTHCHECK_PING_KEY;
+    const slug = process.env.HEALTHCHECK_SLUG;
 
-    if (!base) {
+    if (!baseUrl || !pingKey || !slug) {
         return;
     }
+
+    const base = `${baseUrl}/${pingKey}/${slug}`;
 
     try {
         await fetch(ok ? base : `${base}/fail`, { method: "GET" });
@@ -196,9 +200,14 @@ class TrueNasClient {
     private constructor(ws: WebSocket) {
         this.ws = ws;
         ws.addEventListener("message", (event) => {
-            const message = JSON.parse(
-                String(event.data),
-            ) as TrueNasRpcResponse;
+            let message: TrueNasRpcResponse;
+
+            try {
+                message = JSON.parse(String(event.data)) as TrueNasRpcResponse;
+            } catch {
+                return;
+            }
+
             const waiter = this.pending.get(message.id);
 
             if (!waiter) {
@@ -221,6 +230,8 @@ class TrueNasClient {
 
     static connect(host: string): Promise<TrueNasClient> {
         return new Promise((resolve, reject) => {
+            // SAFETY: Bun's WebSocket accepts an options object (with `tls`) as
+            // its second argument, but the DOM typings only allow string[].
             const ws = new WebSocket(`wss://${host}/api/current`, {
                 tls: { rejectUnauthorized: false },
             } as unknown as string[]);
@@ -576,8 +587,18 @@ async function reconcileEndpoint(
     return "deployed";
 }
 
+function parseTarget(raw: string): Target {
+    try {
+        return JSON.parse(raw) as Target;
+    } catch (error) {
+        throw new Error(
+            `DEPLOY_TARGET is not valid JSON: ${errorMessage(error)}`,
+        );
+    }
+}
+
 async function main(): Promise<void> {
-    const target = JSON.parse(requireEnv("DEPLOY_TARGET")) as Target;
+    const target = parseTarget(requireEnv("DEPLOY_TARGET"));
     const certPem = await Bun.file(CERT_PATH).text();
     const keyPem = await Bun.file(KEY_PATH).text();
     const desiredFingerprint = normalizeFingerprint(
