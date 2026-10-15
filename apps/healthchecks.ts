@@ -1,7 +1,7 @@
 import { applyModifiers, withPostgres } from "../modifiers";
 import { httpCheck, readiness, startup } from "../probes";
 import type { WorkloadApp } from "../types";
-import { appUrl, buildGeneratedSecret, image } from "../utils";
+import { appUrl, buildGeneratedSecret, image, postgresImage } from "../utils";
 
 const name = "healthchecks";
 const port = 8000;
@@ -17,6 +17,21 @@ const base: WorkloadApp = {
 	podSpec: {
 		// Any explicit value skips the uid 1000 default; the image runs as `hc`.
 		securityContext: { seccompProfile: { type: "RuntimeDefault" } },
+		// uWSGI keeps running when the entrypoint's migrate fails and its alert
+		// daemons give up, so the pod must not start before Postgres answers.
+		initContainers: [
+			{
+				name: "wait-for-postgres",
+				image: postgresImage(17),
+				command: ["pg_isready", "-h", `${name}-postgres`, "-U", name],
+				securityContext: {
+					allowPrivilegeEscalation: false,
+					capabilities: { drop: ["ALL"] },
+					runAsNonRoot: true,
+					runAsUser: 999,
+				},
+			},
+		],
 		containers: [
 			{
 				name: "main",
@@ -63,8 +78,6 @@ const base: WorkloadApp = {
 		],
 	},
 	webPort: port,
-	// Bring-up: sync by hand until healthy, then remove.
-	autoSync: false,
 	// The entrypoint runs `manage.py migrate`; two pods could race on it.
 	strategy: { type: "Recreate" },
 	extraResources: buildGeneratedSecret(

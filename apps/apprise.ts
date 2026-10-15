@@ -116,8 +116,6 @@ const config: WorkloadApp = {
 		],
 	},
 	extraResources: [configSecret],
-	// Bring-up: sync by hand until healthy, then remove.
-	autoSync: false,
 };
 
 export default config;
