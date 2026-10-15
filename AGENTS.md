@@ -74,6 +74,10 @@ bunx prettier --write .                      # Format the repo (config: .prettie
 - Depends on the `external-secrets` app being installed (`apps/external-secrets.ts`).
 - Keys can be strings (use cluster-wide default generator) or objects with `{ key, length?, encoding? }`.
 
+### Notifications
+
+Services send push and email by POSTing `{title, body, type, tag}` to `<appriseUrl>/notify/<app-name>` (`apps/apprise.ts`). Apprise has no authentication, so it has no HTTPRoute and is reachable only inside the cluster; the key is just the notifying app's name and must be listed in `appriseNotifiers`, which renders `/config/<app-name>.yml` from `apps/apprise/notifier.yml`. The `tag` picks the route: `info` → Pushover normal, `warn` → Pushover high, `critical` → Pushover high + SES email, `emergency` → Pushover emergency (repeats until acknowledged) + SES email; add `push` or `email` (space-separated) to narrow to one channel, and a tag no URL carries returns 424. Credentials come from AWS Secrets Manager through an ExternalSecret template (`lab53/cluster0/apprise/pushover-credentials` and `ses-credentials`, key names in `apps/apprise.ts`). Healthchecks (`apps/healthchecks.ts`) is the dead-man switch for the cert-deploy CronJobs: they ping `<healthchecksUrl>/ping/<ping-key>/<cronjob-name>` (key at `lab53/cluster0/traefik/healthchecks-ping-key`), and a failed or missed ping fires its webhook integration, which posts `emergency` to `/notify/healthchecks`. The checks (slug = CronJob name) and the webhook are configured in the Healthchecks UI, not in code.
+
 ### Routing
 
 - Internal: `<name>.int.lab53.net` → gateway `traefik-internal`
@@ -164,6 +168,8 @@ Some app files export named constants used by scripts and other modules:
 - `apps/traefik.ts` → `traefikNamespace`
 - `apps/cert-manager.ts` → `certManagerNamespace`
 - `apps/cert-manager/internal-ca.ts` → `internalRootCaSecretName`
+- `apps/apprise.ts` → `appriseUrl`, `appriseNotifiers`
+- `apps/healthchecks.ts` → `healthchecksUrl`
 - `apps/traefik/externalApps.config.ts` → `externalApps`, helper functions
 
 ## Agent skills

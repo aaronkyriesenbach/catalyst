@@ -274,8 +274,7 @@ working (or a one-time manual push).
   before trusting it. The UniFi local API (`/api/userCertificates`) and the
   TrueNAS WS flow especially need a live test. The probe→compare logic makes the
   jobs safe to run repeatedly (no-op when in sync).
-- **Failure alerting** is wired; see `notifications.md` for the env vars and the
-  manual setup steps.
+- **Failure alerting** is wired; see the Notifications section of `AGENTS.md`.
 
 ### Proxmox API token & permissions
 
@@ -406,7 +405,7 @@ alerting is later desired.
 4. `apps/healthchecks.ts` — self-hosted Healthchecks; create a check per
    cert-deploy CronJob.
 5. Wire the cert-deploy script: done in `apps/external-cert-deployer.ts` (see
-   `notifications.md`).
+   the Notifications section of `AGENTS.md`).
 
 ## Observability (deferred, designed-for)
 
