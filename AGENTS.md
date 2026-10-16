@@ -11,7 +11,7 @@ catalyst/
 ├── modifiers.ts         # WorkloadModifier pattern: withNasMounts, withPostgres, withOidcAuth, applyModifiers
 ├── storage.ts           # PV/PVC builders for NAS-backed NFS storage
 ├── versions.ts          # Typed image + Helm chart version registry (Renovate-parsed; see Image sources)
-├── types.ts             # AppConfig = WorkloadApp | StaticApp; HelmRelease, ExternalApp, BackendTLSPolicy
+├── types.ts             # AppConfig = WorkloadApp | StaticApp; HelmRelease, ExternalApp
 ├── apps/                # Each *.ts exports default AppConfig — auto-discovered by main.ts
 │   ├── traefik/         # Submodule: gateways, routes, certs, external app proxy config
 │   ├── cert-manager/    # Submodule: internal CA, issuers
@@ -128,7 +128,7 @@ No inbound ports are open. `apps/cloudflared.ts` runs a locally-managed tunnel (
 - Relative imports only (no path aliases). Standard for flat repo.
 - No linter, tests, or CI. ArgoCD CMP plugin renders in-cluster.
 - **Formatting**: Prettier is a devDependency, configured via `.prettierrc` (explicit defaults) and `.prettierignore` (`node_modules/`, `downloads/`, `bun.lock`, `.sisyphus/`, `.omo/`). Run `bunx prettier --write .` before committing.
-- **Prefer imported types over hand-rolled ones.** Before defining a new type, check whether `kubernetes-models`, `@kubernetes-models/gateway-api`, `@kubernetes-models/traefik`, or other installed packages already export a matching interface (e.g. `IPersistentVolumeClaimTemplate`, `IPodSpec`, `IServicePort`). Hand-roll types only when no package provides them (e.g. `BackendTLSPolicy` for the GA `gateway.networking.k8s.io/v1` API that the package hasn't caught up to yet).
+- **Prefer imported types over hand-rolled ones.** Before defining a new type, check whether `kubernetes-models`, `@kubernetes-models/gateway-api`, `@kubernetes-models/traefik`, or other installed packages already export a matching interface (e.g. `IPersistentVolumeClaimTemplate`, `IPodSpec`, `IServicePort`). Hand-roll types only when no package provides them.
 
 ### Infrastructure
 

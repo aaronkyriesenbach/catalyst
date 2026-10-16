@@ -1,4 +1,8 @@
-import { PersistentVolume, PersistentVolumeClaim } from "kubernetes-models/v1";
+import {
+  PersistentVolume,
+  PersistentVolumeClaim,
+  type IPersistentVolumeSpec,
+} from "kubernetes-models/v1";
 import type { StorageQuantity } from "./types";
 import type { PersistentVolumeAccessMode } from "./utils";
 import { buildPvcSpec } from "./utils";
@@ -8,7 +12,9 @@ const DEFAULT_NAS_PATH = "/mnt/tank/data";
 const DEFAULT_RECLAIM_POLICY = "Retain";
 const DEFAULT_ACCESS_MODES = ["ReadWriteMany"] as const;
 
-type PersistentVolumeReclaimPolicy = "Retain" | "Delete" | "Recycle";
+type PersistentVolumeReclaimPolicy = NonNullable<
+  IPersistentVolumeSpec["persistentVolumeReclaimPolicy"]
+>;
 
 type BuildPersistentVolumeOptions = {
   name: string;

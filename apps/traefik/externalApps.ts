@@ -1,7 +1,7 @@
 import { EndpointSlice } from "kubernetes-models/discovery.k8s.io/v1";
 import { Service } from "kubernetes-models/v1";
 import { Certificate } from "@kubernetes-models/cert-manager/cert-manager.io/v1";
-import type { BackendTLSPolicy } from "../../types";
+import { BackendTLSPolicy } from "@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1";
 import { buildRoute } from "../../utils";
 import {
   externalAppBackendCertSecretName,
@@ -62,34 +62,33 @@ const externalCerts = externalApps.map(
     }),
 );
 
-const externalBackendTlsPolicies: BackendTLSPolicy[] = externalApps.map(
-  (a) => ({
-    apiVersion: "gateway.networking.k8s.io/v1" as const,
-    kind: "BackendTLSPolicy" as const,
-    metadata: {
-      name: `${a.name}-external-tls`,
-    },
-    spec: {
-      targetRefs: [
-        {
-          name: `${a.name}-external`,
-          group: "",
-          kind: "Service",
-          sectionName: "https",
-        },
-      ],
-      validation: {
-        hostname: externalAppBackendHostname(a),
-        caCertificateRefs: [
+const externalBackendTlsPolicies = externalApps.map(
+  (a) =>
+    new BackendTLSPolicy({
+      metadata: {
+        name: `${a.name}-external-tls`,
+      },
+      spec: {
+        targetRefs: [
           {
+            name: `${a.name}-external`,
             group: "",
-            kind: "ConfigMap",
-            name: "internal-root-ca-bundle",
+            kind: "Service",
+            sectionName: "https",
           },
         ],
+        validation: {
+          hostname: externalAppBackendHostname(a),
+          caCertificateRefs: [
+            {
+              group: "",
+              kind: "ConfigMap",
+              name: "internal-root-ca-bundle",
+            },
+          ],
+        },
       },
-    },
-  }),
+    }),
 );
 
 const externalServices = externalApps.map(

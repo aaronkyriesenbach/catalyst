@@ -1,10 +1,9 @@
 import { Project } from "../constants";
-import type { ResourceLike, StaticApp } from "../types";
+import { Bundle } from "@kubernetes-models/cert-manager/trust.cert-manager.io/v1alpha1";
+import type { StaticApp } from "../types";
 import { certManagerNamespace } from "./cert-manager";
 
-const internalRootCaBundle: ResourceLike = {
-  apiVersion: "trust.cert-manager.io/v1alpha1",
-  kind: "Bundle",
+const internalRootCaBundle = new Bundle({
   metadata: {
     name: "internal-root-ca-bundle",
   },
@@ -32,7 +31,7 @@ const internalRootCaBundle: ResourceLike = {
       },
     },
   },
-};
+});
 
 const config: StaticApp = {
   kind: "static",

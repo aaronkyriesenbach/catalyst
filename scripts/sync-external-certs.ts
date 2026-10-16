@@ -1,5 +1,6 @@
 import { chmod, mkdir } from "node:fs/promises";
 import { join } from "node:path";
+import type { ISecret } from "kubernetes-models/v1";
 import {
   externalAppBackendCertSecretName,
   externalAppDownloadBaseName,
@@ -8,10 +9,6 @@ import {
 import { certManagerNamespace } from "../apps/cert-manager";
 import { traefikNamespace } from "../apps/traefik";
 import { internalRootCaSecretName } from "../apps/cert-manager/internal-ca";
-
-type Secret = {
-  data?: Record<string, string | undefined>;
-};
 
 type Options = {
   dryRun: boolean;
@@ -106,10 +103,10 @@ async function getSecret(namespace: string, name: string) {
     "json",
   ]);
 
-  return JSON.parse(stdout) as Secret;
+  return JSON.parse(stdout) as ISecret;
 }
 
-function decodeSecretKey(secret: Secret, key: string, secretName: string) {
+function decodeSecretKey(secret: ISecret, key: string, secretName: string) {
   const value = secret.data?.[key];
 
   if (!value) {

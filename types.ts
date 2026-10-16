@@ -3,10 +3,13 @@ import type {
   IApplication,
 } from "@kubernetes-models/argo-cd/argoproj.io/v1alpha1";
 import { Model } from "@kubernetes-models/base";
+import type { IDeploymentStrategy } from "kubernetes-models/apps/v1";
 import { IPodSpec } from "kubernetes-models/v1";
 import type { Project } from "./constants";
 import type { HelmChartKey } from "./versions";
 import type { WafSetting } from "./waf";
+
+export type WorkloadStrategy = Pick<IDeploymentStrategy, "type">;
 
 export type ProjectSpec = IAppProject["spec"];
 
@@ -49,7 +52,7 @@ export type WorkloadApp = BaseApp & {
   /** Externally accessible apps get the WAF by default; set this to pick a profile or exempt the app. */
   waf?: WafSetting;
   extraResources?: ResourceLike[];
-  strategy?: { type: "Recreate" | "RollingUpdate" };
+  strategy?: WorkloadStrategy;
   /** Seconds a rollout may go without progress before Argo reports it Degraded. */
   progressDeadlineSeconds?: number;
   /** Why no container has a readiness probe; required when none does. */
@@ -76,28 +79,4 @@ export type ExternalApp = {
   subDomain?: string;
   insecure?: boolean;
   certDeploy?: CertDeployStrategy;
-};
-
-export type BackendTLSPolicy = {
-  apiVersion: "gateway.networking.k8s.io/v1";
-  kind: "BackendTLSPolicy";
-  metadata: {
-    name: string;
-  };
-  spec: {
-    targetRefs: Array<{
-      name: string;
-      group: string;
-      kind: string;
-      sectionName?: string;
-    }>;
-    validation: {
-      hostname: string;
-      caCertificateRefs?: Array<{
-        group: string;
-        kind: string;
-        name: string;
-      }>;
-    };
-  };
 };

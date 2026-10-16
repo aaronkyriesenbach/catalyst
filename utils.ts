@@ -6,6 +6,7 @@ import {
   ExternalSecret,
   type IExternalSecretData,
   type IExternalSecretDataFromRemoteRef,
+  type IExternalSecretTemplate,
   type IGeneratorRef,
   type ISecretStoreRef,
 } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
@@ -57,6 +58,7 @@ import type {
   StaticApp,
   StorageQuantity,
   WorkloadApp,
+  WorkloadStrategy,
 } from "./types";
 
 export function readFile(relativePath: string, base: string): Promise<string> {
@@ -270,11 +272,11 @@ type RolloutOptions = {
 type DeploymentOptions = RolloutOptions & {
   replicas?: number;
   revisionHistoryLimit?: number;
-  strategy?: { type: "Recreate" | "RollingUpdate" };
+  strategy?: WorkloadStrategy;
   progressDeadlineSeconds?: number;
 };
 
-function buildStrategy(type: "Recreate" | "RollingUpdate" = "RollingUpdate") {
+function buildStrategy(type: WorkloadStrategy["type"] = "RollingUpdate") {
   return type === "Recreate"
     ? { type }
     : { type, rollingUpdate: { maxSurge: 1, maxUnavailable: 0 } };
@@ -493,14 +495,9 @@ export type GeneratedSecretKey =
       encoding?: PasswordEncoding;
     };
 
-type GeneratedSecretTemplate = {
-  engineVersion?: "v2";
-  data: Record<string, string>;
-};
-
 type GeneratedSecretOptions = {
   persist?: boolean;
-  template?: GeneratedSecretTemplate;
+  template?: IExternalSecretTemplate;
 };
 
 const PUSH_SECRET_PREFIX = "lab53/cluster0";
@@ -584,8 +581,9 @@ export function buildSeedPushSecret(
 const DEFAULT_ISCSI_STORAGE = "10Gi";
 const DEFAULT_ISCSI_STORAGE_CLASS = "truenas-iscsi";
 
-export type PersistentVolumeAccessMode =
-  "ReadOnlyMany" | "ReadWriteMany" | "ReadWriteOnce" | "ReadWriteOncePod";
+export type PersistentVolumeAccessMode = NonNullable<
+  IPersistentVolumeClaimSpec["accessModes"]
+>[number];
 
 export function buildPvcSpec(opts: {
   storage: StorageQuantity;
