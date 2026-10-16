@@ -165,6 +165,10 @@ export const images = {
     tag: "2026.10.0",
     mirrored: true,
   },
+  kubeVip: {
+    name: "ghcr.io/kube-vip/kube-vip",
+    tag: "v1.1.2",
+  },
 } as const satisfies Record<string, ImageEntry>;
 
 export const postgresImages = {
