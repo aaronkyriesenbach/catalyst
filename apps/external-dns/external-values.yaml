@@ -2,8 +2,7 @@ provider:
     name: cloudflare
 
 policy: sync
-# Unchanged so TXT ownership records already in the zone are still recognised.
-txtOwnerId: external-dns-ext-route53
+txtOwnerId: external-dns-ext-cloudflare
 sources: ["gateway-httproute"]
 domainFilters: ["lab53.net"]
 excludeDomains: ["int.lab53.net"]
