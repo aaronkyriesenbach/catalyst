@@ -1,4 +1,4 @@
-import { Project } from "../constants";
+import { cloudflareZoneId, Project } from "../constants";
 import type { StaticApp } from "../types";
 import {
 	awsRemoteKey,
@@ -81,6 +81,7 @@ const config: StaticApp = {
 			chart: "externalDns",
 			releaseName: "external-dns-ext",
 			skipCrds: true,
+			parameters: { "extraArgs.zone-id-filter": cloudflareZoneId },
 			values: await readYaml(
 				"./external-dns/external-values.yaml",
 				import.meta.url,

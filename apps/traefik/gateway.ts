@@ -1,10 +1,11 @@
 import { Gateway } from "@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1";
+import { cloudflareTunnelTarget } from "../../constants";
 
 export const internalGateway = new Gateway({
 	metadata: {
 		name: "traefik-internal",
 		annotations: {
-			"external-dns.alpha.kubernetes.io/target": "192.168.53.201",
+			"external-dns.kubernetes.io/target": "192.168.53.201",
 		},
 	},
 	spec: {
@@ -61,7 +62,7 @@ export const externalGateway = new Gateway({
 	metadata: {
 		name: "traefik-external",
 		annotations: {
-			"external-dns.alpha.kubernetes.io/target": "home.lab53.net",
+			"external-dns.kubernetes.io/target": cloudflareTunnelTarget,
 		},
 	},
 	spec: {
