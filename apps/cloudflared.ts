@@ -14,7 +14,7 @@ const name = "cloudflared";
 const credentialsSecretName = "cloudflared-credentials";
 const metricsPort = 2000;
 
-const traefikOrigin = "https://traefik.kube-system.svc.cluster.local:443";
+const traefikOrigin = "https://traefik.traefik.svc.cluster.local:443";
 
 const tunnelConfig = {
   tunnel: cloudflareTunnelId,
