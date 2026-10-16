@@ -5,37 +5,37 @@ import { image } from "../utils";
 import { httpCheck, readiness } from "../probes";
 
 const base: WorkloadApp = {
-	kind: "workload",
-	name: "registry",
-	project: Project.SYSTEM,
-	podSpec: {
-		containers: [
-			{
-				name: "main",
-				image: image("registry"),
-				env: [
-					{
-						name: "REGISTRY_PROXY_REMOTEURL",
-						value: "https://registry-1.docker.io",
-					},
-				],
-				ports: [{ name: "http", containerPort: 5000 }],
-				livenessProbe: {
-					httpGet: { path: "/", port: 5000 },
-					periodSeconds: 30,
-					failureThreshold: 3,
-				},
-				readinessProbe: readiness(httpCheck("/", 5000)),
-			},
-		],
-	},
-	webPort: 5000,
-	subDomain: "docker",
+  kind: "workload",
+  name: "registry",
+  project: Project.SYSTEM,
+  podSpec: {
+    containers: [
+      {
+        name: "main",
+        image: image("registry"),
+        env: [
+          {
+            name: "REGISTRY_PROXY_REMOTEURL",
+            value: "https://registry-1.docker.io",
+          },
+        ],
+        ports: [{ name: "http", containerPort: 5000 }],
+        livenessProbe: {
+          httpGet: { path: "/", port: 5000 },
+          periodSeconds: 30,
+          failureThreshold: 3,
+        },
+        readinessProbe: readiness(httpCheck("/", 5000)),
+      },
+    ],
+  },
+  webPort: 5000,
+  subDomain: "docker",
 };
 
 export default applyModifiers(
-	base,
-	withNasMounts({
-		main: [{ mountPath: "/var/lib/registry", subPath: "cluster/registry" }],
-	}),
+  base,
+  withNasMounts({
+    main: [{ mountPath: "/var/lib/registry", subPath: "cluster/registry" }],
+  }),
 );

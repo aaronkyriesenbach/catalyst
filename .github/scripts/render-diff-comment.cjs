@@ -9,63 +9,63 @@ const BODY_BUDGET = 58000;
 const FENCE = "````";
 
 function readDiff(file) {
-	if (!fs.existsSync(file)) {
-		return null;
-	}
+  if (!fs.existsSync(file)) {
+    return null;
+  }
 
-	return fs.readFileSync(file, "utf8").trim();
+  return fs.readFileSync(file, "utf8").trim();
 }
 
 function allocate(manifestLength, chartLength) {
-	if (manifestLength + chartLength <= BODY_BUDGET) {
-		return { manifest: manifestLength, chart: chartLength };
-	}
+  if (manifestLength + chartLength <= BODY_BUDGET) {
+    return { manifest: manifestLength, chart: chartLength };
+  }
 
-	const half = Math.floor(BODY_BUDGET / 2);
+  const half = Math.floor(BODY_BUDGET / 2);
 
-	if (manifestLength <= half) {
-		return {
-			manifest: manifestLength,
-			chart: BODY_BUDGET - manifestLength,
-		};
-	}
+  if (manifestLength <= half) {
+    return {
+      manifest: manifestLength,
+      chart: BODY_BUDGET - manifestLength,
+    };
+  }
 
-	if (chartLength <= half) {
-		return { manifest: BODY_BUDGET - chartLength, chart: chartLength };
-	}
+  if (chartLength <= half) {
+    return { manifest: BODY_BUDGET - chartLength, chart: chartLength };
+  }
 
-	return { manifest: half, chart: half };
+  return { manifest: half, chart: half };
 }
 
 function truncate(text, limit) {
-	if (text.length <= limit) {
-		return { text, truncated: false };
-	}
+  if (text.length <= limit) {
+    return { text, truncated: false };
+  }
 
-	const cut = text.slice(0, limit);
-	const lastNewline = cut.lastIndexOf("\n");
+  const cut = text.slice(0, limit);
+  const lastNewline = cut.lastIndexOf("\n");
 
-	return {
-		text: lastNewline > 0 ? cut.slice(0, lastNewline) : cut,
-		truncated: true,
-	};
+  return {
+    text: lastNewline > 0 ? cut.slice(0, lastNewline) : cut,
+    truncated: true,
+  };
 }
 
 function section(title, diff, limit, artifactUrl, emptyMessage) {
-	if (diff === null) {
-		return `### ${title}\n\n_Not available (the render step did not run or produced no output)._\n`;
-	}
+  if (diff === null) {
+    return `### ${title}\n\n_Not available (the render step did not run or produced no output)._\n`;
+  }
 
-	if (diff === "") {
-		return `### ${title}\n\n${emptyMessage}\n`;
-	}
+  if (diff === "") {
+    return `### ${title}\n\n${emptyMessage}\n`;
+  }
 
-	const { text, truncated } = truncate(diff, limit);
-	const notice = truncated
-		? `\n_Truncated to ~${BODY_BUDGET} characters (${text.length} of ${diff.length} shown). Full diff: [\`render-diff\` artifact](${artifactUrl})._\n`
-		: "";
+  const { text, truncated } = truncate(diff, limit);
+  const notice = truncated
+    ? `\n_Truncated to ~${BODY_BUDGET} characters (${text.length} of ${diff.length} shown). Full diff: [\`render-diff\` artifact](${artifactUrl})._\n`
+    : "";
 
-	return `### ${title}\n\n${FENCE}diff\n${text}\n${FENCE}\n${notice}`;
+  return `### ${title}\n\n${FENCE}diff\n${text}\n${FENCE}\n${notice}`;
 }
 
 const MAX_FAILURES_SHOWN = 3;
@@ -74,116 +74,112 @@ const MAX_ERROR_CHARS = 1200;
 const NOISE = /^(\$ bun run|Pulled:|Digest:)/;
 
 function failedCharts(chartsDir) {
-	if (!chartsDir || !fs.existsSync(chartsDir)) {
-		return [];
-	}
+  if (!chartsDir || !fs.existsSync(chartsDir)) {
+    return [];
+  }
 
-	return fs
-		.readdirSync(chartsDir)
-		.filter((file) => file.endsWith(".exit"))
-		.filter(
-			(file) =>
-				fs.readFileSync(path.join(chartsDir, file), "utf8").trim() !==
-				"0",
-		)
-		.map((file) => file.replace(/\.exit$/, ""))
-		.sort();
+  return fs
+    .readdirSync(chartsDir)
+    .filter((file) => file.endsWith(".exit"))
+    .filter(
+      (file) =>
+        fs.readFileSync(path.join(chartsDir, file), "utf8").trim() !== "0",
+    )
+    .map((file) => file.replace(/\.exit$/, ""))
+    .sort();
 }
 
 function chartFailureBanner(chartsDir) {
-	const failed = failedCharts(chartsDir);
+  const failed = failedCharts(chartsDir);
 
-	if (failed.length === 0) {
-		return "";
-	}
+  if (failed.length === 0) {
+    return "";
+  }
 
-	const details = failed.slice(0, MAX_FAILURES_SHOWN).map((name) => {
-		const errFile = path.join(chartsDir, `${name}.err`);
-		const err = fs.existsSync(errFile)
-			? fs.readFileSync(errFile, "utf8")
-			: "";
-		const lines = err.split("\n").filter((line) => !NOISE.test(line));
-		const { text } = truncate(lines.join("\n").trim(), MAX_ERROR_CHARS);
-		const app = name.replace(/^chart-/, "");
+  const details = failed.slice(0, MAX_FAILURES_SHOWN).map((name) => {
+    const errFile = path.join(chartsDir, `${name}.err`);
+    const err = fs.existsSync(errFile) ? fs.readFileSync(errFile, "utf8") : "";
+    const lines = err.split("\n").filter((line) => !NOISE.test(line));
+    const { text } = truncate(lines.join("\n").trim(), MAX_ERROR_CHARS);
+    const app = name.replace(/^chart-/, "");
 
-		return `**\`${app}\`**\n\n${FENCE}\n${text}\n${FENCE}\n`;
-	});
-	const hidden = failed.length - details.length;
-	const more =
-		hidden > 0 ? `\n_${hidden} more failed; see the job logs._\n` : "";
+    return `**\`${app}\`**\n\n${FENCE}\n${text}\n${FENCE}\n`;
+  });
+  const hidden = failed.length - details.length;
+  const more =
+    hidden > 0 ? `\n_${hidden} more failed; see the job logs._\n` : "";
 
-	return [
-		"### Helm chart render failed\n",
-		"`helm template` fails with this change, so `verify` is red and it must not be merged.\n",
-		`${details.join("\n")}${more}`,
-	].join("\n");
+  return [
+    "### Helm chart render failed\n",
+    "`helm template` fails with this change, so `verify` is red and it must not be merged.\n",
+    `${details.join("\n")}${more}`,
+  ].join("\n");
 }
 
 module.exports = async ({ github, context, core }) => {
-	const diffDir = process.env.DIFF_DIR;
-	const manifestDiff = readDiff(path.join(diffDir, "render.diff"));
-	const chartDiff = readDiff(path.join(diffDir, "charts.diff"));
-	const pullRequest = context.payload.pull_request;
-	const { owner, repo } = context.repo;
-	const artifactUrl = `${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}`;
-	const limits = allocate(
-		(manifestDiff ?? "").length,
-		(chartDiff ?? "").length,
-	);
+  const diffDir = process.env.DIFF_DIR;
+  const manifestDiff = readDiff(path.join(diffDir, "render.diff"));
+  const chartDiff = readDiff(path.join(diffDir, "charts.diff"));
+  const pullRequest = context.payload.pull_request;
+  const { owner, repo } = context.repo;
+  const artifactUrl = `${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}`;
+  const limits = allocate(
+    (manifestDiff ?? "").length,
+    (chartDiff ?? "").length,
+  );
 
-	const body = [
-		MARKER,
-		"## Rendered manifest diff",
-		`<sub>Base \`${pullRequest.base.sha.slice(0, 7)}\` vs merge result of \`${pullRequest.head.sha.slice(0, 7)}\`</sub>\n`,
-		chartFailureBanner(process.env.HEAD_CHARTS_DIR),
-		section(
-			"App manifests (`render-all`)",
-			manifestDiff,
-			limits.manifest,
-			artifactUrl,
-			"No rendered manifest changes.",
-		),
-		section(
-			"Helm chart output (`render-chart`)",
-			chartDiff,
-			limits.chart,
-			artifactUrl,
-			"No rendered chart changes.",
-		),
-	].join("\n");
+  const body = [
+    MARKER,
+    "## Rendered manifest diff",
+    `<sub>Base \`${pullRequest.base.sha.slice(0, 7)}\` vs merge result of \`${pullRequest.head.sha.slice(0, 7)}\`</sub>\n`,
+    chartFailureBanner(process.env.HEAD_CHARTS_DIR),
+    section(
+      "App manifests (`render-all`)",
+      manifestDiff,
+      limits.manifest,
+      artifactUrl,
+      "No rendered manifest changes.",
+    ),
+    section(
+      "Helm chart output (`render-chart`)",
+      chartDiff,
+      limits.chart,
+      artifactUrl,
+      "No rendered chart changes.",
+    ),
+  ].join("\n");
 
-	await core.summary.addRaw(body).write();
+  await core.summary.addRaw(body).write();
 
-	// Fork PRs only get a read-only token, so commenting would fail anyway.
-	if (pullRequest.head.repo.full_name !== `${owner}/${repo}`) {
-		core.info("PR head is not in this repository; skipping comment.");
-		return;
-	}
+  // Fork PRs only get a read-only token, so commenting would fail anyway.
+  if (pullRequest.head.repo.full_name !== `${owner}/${repo}`) {
+    core.info("PR head is not in this repository; skipping comment.");
+    return;
+  }
 
-	const comments = await github.paginate(github.rest.issues.listComments, {
-		owner,
-		repo,
-		issue_number: pullRequest.number,
-		per_page: 100,
-	});
-	const existing = comments.find(
-		(comment) =>
-			comment.user?.type === "Bot" && comment.body?.includes(MARKER),
-	);
+  const comments = await github.paginate(github.rest.issues.listComments, {
+    owner,
+    repo,
+    issue_number: pullRequest.number,
+    per_page: 100,
+  });
+  const existing = comments.find(
+    (comment) => comment.user?.type === "Bot" && comment.body?.includes(MARKER),
+  );
 
-	if (existing) {
-		await github.rest.issues.updateComment({
-			owner,
-			repo,
-			comment_id: existing.id,
-			body,
-		});
-	} else {
-		await github.rest.issues.createComment({
-			owner,
-			repo,
-			issue_number: pullRequest.number,
-			body,
-		});
-	}
+  if (existing) {
+    await github.rest.issues.updateComment({
+      owner,
+      repo,
+      comment_id: existing.id,
+      body,
+    });
+  } else {
+    await github.rest.issues.createComment({
+      owner,
+      repo,
+      issue_number: pullRequest.number,
+      body,
+    });
+  }
 };

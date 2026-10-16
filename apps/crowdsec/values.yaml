@@ -1,23 +1,23 @@
 agent:
-    enabled: false
+  enabled: false
 
 lapi:
-    env:
-        - name: BOUNCER_KEY_traefik
-          valueFrom:
-              secretKeyRef:
-                  name: crowdsec-keys
-                  key: BOUNCER_KEY_traefik
-    persistentVolume:
-        data:
-            storageClassName: truenas-iscsi
-            size: 5Gi
-        config:
-            storageClassName: truenas-iscsi
-            size: 1Gi
+  env:
+    - name: BOUNCER_KEY_traefik
+      valueFrom:
+        secretKeyRef:
+          name: crowdsec-keys
+          key: BOUNCER_KEY_traefik
+  persistentVolume:
+    data:
+      storageClassName: truenas-iscsi
+      size: 5Gi
+    config:
+      storageClassName: truenas-iscsi
+      size: 1Gi
 
 secrets:
-    externalSecret:
-        name: crowdsec-lapi-keys
-        csLapiSecretKey: csLapiSecret
-        registrationTokenKey: registrationToken
+  externalSecret:
+    name: crowdsec-lapi-keys
+    csLapiSecretKey: csLapiSecret
+    registrationTokenKey: registrationToken

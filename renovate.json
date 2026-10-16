@@ -1,179 +1,179 @@
 {
-	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-	"description": [
-		"Mend Renovate GitHub App config. Rules are evaluated top to bottom and later rules win.",
-		"Policy overview lives in AGENTS.md (Renovate section). Merging only updates git: every Argo Application is manual-sync, so a human still syncs."
-	],
-	"extends": ["config:recommended"],
-	"ignorePresets": [":semanticPrefixFixDepsChoreOthers"],
-	"dependencyDashboard": true,
-	"ignorePaths": ["cluster/**", "**/node_modules/**"],
-	"timezone": "America/New_York",
-	"schedule": ["before 6am on saturday"],
-	"minimumReleaseAge": "7d",
-	"internalChecksFilter": "strict",
-	"prConcurrentLimit": 5,
-	"prHourlyLimit": 0,
-	"platformAutomerge": true,
-	"automergeType": "pr",
-	"automergeStrategy": "squash",
-	"automerge": false,
-	"vulnerabilityAlerts": { "enabled": false },
-	"semanticCommits": "enabled",
-	"semanticCommitType": "chore",
-	"semanticCommitScope": null,
-	"labels": ["dependencies"],
-	"customManagers": [
-		{
-			"description": "Images in versions.ts. check-versions.ts reads this regex, so keep it as the single source of truth.",
-			"customType": "regex",
-			"managerFilePatterns": ["/^versions\\.ts$/"],
-			"matchStrings": [
-				"name:\\s*\"(?<depName>[^\"]+)\",\\s*tag:\\s*\"(?<currentValue>[^\"]+)\""
-			],
-			"datasourceTemplate": "docker",
-			"depTypeTemplate": "image"
-		},
-		{
-			"description": "Helm charts from a classic chart repository (kind: repo) in versions.ts.",
-			"customType": "regex",
-			"managerFilePatterns": ["/^versions\\.ts$/"],
-			"matchStrings": [
-				"kind:\\s*\"repo\",\\s*repo:\\s*\"(?<registryUrl>[^\"]+)\",\\s*chart:\\s*\"(?<depName>[^\"]+)\",\\s*version:\\s*\"(?<currentValue>[^\"]+)\""
-			],
-			"datasourceTemplate": "helm",
-			"depTypeTemplate": "helm-chart"
-		},
-		{
-			"description": "Helm charts from an OCI registry (kind: oci) in versions.ts; looked up as registry tags. Chart tags are semver, some with a v prefix.",
-			"customType": "regex",
-			"managerFilePatterns": ["/^versions\\.ts$/"],
-			"matchStrings": [
-				"kind:\\s*\"oci\",\\s*chart:\\s*\"oci://(?<depName>[^\"]+)\",\\s*version:\\s*\"(?<currentValue>[^\"]+)\""
-			],
-			"datasourceTemplate": "docker",
-			"versioningTemplate": "semver",
-			"depTypeTemplate": "helm-chart"
-		}
-	],
-	"helm-values": {
-		"managerFilePatterns": [
-			"/(^|/)values\\.ya?ml$/",
-			"/^apps/.+values\\.ya?ml$/"
-		]
-	},
-	"packageRules": [
-		{
-			"description": "Age: minimumReleaseAge 7d is set globally and applies to every update.",
-			"matchPackageNames": ["*"],
-			"minimumReleaseAge": "7d"
-		},
-		{
-			"description": "GHCR, Quay and dragonflydb.io expose no trusted release timestamp, so with the default timestamp-required their updates would sit in Pending Status Checks forever. Raise them without an age check; the 7d age only applies to Docker Hub, Helm repo and npm updates.",
-			"matchPackageNames": [
-				"ghcr.io/**",
-				"quay.io/**",
-				"docker.dragonflydb.io/**"
-			],
-			"minimumReleaseAgeBehaviour": "timestamp-optional"
-		},
-		{
-			"description": "Short PR titles: the default topics append 'Docker tag' or 'helm values', which pushes long OCI names past 80 characters.",
-			"matchPackageNames": ["*"],
-			"commitMessageTopic": "{{{depName}}}"
-		},
-		{
-			"description": "Auto-merge patches and digests for every dependency type; the verify check catches npm and render breakage.",
-			"matchUpdateTypes": ["patch", "digest"],
-			"automerge": true
-		},
-		{
-			"description": "Auto-merge minors for this allowlist of low-risk apps only.",
-			"matchUpdateTypes": ["minor"],
-			"matchPackageNames": [
-				"ghcr.io/navidrome/navidrome",
-				"docker.io/jellyfin/jellyfin",
-				"ghcr.io/ivan-malinovski/calino",
-				"ghcr.io/aaronkyriesenbach/forscoreviewer",
-				"docker.io/linuxserver/qbittorrent",
-				"docker.io/haugene/transmission-openvpn",
-				"docker.io/qmcgaw/gluetun",
-				"docker.io/curlimages/curl"
-			],
-			"automerge": true
-		},
-		{
-			"description": "Majors always need a human.",
-			"matchUpdateTypes": ["major"],
-			"automerge": false,
-			"addLabels": ["needs-review"]
-		},
-		{
-			"description": "Charts are PR-only for now. To enable chart auto-merge later, set automerge true here (optionally narrowing by matchPackageNames); the denylist rule below still applies and wins.",
-			"matchDepTypes": ["helm-chart"],
-			"automerge": false
-		},
-		{
-			"description": "Denylist, never auto-merge: images and OCI charts.",
-			"matchPackageNames": [
-				"ghcr.io/immich-app/immich-charts/immich",
-				"ghcr.io/immich-app/immich-server",
-				"ghcr.io/aclerici38/charts/pocket-id-operator",
-				"ghcr.io/pocket-id/pocket-id",
-				"quay.io/jetstack/charts/cert-manager",
-				"quay.io/jetstack/charts/trust-manager",
-				"ghcr.io/home-assistant/home-assistant"
-			],
-			"automerge": false
-		},
-		{
-			"description": "Denylist, never auto-merge: charts from classic chart repositories.",
-			"matchDatasources": ["helm"],
-			"matchPackageNames": ["external-secrets", "volsync"],
-			"automerge": false
-		},
-		{
-			"description": "immich chart and server image move together.",
-			"matchPackageNames": [
-				"ghcr.io/immich-app/immich-charts/immich",
-				"ghcr.io/immich-app/immich-server"
-			],
-			"groupName": "immich"
-		},
-		{
-			"description": "The typetype images are released together.",
-			"matchPackageNames": ["ghcr.io/typetype-video/**"],
-			"groupName": "typetype"
-		},
-		{
-			"description": "The bun image, bun-types and the CI setup-bun version track the same runtime.",
-			"matchPackageNames": [
-				"docker.io/oven/bun",
-				"bun-types",
-				"bun",
-				"oven-sh/bun"
-			],
-			"groupName": "bun"
-		},
-		{
-			"description": "linuxserver also publishes Ubuntu-style tags such as 20.04.1 that look like a major update; only accept plain x.y.z app versions.",
-			"matchPackageNames": ["docker.io/linuxserver/qbittorrent"],
-			"allowedVersions": "/^[1-9]\\.\\d+\\.\\d+$/"
-		},
-		{
-			"description": "Disabled: floating or compound tags Renovate cannot order, and Postgres majors (see docs/postgres-migration.md).",
-			"matchPackageNames": [
-				"docker.io/crazymax/ddns-route53",
-				"ghcr.io/ggml-org/whisper.cpp",
-				"ghcr.io/immich-app/postgres"
-			],
-			"enabled": false
-		},
-		{
-			"description": "Postgres major upgrades are manual migrations.",
-			"matchPackageNames": ["docker.io/library/postgres"],
-			"matchUpdateTypes": ["major"],
-			"enabled": false
-		}
-	]
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": [
+    "Mend Renovate GitHub App config. Rules are evaluated top to bottom and later rules win.",
+    "Policy overview lives in AGENTS.md (Renovate section). Merging only updates git: every Argo Application is manual-sync, so a human still syncs."
+  ],
+  "extends": ["config:recommended"],
+  "ignorePresets": [":semanticPrefixFixDepsChoreOthers"],
+  "dependencyDashboard": true,
+  "ignorePaths": ["cluster/**", "**/node_modules/**"],
+  "timezone": "America/New_York",
+  "schedule": ["before 6am on saturday"],
+  "minimumReleaseAge": "7d",
+  "internalChecksFilter": "strict",
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 0,
+  "platformAutomerge": true,
+  "automergeType": "pr",
+  "automergeStrategy": "squash",
+  "automerge": false,
+  "vulnerabilityAlerts": { "enabled": false },
+  "semanticCommits": "enabled",
+  "semanticCommitType": "chore",
+  "semanticCommitScope": null,
+  "labels": ["dependencies"],
+  "customManagers": [
+    {
+      "description": "Images in versions.ts. check-versions.ts reads this regex, so keep it as the single source of truth.",
+      "customType": "regex",
+      "managerFilePatterns": ["/^versions\\.ts$/"],
+      "matchStrings": [
+        "name:\\s*\"(?<depName>[^\"]+)\",\\s*tag:\\s*\"(?<currentValue>[^\"]+)\""
+      ],
+      "datasourceTemplate": "docker",
+      "depTypeTemplate": "image"
+    },
+    {
+      "description": "Helm charts from a classic chart repository (kind: repo) in versions.ts.",
+      "customType": "regex",
+      "managerFilePatterns": ["/^versions\\.ts$/"],
+      "matchStrings": [
+        "kind:\\s*\"repo\",\\s*repo:\\s*\"(?<registryUrl>[^\"]+)\",\\s*chart:\\s*\"(?<depName>[^\"]+)\",\\s*version:\\s*\"(?<currentValue>[^\"]+)\""
+      ],
+      "datasourceTemplate": "helm",
+      "depTypeTemplate": "helm-chart"
+    },
+    {
+      "description": "Helm charts from an OCI registry (kind: oci) in versions.ts; looked up as registry tags. Chart tags are semver, some with a v prefix.",
+      "customType": "regex",
+      "managerFilePatterns": ["/^versions\\.ts$/"],
+      "matchStrings": [
+        "kind:\\s*\"oci\",\\s*chart:\\s*\"oci://(?<depName>[^\"]+)\",\\s*version:\\s*\"(?<currentValue>[^\"]+)\""
+      ],
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "semver",
+      "depTypeTemplate": "helm-chart"
+    }
+  ],
+  "helm-values": {
+    "managerFilePatterns": [
+      "/(^|/)values\\.ya?ml$/",
+      "/^apps/.+values\\.ya?ml$/"
+    ]
+  },
+  "packageRules": [
+    {
+      "description": "Age: minimumReleaseAge 7d is set globally and applies to every update.",
+      "matchPackageNames": ["*"],
+      "minimumReleaseAge": "7d"
+    },
+    {
+      "description": "GHCR, Quay and dragonflydb.io expose no trusted release timestamp, so with the default timestamp-required their updates would sit in Pending Status Checks forever. Raise them without an age check; the 7d age only applies to Docker Hub, Helm repo and npm updates.",
+      "matchPackageNames": [
+        "ghcr.io/**",
+        "quay.io/**",
+        "docker.dragonflydb.io/**"
+      ],
+      "minimumReleaseAgeBehaviour": "timestamp-optional"
+    },
+    {
+      "description": "Short PR titles: the default topics append 'Docker tag' or 'helm values', which pushes long OCI names past 80 characters.",
+      "matchPackageNames": ["*"],
+      "commitMessageTopic": "{{{depName}}}"
+    },
+    {
+      "description": "Auto-merge patches and digests for every dependency type; the verify check catches npm and render breakage.",
+      "matchUpdateTypes": ["patch", "digest"],
+      "automerge": true
+    },
+    {
+      "description": "Auto-merge minors for this allowlist of low-risk apps only.",
+      "matchUpdateTypes": ["minor"],
+      "matchPackageNames": [
+        "ghcr.io/navidrome/navidrome",
+        "docker.io/jellyfin/jellyfin",
+        "ghcr.io/ivan-malinovski/calino",
+        "ghcr.io/aaronkyriesenbach/forscoreviewer",
+        "docker.io/linuxserver/qbittorrent",
+        "docker.io/haugene/transmission-openvpn",
+        "docker.io/qmcgaw/gluetun",
+        "docker.io/curlimages/curl"
+      ],
+      "automerge": true
+    },
+    {
+      "description": "Majors always need a human.",
+      "matchUpdateTypes": ["major"],
+      "automerge": false,
+      "addLabels": ["needs-review"]
+    },
+    {
+      "description": "Charts are PR-only for now. To enable chart auto-merge later, set automerge true here (optionally narrowing by matchPackageNames); the denylist rule below still applies and wins.",
+      "matchDepTypes": ["helm-chart"],
+      "automerge": false
+    },
+    {
+      "description": "Denylist, never auto-merge: images and OCI charts.",
+      "matchPackageNames": [
+        "ghcr.io/immich-app/immich-charts/immich",
+        "ghcr.io/immich-app/immich-server",
+        "ghcr.io/aclerici38/charts/pocket-id-operator",
+        "ghcr.io/pocket-id/pocket-id",
+        "quay.io/jetstack/charts/cert-manager",
+        "quay.io/jetstack/charts/trust-manager",
+        "ghcr.io/home-assistant/home-assistant"
+      ],
+      "automerge": false
+    },
+    {
+      "description": "Denylist, never auto-merge: charts from classic chart repositories.",
+      "matchDatasources": ["helm"],
+      "matchPackageNames": ["external-secrets", "volsync"],
+      "automerge": false
+    },
+    {
+      "description": "immich chart and server image move together.",
+      "matchPackageNames": [
+        "ghcr.io/immich-app/immich-charts/immich",
+        "ghcr.io/immich-app/immich-server"
+      ],
+      "groupName": "immich"
+    },
+    {
+      "description": "The typetype images are released together.",
+      "matchPackageNames": ["ghcr.io/typetype-video/**"],
+      "groupName": "typetype"
+    },
+    {
+      "description": "The bun image, bun-types and the CI setup-bun version track the same runtime.",
+      "matchPackageNames": [
+        "docker.io/oven/bun",
+        "bun-types",
+        "bun",
+        "oven-sh/bun"
+      ],
+      "groupName": "bun"
+    },
+    {
+      "description": "linuxserver also publishes Ubuntu-style tags such as 20.04.1 that look like a major update; only accept plain x.y.z app versions.",
+      "matchPackageNames": ["docker.io/linuxserver/qbittorrent"],
+      "allowedVersions": "/^[1-9]\\.\\d+\\.\\d+$/"
+    },
+    {
+      "description": "Disabled: floating or compound tags Renovate cannot order, and Postgres majors (see docs/postgres-migration.md).",
+      "matchPackageNames": [
+        "docker.io/crazymax/ddns-route53",
+        "ghcr.io/ggml-org/whisper.cpp",
+        "ghcr.io/immich-app/postgres"
+      ],
+      "enabled": false
+    },
+    {
+      "description": "Postgres major upgrades are manual migrations.",
+      "matchPackageNames": ["docker.io/library/postgres"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    }
+  ]
 }

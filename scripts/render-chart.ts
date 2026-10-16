@@ -17,74 +17,74 @@ can differ. Use \`argocd app manifests <app>\` for the authoritative output.`;
 const arg = process.argv[2];
 
 if (!arg || arg === "--help" || arg === "-h") {
-	console.error(usage);
-	process.exit(arg ? 0 : 1);
+  console.error(usage);
+  process.exit(arg ? 0 : 1);
 }
 
 function chartArgs(entry: HelmChartEntry): string[] {
-	return entry.kind === "repo"
-		? [entry.chart, "--repo", entry.repo]
-		: [entry.chart];
+  return entry.kind === "repo"
+    ? [entry.chart, "--repo", entry.repo]
+    : [entry.chart];
 }
 
 async function templateRelease(
-	release: HelmRelease,
-	namespace: string,
-	tempDir: string,
+  release: HelmRelease,
+  namespace: string,
+  tempDir: string,
 ): Promise<string> {
-	const entry: HelmChartEntry = helmCharts[release.chart];
-	const valuesFile = join(tempDir, `${release.releaseName}-values.yaml`);
+  const entry: HelmChartEntry = helmCharts[release.chart];
+  const valuesFile = join(tempDir, `${release.releaseName}-values.yaml`);
 
-	writeFileSync(valuesFile, stringify(release.values ?? {}));
+  writeFileSync(valuesFile, stringify(release.values ?? {}));
 
-	const setArgs = Object.entries(release.parameters ?? {}).flatMap(
-		([key, value]) => ["--set", `${key}=${value}`],
-	);
-	const proc = Bun.spawn(
-		[
-			"helm",
-			"template",
-			release.releaseName,
-			...chartArgs(entry),
-			"--version",
-			entry.version,
-			"--namespace",
-			namespace,
-			release.skipCrds ? "--skip-crds" : "--include-crds",
-			"-f",
-			valuesFile,
-			...setArgs,
-		],
-		{ stdout: "pipe", stderr: "inherit" },
-	);
-	const [output, exitCode] = await Promise.all([
-		new Response(proc.stdout).text(),
-		proc.exited,
-	]);
+  const setArgs = Object.entries(release.parameters ?? {}).flatMap(
+    ([key, value]) => ["--set", `${key}=${value}`],
+  );
+  const proc = Bun.spawn(
+    [
+      "helm",
+      "template",
+      release.releaseName,
+      ...chartArgs(entry),
+      "--version",
+      entry.version,
+      "--namespace",
+      namespace,
+      release.skipCrds ? "--skip-crds" : "--include-crds",
+      "-f",
+      valuesFile,
+      ...setArgs,
+    ],
+    { stdout: "pipe", stderr: "inherit" },
+  );
+  const [output, exitCode] = await Promise.all([
+    new Response(proc.stdout).text(),
+    proc.exited,
+  ]);
 
-	if (exitCode !== 0) {
-		throw new Error(`helm template failed for ${release.releaseName}`);
-	}
+  if (exitCode !== 0) {
+    throw new Error(`helm template failed for ${release.releaseName}`);
+  }
 
-	return output;
+  return output;
 }
 
 const name = arg.replace(/\.ts$/, "");
 const config = await loadAppConfig(`${name}.ts`);
 
 if (!config.helmReleases?.length) {
-	console.error(`App '${name}' has no helmReleases`);
-	process.exit(1);
+  console.error(`App '${name}' has no helmReleases`);
+  process.exit(1);
 }
 
 const namespace = appNamespace(config);
 const tempDir = mkdtempSync(join(tmpdir(), "render-chart-"));
 
 try {
-	for (const release of config.helmReleases) {
-		console.log(`# release: ${release.releaseName}`);
-		console.log(await templateRelease(release, namespace, tempDir));
-	}
+  for (const release of config.helmReleases) {
+    console.log(`# release: ${release.releaseName}`);
+    console.log(await templateRelease(release, namespace, tempDir));
+  }
 } finally {
-	rmSync(tempDir, { recursive: true, force: true });
+  rmSync(tempDir, { recursive: true, force: true });
 }

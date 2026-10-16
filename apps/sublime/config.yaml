@@ -1,16 +1,16 @@
 ---
 libraries:
-    - name: movies
-      path: /movies
-      languages: [en]
+  - name: movies
+    path: /movies
+    languages: [en]
 
-    - name: tv
-      path: /tv
-      languages: [en]
+  - name: tv
+    path: /tv
+    languages: [en]
 
 providers:
-    chain: [whisper, opensubtitles, subdl]
-    whisper:
-        # Sidecar container in the same pod
-        endpoint: http://localhost:8081
-        worker_count: 1
+  chain: [whisper, opensubtitles, subdl]
+  whisper:
+    # Sidecar container in the same pod
+    endpoint: http://localhost:8081
+    worker_count: 1

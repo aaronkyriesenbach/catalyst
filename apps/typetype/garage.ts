@@ -1,11 +1,11 @@
 import type { ResourceLike } from "../../types";
 import {
-	buildFileConfigMap,
-	buildHeadlessService,
-	buildIscsiPvcTemplate,
-	buildStatefulSet,
-	image,
-	readFile,
+  buildFileConfigMap,
+  buildHeadlessService,
+  buildIscsiPvcTemplate,
+  buildStatefulSet,
+  image,
+  readFile,
 } from "../../utils";
 import { DOWNLOADER_S3_CREDENTIALS_SECRET, GARAGE_RPC_SECRET } from "./secrets";
 import { execCheck, readiness, startup } from "../../probes";
@@ -34,115 +34,112 @@ api_bind_addr = "[::]:3900"
 `;
 
 const garageConfigMap = buildFileConfigMap(configMapName, {
-	"garage.toml": garageToml,
+  "garage.toml": garageToml,
 });
 
 const provisionScriptName = "provision-garage.sh";
 const provisionConfigMapName = "typetype-garage-provision";
 
 const provisionConfigMap = buildFileConfigMap(provisionConfigMapName, {
-	[provisionScriptName]: await readFile(
-		`./${provisionScriptName}`,
-		import.meta.url,
-	),
+  [provisionScriptName]: await readFile(
+    `./${provisionScriptName}`,
+    import.meta.url,
+  ),
 });
 
 const garageEnv = [
-	{ name: "GARAGE_CONFIG_FILE", value: "/etc/garage/garage.toml" },
-	{
-		name: "GARAGE_RPC_SECRET",
-		valueFrom: { secretKeyRef: { name: GARAGE_RPC_SECRET, key: "secret" } },
-	},
+  { name: "GARAGE_CONFIG_FILE", value: "/etc/garage/garage.toml" },
+  {
+    name: "GARAGE_RPC_SECRET",
+    valueFrom: { secretKeyRef: { name: GARAGE_RPC_SECRET, key: "secret" } },
+  },
 ];
 
 const garageStatus = execCheck("/garage", "status");
 
 const garageStatefulSet = buildStatefulSet(
-	GARAGE_NAME,
-	{
-		containers: [
-			{
-				name: "garage",
-				image: image("garage"),
-				env: garageEnv,
-				ports: [{ name: "s3", containerPort: GARAGE_S3_PORT }],
-				readinessProbe: readiness(garageStatus),
-				startupProbe: startup(garageStatus, 120),
-				volumeMounts: [
-					{ name: "config", mountPath: "/etc/garage" },
-					{ name: "meta", mountPath: "/var/lib/garage/meta" },
-					{ name: "data", mountPath: "/var/lib/garage/data" },
-				],
-			},
-			{
-				name: "provision",
-				image: image("garage"),
-				command: ["/bin/sh", `/scripts/${provisionScriptName}`],
-				env: [
-					...garageEnv,
-					{ name: "GARAGE_BUCKET", value: GARAGE_BUCKET },
-					{ name: "GARAGE_KEY_NAME", value: GARAGE_KEY_NAME },
-					{
-						name: "DOWNLOADER_S3_ACCESS_KEY",
-						valueFrom: {
-							secretKeyRef: {
-								name: DOWNLOADER_S3_CREDENTIALS_SECRET,
-								key: "access_key",
-							},
-						},
-					},
-					{
-						name: "DOWNLOADER_S3_SECRET_KEY",
-						valueFrom: {
-							secretKeyRef: {
-								name: DOWNLOADER_S3_CREDENTIALS_SECRET,
-								key: "secret_key",
-							},
-						},
-					},
-				],
-				volumeMounts: [
-					{
-						name: "config",
-						mountPath: "/etc/garage",
-						readOnly: true,
-					},
-					{
-						name: "provision-script",
-						mountPath: "/scripts",
-						readOnly: true,
-					},
-				],
-			},
-		],
-		volumes: [
-			{ name: "config", configMap: { name: configMapName } },
-			{
-				name: "provision-script",
-				configMap: { name: provisionConfigMapName },
-			},
-		],
-		// FROM-scratch static binary: no /etc/passwd, so any UID/GID works.
-		securityContext: {
-			runAsNonRoot: true,
-			runAsUser: 1000,
-			runAsGroup: 1000,
-			fsGroup: 1000,
-		},
-	},
-	[
-		buildIscsiPvcTemplate("meta", "5Gi"),
-		buildIscsiPvcTemplate("data", "50Gi"),
-	],
+  GARAGE_NAME,
+  {
+    containers: [
+      {
+        name: "garage",
+        image: image("garage"),
+        env: garageEnv,
+        ports: [{ name: "s3", containerPort: GARAGE_S3_PORT }],
+        readinessProbe: readiness(garageStatus),
+        startupProbe: startup(garageStatus, 120),
+        volumeMounts: [
+          { name: "config", mountPath: "/etc/garage" },
+          { name: "meta", mountPath: "/var/lib/garage/meta" },
+          { name: "data", mountPath: "/var/lib/garage/data" },
+        ],
+      },
+      {
+        name: "provision",
+        image: image("garage"),
+        command: ["/bin/sh", `/scripts/${provisionScriptName}`],
+        env: [
+          ...garageEnv,
+          { name: "GARAGE_BUCKET", value: GARAGE_BUCKET },
+          { name: "GARAGE_KEY_NAME", value: GARAGE_KEY_NAME },
+          {
+            name: "DOWNLOADER_S3_ACCESS_KEY",
+            valueFrom: {
+              secretKeyRef: {
+                name: DOWNLOADER_S3_CREDENTIALS_SECRET,
+                key: "access_key",
+              },
+            },
+          },
+          {
+            name: "DOWNLOADER_S3_SECRET_KEY",
+            valueFrom: {
+              secretKeyRef: {
+                name: DOWNLOADER_S3_CREDENTIALS_SECRET,
+                key: "secret_key",
+              },
+            },
+          },
+        ],
+        volumeMounts: [
+          {
+            name: "config",
+            mountPath: "/etc/garage",
+            readOnly: true,
+          },
+          {
+            name: "provision-script",
+            mountPath: "/scripts",
+            readOnly: true,
+          },
+        ],
+      },
+    ],
+    volumes: [
+      { name: "config", configMap: { name: configMapName } },
+      {
+        name: "provision-script",
+        configMap: { name: provisionConfigMapName },
+      },
+    ],
+    // FROM-scratch static binary: no /etc/passwd, so any UID/GID works.
+    securityContext: {
+      runAsNonRoot: true,
+      runAsUser: 1000,
+      runAsGroup: 1000,
+      fsGroup: 1000,
+    },
+  },
+  [buildIscsiPvcTemplate("meta", "5Gi"), buildIscsiPvcTemplate("data", "50Gi")],
 );
 
 const garageService = buildHeadlessService(GARAGE_NAME, [
-	{ name: "s3", port: GARAGE_S3_PORT },
+  { name: "s3", port: GARAGE_S3_PORT },
 ]);
 
 export const garageResources: ResourceLike[] = [
-	garageConfigMap,
-	provisionConfigMap,
-	garageStatefulSet,
-	garageService,
+  garageConfigMap,
+  provisionConfigMap,
+  garageStatefulSet,
+  garageService,
 ];

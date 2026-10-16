@@ -1,129 +1,129 @@
 name: verify
 
 on:
-    pull_request:
-    push:
-        branches: [master]
+  pull_request:
+  push:
+    branches: [master]
 
 concurrency:
-    group: verify-${{ github.ref }}
-    cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  group: verify-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
-    contents: read
+  contents: read
 
 jobs:
-    verify:
-        name: verify
-        runs-on: ubuntu-latest
-        permissions:
-            contents: read
-            pull-requests: write
-        steps:
-            - name: Set render paths
-              run: |
-                  {
-                    echo "HEAD_RENDER_DIR=$RUNNER_TEMP/render-head"
-                    echo "BASE_RENDER_DIR=$RUNNER_TEMP/render-base"
-                    echo "HEAD_CHARTS_DIR=$RUNNER_TEMP/charts-head"
-                    echo "BASE_CHARTS_DIR=$RUNNER_TEMP/charts-base"
-                    echo "DIFF_DIR=$RUNNER_TEMP/diff"
-                  } >> "$GITHUB_ENV"
+  verify:
+    name: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Set render paths
+        run: |
+          {
+            echo "HEAD_RENDER_DIR=$RUNNER_TEMP/render-head"
+            echo "BASE_RENDER_DIR=$RUNNER_TEMP/render-base"
+            echo "HEAD_CHARTS_DIR=$RUNNER_TEMP/charts-head"
+            echo "BASE_CHARTS_DIR=$RUNNER_TEMP/charts-base"
+            echo "DIFF_DIR=$RUNNER_TEMP/diff"
+          } >> "$GITHUB_ENV"
 
-            - name: Checkout
-              uses: actions/checkout@v7.0.1
-              with:
-                  fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+        with:
+          fetch-depth: 0
 
-            - name: Setup Bun
-              uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
-              with:
-                  bun-version: 1.4.2
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: 1.4.2
 
-            - name: Install dependencies
-              run: bun install --frozen-lockfile
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
 
-            - name: Typecheck
-              run: bun run typecheck
+      - name: Typecheck
+        run: bun run typecheck
 
-            - name: Prettier
-              run: bunx prettier --check .
+      - name: Prettier
+        run: bunx prettier --check .
 
-            - name: Check versions
-              run: bun run check-versions
+      - name: Check versions
+        run: bun run check-versions
 
-            - name: Render all apps
-              run: bun run render-all "$HEAD_RENDER_DIR"
+      - name: Render all apps
+        run: bun run render-all "$HEAD_RENDER_DIR"
 
-            - name: Setup Helm
-              if: ${{ !cancelled() }}
-              uses: azure/setup-helm@9bc31f4ebc9c6b171d7bfbaa5d006ae7abdb4310 # v5.0.1
-              with:
-                  version: v4.3.0
+      - name: Setup Helm
+        if: ${{ !cancelled() }}
+        uses: azure/setup-helm@9bc31f4ebc9c6b171d7bfbaa5d006ae7abdb4310 # v5.0.1
+        with:
+          version: v4.3.0
 
-            # The PR checkout is the merge commit, so HEAD^1 is the current
-            # base tip; diffing it against HEAD shows what merging changes.
-            - name: Render base
-              if: ${{ !cancelled() && github.event_name == 'pull_request' }}
-              continue-on-error: true
-              run: |
-                  git worktree add --detach "$RUNNER_TEMP/base" HEAD^1
-                  cd "$RUNNER_TEMP/base"
-                  bun install --frozen-lockfile
-                  bun run "$GITHUB_WORKSPACE/scripts/render-all.ts" \
-                    "$BASE_RENDER_DIR"
+      # The PR checkout is the merge commit, so HEAD^1 is the current
+      # base tip; diffing it against HEAD shows what merging changes.
+      - name: Render base
+        if: ${{ !cancelled() && github.event_name == 'pull_request' }}
+        continue-on-error: true
+        run: |
+          git worktree add --detach "$RUNNER_TEMP/base" HEAD^1
+          cd "$RUNNER_TEMP/base"
+          bun install --frozen-lockfile
+          bun run "$GITHUB_WORKSPACE/scripts/render-all.ts" \
+            "$BASE_RENDER_DIR"
 
-            # continue-on-error keeps the PR comment posting; the last step fails.
-            - name: Render Helm charts (head)
-              id: charts-head
-              if: ${{ !cancelled() }}
-              continue-on-error: true
-              run: |
-                  bun run render-charts "$HEAD_CHARTS_DIR" ||
-                    bun run render-charts "$HEAD_CHARTS_DIR"
+      # continue-on-error keeps the PR comment posting; the last step fails.
+      - name: Render Helm charts (head)
+        id: charts-head
+        if: ${{ !cancelled() }}
+        continue-on-error: true
+        run: |
+          bun run render-charts "$HEAD_CHARTS_DIR" ||
+            bun run render-charts "$HEAD_CHARTS_DIR"
 
-            - name: Render Helm charts (base)
-              if: ${{ !cancelled() && github.event_name == 'pull_request' }}
-              continue-on-error: true
-              working-directory: ${{ runner.temp }}/base
-              run: |
-                  bun run "$GITHUB_WORKSPACE/scripts/render-charts.ts" \
-                    "$BASE_CHARTS_DIR"
+      - name: Render Helm charts (base)
+        if: ${{ !cancelled() && github.event_name == 'pull_request' }}
+        continue-on-error: true
+        working-directory: ${{ runner.temp }}/base
+        run: |
+          bun run "$GITHUB_WORKSPACE/scripts/render-charts.ts" \
+            "$BASE_CHARTS_DIR"
 
-            - name: Diff renders
-              if: ${{ !cancelled() && github.event_name == 'pull_request' }}
-              working-directory: ${{ runner.temp }}
-              run: |
-                  mkdir -p "$DIFF_DIR"
-                  # diff exits 1 when the trees differ (the expected case).
-                  diff -ruN render-base render-head \
-                    > "$DIFF_DIR/render.diff" || test $? -eq 1
-                  if [ -d charts-head ]; then
-                    diff -ruN charts-base charts-head \
-                      > "$DIFF_DIR/charts.diff" || test $? -eq 1
-                  fi
+      - name: Diff renders
+        if: ${{ !cancelled() && github.event_name == 'pull_request' }}
+        working-directory: ${{ runner.temp }}
+        run: |
+          mkdir -p "$DIFF_DIR"
+          # diff exits 1 when the trees differ (the expected case).
+          diff -ruN render-base render-head \
+            > "$DIFF_DIR/render.diff" || test $? -eq 1
+          if [ -d charts-head ]; then
+            diff -ruN charts-base charts-head \
+              > "$DIFF_DIR/charts.diff" || test $? -eq 1
+          fi
 
-            - name: Post render diff
-              if: ${{ !cancelled() && github.event_name == 'pull_request' }}
-              uses: actions/github-script@v9.0.0
-              with:
-                  script: |
-                      const run = require(
-                        "./.github/scripts/render-diff-comment.cjs",
-                      );
-                      await run({ github, context, core });
+      - name: Post render diff
+        if: ${{ !cancelled() && github.event_name == 'pull_request' }}
+        uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            const run = require(
+              "./.github/scripts/render-diff-comment.cjs",
+            );
+            await run({ github, context, core });
 
-            - name: Upload render diff
-              if: ${{ !cancelled() && github.event_name == 'pull_request' }}
-              uses: actions/upload-artifact@v7.0.2
-              with:
-                  name: render-diff
-                  path: ${{ runner.temp }}/diff
-                  if-no-files-found: ignore
+      - name: Upload render diff
+        if: ${{ !cancelled() && github.event_name == 'pull_request' }}
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: render-diff
+          path: ${{ runner.temp }}/diff
+          if-no-files-found: ignore
 
-            - name: Fail on Helm chart render errors
-              if: ${{ !cancelled() && steps.charts-head.outcome == 'failure' }}
-              run: |
-                  echo "::error::helm template failed for at least one app."
-                  echo "See the render diff comment or the render-charts logs."
-                  exit 1
+      - name: Fail on Helm chart render errors
+        if: ${{ !cancelled() && steps.charts-head.outcome == 'failure' }}
+        run: |
+          echo "::error::helm template failed for at least one app."
+          echo "See the render diff comment or the render-charts logs."
+          exit 1

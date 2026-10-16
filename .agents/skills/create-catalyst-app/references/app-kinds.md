@@ -21,27 +21,27 @@ import type { WorkloadApp } from "../types";
 import { image } from "../utils";
 
 const base: WorkloadApp = {
-	kind: "workload",
-	name: "my-app",
-	podSpec: {
-		containers: [
-			{
-				name: "main",
-				image: image("myApp"), // entry in versions.ts `images`
-				ports: [{ name: "http", containerPort: 8080 }],
-				env: [{ name: "CONFIG_VAR", value: "some-value" }],
-			},
-		],
-	},
-	webPort: 8080,
-	externallyAccessible: true,
+  kind: "workload",
+  name: "my-app",
+  podSpec: {
+    containers: [
+      {
+        name: "main",
+        image: image("myApp"), // entry in versions.ts `images`
+        ports: [{ name: "http", containerPort: 8080 }],
+        env: [{ name: "CONFIG_VAR", value: "some-value" }],
+      },
+    ],
+  },
+  webPort: 8080,
+  externallyAccessible: true,
 };
 
 export default applyModifiers(
-	base,
-	withIscsiVolumes({
-		main: [{ name: "data", mountPath: "/data", backup: true }],
-	}),
+  base,
+  withIscsiVolumes({
+    main: [{ name: "data", mountPath: "/data", backup: true }],
+  }),
 );
 ```
 
@@ -71,17 +71,17 @@ import type { StaticApp } from "../types";
 import { readYaml } from "../utils";
 
 const config: StaticApp = {
-	kind: "static",
-	name: "my-app",
-	// "myApp" is an entry in versions.ts `helmCharts`; the chart installs into
-	// the app's namespace (`namespace ?? name`) as a native ArgoCD Helm source.
-	helmReleases: [
-		{
-			chart: "myApp",
-			releaseName: "my-app",
-			values: await readYaml("./my-app/values.yaml", import.meta.url),
-		},
-	],
+  kind: "static",
+  name: "my-app",
+  // "myApp" is an entry in versions.ts `helmCharts`; the chart installs into
+  // the app's namespace (`namespace ?? name`) as a native ArgoCD Helm source.
+  helmReleases: [
+    {
+      chart: "myApp",
+      releaseName: "my-app",
+      values: await readYaml("./my-app/values.yaml", import.meta.url),
+    },
+  ],
 };
 
 export default config;

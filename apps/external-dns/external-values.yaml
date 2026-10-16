@@ -1,5 +1,5 @@
 provider:
-    name: cloudflare
+  name: cloudflare
 
 policy: sync
 txtOwnerId: external-dns-ext-cloudflare
@@ -8,13 +8,13 @@ domainFilters: ["lab53.net"]
 excludeDomains: ["int.lab53.net"]
 
 env:
-    - name: CF_API_TOKEN
-      valueFrom:
-          secretKeyRef:
-              name: cloudflare-api-token
-              key: api-token
+  - name: CF_API_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: cloudflare-api-token
+        key: api-token
 
 extraArgs:
-    cloudflare-proxied: true
-    gateway-name: traefik-external
-    gateway-namespace: traefik
+  cloudflare-proxied: true
+  gateway-name: traefik-external
+  gateway-namespace: traefik
