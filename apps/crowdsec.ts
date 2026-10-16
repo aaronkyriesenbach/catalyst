@@ -21,18 +21,46 @@ const profiles = Object.entries(wafProfiles);
 
 const alphanumeric = true;
 
+// One AWS secret per value: IfNotExists seeding skips the whole AWS secret once any property exists.
 // persist: Traefik's namespace needs the same bouncer key, so it lives in AWS instead of being generated per ExternalSecret.
 const keysSecret = buildGeneratedSecret(
 	crowdsecNamespace,
 	crowdsecKeysSecretName,
-	[
-		{ key: bouncerKeyName, length: 48, alphanumeric },
-		// The chart requires more than 64 and more than 48 characters respectively.
-		{ key: "csLapiSecret", length: 72, alphanumeric },
-		{ key: "registrationToken", length: 64, alphanumeric },
-	],
+	[{ key: bouncerKeyName, length: 48, alphanumeric }],
 	{ persist: true },
 );
+
+const lapiSecretName = "crowdsec-lapi-secret";
+const registrationTokenName = "crowdsec-registration-token";
+
+// The chart requires more than 64 and more than 48 characters respectively.
+const lapiSecrets = [
+	...buildGeneratedSecret(
+		crowdsecNamespace,
+		lapiSecretName,
+		[{ key: "csLapiSecret", length: 72, alphanumeric }],
+		{ persist: true },
+	),
+	...buildGeneratedSecret(
+		crowdsecNamespace,
+		registrationTokenName,
+		[{ key: "registrationToken", length: 64, alphanumeric }],
+		{ persist: true },
+	),
+];
+
+const chartKeys = buildAwsExternalSecret("crowdsec-lapi-keys", [
+	{
+		remoteKey: awsRemoteKey(crowdsecNamespace, lapiSecretName),
+		property: "csLapiSecret",
+		secretKey: "csLapiSecret",
+	},
+	{
+		remoteKey: awsRemoteKey(crowdsecNamespace, registrationTokenName),
+		property: "registrationToken",
+		secretKey: "registrationToken",
+	},
+]);
 
 const traefikBouncerKey = buildAwsExternalSecret(
 	bouncerKeySecretName,
@@ -67,7 +95,13 @@ const config: StaticApp = {
 	name: "crowdsec",
 	namespace: crowdsecNamespace,
 	project: Project.SYSTEM,
-	resources: [...keysSecret, traefikBouncerKey, ...appsecServices],
+	resources: [
+		...keysSecret,
+		...lapiSecrets,
+		chartKeys,
+		traefikBouncerKey,
+		...appsecServices,
+	],
 	helmReleases: [
 		{
 			chart: "crowdsec",
