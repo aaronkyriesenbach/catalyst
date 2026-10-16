@@ -13,9 +13,6 @@ const config: StaticApp = {
   kind: "static",
   name: "traefik",
   project: Project.SYSTEM,
-  // Remove once the chart has taken over from k3s's bundled Traefik; until then
-  // a sync would start a second Traefik next to the live one.
-  autoSync: false,
   helmReleases: [
     {
       chart: "traefik",
