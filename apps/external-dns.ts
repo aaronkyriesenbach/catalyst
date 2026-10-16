@@ -1,8 +1,23 @@
 import { Project } from "../constants";
 import type { StaticApp } from "../types";
-import { buildDeployment, image, readYaml } from "../utils";
+import {
+	awsRemoteKey,
+	buildAwsExternalSecret,
+	buildDeployment,
+	image,
+	readYaml,
+} from "../utils";
 
 const awsCredentialsSecretName = "aws-credentials";
+
+// Unused until external-dns-ext switches to the Cloudflare provider once the zone is active.
+const cloudflareTokenSecret = buildAwsExternalSecret("cloudflare-api-token", [
+	{
+		remoteKey: awsRemoteKey("external-dns", "cloudflare-api-token"),
+		property: "api-token",
+		secretKey: "api-token",
+	},
+]);
 
 const ddnsRoute53Deployment = buildDeployment(
 	"ddns-route53",
@@ -52,7 +67,7 @@ const config: StaticApp = {
 	kind: "static",
 	name: "external-dns",
 	project: Project.SYSTEM,
-	resources: [ddnsRoute53Deployment],
+	resources: [ddnsRoute53Deployment, cloudflareTokenSecret],
 	helmReleases: [
 		{
 			chart: "externalDns",

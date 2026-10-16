@@ -31,3 +31,8 @@ export const helmReleaseNamespaces: Record<string, string> = {
 	immich: "immich",
 	"pocket-id-operator": "pocket-id",
 };
+
+// Not secrets: the tunnel UUID is only usable by DNS records in this Cloudflare account.
+export const cloudflareZoneId = "6383809236b97157242971dbb4160888";
+export const cloudflareTunnelId = "50e30bc4-339f-4bba-a3ff-3c780467ecf8";
+export const cloudflareTunnelTarget = `${cloudflareTunnelId}.cfargotunnel.com`;

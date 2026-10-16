@@ -160,6 +160,11 @@ export const images = {
 		tag: "v4.4",
 		mirrored: true,
 	},
+	cloudflared: {
+		name: "docker.io/cloudflare/cloudflared",
+		tag: "2026.10.0",
+		mirrored: true,
+	},
 } as const satisfies Record<string, ImageEntry>;
 
 export const postgresImages = {

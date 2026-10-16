@@ -32,6 +32,16 @@ spec:
             exposedPort: 443
             expose:
               default: true
+            # Default 60s read timeout aborts large Immich uploads mid-stream.
+            transport:
+              respondingTimeouts:
+                readTimeout: 600s
+                idleTimeout: 600s
+            # cloudflared connects from a pod IP; trusting it keeps the
+            # real client IP in X-Forwarded-For.
+            forwardedHeaders:
+              trustedIPs:
+                - 10.42.0.0/16
           web:
             expose:
               default: false
