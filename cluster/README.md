@@ -28,33 +28,6 @@ Restart k3s after updating: `sudo systemctl restart k3s`
 
 When restarting a multi-node cluster, restart one server at a time and verify it rejoins before restarting the next. With only two servers, etcd has no quorum while one is down: the API server is unavailable until it rejoins (running workloads keep serving, but kube-vip loses its leases and the VIPs flap).
 
-## kube-vip
-
-kube-vip runs as a DaemonSet on control-plane nodes (`apps/kube-vip.ts`) and manages two VIPs via ARP:
-
-| VIP           | Address          | Purpose                                        |
-| ------------- | ---------------- | ---------------------------------------------- |
-| Control plane | `192.168.53.200` | Stable API server endpoint (port 6443)         |
-| Service       | `192.168.53.201` | Stable Traefik ingress endpoint (ports 80/443) |
-
-The service VIP is assigned to Traefik's LoadBalancer service via the `kube-vip.io/loadbalancerIPs` annotation in `apps/traefik/values.yaml`.
-
-Its resources are annotated `Prune=false,Delete=false`, so deleting the Application or its file never removes the VIP provider, and a rollout moves the VIPs one node at a time. Merge changes to it deliberately; Renovate bumps are PR-only.
-
-After kube-vip is running, update your kubeconfig server to `https://192.168.53.200:6443`.
-
-## Traefik
-
-The `traefik` ArgoCD app installs the official `traefik/traefik` chart into the `traefik` namespace, with values in `apps/traefik/values.yaml`:
-
-- Gateway API provider enabled; the chart's default Gateway is disabled (our own, with TLS, are in `apps/traefik/gateway.ts`)
-- Service LoadBalancer IP pinned to `192.168.53.201` via the kube-vip annotation
-- Ports 80 and 443 exposed, the legacy `web`/`websecure` entrypoints not
-- 2 replicas with soft pod anti-affinity and a PodDisruptionBudget (`minAvailable: 1`)
-- CrowdSec bouncer and OIDC plugins loaded (see `docs/waf.md`); the `crowdsec-bouncer-key` secret is mounted from the `traefik` namespace and created by the `crowdsec` app
-
-The chart also installs the Gateway API and Traefik CRDs. On a rebuilt cluster there is no ingress until Argo has synced `traefik`; reach the Argo UI with `kubectl -n argocd port-forward svc/argocd-server 8080:80` until then. Apps that define routes retry until the CRDs exist.
-
 ## ArgoCD
 
 ArgoCD is installed via Helm (not as a k3s server manifest):
