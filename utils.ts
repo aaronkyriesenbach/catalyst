@@ -44,6 +44,12 @@ import {
 } from "./apps/external-secrets";
 import { DOCKER_MIRROR_HOST, helmReleaseNamespaces } from "./constants";
 import { assertReadinessProbe } from "./probes";
+import {
+	buildWafMiddleware,
+	resolveWaf,
+	WAF_MIDDLEWARE_NAME,
+	type WafSetting,
+} from "./waf";
 import type {
 	AppConfig,
 	HelmRelease,
@@ -396,7 +402,20 @@ type RouteOptions = {
 	namespace?: string;
 	externallyAccessible?: boolean;
 	forwardAuth?: boolean;
+	/** Required for externally accessible routes. The `crowdsec-appsec` Middleware must exist in the route's namespace unless exempt. */
+	waf?: WafSetting;
 };
+
+function extensionRefFilter(middlewareName: string) {
+	return {
+		type: "ExtensionRef" as const,
+		extensionRef: {
+			group: "traefik.io",
+			kind: "Middleware",
+			name: middlewareName,
+		},
+	};
+}
 
 export function buildRoute(
 	name: string,
@@ -409,7 +428,17 @@ export function buildRoute(
 		namespace,
 		externallyAccessible,
 		forwardAuth,
+		waf,
 	} = options ?? {};
+
+	if (externallyAccessible && waf === undefined) {
+		throw new Error(
+			`Route '${name}' is externally accessible: pass waf options or an exemption reason`,
+		);
+	}
+
+	const wafEnabled =
+		resolveWaf(name, externallyAccessible, waf) !== undefined;
 	const hostname = appHostname(name, { subDomain, externallyAccessible });
 
 	const parentRefs = externallyAccessible
@@ -419,18 +448,11 @@ export function buildRoute(
 			]
 		: [{ name: "traefik-internal", namespace: "traefik" }];
 
-	const filters = forwardAuth
-		? [
-				{
-					type: "ExtensionRef" as const,
-					extensionRef: {
-						group: "traefik.io",
-						kind: "Middleware",
-						name: "oidc-auth",
-					},
-				},
-			]
-		: undefined;
+	// WAF first so attacks are rejected before the OIDC redirect.
+	const filters = [
+		...(wafEnabled ? [extensionRefFilter(WAF_MIDDLEWARE_NAME)] : []),
+		...(forwardAuth ? [extensionRefFilter("oidc-auth")] : []),
+	];
 
 	return new HTTPRoute({
 		metadata: {
@@ -442,7 +464,7 @@ export function buildRoute(
 			hostnames: [hostname],
 			rules: [
 				{
-					filters,
+					filters: filters.length > 0 ? filters : undefined,
 					backendRefs: [
 						{
 							name: serviceName ?? name,
@@ -718,9 +740,15 @@ function renderWorkload(config: WorkloadApp): string[] {
 		extraResources,
 	} = app;
 	const resources: string[] = [];
+	const waf = externallyAccessible ? (app.waf ?? {}) : app.waf;
+	const resolvedWaf = resolveWaf(name, externallyAccessible, app.waf);
 
 	if (extraResources) {
 		resources.push(...extraResources.map((r) => toYaml(r)));
+	}
+
+	if (resolvedWaf) {
+		resources.push(toYaml(buildWafMiddleware(resolvedWaf)));
 	}
 
 	resources.push(
@@ -756,6 +784,7 @@ function renderWorkload(config: WorkloadApp): string[] {
 				subDomain,
 				externallyAccessible,
 				forwardAuth,
+				waf,
 			});
 			resources.push(toYaml(route));
 		}

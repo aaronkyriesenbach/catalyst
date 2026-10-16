@@ -84,6 +84,11 @@ Services send push and email by POSTing `{title, body, type, tag}` to `<appriseU
 - External: `<name>.lab53.net` → gateways `traefik-external` + `traefik-internal`
 - Controlled by `externallyAccessible` flag. Override hostname with `subDomain`.
 - `forwardAuth: true` adds an `ExtensionRef` filter pointing to the `oidc-auth` Middleware.
+- Every externally accessible route is behind the WAF unless exempted with a reason (see Web application firewall). `buildRoute` throws for an external route without `waf`.
+
+### Web application firewall
+
+`externallyAccessible: true` apps are inspected by CrowdSec AppSec through the community Traefik bouncer plugin; see `docs/waf.md`. `renderWorkload` adds a `crowdsec-appsec` Middleware and a WAF `ExtensionRef` filter (before `oidc-auth`) automatically. Change it per app with `withWaf({ profile?, bodyLimit? })` (profiles `default` and `strict`, defined in `waf.ts`) or opt out with `withoutWaf("<reason>")`; the reason is mandatory. `StaticApp`s that call `buildRoute` directly must pass `waf` (Immich is exempt for large uploads). Profiles each need their own AppSec port, so `apps/crowdsec.ts` generates listeners and Services from the table in `waf.ts`. The plugin fails open on AppSec/LAPI errors and trusts pod/service/LAN CIDRs. The bouncer key lives in AWS (`lab53/cluster0/crowdsec/crowdsec-keys`) and is copied into `kube-system` for Traefik to mount; sync `crowdsec` before applying `cluster/traefik-config.yaml`, which pins the plugin version (Renovate ignores `cluster/`).
 
 ### Public access (Cloudflare Tunnel)
 
@@ -93,7 +98,7 @@ No inbound ports are open. `apps/cloudflared.ts` runs a locally-managed tunnel (
 - **Certificates**: the cert-manager issuers solve DNS-01 through Cloudflare.
 - **Secrets** (AWS Secrets Manager): `lab53/cluster0/cloudflared/tunnel-credentials` (raw `cloudflared tunnel create` JSON), `lab53/cluster0/external-dns/cloudflare-api-token` and `lab53/cluster0/cert-manager/cloudflare-api-token` (JSON property `api-token`, zone-scoped DNS edit tokens).
 - **Limits**: Cloudflare caps proxied request bodies at 100 MB on the Free plan, so large uploads (e.g. Immich videos) must go through the internal hostname on the LAN. Streaming large media through the proxy is restricted by Cloudflare's terms.
-- **Traefik** (`cluster/traefik-config.yaml`, applied by hand with `apply-cluster`) raises the `https` read/idle timeouts for long uploads and trusts pod IPs for forwarded headers.
+- **Traefik** (`cluster/traefik-config.yaml`, applied by hand with `apply-cluster`) raises the `https` read/idle timeouts for long uploads and trusts pod IPs for forwarded headers. It runs 2 replicas with soft pod anti-affinity and a PodDisruptionBudget (`minAvailable: 1`).
 
 ### Helm Charts
 
@@ -180,6 +185,7 @@ Some app files export named constants used by scripts and other modules:
 - `apps/cert-manager/internal-ca.ts` → `internalRootCaSecretName`
 - `apps/apprise.ts` → `appriseUrl`, `appriseNotifiers`
 - `apps/healthchecks.ts` → `healthchecksUrl`
+- `waf.ts` → `wafProfiles`, `resolveWaf`, `buildWafMiddleware`, crowdsec namespace and secret names
 - `apps/traefik/externalApps.config.ts` → `externalApps`, helper functions
 
 ## Agent skills

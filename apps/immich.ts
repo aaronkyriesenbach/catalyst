@@ -82,6 +82,9 @@ const postgresHeadlessService = buildHeadlessService("immich-postgres", [
 const route = buildRoute("immich", 2283, {
 	serviceName: "immich-server",
 	externallyAccessible: true,
+	waf: {
+		exempt: "Large uploads: AppSec buffers request bodies, and a cancelled upload is turned into a ban",
+	},
 });
 
 const config: StaticApp = {

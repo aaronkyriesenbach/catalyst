@@ -14,6 +14,7 @@ import {
 	postgresImage,
 } from "./utils";
 import type { PostgresMajor } from "./versions";
+import type { WafOptions } from "./waf";
 
 export type NasMountConfig = {
 	[containerName: string]: { mountPath: string; subPath?: string }[];
@@ -331,6 +332,14 @@ export function withOidcAuth(options?: OidcAuthOptions): WorkloadModifier {
 			extraResources: [...(app.extraResources ?? []), ...extraResources],
 		};
 	};
+}
+
+export function withWaf(options: WafOptions): WorkloadModifier {
+	return (app) => ({ ...app, waf: options });
+}
+
+export function withoutWaf(reason: string): WorkloadModifier {
+	return (app) => ({ ...app, waf: { exempt: reason } });
 }
 
 export type IscsiVolumeMount = {

@@ -6,6 +6,7 @@ import { Model } from "@kubernetes-models/base";
 import { IPodSpec } from "kubernetes-models/v1";
 import type { Project } from "./constants";
 import type { HelmChartKey } from "./versions";
+import type { WafSetting } from "./waf";
 
 export type ProjectSpec = IAppProject["spec"];
 
@@ -45,6 +46,8 @@ export type WorkloadApp = BaseApp & {
 	subDomain?: string;
 	externallyAccessible?: boolean;
 	forwardAuth?: boolean;
+	/** Externally accessible apps get the WAF by default; set this to pick a profile or exempt the app. */
+	waf?: WafSetting;
 	extraResources?: ResourceLike[];
 	strategy?: { type: "Recreate" | "RollingUpdate" };
 	/** Seconds a rollout may go without progress before Argo reports it Degraded. */
