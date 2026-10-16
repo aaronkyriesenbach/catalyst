@@ -10,7 +10,7 @@ import {
 import {
   bouncerKeyName,
   bouncerKeySecretName,
-  bouncerKeySecretNamespace,
+  bouncerKeySecretNamespaces,
   crowdsecKeysSecretName,
   crowdsecNamespace,
   wafAppsecServiceName,
@@ -62,16 +62,18 @@ const chartKeys = buildAwsExternalSecret("crowdsec-lapi-keys", [
   },
 ]);
 
-const traefikBouncerKey = buildAwsExternalSecret(
-  bouncerKeySecretName,
-  [
-    {
-      remoteKey: awsRemoteKey(crowdsecNamespace, crowdsecKeysSecretName),
-      property: bouncerKeyName,
-      secretKey: bouncerKeyName,
-    },
-  ],
-  { namespace: bouncerKeySecretNamespace },
+const traefikBouncerKeys = bouncerKeySecretNamespaces.map((namespace) =>
+  buildAwsExternalSecret(
+    bouncerKeySecretName,
+    [
+      {
+        remoteKey: awsRemoteKey(crowdsecNamespace, crowdsecKeysSecretName),
+        property: bouncerKeyName,
+        secretKey: bouncerKeyName,
+      },
+    ],
+    { namespace },
+  ),
 );
 
 // The chart only publishes port 7422, so each profile gets its own Service.
@@ -99,7 +101,7 @@ const config: StaticApp = {
     ...keysSecret,
     ...lapiSecrets,
     chartKeys,
-    traefikBouncerKey,
+    ...traefikBouncerKeys,
     ...appsecServices,
   ],
   helmReleases: [

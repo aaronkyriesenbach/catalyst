@@ -6,13 +6,14 @@ export const crowdsecKeysSecretName = "crowdsec-keys";
 export const bouncerKeyName = "BOUNCER_KEY_traefik";
 
 // The Middleware CRD has no secretKeyRef, so Traefik mounts the key and reads it from a file.
-export const bouncerKeySecretNamespace = "kube-system";
+// kube-system is the old k3s-bundled Traefik; drop it once that is gone.
+export const bouncerKeySecretNamespaces = ["traefik", "kube-system"];
 export const bouncerKeySecretName = "crowdsec-bouncer-key";
 export const bouncerKeyMountDir = "/etc/traefik/crowdsec";
 
 export const crowdsecLapiHost = `crowdsec-service.${crowdsecNamespace}.svc.cluster.local:8080`;
 
-// Must match `experimental.plugins.<name>` in cluster/traefik-config.yaml.
+// Must match `experimental.plugins.<name>` in apps/traefik/values.yaml.
 const BOUNCER_PLUGIN_NAME = "crowdsec-bouncer";
 
 export const WAF_MIDDLEWARE_NAME = "crowdsec-appsec";
