@@ -114,7 +114,7 @@
       "automerge": false
     },
     {
-      "description": "Denylist, never auto-merge: images and OCI charts.",
+      "description": "Denylist, never auto-merge: images and OCI charts. A kube-vip rollout moves the API and ingress VIPs.",
       "matchPackageNames": [
         "ghcr.io/immich-app/immich-charts/immich",
         "ghcr.io/immich-app/immich-server",
@@ -122,7 +122,8 @@
         "ghcr.io/pocket-id/pocket-id",
         "quay.io/jetstack/charts/cert-manager",
         "quay.io/jetstack/charts/trust-manager",
-        "ghcr.io/home-assistant/home-assistant"
+        "ghcr.io/home-assistant/home-assistant",
+        "ghcr.io/kube-vip/kube-vip"
       ],
       "automerge": false
     },
