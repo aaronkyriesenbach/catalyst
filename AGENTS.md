@@ -109,7 +109,6 @@ No inbound ports are open. `apps/cloudflared.ts` runs a locally-managed tunnel (
 - When several releases of one chart share a namespace, set `skipCrds: true` on all but one so a `crds/` directory is not rendered twice.
 - Use `ignoreDifferences` (typed from `@kubernetes-models/argo-cd`) for fields written at runtime by controllers. Apps with `helmReleases` also get `ServerSideApply=true` and `ServerSideDiff=true`.
 - `bun run render <app>` only shows CMP-rendered resources. Chart output is visible in ArgoCD (`argocd app manifests <app>`) or via `bun run render-chart <app>` (needs the `helm` CLI; an approximation of Argo's output).
-- Deleting a k3s `HelmChart` runs `helm uninstall` for its release, even after annotating it `helmcharts.helm.cattle.io/unmanaged=true` and clearing its finalizers (observed on k3s v1.34.6: it removed the CRDs and, with them, every custom resource). Back up CRDs and expect that when migrating a live `HelmChart` to `helmReleases`; removing the release's `sh.helm.release.v1.<name>.*` Secrets first, so Helm has nothing to uninstall, is untested. A bundled k3s chart is also recreated from `/var/lib/rancher/k3s/server/manifests` whenever k3s restarts on a node that does not `disable` it, so set `disable` on every server before restarting any of them. A Service that Helm or Argo deletes can hang in `Terminating` on the `service.kubernetes.io/load-balancer-cleanup` finalizer, because servicelb is disabled and kube-vip does not clear it; remove the finalizer by hand.
 
 ### Scripts and embedded files
 
