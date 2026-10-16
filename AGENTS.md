@@ -21,7 +21,7 @@ catalyst/
 │   ├── apply-cluster.ts # CLI: bun run apply-cluster <node> — copy manifests to k3s server over SSH
 │   └── sync-external-certs.ts
 ├── docs/                # Design docs (e.g., forward-auth.md)
-├── cluster/             # Bootstrap manifests: ArgoCD values, kube-vip, traefik config
+├── cluster/             # Bootstrap manifests: ArgoCD values, root app, kube-vip
 └── irsa.md              # IRSA setup docs (AWS OIDC, S3, IAM)
 ```
 
@@ -88,7 +88,7 @@ Services send push and email by POSTing `{title, body, type, tag}` to `<appriseU
 
 ### Web application firewall
 
-`externallyAccessible: true` apps are inspected by CrowdSec AppSec through the community Traefik bouncer plugin; see `docs/waf.md`. `renderWorkload` adds a `crowdsec-appsec` Middleware and a WAF `ExtensionRef` filter (before `oidc-auth`) automatically. Change it per app with `withWaf({ profile?, bodyLimit? })` (profiles `default` and `strict`, defined in `waf.ts`) or opt out with `withoutWaf("<reason>")`; the reason is mandatory. `StaticApp`s that call `buildRoute` directly must pass `waf` (Immich is exempt for large uploads). Profiles each need their own AppSec port, so `apps/crowdsec.ts` generates listeners and Services from the table in `waf.ts`. The plugin fails open on AppSec/LAPI errors and trusts pod/service/LAN CIDRs. The bouncer key lives in AWS (`lab53/cluster0/crowdsec/crowdsec-keys`) and is copied into `kube-system` for Traefik to mount; sync `crowdsec` before applying `cluster/traefik-config.yaml`, which pins the plugin version (Renovate ignores `cluster/`).
+`externallyAccessible: true` apps are inspected by CrowdSec AppSec through the community Traefik bouncer plugin; see `docs/waf.md`. `renderWorkload` adds a `crowdsec-appsec` Middleware and a WAF `ExtensionRef` filter (before `oidc-auth`) automatically. Change it per app with `withWaf({ profile?, bodyLimit? })` (profiles `default` and `strict`, defined in `waf.ts`) or opt out with `withoutWaf("<reason>")`; the reason is mandatory. `StaticApp`s that call `buildRoute` directly must pass `waf` (Immich is exempt for large uploads). Profiles each need their own AppSec port, so `apps/crowdsec.ts` generates listeners and Services from the table in `waf.ts`. The plugin fails open on AppSec/LAPI errors and trusts pod/service/LAN CIDRs. The bouncer key lives in AWS (`lab53/cluster0/crowdsec/crowdsec-keys`) and is copied into the `traefik` namespace for Traefik to mount (its pods wait in `ContainerCreating` until `crowdsec` has created that secret). The plugin version is pinned in `apps/traefik/values.yaml`, which Renovate does not track.
 
 ### Public access (Cloudflare Tunnel)
 
@@ -98,18 +98,18 @@ No inbound ports are open. `apps/cloudflared.ts` runs a locally-managed tunnel (
 - **Certificates**: the cert-manager issuers solve DNS-01 through Cloudflare.
 - **Secrets** (AWS Secrets Manager): `lab53/cluster0/cloudflared/tunnel-credentials` (raw `cloudflared tunnel create` JSON), `lab53/cluster0/external-dns/cloudflare-api-token` and `lab53/cluster0/cert-manager/cloudflare-api-token` (JSON property `api-token`, zone-scoped DNS edit tokens).
 - **Limits**: Cloudflare caps proxied request bodies at 100 MB on the Free plan, so large uploads (e.g. Immich videos) must go through the internal hostname on the LAN. Streaming large media through the proxy is restricted by Cloudflare's terms.
-- **Traefik** (`cluster/traefik-config.yaml`, applied by hand with `apply-cluster`) raises the `https` read/idle timeouts for long uploads and trusts pod IPs for forwarded headers. It runs 2 replicas with soft pod anti-affinity and a PodDisruptionBudget (`minAvailable: 1`).
+- **Traefik** is the official `traefik/traefik` chart in the `traefik` namespace, declared in `apps/traefik.ts` with values in `apps/traefik/values.yaml`; k3s's bundled Traefik is turned off with `disable: traefik` in `/etc/rancher/k3s/config.yaml`. The values raise the `https` read/idle timeouts for long uploads and trust pod IPs for forwarded headers. It runs 2 replicas with soft pod anti-affinity and a PodDisruptionBudget (`minAvailable: 1`), and the Service takes the kube-vip VIP `192.168.53.201`. The chart ships the Gateway API and Traefik CRDs, so deleting the Application would delete every Gateway, HTTPRoute and Middleware: use `argocd app delete --cascade=false`. Its image is not mirrored through `docker.int.lab53.net`, because that registry is served through Traefik and a restarted pod could not pull its own image.
 
 ### Helm Charts
 
-- Declare charts with `helmReleases: [{ chart, releaseName, values?, parameters?, skipCrds? }]` on the app. `buildApplication` turns each release into a native ArgoCD Helm source (multi-source Application), so chart resources are tracked by Argo with diffs in its UI. Helm is **not** in the CMP sidecar, and the k3s `HelmChart` CRD is not used for apps (only k3s's bundled `traefik`/`traefik-crd`).
+- Declare charts with `helmReleases: [{ chart, releaseName, values?, parameters?, skipCrds? }]` on the app. `buildApplication` turns each release into a native ArgoCD Helm source (multi-source Application), so chart resources are tracked by Argo with diffs in its UI. Helm is **not** in the CMP sidecar, and the k3s `HelmChart` CRD is not used for apps.
 - Chart repo/name/version live in `helmCharts` in `versions.ts` (`chart` is a `HelmChartKey`). Never write repo URLs or versions in `apps/*.ts`.
 - `releaseName` must equal the live Helm release name when adopting an existing install. Charts install into the app's destination namespace (`namespace ?? name`); adopted releases are pinned in `helmReleaseNamespaces` (`constants.ts`) so a namespace change fails the render.
 - Load values from a file with `await readYaml("./app/values.yaml", import.meta.url)`; `--set` equivalents go in `parameters`.
 - When several releases of one chart share a namespace, set `skipCrds: true` on all but one so a `crds/` directory is not rendered twice.
 - Use `ignoreDifferences` (typed from `@kubernetes-models/argo-cd`) for fields written at runtime by controllers. Apps with `helmReleases` also get `ServerSideApply=true` and `ServerSideDiff=true`.
 - `bun run render <app>` only shows CMP-rendered resources. Chart output is visible in ArgoCD (`argocd app manifests <app>`) or via `bun run render-chart <app>` (needs the `helm` CLI; an approximation of Argo's output).
-- Migrating a live `HelmChart` to `helmReleases` must not uninstall the release. Detach it first: annotate the `HelmChart` with `helmcharts.helm.cattle.io/unmanaged=true`, clear its finalizers, then delete it, and verify resource UIDs are unchanged. Deleting a `HelmChart` that still has the `wrangler.cattle.io/on-helm-chart-remove` finalizer runs `helm uninstall`.
+- Deleting a k3s `HelmChart` runs `helm uninstall` for its release, even after annotating it `helmcharts.helm.cattle.io/unmanaged=true` and clearing its finalizers (observed on k3s v1.34.6: it removed the CRDs and, with them, every custom resource). Back up CRDs and expect that when migrating a live `HelmChart` to `helmReleases`; removing the release's `sh.helm.release.v1.<name>.*` Secrets first, so Helm has nothing to uninstall, is untested. A bundled k3s chart is also recreated from `/var/lib/rancher/k3s/server/manifests` whenever k3s restarts on a node that does not `disable` it, so set `disable` on every server before restarting any of them. A Service that Helm or Argo deletes can hang in `Terminating` on the `service.kubernetes.io/load-balancer-cleanup` finalizer, because servicelb is disabled and kube-vip does not clear it; remove the finalizer by hand.
 
 ### Scripts and embedded files
 

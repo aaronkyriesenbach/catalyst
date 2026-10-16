@@ -77,14 +77,14 @@ Without middleware, only `<app>-oidc-credentials` is created (by the operator).
 
 - The pocket-id-operator must be installed (see `apps/pocket-id.ts`)
 - The External Secrets operator must be installed (see `apps/external-secrets.ts`) — only needed for middleware mode
-- The Traefik OIDC plugin must be declared in `cluster/traefik-config.yaml` — only needed for middleware mode
+- The Traefik OIDC plugin must be declared in `apps/traefik/values.yaml` — only needed for middleware mode
 
 ## Reference
 
-| Component                   | Location                      |
-| --------------------------- | ----------------------------- |
-| `withOidcAuth()` modifier   | `modifiers.ts`                |
-| `forwardAuth` type field    | `types.ts` (`WorkloadApp`)    |
-| `ExtensionRef` filter logic | `utils.ts` (`buildRoute()`)   |
-| Traefik plugin declaration  | `cluster/traefik-config.yaml` |
-| Pocket ID operator app      | `apps/pocket-id.ts`           |
+| Component                   | Location                    |
+| --------------------------- | --------------------------- |
+| `withOidcAuth()` modifier   | `modifiers.ts`              |
+| `forwardAuth` type field    | `types.ts` (`WorkloadApp`)  |
+| `ExtensionRef` filter logic | `utils.ts` (`buildRoute()`) |
+| Traefik plugin declaration  | `apps/traefik/values.yaml`  |
+| Pocket ID operator app      | `apps/pocket-id.ts`         |
