@@ -14,11 +14,41 @@ spec:
         providers:
           kubernetesGateway:
             enabled: true
+        deployment:
+          replicas: 2
+        podDisruptionBudget:
+          enabled: true
+          minAvailable: 1
+        # Soft: with two nodes a hard rule would leave a replica Pending whenever a node is down.
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchLabels:
+                      app.kubernetes.io/name: traefik
+                      app.kubernetes.io/instance: traefik-kube-system
+                  topologyKey: kubernetes.io/hostname
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
         experimental:
           plugins:
             traefik-oidc-auth:
               moduleName: github.com/sevensolutions/traefik-oidc-auth
               version: v0.19.0
+            # Renovate ignores cluster/, so bump this by hand.
+            crowdsec-bouncer:
+              moduleName: github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin
+              version: v1.7.1
+        # The Middleware CRD can't reference a secret, so the plugin reads the bouncer key from this mount.
+        # Created by the crowdsec app (ExternalSecret in kube-system); the pods stay ContainerCreating until it exists.
+        volumes:
+          - name: crowdsec-bouncer-key
+            mountPath: /etc/traefik/crowdsec
+            type: secret
         gateway:
           enabled: false # Disable the default gateway - we manage a gateway w/ TLS settings in the traefik namespace
         ports:

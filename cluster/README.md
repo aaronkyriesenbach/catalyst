@@ -57,6 +57,9 @@ Configures k3s's built-in Traefik deployment:
 - Disables Traefik's default Gateway (we define our own with TLS in the `traefik` namespace)
 - Pins the service LoadBalancer IP to `192.168.53.201` via kube-vip annotation
 - Exposes ports 80 and 443, disables the legacy `web`/`websecure` entrypoints
+- Runs 2 replicas with soft pod anti-affinity and a PodDisruptionBudget (`minAvailable: 1`)
+- Loads the CrowdSec bouncer plugin (see `docs/waf.md`) and mounts the `crowdsec-bouncer-key` secret from `kube-system`. **Sync the `crowdsec` ArgoCD app and confirm that secret exists before applying this file**, or the Traefik pods stay in `ContainerCreating` and ingress goes down.
+- Apply it to every server node, one at a time (`bun run apply-cluster <node>`), checking `kubectl -n kube-system rollout status deploy/traefik` between nodes.
 
 ## ArgoCD
 

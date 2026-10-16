@@ -516,9 +516,10 @@ type AwsExternalSecretEntry = {
 export function buildAwsExternalSecret(
 	name: string,
 	entries: AwsExternalSecretEntry[],
+	options?: { namespace?: string },
 ): ExternalSecret {
 	return new ExternalSecret({
-		metadata: { name },
+		metadata: { name, namespace: options?.namespace },
 		spec: {
 			refreshInterval: entries[0]?.refreshInterval ?? "1h",
 			secretStoreRef: AWS_STORE,

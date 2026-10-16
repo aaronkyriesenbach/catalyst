@@ -230,6 +230,12 @@ export const helmCharts = {
 		chart: "oci://ghcr.io/immich-app/immich-charts/immich",
 		version: "0.13.4",
 	},
+	crowdsec: {
+		kind: "repo",
+		repo: "https://crowdsecurity.github.io/helm-charts",
+		chart: "crowdsec",
+		version: "0.24.2",
+	},
 } as const satisfies Record<string, HelmChartEntry>;
 
 export type ImageKey = keyof typeof images;
