@@ -17,14 +17,16 @@ tls-san:
   - 192.168.53.200
 disable:
   - servicelb
+  - traefik
 ```
 
 - `tls-san` adds the kube-vip control plane VIP to the API server's TLS certificate
 - `disable: servicelb` removes k3s's built-in ServiceLB (Klipper) since kube-vip handles LoadBalancer services
+- `disable: traefik` removes k3s's bundled Traefik; the official chart is deployed by the `traefik` ArgoCD app instead (see [Traefik](#traefik)). Set it on **every** server before restarting any of them: a node that still has it enabled restages `traefik.yaml` on startup, and helm-controller then reinstalls (or uninstalls) the bundled chart over Argo's resources.
 
 Restart k3s after updating: `sudo systemctl restart k3s`
 
-When restarting a multi-node cluster, restart one server at a time and verify it rejoins before restarting the next.
+When restarting a multi-node cluster, restart one server at a time and verify it rejoins before restarting the next. With only two servers, etcd has no quorum while one is down: the API server is unavailable until it rejoins (running workloads keep serving, but kube-vip loses its leases and the VIPs flap).
 
 ## Server Manifests
 
@@ -34,7 +36,6 @@ Copy these files to `/var/lib/rancher/k3s/server/manifests/` on every server nod
 | ------------------------- | -------------------------------------------------------------------- |
 | `kube-vip-rbac.yaml`      | ServiceAccount and RBAC for the kube-vip DaemonSet                   |
 | `kube-vip-daemonset.yaml` | kube-vip in ARP mode, provides two floating VIPs across server nodes |
-| `traefik-config.yaml`     | HelmChartConfig overlay for the built-in Traefik deployment          |
 
 ### kube-vip
 
@@ -45,21 +46,21 @@ kube-vip runs as a DaemonSet on control-plane nodes and manages two VIPs via ARP
 | Control plane | `192.168.53.200` | Stable API server endpoint (port 6443)         |
 | Service       | `192.168.53.201` | Stable Traefik ingress endpoint (ports 80/443) |
 
-The service VIP is assigned to Traefik's LoadBalancer service via the `kube-vip.io/loadbalancerIPs` annotation in `traefik-config.yaml`.
+The service VIP is assigned to Traefik's LoadBalancer service via the `kube-vip.io/loadbalancerIPs` annotation in `apps/traefik/values.yaml`.
 
 After kube-vip is running, update your kubeconfig server to `https://192.168.53.200:6443`.
 
-### traefik-config.yaml
+### Traefik
 
-Configures k3s's built-in Traefik deployment:
+Traefik is not a server manifest. The `traefik` ArgoCD app installs the official `traefik/traefik` chart into the `traefik` namespace, with values in `apps/traefik/values.yaml`:
 
-- Enables the Gateway API provider (Kubernetes Gateway, not Ingress)
-- Disables Traefik's default Gateway (we define our own with TLS in the `traefik` namespace)
-- Pins the service LoadBalancer IP to `192.168.53.201` via kube-vip annotation
-- Exposes ports 80 and 443, disables the legacy `web`/`websecure` entrypoints
-- Runs 2 replicas with soft pod anti-affinity and a PodDisruptionBudget (`minAvailable: 1`)
-- Loads the CrowdSec bouncer plugin (see `docs/waf.md`) and mounts the `crowdsec-bouncer-key` secret from `kube-system`. **Sync the `crowdsec` ArgoCD app and confirm that secret exists before applying this file**, or the Traefik pods stay in `ContainerCreating` and ingress goes down.
-- Apply it to every server node, one at a time (`bun run apply-cluster <node>`), checking `kubectl -n kube-system rollout status deploy/traefik` between nodes.
+- Gateway API provider enabled; the chart's default Gateway is disabled (our own, with TLS, are in `apps/traefik/gateway.ts`)
+- Service LoadBalancer IP pinned to `192.168.53.201` via the kube-vip annotation
+- Ports 80 and 443 exposed, the legacy `web`/`websecure` entrypoints not
+- 2 replicas with soft pod anti-affinity and a PodDisruptionBudget (`minAvailable: 1`)
+- CrowdSec bouncer and OIDC plugins loaded (see `docs/waf.md`); the `crowdsec-bouncer-key` secret is mounted from the `traefik` namespace and created by the `crowdsec` app
+
+The chart also installs the Gateway API and Traefik CRDs. On a rebuilt cluster there is no ingress until Argo has synced `traefik`; reach the Argo UI with `kubectl -n argocd port-forward svc/argocd-server 8080:80` until then. Apps that define routes retry until the CRDs exist.
 
 ## ArgoCD
 
@@ -82,6 +83,6 @@ ArgoCD syncs apps defined in `apps/*.ts` from this repo. The CMP sidecar contain
 
 ## Adding a New Server Node
 
-1. Install k3s with the config above and `--server https://192.168.53.200:6443` (use the VIP)
-2. Copy all server manifests from this directory to `/var/lib/rancher/k3s/server/manifests/`
+1. Install k3s with the config above (including `disable: traefik`) and `--server https://192.168.53.200:6443` (use the VIP)
+2. Copy the kube-vip manifests from this directory to `/var/lib/rancher/k3s/server/manifests/`
 3. The node will join the etcd cluster and kube-vip will schedule a pod on it automatically

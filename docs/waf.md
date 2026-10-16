@@ -7,7 +7,7 @@ Externally accessible apps are inspected by the [CrowdSec AppSec component](http
 - `apps/crowdsec.ts` installs the CrowdSec chart: LAPI, plus the AppSec pod with one listener per profile. The agent (log parsing) is disabled.
 - `waf.ts` holds the profile table, constants and the `Middleware` builder. `apps/crowdsec.ts` generates the AppSec acquisitions, collections and per-profile Services from it.
 - `renderWorkload` adds a `crowdsec-appsec` `Middleware` to the app's namespace and a matching `ExtensionRef` filter to its `HTTPRoute` for every app with `externallyAccessible: true`. The WAF filter comes before `oidc-auth`.
-- The bouncer key is generated once into AWS (`lab53/cluster0/crowdsec/crowdsec-keys`) and pulled into two namespaces: `crowdsec` (for LAPI) and `kube-system` (`crowdsec-bouncer-key`, mounted into Traefik at `/etc/traefik/crowdsec`).
+- The bouncer key is generated once into AWS (`lab53/cluster0/crowdsec/crowdsec-keys`) and pulled into two namespaces: `crowdsec` (for LAPI) and `traefik` (`crowdsec-bouncer-key`, mounted into Traefik at `/etc/traefik/crowdsec`).
 
 ## Defaults and failure behaviour
 
@@ -56,5 +56,5 @@ kubectl -n crowdsec exec deploy/crowdsec-lapi -- cscli decisions delete --ip <ip
 ## Prerequisites and ordering
 
 - The `external-secrets` app must be installed.
-- Sync the `crowdsec` app and confirm the `crowdsec-bouncer-key` secret exists in `kube-system` before applying `cluster/traefik-config.yaml`. Traefik mounts it, so its pods stay in `ContainerCreating` without it.
-- The plugin version is pinned in `cluster/traefik-config.yaml`. Renovate ignores that directory, so bump it by hand.
+- Traefik mounts `crowdsec-bouncer-key` from its own namespace, so its pods stay in `ContainerCreating` until the `crowdsec` app has created that secret in `traefik`. On a rebuilt cluster they recover on their own once `crowdsec` syncs.
+- The plugin version is pinned in `apps/traefik/values.yaml`. Renovate does not track it, so bump it by hand.
