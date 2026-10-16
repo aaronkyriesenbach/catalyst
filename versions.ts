@@ -236,6 +236,12 @@ export const helmCharts = {
     chart: "crowdsec",
     version: "0.24.2",
   },
+  traefik: {
+    kind: "repo",
+    repo: "https://traefik.github.io/charts",
+    chart: "traefik",
+    version: "39.0.5",
+  },
 } as const satisfies Record<string, HelmChartEntry>;
 
 export type ImageKey = keyof typeof images;

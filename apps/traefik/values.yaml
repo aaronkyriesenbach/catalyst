@@ -1,0 +1,91 @@
+# Values for the official traefik/traefik chart (release `traefik`, namespace
+# `traefik`). The image is intentionally not mirrored through
+# docker.int.lab53.net: that registry is served through this Traefik, so a
+# restarted pod could not pull its own image.
+deployment:
+  replicas: 2
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8082"
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1
+priorityClassName: system-cluster-critical
+tolerations:
+  - key: CriticalAddonsOnly
+    operator: Exists
+  - key: node-role.kubernetes.io/control-plane
+    operator: Exists
+    effect: NoSchedule
+# Soft: with two nodes a hard rule would leave a replica Pending whenever a
+# node is down.
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        podAffinityTerm:
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: traefik
+              app.kubernetes.io/instance: traefik-traefik
+          topologyKey: kubernetes.io/hostname
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+service:
+  ipFamilyPolicy: PreferDualStack
+  annotations:
+    kube-vip.io/loadbalancerIPs: 192.168.53.201
+providers:
+  kubernetesGateway:
+    enabled: true
+  kubernetesIngress:
+    publishedService:
+      enabled: true
+experimental:
+  plugins:
+    traefik-oidc-auth:
+      moduleName: github.com/sevensolutions/traefik-oidc-auth
+      version: v0.19.0
+    crowdsec-bouncer:
+      moduleName: github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin
+      version: v1.7.1
+# The Middleware CRD can't reference a secret, so the plugin reads the bouncer
+# key from this mount. Created by the crowdsec app (ExternalSecret in this
+# namespace); the pods stay ContainerCreating until it exists.
+volumes:
+  - name: crowdsec-bouncer-key
+    mountPath: /etc/traefik/crowdsec
+    type: secret
+# The default gateway is off: apps/traefik/gateway.ts defines gateways with TLS
+# settings.
+gateway:
+  enabled: false
+ports:
+  http:
+    port: 80
+    exposedPort: 80
+    expose:
+      default: true
+  https:
+    port: 443
+    exposedPort: 443
+    expose:
+      default: true
+    # Default 60s read timeout aborts large Immich uploads mid-stream.
+    transport:
+      respondingTimeouts:
+        readTimeout: 600s
+        idleTimeout: 600s
+    # cloudflared connects from a pod IP; trusting it keeps the
+    # real client IP in X-Forwarded-For.
+    forwardedHeaders:
+      trustedIPs:
+        - 10.42.0.0/16
+  web:
+    expose:
+      default: false
+  websecure:
+    expose:
+      default: false
