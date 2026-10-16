@@ -18,7 +18,7 @@ catalyst/
 │   └── <app>/           # Some apps have subdirectories for values YAML or config files
 ├── scripts/
 │   ├── render.ts        # CLI: bun run render <app-name> → stdout YAML
-│   ├── apply-cluster.ts # CLI: bun run apply-cluster <node> — rsync manifests to k3s server
+│   ├── apply-cluster.ts # CLI: bun run apply-cluster <node> — copy manifests to k3s server over SSH
 │   └── sync-external-certs.ts
 ├── docs/                # Design docs (e.g., forward-auth.md)
 ├── cluster/             # Bootstrap manifests: ArgoCD values, kube-vip, traefik config
@@ -29,7 +29,7 @@ catalyst/
 
 ```bash
 bun run render <app-name>                    # Render single app to stdout YAML (verify changes)
-bun run apply-cluster <node> [--dry-run]     # Sync cluster/ manifests to k3s server via rsync+SSH
+bun run apply-cluster <node> [--dry-run]     # Sync cluster/ manifests to k3s server via SSH
 bun run sync-external-certs [--dry-run]      # Pull TLS certs from cluster via kubectl
 bun run typecheck                            # tsc --noEmit
 bun run render-all <outdir>                  # Render every app + project + enumerate-all into <outdir> (what CI runs)

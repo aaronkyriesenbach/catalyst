@@ -32,7 +32,7 @@ function parseArgs(args: string[]): Options {
 					"Usage: bun run apply-cluster <node> [--dry-run]",
 					"",
 					"Syncs cluster manifests to /var/lib/rancher/k3s/server/manifests/",
-					"on the specified k3s server node via rsync over SSH.",
+					"on the specified k3s server node over SSH.",
 					"",
 					"Options:",
 					"  --dry-run  Show what would change without applying",
@@ -60,37 +60,15 @@ function parseArgs(args: string[]): Options {
 	return { node, dryRun };
 }
 
-async function runCommand(command: string[]) {
-	const proc = Bun.spawn({
-		cmd: command,
-		stdout: "pipe",
-		stderr: "pipe",
-	});
-
-	const [stdout, stderr, exitCode] = await Promise.all([
-		new Response(proc.stdout).text(),
-		new Response(proc.stderr).text(),
-		proc.exited,
-	]);
-
-	if (exitCode !== 0) {
-		throw new Error(
-			[
-				`Command failed: ${command.join(" ")}`,
-				stderr.trim() || stdout.trim() || `exit code ${exitCode}`,
-			].join("\n"),
-		);
-	}
-
-	return stdout;
-}
-
 async function getManifestFiles(): Promise<string[]> {
 	const entries = await readdir(clusterDir);
 	return entries
 		.filter((entry) => entry.endsWith(".yaml") && !excludedFiles.has(entry))
 		.sort();
 }
+
+// ssh itself exits 255 on connection or host-key errors; a missing remote file exits 1 from `cat`.
+const SSH_FAILURE_EXIT_CODE = 255;
 
 async function getRemoteFileContent(
 	node: string,
@@ -102,13 +80,50 @@ async function getRemoteFileContent(
 		stderr: "pipe",
 	});
 
-	const [stdout, , exitCode] = await Promise.all([
+	const [stdout, stderr, exitCode] = await Promise.all([
 		new Response(proc.stdout).text(),
 		new Response(proc.stderr).text(),
 		proc.exited,
 	]);
 
+	if (exitCode === SSH_FAILURE_EXIT_CODE) {
+		throw new Error(`ssh ${node} failed: ${stderr.trim()}`);
+	}
+
 	return exitCode === 0 ? stdout : null;
+}
+
+// Written to a temp name first because k3s applies a manifest as soon as the file changes.
+async function writeRemoteFile(
+	node: string,
+	filePath: string,
+	content: string,
+): Promise<void> {
+	const tempPath = `${filePath}.tmp`;
+	const proc = Bun.spawn({
+		cmd: [
+			"ssh",
+			node,
+			`sudo tee '${tempPath}' >/dev/null && sudo mv '${tempPath}' '${filePath}'`,
+		],
+		stdin: "pipe",
+		stdout: "pipe",
+		stderr: "pipe",
+	});
+
+	proc.stdin.write(content);
+	proc.stdin.end();
+
+	const [stderr, exitCode] = await Promise.all([
+		new Response(proc.stderr).text(),
+		proc.exited,
+	]);
+
+	if (exitCode !== 0) {
+		throw new Error(
+			`Failed to write ${node}:${filePath}: ${stderr.trim() || `exit code ${exitCode}`}`,
+		);
+	}
 }
 
 async function computeDiff(
@@ -197,22 +212,27 @@ if (options.dryRun) {
 		console.log("\n[dry-run] No changes applied.");
 	}
 } else {
-	const localPaths = files.map((file) => join(clusterDir, file));
+	let updated = 0;
 
-	const output = await runCommand([
-		"rsync",
-		"-avc",
-		"--checksum",
-		"--rsync-path=sudo rsync",
-		...localPaths,
-		`${options.node}:${remotePath}/`,
-	]);
+	for (const file of files) {
+		const remoteFilePath = `${remotePath}/${file}`;
+		const localContent = await Bun.file(join(clusterDir, file)).text();
+		const remoteContent = await getRemoteFileContent(
+			options.node,
+			remoteFilePath,
+		);
 
-	if (output.trim()) {
-		console.log(output.trimEnd());
+		if (remoteContent === localContent) {
+			console.log(`  ${file} (unchanged)`);
+			continue;
+		}
+
+		await writeRemoteFile(options.node, remoteFilePath, localContent);
+		console.log(`${remoteContent === null ? "+" : "~"} ${file}`);
+		updated += 1;
 	}
 
 	console.log(
-		`\nSynced ${files.length} manifest(s) to ${options.node}:${remotePath}/`,
+		`\nSynced ${updated} of ${files.length} manifest(s) to ${options.node}:${remotePath}/`,
 	);
 }
