@@ -10,7 +10,6 @@
     "typecheck": "tsc --noEmit",
     "check-versions": "bun run scripts/check-versions.ts",
     "sync-external-certs": "bun run scripts/sync-external-certs.ts",
-    "apply-cluster": "bun run scripts/apply-cluster.ts",
     "install-argo": "helm upgrade --install -n argocd --create-namespace -f ./cluster/argocd-values.yaml --version 9.4.17 argocd argocd/argo-cd"
   },
   "dependencies": {

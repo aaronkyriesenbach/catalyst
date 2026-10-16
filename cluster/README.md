@@ -1,10 +1,10 @@
 # Cluster Setup
 
-This directory contains files that are applied outside of ArgoCD, either as k3s server manifests or via Helm.
+This directory contains only what bootstraps ArgoCD: its Helm values and the root Application, both applied by hand. Everything else, including kube-vip and Traefik, is an ArgoCD app defined under `apps/`.
 
 ## Prerequisites
 
-- 3 server nodes (all run control plane + workloads) for etcd quorum
+- Server nodes that all run control plane + workloads (currently 2). A 2-member etcd has no fault tolerance, so add a third server for a cluster that survives a node restart
 - Each node runs k3s with embedded etcd (`--cluster-init` on first server, `--server https://<first-server>:6443` on subsequent)
 
 ## k3s Server Config
@@ -28,18 +28,9 @@ Restart k3s after updating: `sudo systemctl restart k3s`
 
 When restarting a multi-node cluster, restart one server at a time and verify it rejoins before restarting the next. With only two servers, etcd has no quorum while one is down: the API server is unavailable until it rejoins (running workloads keep serving, but kube-vip loses its leases and the VIPs flap).
 
-## Server Manifests
+## kube-vip
 
-Copy these files to `/var/lib/rancher/k3s/server/manifests/` on every server node. k3s automatically applies manifests in this directory on startup.
-
-| File                      | Purpose                                                              |
-| ------------------------- | -------------------------------------------------------------------- |
-| `kube-vip-rbac.yaml`      | ServiceAccount and RBAC for the kube-vip DaemonSet                   |
-| `kube-vip-daemonset.yaml` | kube-vip in ARP mode, provides two floating VIPs across server nodes |
-
-### kube-vip
-
-kube-vip runs as a DaemonSet on control-plane nodes and manages two VIPs via ARP:
+kube-vip runs as a DaemonSet on control-plane nodes (`apps/kube-vip.ts`) and manages two VIPs via ARP:
 
 | VIP           | Address          | Purpose                                        |
 | ------------- | ---------------- | ---------------------------------------------- |
@@ -48,11 +39,13 @@ kube-vip runs as a DaemonSet on control-plane nodes and manages two VIPs via ARP
 
 The service VIP is assigned to Traefik's LoadBalancer service via the `kube-vip.io/loadbalancerIPs` annotation in `apps/traefik/values.yaml`.
 
+Its resources are annotated `Prune=false,Delete=false`, so deleting the Application or its file never removes the VIP provider, and a rollout moves the VIPs one node at a time. Merge changes to it deliberately; Renovate bumps are PR-only.
+
 After kube-vip is running, update your kubeconfig server to `https://192.168.53.200:6443`.
 
-### Traefik
+## Traefik
 
-Traefik is not a server manifest. The `traefik` ArgoCD app installs the official `traefik/traefik` chart into the `traefik` namespace, with values in `apps/traefik/values.yaml`:
+The `traefik` ArgoCD app installs the official `traefik/traefik` chart into the `traefik` namespace, with values in `apps/traefik/values.yaml`:
 
 - Gateway API provider enabled; the chart's default Gateway is disabled (our own, with TLS, are in `apps/traefik/gateway.ts`)
 - Service LoadBalancer IP pinned to `192.168.53.201` via the kube-vip annotation
@@ -77,12 +70,21 @@ bun run install-argo
 - `server.insecure: true` for TLS termination at the Gateway level
 - Resource exclusions to reduce watch event noise
 
-`catalyst-app.yaml` is the root Application that renders every AppProject and child Application. Apply it by hand with `kubectl apply -f cluster/catalyst-app.yaml`; it is not self-managed and `apply-cluster` skips it. It auto-syncs with `prune: true` and `selfHeal: true`, so removing an `apps/*.ts` file prunes that app's Application and, through its finalizer, the app's resources.
+`catalyst-app.yaml` is the root Application that renders every AppProject and child Application. Apply it by hand with `kubectl apply -f cluster/catalyst-app.yaml`; it is not self-managed. It auto-syncs with `prune: true` and `selfHeal: true`, so removing an `apps/*.ts` file prunes that app's Application and, through its finalizer, the app's resources.
 
 ArgoCD syncs apps defined in `apps/*.ts` from this repo. The CMP sidecar container (`oven/bun:1.3.11`) runs in the repo-server pod.
 
+## Bootstrapping a New Cluster
+
+The API VIP and ingress come from ArgoCD apps, so the order matters:
+
+1. Install k3s on the first server with the config above (`cluster-init: true`) and use its node IP for kubectl.
+2. Install ArgoCD and apply the root Application (see above).
+3. Wait for the `kube-vip` and `traefik` apps to sync. There is no API VIP, no `LoadBalancer` IP and no ingress until then; reach the Argo UI with `kubectl -n argocd port-forward svc/argocd-server 8080:80`.
+4. Join the other servers through the VIP (below).
+
 ## Adding a New Server Node
 
-1. Install k3s with the config above (including `disable: traefik`) and `--server https://192.168.53.200:6443` (use the VIP)
-2. Copy the kube-vip manifests from this directory to `/var/lib/rancher/k3s/server/manifests/`
-3. The node will join the etcd cluster and kube-vip will schedule a pod on it automatically
+1. Make sure the `kube-vip` app is synced and `192.168.53.200` answers on port 6443.
+2. Install k3s with the config above (including `disable: traefik`) and `--server https://192.168.53.200:6443` (use the VIP).
+3. The node joins the etcd cluster and kube-vip schedules a pod on it automatically. Nothing is copied to the node.
