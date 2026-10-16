@@ -1,27 +1,20 @@
 provider:
-    name: aws
+    name: cloudflare
 
 policy: sync
-txtOwnerId: external-dns-ext-route53
+txtOwnerId: external-dns-ext-cloudflare
 sources: ["gateway-httproute"]
 domainFilters: ["lab53.net"]
 excludeDomains: ["int.lab53.net"]
 
 env:
-    - name: AWS_DEFAULT_REGION
-      value: us-east-1
-    - name: AWS_ACCESS_KEY_ID
+    - name: CF_API_TOKEN
       valueFrom:
           secretKeyRef:
-              name: aws-credentials
-              key: access-key-id
-    - name: AWS_SECRET_ACCESS_KEY
-      valueFrom:
-          secretKeyRef:
-              name: aws-credentials
-              key: secret-access-key
+              name: cloudflare-api-token
+              key: api-token
 
 extraArgs:
-    aws-zone-type: public
+    cloudflare-proxied: true
     gateway-name: traefik-external
     gateway-namespace: traefik

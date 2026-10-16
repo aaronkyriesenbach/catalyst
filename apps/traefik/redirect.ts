@@ -4,7 +4,7 @@ export const httpRedirect = new HTTPRoute({
 	metadata: {
 		name: "http-redirect",
 		annotations: {
-			"external-dns.alpha.kubernetes.io/gateway-hostname-source":
+			"external-dns.kubernetes.io/gateway-hostname-source":
 				"defined-hosts-only",
 		},
 	},

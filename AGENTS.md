@@ -85,6 +85,16 @@ Services send push and email by POSTing `{title, body, type, tag}` to `<appriseU
 - Controlled by `externallyAccessible` flag. Override hostname with `subDomain`.
 - `forwardAuth: true` adds an `ExtensionRef` filter pointing to the `oidc-auth` Middleware.
 
+### Public access (Cloudflare Tunnel)
+
+No inbound ports are open. `apps/cloudflared.ts` runs a locally-managed tunnel (`cloudflareTunnelId` in `constants.ts`) whose `config.yml` forwards `*.lab53.net` to Traefik over HTTPS and answers 404 for `*.int.lab53.net`. Public DNS exists only for hostnames external-dns publishes, so internal names are never routable through it.
+
+- **DNS**: `lab53.net` is hosted at Cloudflare (registration stays at Route 53). `external-dns-ext` uses the Cloudflare provider with `--cloudflare-proxied`; the `external-dns.kubernetes.io/target` annotation on the `traefik-external` Gateway points every record at `<tunnel-id>.cfargotunnel.com`. Annotations must use the `external-dns.kubernetes.io/` prefix: external-dns ignores the old `alpha` prefix since v0.22, which silently turns records into A records for the Gateway's private IP.
+- **Certificates**: the cert-manager issuers solve DNS-01 through Cloudflare.
+- **Secrets** (AWS Secrets Manager): `lab53/cluster0/cloudflared/tunnel-credentials` (raw `cloudflared tunnel create` JSON), `lab53/cluster0/external-dns/cloudflare-api-token` and `lab53/cluster0/cert-manager/cloudflare-api-token` (JSON property `api-token`, zone-scoped DNS edit tokens).
+- **Limits**: Cloudflare caps proxied request bodies at 100 MB on the Free plan, so large uploads (e.g. Immich videos) must go through the internal hostname on the LAN. Streaming large media through the proxy is restricted by Cloudflare's terms.
+- **Traefik** (`cluster/traefik-config.yaml`, applied by hand with `apply-cluster`) raises the `https` read/idle timeouts for long uploads and trusts pod IPs for forwarded headers.
+
 ### Helm Charts
 
 - Declare charts with `helmReleases: [{ chart, releaseName, values?, parameters?, skipCrds? }]` on the app. `buildApplication` turns each release into a native ArgoCD Helm source (multi-source Application), so chart resources are tracked by Argo with diffs in its UI. Helm is **not** in the CMP sidecar, and the k3s `HelmChart` CRD is not used for apps (only k3s's bundled `traefik`/`traefik-crd`).
