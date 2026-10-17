@@ -408,7 +408,7 @@ type RouteOptions = {
   waf?: WafSetting;
 };
 
-function extensionRefFilter(middlewareName: string) {
+export function extensionRefFilter(middlewareName: string) {
   return {
     type: "ExtensionRef" as const,
     extensionRef: {

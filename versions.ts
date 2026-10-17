@@ -240,6 +240,11 @@ export const helmCharts = {
     chart: "crowdsec",
     version: "0.24.2",
   },
+  kyoo: {
+    kind: "oci",
+    chart: "oci://ghcr.io/zoriya/helm-charts/kyoo",
+    version: "5.2.1",
+  },
   traefik: {
     kind: "repo",
     repo: "https://traefik.github.io/charts",

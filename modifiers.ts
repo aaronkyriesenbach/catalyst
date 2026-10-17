@@ -195,7 +195,15 @@ const POCKET_ID_API_VERSION = "pocketid.internal/v1alpha1";
 const POCKET_ID_URL = "https://auth.lab53.net/";
 const DEFAULT_MIDDLEWARE_CALLBACK_PATH = "/oidc/callback";
 
-export function buildOidcClient(app: WorkloadApp): ResourceLike {
+export type OidcClientApp = Pick<
+  WorkloadApp,
+  "name" | "webPort" | "subDomain" | "externallyAccessible"
+>;
+
+export function buildOidcClient(
+  app: OidcClientApp,
+  callbackUrls?: string[],
+): ResourceLike {
   const credentialsSecretName = `${app.name}-oidc-credentials`;
 
   return {
@@ -205,6 +213,7 @@ export function buildOidcClient(app: WorkloadApp): ResourceLike {
     spec: {
       secret: { name: credentialsSecretName },
       allowedUserGroups: [{ name: app.name }],
+      ...(callbackUrls && { callbackUrls }),
       ...(app.webPort && {
         launchUrl: appUrl(app.name, {
           subDomain: app.subDomain,
@@ -215,7 +224,7 @@ export function buildOidcClient(app: WorkloadApp): ResourceLike {
   };
 }
 
-function buildOidcGroup(app: WorkloadApp): ResourceLike {
+export function buildOidcGroup(app: OidcClientApp): ResourceLike {
   return {
     apiVersion: POCKET_ID_API_VERSION,
     kind: "PocketIDUserGroup",

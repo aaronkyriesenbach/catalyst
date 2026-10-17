@@ -1,0 +1,64 @@
+---
+kyoo:
+  address: https://kyoo.int.lab53.net
+  # The scanner reaches the API through the cluster Traefik, which exchanges its
+  # API key for a JWT.
+  middlewareRootURL: https://kyoo.int.lab53.net
+  oidc_providers:
+    - name: pocketid
+      existingSecret: kyoo-oidc-credentials
+      clientIdKey: client_id
+      clientSecretKey: client_secret
+      logo: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons\
+        /webp/pocket-id.webp"
+      authorizationAddress: https://auth.lab53.net/authorize
+      tokenAddress: https://auth.lab53.net/api/oidc/token
+      profileAddress: https://auth.lab53.net/api/oidc/userinfo
+      scope: openid email profile
+      authMethod: ClientSecretPost
+  auth:
+    apikeys:
+      scanner:
+        existingSecret: kyoo-apikeys
+
+global:
+  postgres:
+    shared:
+      host: kyoo-postgres
+      databaseOverride: kyoo
+      userOverride: kyoo
+      passwordOverride: kyoo
+      sslmodeOverride: disable
+
+media:
+  volumes:
+    - name: media
+      nfs:
+        server: 192.168.53.120
+        path: /mnt/tank/data
+  volumeMounts:
+    - name: media
+      mountPath: /media/movies
+      subPath: movies
+      readOnly: true
+    - name: media
+      mountPath: /media/tv
+      subPath: tv
+      readOnly: true
+  baseMountPath: /media
+
+api:
+  persistence:
+    storageClass: truenas-iscsi
+auth:
+  # RWO profile-picture PVC: a surge pod on the other node can't attach it.
+  updateStrategy:
+    type: Recreate
+  persistence:
+    storageClass: truenas-iscsi
+transcoder:
+  persistence:
+    storageClass: truenas-iscsi
+
+traefikproxy:
+  enabled: false
