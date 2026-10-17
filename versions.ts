@@ -244,7 +244,7 @@ export const helmCharts = {
     kind: "repo",
     repo: "https://traefik.github.io/charts",
     chart: "traefik",
-    version: "39.0.5",
+    version: "39.0.9",
   },
 } as const satisfies Record<string, HelmChartEntry>;
 
