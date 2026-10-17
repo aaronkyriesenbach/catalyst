@@ -101,7 +101,7 @@ export const images = {
   },
   homeAssistant: {
     name: "ghcr.io/home-assistant/home-assistant",
-    tag: "2026.10.1",
+    tag: "2026.10.2",
   },
   dragonfly: {
     name: "docker.dragonflydb.io/dragonflydb/dragonfly",
