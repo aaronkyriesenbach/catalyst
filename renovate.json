@@ -2,7 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "description": [
     "Mend Renovate GitHub App config. Rules are evaluated top to bottom and later rules win.",
-    "Policy overview lives in AGENTS.md (Renovate section). Merging only updates git: every Argo Application is manual-sync, so a human still syncs."
+    "Policy overview lives in AGENTS.md (Renovate section). Merging updates git and Argo auto-syncs every Application, so no manual sync is needed."
   ],
   "extends": ["config:recommended"],
   "ignorePresets": [":semanticPrefixFixDepsChoreOthers"],
@@ -83,23 +83,8 @@
       "commitMessageTopic": "{{{depName}}}"
     },
     {
-      "description": "Auto-merge patches and digests for every dependency type; the verify check catches npm and render breakage.",
-      "matchUpdateTypes": ["patch", "digest"],
-      "automerge": true
-    },
-    {
-      "description": "Auto-merge minors for this allowlist of low-risk apps only.",
-      "matchUpdateTypes": ["minor"],
-      "matchPackageNames": [
-        "ghcr.io/navidrome/navidrome",
-        "docker.io/jellyfin/jellyfin",
-        "ghcr.io/ivan-malinovski/calino",
-        "ghcr.io/aaronkyriesenbach/forscoreviewer",
-        "docker.io/linuxserver/qbittorrent",
-        "docker.io/haugene/transmission-openvpn",
-        "docker.io/qmcgaw/gluetun",
-        "docker.io/curlimages/curl"
-      ],
+      "description": "Auto-merge patches, digests, and minors for every dependency type; the verify check catches npm and render breakage.",
+      "matchUpdateTypes": ["patch", "digest", "minor"],
       "automerge": true
     },
     {
@@ -109,28 +94,8 @@
       "addLabels": ["needs-review"]
     },
     {
-      "description": "Charts are PR-only for now. To enable chart auto-merge later, set automerge true here (optionally narrowing by matchPackageNames); the denylist rule below still applies and wins.",
-      "matchDepTypes": ["helm-chart"],
-      "automerge": false
-    },
-    {
-      "description": "Denylist, never auto-merge: images and OCI charts. A kube-vip rollout moves the API and ingress VIPs.",
-      "matchPackageNames": [
-        "ghcr.io/immich-app/immich-charts/immich",
-        "ghcr.io/immich-app/immich-server",
-        "ghcr.io/aclerici38/charts/pocket-id-operator",
-        "ghcr.io/pocket-id/pocket-id",
-        "quay.io/jetstack/charts/cert-manager",
-        "quay.io/jetstack/charts/trust-manager",
-        "ghcr.io/home-assistant/home-assistant",
-        "ghcr.io/kube-vip/kube-vip"
-      ],
-      "automerge": false
-    },
-    {
-      "description": "Denylist, never auto-merge: charts from classic chart repositories.",
-      "matchDatasources": ["helm"],
-      "matchPackageNames": ["external-secrets", "volsync"],
+      "description": "Denylist, never auto-merge (minors included): images and OCI charts. A kube-vip rollout moves the API and ingress VIPs.",
+      "matchPackageNames": ["ghcr.io/kube-vip/kube-vip"],
       "automerge": false
     },
     {

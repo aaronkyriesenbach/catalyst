@@ -152,18 +152,15 @@ Mend Renovate (GitHub App) opens PRs for images, charts and npm packages from `r
 - **Timing:** Docker Hub, Helm-repo and npm updates are created once a version is 7 days old (`minimumReleaseAge`). `ghcr.io`, `quay.io` and `docker.dragonflydb.io` expose no registry-provided release date, so a rule sets `minimumReleaseAgeBehaviour: timestamp-optional` and they skip the age check. Updates are only created in the weekly window (before 6am Saturday, America/New_York). The Dependency Dashboard issue is not schedule-bound.
 - **Verify:** `.github/workflows/verify.yml` (required check `verify`) runs typecheck, Prettier, `check-versions`, `render-all` and `render-charts` (`helm template` for every app with `helmReleases`, so a chart that rejects our values fails the check). On PRs it posts a sticky comment with the rendered-manifest and chart diff against the base, and a failure banner if a chart does not render.
 
-| Update                               | Behaviour                                                                     |
-| ------------------------------------ | ----------------------------------------------------------------------------- |
-| patch, digest                        | auto-merge (GitHub auto-merge once `verify` is green)                         |
-| minor on the allowlist               | auto-merge                                                                    |
-| any other minor                      | PR only                                                                       |
-| major                                | PR only, `needs-review` label                                                 |
-| Helm charts (`depType` `helm-chart`) | PR only                                                                       |
-| denylist                             | PR only, always                                                               |
-| disabled                             | no PR (`ddns-route53`, `whisper.cpp`, `immich-app/postgres`, Postgres majors) |
+| Update        | Behaviour                                                                     |
+| ------------- | ----------------------------------------------------------------------------- |
+| patch, digest | auto-merge (GitHub auto-merge once `verify` is green)                         |
+| minor         | auto-merge                                                                    |
+| major         | PR only, `needs-review` label                                                 |
+| denylist      | PR only, always                                                               |
+| disabled      | no PR (`ddns-route53`, `whisper.cpp`, `immich-app/postgres`, Postgres majors) |
 
-- **Where the lists live:** the minor allowlist and the denylist are `matchPackageNames` rules in `renovate.json`. Denylist: immich (chart + server image, grouped), pocket-id (operator chart + image), cert-manager and trust-manager charts, external-secrets, volsync, home-assistant, kube-vip. Groups: `immich`, `typetype`, `bun` (image + `bun-types`).
-- **Enable chart auto-merge later:** set `automerge` to `true` in the "Charts" rule (optionally narrow with `matchPackageNames`). The denylist rule comes later in the file and still wins.
+- **Where the lists live:** the denylist is a pair of `matchPackageNames` rules in `renovate.json`; every minor auto-merges unless it is on the denylist or a major, and charts follow the same rules as images. Denylist: immich (chart + server image, grouped), pocket-id (operator chart + image), cert-manager and trust-manager charts, external-secrets, volsync, home-assistant, kube-vip. Groups: `immich`, `typetype`, `bun` (image + `bun-types`).
 - **Vulnerability alerts** are disabled so security updates follow the same rules.
 - PR titles must stay within 80 characters; `commitMessageTopic` is `{{{depName}}}` to keep long OCI names short.
 
