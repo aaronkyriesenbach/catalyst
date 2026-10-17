@@ -92,15 +92,13 @@ jobs:
 
       - name: Diff renders
         if: ${{ !cancelled() && github.event_name == 'pull_request' }}
-        working-directory: ${{ runner.temp }}
         run: |
           mkdir -p "$DIFF_DIR"
-          # diff exits 1 when the trees differ (the expected case).
-          diff -ruN render-base render-head \
-            > "$DIFF_DIR/render.diff" || test $? -eq 1
-          if [ -d charts-head ]; then
-            diff -ruN charts-base charts-head \
-              > "$DIFF_DIR/charts.diff" || test $? -eq 1
+          bun run diff-renders "$BASE_RENDER_DIR" "$HEAD_RENDER_DIR" \
+            > "$DIFF_DIR/render.diff"
+          if [ -d "$HEAD_CHARTS_DIR" ]; then
+            bun run diff-renders "$BASE_CHARTS_DIR" "$HEAD_CHARTS_DIR" \
+              > "$DIFF_DIR/charts.diff"
           fi
 
       - name: Post render diff
