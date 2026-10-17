@@ -20,6 +20,7 @@ import { Deployment, StatefulSet } from "kubernetes-models/apps/v1";
 import type {
   IPersistentVolumeClaimSpec,
   IPersistentVolumeClaimTemplate,
+  IPodSecurityContext,
   IPodSpec,
   IServicePort,
 } from "kubernetes-models/v1";
@@ -707,6 +708,15 @@ function toYaml(value: unknown): string {
   return stringify(value, { blockQuote: "literal" });
 }
 
+const defaultSecurityContext: IPodSecurityContext = {
+  runAsNonRoot: true,
+  runAsUser: 1000,
+  runAsGroup: 1000,
+  fsGroup: 1000,
+  // Skips the recursive chown on every mount of a volume that is already correct.
+  fsGroupChangePolicy: "OnRootMismatch",
+};
+
 function renderWorkload(config: WorkloadApp): string[] {
   const app = config.podSpec.securityContext
     ? config
@@ -714,12 +724,7 @@ function renderWorkload(config: WorkloadApp): string[] {
         ...config,
         podSpec: {
           ...config.podSpec,
-          securityContext: {
-            runAsNonRoot: true,
-            runAsUser: 1000,
-            runAsGroup: 1000,
-            fsGroup: 1000,
-          },
+          securityContext: defaultSecurityContext,
         },
       };
 
