@@ -14,6 +14,9 @@ const opensubtitlesSecretName = `${name}-opensubtitles-credentials`;
 const subdlSecretName = `${name}-subdl-credentials`;
 
 const whisperPort = 8081;
+// whisper.cpp sizes its thread pool from the host's cores and ignores the cgroup
+// CPU quota, so the thread count and the CPU limit have to be set together.
+const whisperCpus = 2;
 const whisperModelFile = "ggml-large-v3-turbo-q5_0.bin";
 const whisperModelsVolume = "whisper-models";
 
@@ -110,7 +113,7 @@ const base: WorkloadApp = {
           "-m",
           `/models/${whisperModelFile}`,
           "-t",
-          "4",
+          String(whisperCpus),
           // Drops non-speech tokens such as [MUSIC].
           "--suppress-nst",
           // Returns an empty result instead of HTTP 500 for chunks with no speech.
@@ -120,10 +123,11 @@ const base: WorkloadApp = {
         startupProbe: startup(tcpCheck(whisperPort), 180),
         // Model is ~1 GiB resident plus ~14 MiB per minute of chunk audio, so the
         // limit is a hard cap with headroom rather than something to tune down;
-        // CPU can be throttled freely at the cost of speed.
+        // CPU can be throttled freely at the cost of speed. The cap keeps whisper
+        // from starving other workloads on the node.
         resources: {
           requests: { cpu: "1", memory: "1536Mi" },
-          limits: { cpu: "4", memory: "1536Mi" },
+          limits: { cpu: String(whisperCpus), memory: "1536Mi" },
         },
         volumeMounts: [
           {
