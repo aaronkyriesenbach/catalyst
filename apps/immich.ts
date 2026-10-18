@@ -7,6 +7,7 @@ import {
   buildRoute,
   buildStatefulSet,
   image,
+  mirrorRepository,
   readYaml,
 } from "../utils";
 import { postgresProbes } from "../probes";
@@ -108,6 +109,14 @@ const config: StaticApp = {
       chart: "immich",
       releaseName: "immich",
       values: await readYaml("./immich/values.yaml", import.meta.url),
+      parameters: {
+        "server.controllers.main.containers.main.image.repository":
+          mirrorRepository("ghcr.io/immich-app/immich-server"),
+        "machine-learning.controllers.main.containers.main.image.repository":
+          mirrorRepository("ghcr.io/immich-app/immich-machine-learning"),
+        "valkey.controllers.main.containers.main.image.repository":
+          mirrorRepository("docker.io/valkey/valkey"),
+      },
     },
   ],
 };

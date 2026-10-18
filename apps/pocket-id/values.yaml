@@ -1,6 +1,5 @@
 instance:
   spec:
-    image: ghcr.io/pocket-id/pocket-id:v2.18.0
     userManagement:
       allowUserSignups: "disabled"
     encryptionKey:

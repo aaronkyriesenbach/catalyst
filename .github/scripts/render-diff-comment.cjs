@@ -120,7 +120,7 @@ function chartFailureBanner(chartsDir) {
 
   return [
     "### Helm chart render failed\n",
-    "`helm template` fails with this change, so `verify` is red and it must not be merged.\n",
+    "`helm template` fails, or a chart renders an image that bypasses the zot mirror, so `verify` is red and it must not be merged.\n",
     `${details.join("\n")}${more}`,
   ].join("\n");
 }

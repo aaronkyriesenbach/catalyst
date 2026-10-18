@@ -122,6 +122,6 @@ jobs:
       - name: Fail on Helm chart render errors
         if: ${{ !cancelled() && steps.charts-head.outcome == 'failure' }}
         run: |
-          echo "::error::helm template failed for at least one app."
+          echo "::error::helm template or the mirrored-image check failed for at least one app."
           echo "See the render diff comment or the render-charts logs."
           exit 1

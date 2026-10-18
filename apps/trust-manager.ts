@@ -1,6 +1,7 @@
 import { Project } from "../constants";
 import { Bundle } from "@kubernetes-models/cert-manager/trust.cert-manager.io/v1alpha1";
 import type { StaticApp } from "../types";
+import { mirrorRepository } from "../utils";
 import { certManagerNamespace } from "./cert-manager";
 
 const internalRootCaBundle = new Bundle({
@@ -39,7 +40,18 @@ const config: StaticApp = {
   namespace: certManagerNamespace,
   project: Project.SYSTEM,
   resources: [internalRootCaBundle],
-  helmReleases: [{ chart: "trustManager", releaseName: "trust-manager" }],
+  helmReleases: [
+    {
+      chart: "trustManager",
+      releaseName: "trust-manager",
+      parameters: {
+        "image.repository": mirrorRepository("quay.io/jetstack/trust-manager"),
+        "defaultPackageImage.repository": mirrorRepository(
+          "quay.io/jetstack/trust-pkg-debian-trixie",
+        ),
+      },
+    },
+  ],
 };
 
 export default config;

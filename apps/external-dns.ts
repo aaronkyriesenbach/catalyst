@@ -1,6 +1,11 @@
 import { cloudflareZoneId, Project } from "../constants";
 import type { StaticApp } from "../types";
-import { awsRemoteKey, buildAwsExternalSecret, readYaml } from "../utils";
+import {
+  awsRemoteKey,
+  buildAwsExternalSecret,
+  mirrorRepository,
+  readYaml,
+} from "../utils";
 
 // Unused until external-dns-ext switches to the Cloudflare provider once the zone is active.
 const cloudflareTokenSecret = buildAwsExternalSecret("cloudflare-api-token", [
@@ -29,7 +34,12 @@ const config: StaticApp = {
       chart: "externalDns",
       releaseName: "external-dns-ext",
       skipCrds: true,
-      parameters: { "extraArgs.zone-id-filter": cloudflareZoneId },
+      parameters: {
+        "extraArgs.zone-id-filter": cloudflareZoneId,
+        "image.repository": mirrorRepository(
+          "registry.k8s.io/external-dns/external-dns",
+        ),
+      },
       values: await readYaml(
         "./external-dns/external-values.yaml",
         import.meta.url,

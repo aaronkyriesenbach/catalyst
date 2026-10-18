@@ -12,6 +12,41 @@ export const mirrorPrefixes: Record<ImageRegistry, string> = {
   "docker.dragonflydb.io": "dragonfly",
 };
 
+export type UnmirroredChartImage = {
+  release: string;
+  repository: string;
+  reason: string;
+};
+
+// Images zot's own startup depends on, so they must pull straight from upstream.
+export const unmirroredChartImages: readonly UnmirroredChartImage[] = [
+  {
+    release: "traefik",
+    repository: "docker.io/traefik",
+    reason: "Serves zot; a restarted pod could not pull its own image.",
+  },
+  {
+    release: "external-secrets",
+    repository: "ghcr.io/external-secrets/",
+    reason: "Creates the bouncer-key Secret Traefik's pods wait for.",
+  },
+  {
+    release: "cert-manager",
+    repository: "quay.io/jetstack/cert-manager-",
+    reason: "Issues and renews the gateway certificate zot is served with.",
+  },
+  {
+    release: "external-dns-int",
+    repository: "registry.k8s.io/external-dns/",
+    reason: "Publishes the zot.int.lab53.net DNS record in UniFi.",
+  },
+  {
+    release: "external-dns-int",
+    repository: "ghcr.io/home-operations/external-dns-unifi-webhook",
+    reason: "Publishes the zot.int.lab53.net DNS record in UniFi.",
+  },
+];
+
 export enum Project {
   SYSTEM = "system",
 }

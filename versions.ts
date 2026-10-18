@@ -39,12 +39,12 @@ export const images = {
   sublime: {
     name: "ghcr.io/aaronkyriesenbach/sublime",
     tag: "0.4.0",
-    mirrored: false,
+    mirrored: true,
   },
   whisperCpp: {
     name: "ghcr.io/ggml-org/whisper.cpp",
     tag: "main-c62adfbd1ecdaea9e295c72d672992514a2d887c",
-    mirrored: false,
+    mirrored: true,
   },
   curl: {
     name: "docker.io/curlimages/curl",
@@ -54,7 +54,7 @@ export const images = {
   linkwarden: {
     name: "ghcr.io/linkwarden/linkwarden",
     tag: "v2.16.3",
-    mirrored: false,
+    mirrored: true,
   },
   trilium: {
     name: "docker.io/triliumnext/trilium",
@@ -84,7 +84,7 @@ export const images = {
   navidrome: {
     name: "ghcr.io/navidrome/navidrome",
     tag: "0.64.2",
-    mirrored: false,
+    mirrored: true,
   },
   resticServer: {
     name: "docker.io/restic/rest-server",
@@ -94,7 +94,7 @@ export const images = {
   homeAssistant: {
     name: "ghcr.io/home-assistant/home-assistant",
     tag: "2026.10.2",
-    mirrored: false,
+    mirrored: true,
   },
   dragonfly: {
     name: "docker.dragonflydb.io/dragonflydb/dragonfly",
@@ -129,7 +129,7 @@ export const images = {
   immichPostgres: {
     name: "ghcr.io/immich-app/postgres",
     tag: "14-vectorchord0.4.3-pgvectors0.2.0",
-    mirrored: false,
+    mirrored: true,
   },
   gluetun: {
     name: "docker.io/qmcgaw/gluetun",
@@ -164,6 +164,11 @@ export const images = {
   cloudflared: {
     name: "docker.io/cloudflare/cloudflared",
     tag: "2026.10.0",
+    mirrored: true,
+  },
+  pocketId: {
+    name: "ghcr.io/pocket-id/pocket-id",
+    tag: "v2.18.0",
     mirrored: true,
   },
   kubeVip: {
