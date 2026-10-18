@@ -169,6 +169,10 @@ export const images = {
     name: "ghcr.io/kube-vip/kube-vip",
     tag: "v1.1.2",
   },
+  zot: {
+    name: "ghcr.io/project-zot/zot",
+    tag: "v2.1.22",
+  },
 } as const satisfies Record<string, ImageEntry>;
 
 export const postgresImages = {
