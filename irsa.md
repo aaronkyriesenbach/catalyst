@@ -622,19 +622,6 @@ env vars are removed — the webhook injects `AWS_ROLE_ARN` and
 > **Note**: The internal external-dns instance uses the Unifi webhook provider and
 > does not use AWS credentials. No changes needed for it.
 
-### 4.2 ddns-route53
-
-ddns-route53 uses `aws-sdk-go-v2` and calls `config.LoadDefaultConfig()`.
-Static credentials are only applied if explicitly provided — when omitted, the
-SDK falls back to the standard credential chain, which includes IRSA.
-
-Remove the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` env vars from the
-deployment in `apps/external-dns.ts`, and ensure the deployment's
-ServiceAccount is annotated with the IAM role ARN.
-
-ddns-route53 can share the same IAM role as external-dns since both need the same
-Route53 permissions, or it can have its own role for isolation.
-
 ### 4.3 cert-manager (Route53 DNS01 Solver)
 
 cert-manager supports IRSA natively via ambient credentials. When the cert-manager

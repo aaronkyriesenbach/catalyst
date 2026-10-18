@@ -129,7 +129,6 @@
     {
       "description": "Disabled: floating or compound tags Renovate cannot order, and Postgres majors (see docs/postgres-migration.md).",
       "matchPackageNames": [
-        "docker.io/crazymax/ddns-route53",
         "ghcr.io/ggml-org/whisper.cpp",
         "ghcr.io/immich-app/postgres"
       ],

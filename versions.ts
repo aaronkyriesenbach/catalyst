@@ -76,11 +76,6 @@ export const images = {
     tag: "3.8.3",
     mirrored: true,
   },
-  ddnsRoute53: {
-    name: "docker.io/crazymax/ddns-route53",
-    tag: "latest",
-    mirrored: true,
-  },
   bun: {
     name: "docker.io/oven/bun",
     tag: "1.4.3",
