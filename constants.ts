@@ -1,6 +1,16 @@
 import type { ProjectSpec } from "./types";
+import type { ImageRegistry } from "./versions";
 
-export const DOCKER_MIRROR_HOST = "zot.int.lab53.net/docker";
+export const MIRROR_HOST = "zot.int.lab53.net";
+
+// Must match the sync `destination` of each upstream in apps/zot/config.json.
+export const mirrorPrefixes: Record<ImageRegistry, string> = {
+  "docker.io": "docker",
+  "ghcr.io": "ghcr",
+  "quay.io": "quay",
+  "registry.k8s.io": "k8s",
+  "docker.dragonflydb.io": "dragonfly",
+};
 
 export enum Project {
   SYSTEM = "system",

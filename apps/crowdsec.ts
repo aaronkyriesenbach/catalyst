@@ -1,10 +1,11 @@
 import { Service } from "kubernetes-models/v1";
-import { DOCKER_MIRROR_HOST, Project } from "../constants";
+import { Project } from "../constants";
 import type { StaticApp } from "../types";
 import {
   awsRemoteKey,
   buildAwsExternalSecret,
   buildGeneratedSecret,
+  mirrorRepository,
   readYaml,
 } from "../utils";
 import {
@@ -109,7 +110,7 @@ const config: StaticApp = {
       values: {
         ...(await readYaml("./crowdsec/values.yaml", import.meta.url)),
         image: {
-          repository: `${DOCKER_MIRROR_HOST}/crowdsecurity/crowdsec`,
+          repository: mirrorRepository("docker.io/crowdsecurity/crowdsec"),
         },
         appsec: {
           enabled: true,

@@ -44,7 +44,11 @@ import {
   awsSecretStoreRef,
   clusterGeneratorRef,
 } from "./apps/external-secrets";
-import { DOCKER_MIRROR_HOST, helmReleaseNamespaces } from "./constants";
+import {
+  helmReleaseNamespaces,
+  MIRROR_HOST,
+  mirrorPrefixes,
+} from "./constants";
 import { assertReadinessProbe } from "./probes";
 import {
   buildWafMiddleware,
@@ -83,25 +87,20 @@ export async function readYaml(
   return parsed;
 }
 
-const DOCKER_HUB_PREFIX = "docker.io/";
-const DOCKER_HUB_LIBRARY_PREFIX = "library/";
+export function mirrorRepository(name: ImageEntry["name"]): string {
+  for (const [registry, prefix] of Object.entries(mirrorPrefixes)) {
+    if (name.startsWith(`${registry}/`)) {
+      return `${MIRROR_HOST}/${prefix}/${name.slice(registry.length + 1)}`;
+    }
+  }
+
+  throw new Error(`No mirror prefix for ${name}`);
+}
 
 function renderImage(entry: ImageEntry): string {
-  if (entry.mirrored === undefined) {
-    return `${entry.name}:${entry.tag}`;
-  }
+  const repository = entry.mirrored ? mirrorRepository(entry.name) : entry.name;
 
-  const path = entry.name.slice(DOCKER_HUB_PREFIX.length);
-
-  if (entry.mirrored) {
-    return `${DOCKER_MIRROR_HOST}/${path}:${entry.tag}`;
-  }
-
-  const unprefixed = path.startsWith(DOCKER_HUB_LIBRARY_PREFIX)
-    ? path.slice(DOCKER_HUB_LIBRARY_PREFIX.length)
-    : path;
-
-  return `${unprefixed}:${entry.tag}`;
+  return `${repository}:${entry.tag}`;
 }
 
 export function image(key: ImageKey): string {

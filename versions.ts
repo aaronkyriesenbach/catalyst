@@ -3,22 +3,19 @@
 // or introduce computed values, template strings or shared constants for
 // names and tags.
 
-export type NonHubRegistry = "ghcr.io" | "docker.dragonflydb.io";
+export type ImageRegistry =
+  | "docker.io"
+  | "ghcr.io"
+  | "quay.io"
+  | "registry.k8s.io"
+  | "docker.dragonflydb.io";
 
-type HubImage = {
-  readonly name: `docker.io/${string}/${string}`;
+export type ImageEntry = {
+  readonly name: `${ImageRegistry}/${string}`;
   readonly tag: string;
-  /** true: pulled via the zot.int.lab53.net/docker pull-through mirror */
+  /** true: pulled via the zot.int.lab53.net pull-through mirror */
   readonly mirrored: boolean;
 };
-
-type OtherImage = {
-  readonly name: `${NonHubRegistry}/${string}`;
-  readonly tag: string;
-  readonly mirrored?: never;
-};
-
-export type ImageEntry = HubImage | OtherImage;
 
 export type HelmChartEntry =
   | {
@@ -42,10 +39,12 @@ export const images = {
   sublime: {
     name: "ghcr.io/aaronkyriesenbach/sublime",
     tag: "0.4.0",
+    mirrored: false,
   },
   whisperCpp: {
     name: "ghcr.io/ggml-org/whisper.cpp",
     tag: "main-c62adfbd1ecdaea9e295c72d672992514a2d887c",
+    mirrored: false,
   },
   curl: {
     name: "docker.io/curlimages/curl",
@@ -55,6 +54,7 @@ export const images = {
   linkwarden: {
     name: "ghcr.io/linkwarden/linkwarden",
     tag: "v2.16.3",
+    mirrored: false,
   },
   trilium: {
     name: "docker.io/triliumnext/trilium",
@@ -64,6 +64,7 @@ export const images = {
   shakedown: {
     name: "ghcr.io/aaronkyriesenbach/shakedown",
     tag: "0.1.0",
+    mirrored: true,
   },
   jellyfin: {
     name: "docker.io/jellyfin/jellyfin",
@@ -80,11 +81,6 @@ export const images = {
     tag: "latest",
     mirrored: true,
   },
-  registry: {
-    name: "docker.io/library/registry",
-    tag: "3",
-    mirrored: false,
-  },
   bun: {
     name: "docker.io/oven/bun",
     tag: "1.4.3",
@@ -93,6 +89,7 @@ export const images = {
   navidrome: {
     name: "ghcr.io/navidrome/navidrome",
     tag: "0.64.2",
+    mirrored: false,
   },
   resticServer: {
     name: "docker.io/restic/rest-server",
@@ -102,10 +99,12 @@ export const images = {
   homeAssistant: {
     name: "ghcr.io/home-assistant/home-assistant",
     tag: "2026.10.2",
+    mirrored: false,
   },
   dragonfly: {
     name: "docker.dragonflydb.io/dragonflydb/dragonfly",
     tag: "v2.0.2",
+    mirrored: true,
   },
   garage: {
     name: "docker.io/dxflrs/garage",
@@ -115,22 +114,27 @@ export const images = {
   typetype: {
     name: "ghcr.io/typetype-video/typetype",
     tag: "1.9.0",
+    mirrored: true,
   },
   typetypeServer: {
     name: "ghcr.io/typetype-video/typetype-server",
     tag: "1.9.0",
+    mirrored: true,
   },
   typetypeDownloader: {
     name: "ghcr.io/typetype-video/typetype-downloader",
     tag: "1.9.0",
+    mirrored: true,
   },
   typetypeToken: {
     name: "ghcr.io/typetype-video/typetype-token",
     tag: "1.9.0",
+    mirrored: true,
   },
   immichPostgres: {
     name: "ghcr.io/immich-app/postgres",
     tag: "14-vectorchord0.4.3-pgvectors0.2.0",
+    mirrored: false,
   },
   gluetun: {
     name: "docker.io/qmcgaw/gluetun",
@@ -145,10 +149,12 @@ export const images = {
   calino: {
     name: "ghcr.io/ivan-malinovski/calino",
     tag: "0.39.1",
+    mirrored: true,
   },
   forscore: {
     name: "ghcr.io/aaronkyriesenbach/forscoreviewer",
     tag: "0.3.0",
+    mirrored: true,
   },
   apprise: {
     name: "docker.io/caronc/apprise",
@@ -168,10 +174,12 @@ export const images = {
   kubeVip: {
     name: "ghcr.io/kube-vip/kube-vip",
     tag: "v1.1.2",
+    mirrored: false,
   },
   zot: {
     name: "ghcr.io/project-zot/zot",
     tag: "v2.1.22",
+    mirrored: false,
   },
 } as const satisfies Record<string, ImageEntry>;
 
@@ -191,7 +199,7 @@ export const postgresImages = {
     tag: "18-alpine",
     mirrored: true,
   },
-} as const satisfies Record<number, HubImage>;
+} as const satisfies Record<number, ImageEntry>;
 
 export const helmCharts = {
   reloader: {
