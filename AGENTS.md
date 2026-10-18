@@ -96,7 +96,7 @@ No inbound ports are open. `apps/cloudflared.ts` runs a locally-managed tunnel (
 - **Certificates**: the cert-manager issuers solve DNS-01 through Cloudflare.
 - **Secrets** (AWS Secrets Manager): `lab53/cluster0/cloudflared/tunnel-credentials` (raw `cloudflared tunnel create` JSON), `lab53/cluster0/external-dns/cloudflare-api-token` and `lab53/cluster0/cert-manager/cloudflare-api-token` (JSON property `api-token`, zone-scoped DNS edit tokens).
 - **Limits**: Cloudflare caps proxied request bodies at 100 MB on the Free plan, so large uploads (e.g. Immich videos) must go through the internal hostname on the LAN. Streaming large media through the proxy is restricted by Cloudflare's terms.
-- **Traefik** is the official `traefik/traefik` chart in the `traefik` namespace, declared in `apps/traefik.ts` with values in `apps/traefik/values.yaml`; k3s's bundled Traefik is turned off with `disable: traefik` in `/etc/rancher/k3s/config.yaml`. The values raise the `https` read/idle timeouts for long uploads and trust pod IPs for forwarded headers. It runs 2 replicas with soft pod anti-affinity and a PodDisruptionBudget (`minAvailable: 1`), and the Service takes the kube-vip VIP `192.168.53.201`. The chart ships the Gateway API and Traefik CRDs, so deleting the Application would delete every Gateway, HTTPRoute and Middleware: use `argocd app delete --cascade=false`. Its image is not mirrored through `docker.int.lab53.net`, because that registry is served through Traefik and a restarted pod could not pull its own image.
+- **Traefik** is the official `traefik/traefik` chart in the `traefik` namespace, declared in `apps/traefik.ts` with values in `apps/traefik/values.yaml`; k3s's bundled Traefik is turned off with `disable: traefik` in `/etc/rancher/k3s/config.yaml`. The values raise the `https` read/idle timeouts for long uploads and trust pod IPs for forwarded headers. It runs 2 replicas with soft pod anti-affinity and a PodDisruptionBudget (`minAvailable: 1`), and the Service takes the kube-vip VIP `192.168.53.201`. The chart ships the Gateway API and Traefik CRDs, so deleting the Application would delete every Gateway, HTTPRoute and Middleware: use `argocd app delete --cascade=false`. Its image is not mirrored through `zot.int.lab53.net/docker`, because that registry is served through Traefik and a restarted pod could not pull its own image.
 
 ### Helm Charts
 
@@ -130,12 +130,12 @@ No inbound ports are open. `apps/cloudflared.ts` runs a locally-managed tunnel (
 ### Infrastructure
 
 - NAS: IP `192.168.53.120`, base path `/mnt/tank/data`. Hardcoded in `modifiers.ts` and `storage.ts`.
-- Private registry mirror: `docker.int.lab53.net`.
+- Private registry mirror: `zot.int.lab53.net/docker`.
 
 ### Image sources
 
 - Every container image and Helm chart version is declared in `versions.ts` (`images`, `postgresImages`, `helmCharts`) and consumed via `image(key)`, `postgresImage(major)` and `HelmRelease.chart` keys. Do not write image strings in `apps/*.ts`.
-- **Docker Hub images** (`docker.io/...`) are `mirrored: true` — rendered via `docker.int.lab53.net/<path>:<tag>` — except `registry`, which is the mirror itself and stays `mirrored: false`.
+- **Docker Hub images** (`docker.io/...`) are `mirrored: true` — rendered via `zot.int.lab53.net/docker/<path>:<tag>` (the zot app, `apps/zot.ts`) — except `registry`, the legacy `docker.int.lab53.net` mirror, which stays `mirrored: false`.
 - **All other registries** (ghcr.io, docker.dragonflydb.io) → no `mirrored` field; rendered with their actual source URL. Adding a registry means extending `NonHubRegistry` in `versions.ts`.
 - `versions.ts` is parsed by Renovate regexes: keep the exact field order and one-entry-per-object shape, then run `bun run check-versions` and `bun run typecheck`.
 - Exceptions: digest-pinned images (`apps/iso-archive.ts`) and images inside YAML files (`cluster/*.yaml`, `apps/*/values.yaml`).

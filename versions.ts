@@ -8,7 +8,7 @@ export type NonHubRegistry = "ghcr.io" | "docker.dragonflydb.io";
 type HubImage = {
   readonly name: `docker.io/${string}/${string}`;
   readonly tag: string;
-  /** true: pulled via the docker.int.lab53.net pull-through mirror */
+  /** true: pulled via the zot.int.lab53.net/docker pull-through mirror */
   readonly mirrored: boolean;
 };
 

@@ -1,6 +1,6 @@
 # Values for the official traefik/traefik chart (release `traefik`, namespace
 # `traefik`). The image is intentionally not mirrored through
-# docker.int.lab53.net: that registry is served through this Traefik, so a
+# zot.int.lab53.net: that registry is served through this Traefik, so a
 # restarted pod could not pull its own image.
 deployment:
   replicas: 2

@@ -269,7 +269,7 @@ working (or a one-time manual push).
   **append any future nodes** to the `nodes` array; each is probed/deployed
   independently. One cluster-wide API token (`Sys.Modify` on `/nodes`) covers all.
 - **Image pinning/mirror** — CronJobs use `oven/bun:1.2`; repoint to
-  `docker.int.lab53.net` and pin a patch version if desired.
+  `zot.int.lab53.net/docker` and pin a patch version if desired.
 - **Real-device validation** — dry-run each strategy against the live appliance
   before trusting it. The UniFi local API (`/api/userCertificates`) and the
   TrueNAS WS flow especially need a live test. The probe→compare logic makes the
