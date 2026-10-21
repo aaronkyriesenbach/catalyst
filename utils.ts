@@ -83,6 +83,25 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+/** Recursively merges Helm values; `override` wins and arrays are replaced, not concatenated. */
+export function mergeValues(
+  base: Record<string, unknown>,
+  override: Record<string, unknown>,
+): Record<string, unknown> {
+  const merged: Record<string, unknown> = { ...base };
+
+  for (const [key, value] of Object.entries(override)) {
+    const existing = merged[key];
+
+    merged[key] =
+      isRecord(existing) && isRecord(value)
+        ? mergeValues(existing, value)
+        : value;
+  }
+
+  return merged;
+}
+
 export async function readYaml(
   relativePath: string,
   base: string,

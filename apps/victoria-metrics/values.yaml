@@ -1,0 +1,159 @@
+fullnameOverride: vm
+
+# Cluster infra metrics reach VictoriaMetrics through the OTel Collector
+# (apps/otel-collector), not VMAgent, so this chart only deploys the stores and
+# the Prometheus-format exporters the collector scrapes.
+vmagent:
+  enabled: false
+
+# k3s runs these inside one process on localhost; they have no scrape target.
+kubeEtcd:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeControllerManager:
+  enabled: false
+kubeProxy:
+  enabled: false
+
+victoria-metrics-operator:
+  crds:
+    cleanup:
+      enabled: false
+  resources:
+    requests:
+      cpu: 25m
+      memory: 64Mi
+    limits:
+      memory: 256Mi
+
+vmsingle:
+  spec:
+    retentionPeriod: 90d
+    storage:
+      storageClassName: truenas-iscsi
+      resources:
+        requests:
+          storage: 25Gi
+    resources:
+      requests:
+        cpu: 100m
+        memory: 384Mi
+      limits:
+        memory: 1Gi
+    extraArgs:
+      # OTLP arrives from the collector; this keeps Prometheus metric names
+      # (counters regain `_total`) so the chart's dashboards and rules match.
+      opentelemetry.usePrometheusNaming: "true"
+      # Scope labels would add `scope_name` and `scope_version` to every series.
+      opentelemetry.promoteScopeMetadata: "false"
+
+vlsingle:
+  enabled: true
+  spec:
+    retentionPeriod: 30d
+    storage:
+      storageClassName: truenas-iscsi
+      resources:
+        requests:
+          storage: 20Gi
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+      limits:
+        memory: 512Mi
+
+vtsingle:
+  enabled: true
+  spec:
+    retentionPeriod: 7d
+    storage:
+      storageClassName: truenas-iscsi
+      resources:
+        requests:
+          storage: 5Gi
+    resources:
+      requests:
+        cpu: 25m
+        memory: 64Mi
+      limits:
+        memory: 256Mi
+
+vmalert:
+  spec:
+    resources:
+      requests:
+        cpu: 25m
+        memory: 64Mi
+      limits:
+        memory: 256Mi
+
+alertmanager:
+  spec:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 32Mi
+      limits:
+        memory: 128Mi
+
+kube-state-metrics:
+  resources:
+    requests:
+      cpu: 25m
+      memory: 64Mi
+    limits:
+      memory: 256Mi
+
+prometheus-node-exporter:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      memory: 64Mi
+
+# Capacity-planning rules (CPU/memory overcommit, CPUThrottlingHigh) fire
+# permanently on a two-node cluster and would page a phone.
+defaultRules:
+  groups:
+    kubernetes-resources:
+      enabled: false
+
+syncJob:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      memory: 256Mi
+
+grafana:
+  deploymentStrategy:
+    type: Recreate
+  persistence:
+    enabled: true
+    storageClassName: truenas-iscsi
+    size: 2Gi
+  # The chart's default securityContext already sets fsGroup 472.
+  initChownData:
+    enabled: false
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 512Mi
+  sidecar:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 32Mi
+      limits:
+        memory: 128Mi
+  # Rotated client secrets reach Grafana through env, so it must restart on change.
+  podAnnotations:
+    reloader.stakater.com/auto: "true"
+  plugins:
+    - victoriametrics-logs-datasource

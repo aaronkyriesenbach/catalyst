@@ -14,7 +14,11 @@ const configSecretName = `${name}-config`;
 export const appriseUrl = `http://${name}.${name}.svc:${port}`;
 
 // Simple stateful mode reads /config/<key>.yml, one file per notifying app.
-export const appriseNotifiers = ["external-cert-deployer", "healthchecks"];
+export const appriseNotifiers = [
+  "external-cert-deployer",
+  "healthchecks",
+  "victoria-metrics",
+];
 
 const pushoverSecret = awsRemoteKey(name, "pushover-credentials");
 const sesSecret = awsRemoteKey(name, "ses-credentials");

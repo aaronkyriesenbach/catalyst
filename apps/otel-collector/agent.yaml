@@ -1,0 +1,256 @@
+mode: daemonset
+fullnameOverride: otel-agent
+
+# Daemonset Services default to internalTrafficPolicy Local, so apps reach the
+# agent on their own node.
+service:
+  enabled: true
+
+presets:
+  logsCollection:
+    enabled: true
+    storeCheckpoints: true
+
+ports:
+  otlp:
+    enabled: true
+    hostPort: 0
+  otlp-http:
+    enabled: true
+    hostPort: 0
+  jaeger-compact:
+    enabled: false
+  jaeger-thrift:
+    enabled: false
+  jaeger-grpc:
+    enabled: false
+  zipkin:
+    enabled: false
+  metrics:
+    enabled: true
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    memory: 256Mi
+
+clusterRole:
+  create: true
+  rules:
+    - apiGroups: [""]
+      resources: [nodes, pods, namespaces]
+      verbs: [get, list, watch]
+    - apiGroups: [""]
+      resources: [nodes/metrics]
+      verbs: [get]
+    - apiGroups: [apps]
+      resources: [replicasets]
+      verbs: [get, list, watch]
+
+config:
+  extensions:
+    health_check:
+      endpoint: ${env:MY_POD_IP}:13133
+
+  receivers:
+    jaeger: null
+    zipkin: null
+    prometheus:
+      config:
+        scrape_configs:
+          # The four kubelet jobs mirror the chart's VMNodeScrape objects so its
+          # dashboards and rules find `job="kubelet"` and `metrics_path`.
+          - job_name: kubelet
+            scrape_interval: 30s
+            scrape_timeout: 10s
+            scheme: https
+            metrics_path: /metrics
+            honor_labels: true
+            authorization:
+              credentials_file: "/var/run/secrets/kubernetes.io/\
+                serviceaccount/token"
+            tls_config:
+              insecure_skip_verify: true
+            kubernetes_sd_configs:
+              - role: node
+                selectors:
+                  - role: node
+                    field: metadata.name=${env:OTEL_K8S_NODE_NAME}
+            relabel_configs:
+              - source_labels: [__metrics_path__]
+                target_label: metrics_path
+              - source_labels: [__meta_kubernetes_node_name]
+                target_label: node
+              - target_label: job
+                replacement: kubelet
+            metric_relabel_configs:
+              - action: labeldrop
+                regex: uid|id|name
+              # k3s serves the whole control plane from one process, so the
+              # kubelet endpoint repeats the apiserver and etcd histograms.
+              - action: drop
+                source_labels: [__name__]
+                regex: apiserver_.*|etcd_.*|rest_client_request_duration_.*
+          - job_name: kubelet-cadvisor
+            scrape_interval: 30s
+            scrape_timeout: 10s
+            scheme: https
+            metrics_path: /metrics/cadvisor
+            honor_labels: true
+            honor_timestamps: false
+            authorization:
+              credentials_file: "/var/run/secrets/kubernetes.io/\
+                serviceaccount/token"
+            tls_config:
+              insecure_skip_verify: true
+            kubernetes_sd_configs:
+              - role: node
+                selectors:
+                  - role: node
+                    field: metadata.name=${env:OTEL_K8S_NODE_NAME}
+            relabel_configs:
+              - source_labels: [__metrics_path__]
+                target_label: metrics_path
+              - source_labels: [__meta_kubernetes_node_name]
+                target_label: node
+              - target_label: job
+                replacement: kubelet
+            metric_relabel_configs:
+              - action: labeldrop
+                regex: uid|id|name
+          - job_name: kubelet-resource
+            scrape_interval: 30s
+            scrape_timeout: 10s
+            scheme: https
+            metrics_path: /metrics/resource
+            honor_labels: true
+            authorization:
+              credentials_file: "/var/run/secrets/kubernetes.io/\
+                serviceaccount/token"
+            tls_config:
+              insecure_skip_verify: true
+            kubernetes_sd_configs:
+              - role: node
+                selectors:
+                  - role: node
+                    field: metadata.name=${env:OTEL_K8S_NODE_NAME}
+            relabel_configs:
+              - source_labels: [__metrics_path__]
+                target_label: metrics_path
+              - source_labels: [__meta_kubernetes_node_name]
+                target_label: node
+              - target_label: job
+                replacement: kubelet
+          - job_name: kubelet-probes
+            scrape_interval: 30s
+            scrape_timeout: 10s
+            scheme: https
+            metrics_path: /metrics/probes
+            honor_labels: true
+            authorization:
+              credentials_file: "/var/run/secrets/kubernetes.io/\
+                serviceaccount/token"
+            tls_config:
+              insecure_skip_verify: true
+            kubernetes_sd_configs:
+              - role: node
+                selectors:
+                  - role: node
+                    field: metadata.name=${env:OTEL_K8S_NODE_NAME}
+            relabel_configs:
+              - source_labels: [__metrics_path__]
+                target_label: metrics_path
+              - source_labels: [__meta_kubernetes_node_name]
+                target_label: node
+              - target_label: job
+                replacement: kubelet
+          # node-exporter runs with hostNetwork, so its pod IP is the node IP.
+          - job_name: node-exporter
+            scrape_interval: 30s
+            kubernetes_sd_configs:
+              - role: pod
+                namespaces:
+                  names: [monitoring]
+                selectors:
+                  - role: pod
+                    label: app.kubernetes.io/name=prometheus-node-exporter
+                    field: spec.nodeName=${env:OTEL_K8S_NODE_NAME}
+            relabel_configs:
+              - action: keep
+                source_labels: [__meta_kubernetes_pod_container_port_name]
+                regex: metrics
+              - source_labels: [__meta_kubernetes_pod_node_name]
+                target_label: node
+            metric_relabel_configs:
+              - action: drop
+                source_labels: [mountpoint]
+                regex: /var/lib/kubelet/pods.+
+          - job_name: otel-collector
+            scrape_interval: 30s
+            static_configs:
+              - targets:
+                  - ${env:MY_POD_IP}:8888
+
+  processors:
+    # Scraped metrics arrive as service.name/service.instance.id; the Prometheus
+    # dashboards select on `job` and `instance`, and the other attributes would
+    # become extra labels.
+    transform/prom-labels:
+      metric_statements:
+        - context: resource
+          statements:
+            - set(attributes["job"], attributes["service.name"])
+            - set(attributes["instance"], attributes["service.instance.id"])
+            - delete_key(attributes, "service.name")
+            - delete_key(attributes, "service.instance.id")
+            - delete_key(attributes, "server.port")
+            - delete_key(attributes, "url.scheme")
+            - delete_key(attributes, "net.host.port")
+            - delete_key(attributes, "http.scheme")
+    k8sattributes:
+      filter:
+        node_from_env_var: OTEL_K8S_NODE_NAME
+      pod_association:
+        - sources:
+            - from: resource_attribute
+              name: k8s.pod.uid
+        - sources:
+            - from: connection
+      extract:
+        metadata:
+          - k8s.node.name
+          - k8s.deployment.name
+          - k8s.statefulset.name
+          - k8s.daemonset.name
+          - k8s.cronjob.name
+          - k8s.job.name
+
+  exporters:
+    debug: null
+    otlp:
+      endpoint: otel-gateway.monitoring.svc:4317
+      tls:
+        insecure: true
+
+  service:
+    extensions:
+      - health_check
+    pipelines:
+      traces:
+        receivers: [otlp]
+        processors: [memory_limiter, batch]
+        exporters: [otlp]
+      metrics:
+        receivers: [otlp]
+        processors: [memory_limiter, batch]
+        exporters: [otlp]
+      metrics/prometheus:
+        receivers: [prometheus]
+        processors: [memory_limiter, transform/prom-labels, batch]
+        exporters: [otlp]
+      logs:
+        receivers: [otlp]
+        processors: [memory_limiter, k8sattributes, batch]
+        exporters: [otlp]

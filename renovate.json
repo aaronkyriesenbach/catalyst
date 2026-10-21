@@ -99,6 +99,11 @@
       "automerge": false
     },
     {
+      "description": "Denylist, never auto-merge: a chart bump can upgrade the VictoriaMetrics operator and its CRDs, which need a manual look.",
+      "matchPackageNames": ["victoria-metrics-k8s-stack"],
+      "automerge": false
+    },
+    {
       "description": "immich chart and server image move together.",
       "matchPackageNames": [
         "ghcr.io/immich-app/immich-charts/immich",

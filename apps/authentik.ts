@@ -45,7 +45,11 @@ function collectOidcApps(configs: readonly AppConfig[]): DeclaredApp[] {
       {
         name: config.name,
         namespace: appNamespace(config),
-        url: appUrl(config.name, config),
+        url: appUrl(config.name, {
+          subDomain: config.subDomain,
+          externallyAccessible:
+            config.kind === "workload" ? config.externallyAccessible : false,
+        }),
         oidc: config.oidc,
       },
     ];

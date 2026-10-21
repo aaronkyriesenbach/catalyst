@@ -56,15 +56,17 @@ type BaseApp = {
   autoSync?: boolean;
   /** Apply with ServerSideApply, required for resources too large for the last-applied annotation (CRDs). Helm apps always use it. */
   serverSideApply?: boolean;
+  /** Hostname label; defaults to `name`. Used for the OIDC client's URL. */
+  subDomain?: string;
+  /** Declares the authentik group, provider and application for this app. */
+  oidc?: OidcDeclaration;
 };
 
 export type WorkloadApp = BaseApp & {
   kind: "workload";
   podSpec: IPodSpec;
   webPort?: number;
-  subDomain?: string;
   externallyAccessible?: boolean;
-  oidc?: OidcDeclaration;
   /** Externally accessible apps get the WAF by default; set this to pick a profile or exempt the app. */
   waf?: WafSetting;
   extraResources?: ResourceLike[];

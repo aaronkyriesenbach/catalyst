@@ -259,6 +259,18 @@ export const helmCharts = {
     chart: "authentik",
     version: "2026.8.4",
   },
+  victoriaMetricsK8sStack: {
+    kind: "repo",
+    repo: "https://victoriametrics.github.io/helm-charts/",
+    chart: "victoria-metrics-k8s-stack",
+    version: "0.96.0",
+  },
+  opentelemetryCollector: {
+    kind: "repo",
+    repo: "https://open-telemetry.github.io/opentelemetry-helm-charts",
+    chart: "opentelemetry-collector",
+    version: "0.176.1",
+  },
 } as const satisfies Record<string, HelmChartEntry>;
 
 export type ImageKey = keyof typeof images;

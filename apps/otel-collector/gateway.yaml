@@ -1,0 +1,107 @@
+mode: statefulset
+fullnameOverride: otel-gateway
+replicaCount: 1
+
+# The persistent queue outlives pod restarts, so a VictoriaMetrics restart does
+# not drop telemetry.
+statefulset:
+  volumeClaimTemplates:
+    - metadata:
+        name: queue
+      spec:
+        accessModes: [ReadWriteOnce]
+        storageClassName: truenas-iscsi
+        resources:
+          requests:
+            storage: 2Gi
+
+extraVolumeMounts:
+  - name: queue
+    mountPath: /var/lib/otelcol/queue
+
+# The collector image runs as UID 10001.
+podSecurityContext:
+  fsGroup: 10001
+
+ports:
+  otlp:
+    enabled: true
+  otlp-http:
+    enabled: true
+  jaeger-compact:
+    enabled: false
+  jaeger-thrift:
+    enabled: false
+  jaeger-grpc:
+    enabled: false
+  zipkin:
+    enabled: false
+  metrics:
+    enabled: true
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    memory: 512Mi
+
+clusterRole:
+  create: true
+  rules:
+    - apiGroups: [""]
+      resources: [nodes, pods, services, endpoints, namespaces]
+      verbs: [get, list, watch]
+    - nonResourceURLs: [/metrics]
+      verbs: [get]
+
+config:
+  extensions:
+    health_check:
+      endpoint: ${env:MY_POD_IP}:13133
+    file_storage/queue:
+      directory: /var/lib/otelcol/queue
+
+  receivers:
+    jaeger: null
+    zipkin: null
+
+  processors:
+    # Same label fix as the agent; see apps/otel-collector/agent.yaml.
+    transform/prom-labels:
+      metric_statements:
+        - context: resource
+          statements:
+            - set(attributes["job"], attributes["service.name"])
+            - set(attributes["instance"], attributes["service.instance.id"])
+            - delete_key(attributes, "service.name")
+            - delete_key(attributes, "service.instance.id")
+            - delete_key(attributes, "server.port")
+            - delete_key(attributes, "url.scheme")
+            - delete_key(attributes, "net.host.port")
+            - delete_key(attributes, "http.scheme")
+
+  exporters:
+    debug: null
+
+  service:
+    extensions:
+      - health_check
+      - file_storage/queue
+    pipelines:
+      traces:
+        receivers: [otlp]
+        processors: [memory_limiter, batch]
+        exporters: [otlphttp/traces]
+      metrics:
+        receivers: [otlp]
+        processors: [memory_limiter, batch]
+        exporters: [otlphttp/metrics]
+      metrics/prometheus:
+        receivers: [prometheus]
+        processors: [memory_limiter, transform/prom-labels, batch]
+        exporters: [otlphttp/metrics]
+      logs:
+        receivers: [otlp]
+        processors: [memory_limiter, batch]
+        exporters: [otlphttp/logs]
