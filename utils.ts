@@ -232,6 +232,7 @@ export function buildApplication(config: AppConfig): Application {
   };
   const helmSources = (helmReleases ?? []).map(buildHelmSource);
   const hasHelm = helmSources.length > 0;
+  const serverSideApply = hasHelm || config.serverSideApply === true;
   const cmpSources = !hasHelm || hasCmpContent(config) ? [cmpSource] : [];
 
   return new Application({
@@ -241,7 +242,7 @@ export function buildApplication(config: AppConfig): Application {
       finalizers: ["resources-finalizer.argocd.argoproj.io"],
       // ServerSideApply leaves no last-applied annotation, so client-side diffs
       // report API-defaulted fields (HTTPRoute, ExternalSecret, ...) as drift.
-      ...(hasHelm && {
+      ...(serverSideApply && {
         annotations: {
           "argocd.argoproj.io/compare-options": "ServerSideDiff=true",
         },
@@ -262,7 +263,7 @@ export function buildApplication(config: AppConfig): Application {
         }),
         syncOptions: [
           "CreateNamespace=true",
-          ...(hasHelm ? ["ServerSideApply=true"] : []),
+          ...(serverSideApply ? ["ServerSideApply=true"] : []),
         ],
         retry: {
           limit: 5,
@@ -864,6 +865,27 @@ function renderWorkload(config: WorkloadApp): string[] {
   return resources;
 }
 
+function withAnnotations(
+  doc: Record<string, unknown>,
+  annotations: Record<string, string> | undefined,
+): Record<string, unknown> {
+  if (annotations === undefined) {
+    return doc;
+  }
+
+  const metadata = (doc.metadata ?? {}) as {
+    annotations?: Record<string, string>;
+  };
+
+  return {
+    ...doc,
+    metadata: {
+      ...metadata,
+      annotations: { ...metadata.annotations, ...annotations },
+    },
+  };
+}
+
 async function renderStatic(config: StaticApp): Promise<string[]> {
   const results = config.resources?.map((r) => toYaml(r)) ?? [];
 
@@ -881,7 +903,11 @@ async function renderStatic(config: StaticApp): Promise<string[]> {
       .map((doc) => doc.toJSON() as Record<string, unknown>)
       .filter(Boolean);
 
-    results.push(...docs.map((d) => toYaml(d)));
+    results.push(
+      ...docs.map((d) =>
+        toYaml(withAnnotations(d, config.remoteResourceAnnotations)),
+      ),
+    );
   }
 
   return results;

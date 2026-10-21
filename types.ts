@@ -52,6 +52,8 @@ type BaseApp = {
   ignoreDifferences?: IApplication["spec"]["ignoreDifferences"];
   /** Set to `false` for apps that should only sync when triggered by hand. Defaults to `true`. */
   autoSync?: boolean;
+  /** Apply with ServerSideApply, required for resources too large for the last-applied annotation (CRDs). Helm apps always use it. */
+  serverSideApply?: boolean;
 };
 
 export type WorkloadApp = BaseApp & {
@@ -76,6 +78,8 @@ export type StaticApp = BaseApp & {
   kind: "static";
   resources?: ResourceLike[];
   remoteResources?: string[];
+  /** Merged into the metadata annotations of every remote resource. */
+  remoteResourceAnnotations?: Record<string, string>;
 };
 
 export type AppConfig = WorkloadApp | StaticApp;
