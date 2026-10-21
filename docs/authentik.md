@@ -58,6 +58,19 @@ Apps that run their own OIDC flow use `withOidcClient({ redirectPaths })`. Forwa
 
 authentik allows one secret per provider, so for a minute or two after a rotation the two sides can disagree and token exchanges (new logins and token refreshes) fail until both converge. Established sessions aren't affected. Rotation is interval-based, so its time of day is arbitrary. `buildSeedPushSecret` has a TODO to move to a cron schedule once external-secrets supports it.
 
-## Not verified until deployed
+## First boot
 
-The blueprints, flows, outpost, forward-auth endpoint, invitation and recovery emails, and secret re-apply were exercised against a local authentik. These depend on the real cluster and haven't run yet: Traefik routing `/outpost.goauthentik.io/` to `authentik-server` across namespaces through the `ReferenceGrant`, the Host and forwarded headers behind the Cloudflare tunnel, SES delivery, and Reloader restarting the worker on a secret change.
+Expect about 10 minutes from a fresh install until forward auth works. The pods are Ready after roughly 3 minutes of database migrations. `catalyst-apps` then waits for authentik's built-in blueprints, which takes several more minutes, and the embedded outpost loads its provider list about 30 seconds after that. Until then protected apps return a 404 from authentik. The `authentik` Argo app also stays Degraded while the `authentik-smtp` ExternalSecret has no AWS secret to read.
+
+## Verified on the cluster
+
+Forward auth for reader through Traefik (login redirect, the `/outpost.goauthentik.io/` route across namespaces through the `ReferenceGrant`, and the Middleware), blueprint application, per-app group access (a member passes, a superuser outside the group is denied), secret seeding, and the rotation chain: `PushSecret` regenerates and overwrites the AWS value on its interval, the consumer ExternalSecret picks it up within a minute, and Reloader restarts the workload.
+
+## Not verified yet
+
+- SES delivery of recovery and invitation emails (needs the SMTP secret).
+- A browser login completing end to end (the declared user has no password until the recovery email is sent).
+- A rotation reaching authentik itself: the pieces are tested separately, but not with a real `withOidcClient` app.
+- The Cloudflare tunnel path, which matters for externally accessible apps (reader is internal).
+
+ESO's AWS user cannot delete secrets, so a deleted `PushSecret` leaves its AWS secret behind. The seeds use `deletionPolicy: None` for the same reason, and removing an app's secret is a manual step in AWS.
