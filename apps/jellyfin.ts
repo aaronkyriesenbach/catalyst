@@ -2,7 +2,7 @@ import {
   applyModifiers,
   withIscsiVolumes,
   withNasMounts,
-  withOidcAuth,
+  withOidcClient,
 } from "../modifiers";
 import { httpCheck, readiness, startup } from "../probes";
 import type { WorkloadApp } from "../types";
@@ -47,5 +47,8 @@ export default applyModifiers(
       { mountPath: "/live", subPath: "live" },
     ],
   }),
-  withOidcAuth(),
+  withOidcClient({
+    redirectPaths: ["/sso/OID/redirect/authentik"],
+    rotate: false,
+  }),
 );

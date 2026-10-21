@@ -209,7 +209,7 @@ export function withPostgres(
 }
 
 const POCKET_ID_API_VERSION = "pocketid.internal/v1alpha1";
-const POCKET_ID_URL = "https://auth.lab53.net/";
+const POCKET_ID_URL = "https://pocketid.lab53.net/";
 const DEFAULT_MIDDLEWARE_CALLBACK_PATH = "/oidc/callback";
 
 export type OidcClientApp = Pick<

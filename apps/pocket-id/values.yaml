@@ -8,7 +8,7 @@ instance:
           name: pocket-id
           key: encryption-key
 
-    appUrl: https://auth.lab53.net
+    appUrl: https://pocketid.lab53.net
 
     persistence:
       enabled: true
@@ -22,4 +22,4 @@ instance:
         - name: traefik-internal
           namespace: traefik
       hostnames:
-        - auth.lab53.net
+        - pocketid.lab53.net

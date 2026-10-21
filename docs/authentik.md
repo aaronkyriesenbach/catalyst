@@ -14,7 +14,7 @@ Identity provider for the cluster. It replaces Pocket ID app by app; see [forwar
 | `apps/authentik/enrollment-flow.yaml` | Invitation-only enrollment flow                                                  |
 | `auth.ts`                             | authentik URL, forward-auth Middleware, issuer helper                            |
 
-The hostname is `authentikHostOptions` in `auth.ts`: `authentik.lab53.net`, externally accessible because public apps send their users to it, so the route gets the default WAF profile (its `crowdsec-appsec` Middleware is emitted by `apps/authentik.ts`). To move to `auth.lab53.net`, set `subDomain` to `"auth"` in the same change that removes Pocket ID, which holds that name today. Everything generated from it (provider URLs, the outpost host, each app's issuer) follows.
+The hostname is `authentikHostOptions` in `auth.ts`: `auth.lab53.net`, externally accessible because public apps send their users to it, so the route gets the default WAF profile (its `crowdsec-appsec` Middleware is emitted by `apps/authentik.ts`). Everything generated from it (provider URLs, the outpost host, each app's issuer) follows. `authentik.lab53.net` is a second route (`authentik-previous`) while clients move over; each hostname gets its own issuer URL, so an app must be on one of them consistently.
 
 ## One-time setup
 
@@ -65,6 +65,13 @@ A `StaticApp` (such as kyoo) has no modifiers, so it calls `defineOidcClient(nam
 authentik allows one secret per provider, so for a minute or two after a rotation the two sides can disagree and token exchanges (new logins and token refreshes) fail until both converge. Established sessions aren't affected. Rotation is interval-based, so its time of day is arbitrary. `buildSeedPushSecret` has a TODO to move to a cron schedule once external-secrets supports it.
 
 Pass `rotate: false` to `withOidcClient` for an app that stores the secret itself, such as Jellyfin's SSO plugin, whose UI keeps its own copy. The secret is then seeded once and never replaced, and the app-side ExternalSecret refreshes hourly instead of every minute. Copy the value from the app's `<app>-oidc-credentials` Secret into the app's own settings.
+
+Jellyfin's SSO plugin (Dashboard, Plugins, SSO-Auth) is configured by hand with these values; the plugin links a user by the `preferred_username` claim, so an authentik username has to equal the Jellyfin one:
+
+- Provider name `authentik`, which gives the callback `/sso/OID/redirect/authentik` that `apps/jellyfin.ts` registers.
+- OID endpoint `https://auth.lab53.net/application/o/jellyfin/`, client ID `jellyfin`, and the secret from `jellyfin-oidc-credentials`.
+- Role claim `groups`, role `jellyfin`, admin role `admin`. Both are authentik groups: `jellyfin` is the app's group and `admin` is the one declared in `users.config.ts`.
+- The login button in Dashboard, General, Login disclaimer points at `/sso/OID/start/authentik`.
 
 ## First boot
 

@@ -69,7 +69,7 @@ The app render should contain a `forward-auth` Middleware and an `HTTPRoute` wit
 
 ## Legacy: Pocket ID plugin
 
-[traefik-oidc-auth](https://github.com/sevensolutions/traefik-oidc-auth) with [Pocket ID](https://auth.lab53.net/), managed by the [pocket-id-operator](https://github.com/aclerici38/pocket-id-operator). It stays until the apps that still use it move to authentik, then this section, `withOidcAuth` and the plugin entry in `apps/traefik/values.yaml` go away.
+[traefik-oidc-auth](https://github.com/sevensolutions/traefik-oidc-auth) with [Pocket ID](https://pocketid.lab53.net/), managed by the [pocket-id-operator](https://github.com/aclerici38/pocket-id-operator). It stays until the apps that still use it move to authentik, then this section, `withOidcAuth` and the plugin entry in `apps/traefik/values.yaml` go away.
 
 `withOidcAuth()` creates a `PocketIDUserGroup` and a `PocketIDOIDCClient` per app. With `{ middleware: { enabled: true } }` it also adds a Traefik `Middleware` named `oidc-auth` and an ESO-generated `<app>-oidc-plugin` secret, and sets `forwardAuth: true` so `buildRoute()` adds the filter. The session cookie is scoped to `.lab53.net`, so one login covers every plugin-protected app.
 
