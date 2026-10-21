@@ -126,15 +126,21 @@ export async function loadAppConfig(path: string): Promise<AppConfig> {
   return mod.default;
 }
 
-// `exclude` stops an aggregating app (authentik) from awaiting its own import.
+// `exclude` stops an aggregating app (authentik) from awaiting its own import. Sequential on
+// purpose: the CMP has no node_modules, and concurrent imports race Bun's auto-install.
 export async function loadAllAppConfigs(
   exclude?: string,
 ): Promise<AppConfig[]> {
   const files = readdirSync("apps", { withFileTypes: true })
     .filter((entry) => entry.isFile() && entry.name !== exclude)
     .map((entry) => entry.name);
+  const configs: AppConfig[] = [];
 
-  return Promise.all(files.map(loadAppConfig));
+  for (const file of files) {
+    configs.push(await loadAppConfig(file));
+  }
+
+  return configs;
 }
 
 const REPO_URL = "https://github.com/aaronkyriesenbach/catalyst";
