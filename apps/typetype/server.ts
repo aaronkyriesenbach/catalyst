@@ -1,4 +1,5 @@
 import type { ResourceLike } from "../../types";
+import { oidcIssuer } from "../../auth";
 import { buildDeployment, buildService, image } from "../../utils";
 import { DRAGONFLY_NAME, DRAGONFLY_PORT } from "./dragonfly";
 import { DOWNLOADER_NAME, DOWNLOADER_PORT } from "./downloader";
@@ -79,8 +80,8 @@ const deployment = buildDeployment(SERVER_NAME, {
           name: "YOUTUBE_REMOTE_LOGIN_MAX_FRAME_BYTES",
           value: "524288",
         },
-        { name: "OIDC_ISSUER", value: "https://auth.lab53.net" },
-        { name: "OIDC_PROVIDER_NAME", value: "Pocket ID" },
+        { name: "OIDC_ISSUER", value: oidcIssuer("typetype") },
+        { name: "OIDC_PROVIDER_NAME", value: "authentik" },
         {
           name: "OIDC_CLIENT_ID",
           valueFrom: {

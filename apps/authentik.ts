@@ -37,7 +37,7 @@ type DeclaredApp = OidcApp & { namespace: string };
 
 function collectOidcApps(configs: readonly AppConfig[]): DeclaredApp[] {
   const apps = configs.flatMap((config): DeclaredApp[] => {
-    if (config.kind !== "workload" || config.oidc === undefined) {
+    if (config.oidc === undefined) {
       return [];
     }
 

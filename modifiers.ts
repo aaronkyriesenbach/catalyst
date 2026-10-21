@@ -11,7 +11,12 @@ import {
 import { buildBackupResources } from "./backup";
 import type { CronExpression } from "./cron";
 import { postgresProbes } from "./probes";
-import type { ResourceLike, StorageQuantity, WorkloadApp } from "./types";
+import type {
+  OAuth2OidcDeclaration,
+  ResourceLike,
+  StorageQuantity,
+  WorkloadApp,
+} from "./types";
 import {
   appUrl,
   AWS_STORE,
@@ -413,26 +418,40 @@ export function buildOidcCredentialsSecret(
   });
 }
 
-export function withOidcClient(options: {
+export type OidcClientOptions = {
   redirectPaths: readonly `/${string}`[];
   rotate?: string | false;
-}): WorkloadModifier {
+};
+
+export function defineOidcClient(
+  appName: string,
+  options: OidcClientOptions,
+): { oidc: OAuth2OidcDeclaration; credentialsSecret: ExternalSecret } {
+  return {
+    oidc: {
+      kind: "oauth2",
+      redirectPaths: options.redirectPaths,
+      rotate: options.rotate ?? DEFAULT_CLIENT_SECRET_ROTATION,
+    },
+    credentialsSecret: buildOidcCredentialsSecret(
+      appName,
+      options.rotate !== false,
+    ),
+  };
+}
+
+export function withOidcClient(options: OidcClientOptions): WorkloadModifier {
   return (app) => {
     if (!app.webPort) {
       throw new Error(`App '${app.name}' needs a webPort for an OIDC client`);
     }
 
+    const { oidc, credentialsSecret } = defineOidcClient(app.name, options);
+
     return {
       ...app,
-      oidc: {
-        kind: "oauth2",
-        redirectPaths: options.redirectPaths,
-        rotate: options.rotate ?? DEFAULT_CLIENT_SECRET_ROTATION,
-      },
-      extraResources: [
-        ...(app.extraResources ?? []),
-        buildOidcCredentialsSecret(app.name, options.rotate !== false),
-      ],
+      oidc,
+      extraResources: [...(app.extraResources ?? []), credentialsSecret],
     };
   };
 }

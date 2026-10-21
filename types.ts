@@ -31,16 +31,18 @@ export type HelmRelease = {
 };
 
 // `proxy` is forward auth through the embedded outpost (no shared secret).
-export type OidcDeclaration =
-  | {
-      kind: "proxy";
-      skipPathRegex?: readonly string[];
-    }
-  | {
-      kind: "oauth2";
-      redirectPaths: readonly `/${string}`[];
-      rotate: string | false;
-    };
+type ProxyOidcDeclaration = {
+  kind: "proxy";
+  skipPathRegex?: readonly string[];
+};
+
+export type OAuth2OidcDeclaration = {
+  kind: "oauth2";
+  redirectPaths: readonly `/${string}`[];
+  rotate: string | false;
+};
+
+export type OidcDeclaration = ProxyOidcDeclaration | OAuth2OidcDeclaration;
 
 type BaseApp = {
   name: string;
@@ -76,6 +78,10 @@ export type WorkloadApp = BaseApp & {
 
 export type StaticApp = BaseApp & {
   kind: "static";
+  subDomain?: string;
+  externallyAccessible?: boolean;
+  /** Forward auth needs a route the app builder owns, so a StaticApp can only be an OIDC client. */
+  oidc?: OAuth2OidcDeclaration;
   resources?: ResourceLike[];
   remoteResources?: string[];
   /** Merged into the metadata annotations of every remote resource. */

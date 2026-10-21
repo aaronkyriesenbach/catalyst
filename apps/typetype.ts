@@ -1,7 +1,7 @@
 import {
   applyModifiers,
   buildPostgresResources,
-  withOidcAuth,
+  withOidcClient,
 } from "../modifiers";
 import type { WorkloadApp } from "../types";
 import { dragonflyResources } from "./typetype/dragonfly";
@@ -67,4 +67,7 @@ const base: WorkloadApp = {
   ],
 };
 
-export default applyModifiers(base, withOidcAuth());
+export default applyModifiers(
+  base,
+  withOidcClient({ redirectPaths: ["/auth/oidc/callback"] }),
+);

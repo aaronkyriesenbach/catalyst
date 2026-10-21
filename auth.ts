@@ -56,6 +56,17 @@ export function oidcIssuer(slug: string): string {
   return `${authentikUrl}/application/o/${slug}/`;
 }
 
+export function oidcDiscoveryUrl(slug: string): string {
+  return `${oidcIssuer(slug)}.well-known/openid-configuration`;
+}
+
+// Shared by every provider, unlike the per-application issuer and discovery document.
+export function oidcEndpointUrl(
+  endpoint: "authorize" | "token" | "userinfo",
+): string {
+  return `${authentikUrl}/application/o/${endpoint}/`;
+}
+
 export function oidcSecretName(appName: string): string {
   return `oidc-${appName}`;
 }

@@ -53,6 +53,8 @@ Things that behave differently than you might expect (all confirmed against auth
 
 Apps that run their own OIDC flow use `withOidcClient({ redirectPaths })`. Forward-auth apps need no secret.
 
+A `StaticApp` (such as kyoo) has no modifiers, so it calls `defineOidcClient(name, { redirectPaths })` from `modifiers.ts` instead, which `withOidcClient` itself uses. Put the returned `oidc` on the app and `credentialsSecret` in its `resources`. Only OIDC clients are supported there, since forward auth needs the route the app builder generates. The hostname for the redirect URLs comes from the StaticApp's `subDomain` and `externallyAccessible`, defaulting to `<name>.int.lab53.net`. Endpoint URLs that a Helm chart needs come from `oidcEndpointUrl` and `oidcDiscoveryUrl` in `auth.ts`, so a hostname change reaches them.
+
 1. `apps/authentik.ts` generates the secret (48 characters) and stores it in AWS at `lab53/cluster0/authentik/oidc-<app>` (property `client_secret`). Every 90 days (`DEFAULT_CLIENT_SECRET_ROTATION`) ESO generates a new value and overwrites it.
 2. In the `authentik` namespace an ExternalSecret renders the value into a small blueprint (`client-secret.yaml`) that sets only the provider's `client_secret`. The chart mounts it through `blueprints.secrets`. Because the secret is part of the file, a rotation changes its hash and authentik re-applies it.
 3. In the app's namespace `withOidcClient` creates `<app>-oidc-credentials` with `client_id`, `client_secret` and `issuer_url` from the same AWS key.

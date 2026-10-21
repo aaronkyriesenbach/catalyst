@@ -5,15 +5,13 @@ kyoo:
   # API key for a JWT.
   middlewareRootURL: https://kyoo.int.lab53.net
   oidc_providers:
-    - name: pocketid
+    # The endpoint addresses are set in apps/kyoo.ts so they follow authentik's hostname.
+    - name: authentik
       existingSecret: kyoo-oidc-credentials
       clientIdKey: client_id
       clientSecretKey: client_secret
       logo: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons\
-        /webp/pocket-id.webp"
-      authorizationAddress: https://auth.lab53.net/authorize
-      tokenAddress: https://auth.lab53.net/api/oidc/token
-      profileAddress: https://auth.lab53.net/api/oidc/userinfo
+        /webp/authentik.webp"
       scope: openid email profile
       authMethod: ClientSecretPost
   auth:
@@ -56,6 +54,8 @@ api:
   persistence:
     storageClass: truenas-iscsi
 auth:
+  deploymentAnnotations:
+    reloader.stakater.com/auto: "true"
   kyoo_auth:
     resources:
       requests: { cpu: 100m, memory: 64Mi }

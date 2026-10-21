@@ -1,9 +1,10 @@
 import {
   applyModifiers,
   withIscsiVolumes,
-  withOidcAuth,
+  withOidcClient,
   withPostgres,
 } from "../modifiers";
+import { oidcDiscoveryUrl } from "../auth";
 import type { WorkloadApp } from "../types";
 import { buildGeneratedSecret, image } from "../utils";
 import { httpCheck, readiness, startup } from "../probes";
@@ -43,11 +44,8 @@ const base: WorkloadApp = {
           { name: "DISABLE_BROWSER", value: "true" },
 
           { name: "NEXT_PUBLIC_OIDC_ENABLED", value: "true" },
-          { name: "OIDC_CUSTOM_NAME", value: "Pocket ID" },
-          {
-            name: "OIDC_WELLKNOWN_URL",
-            value: "https://auth.lab53.net/.well-known/openid-configuration",
-          },
+          { name: "OIDC_CUSTOM_NAME", value: "authentik" },
+          { name: "OIDC_WELLKNOWN_URL", value: oidcDiscoveryUrl(name) },
           { name: "OIDC_SCOPES", value: "openid email profile" },
           {
             name: "OIDC_CLIENT_ID",
@@ -105,5 +103,5 @@ export default applyModifiers(
     ],
   }),
   withPostgres(16, { backup: true }),
-  withOidcAuth(),
+  withOidcClient({ redirectPaths: ["/api/v1/auth/callback/oidc"] }),
 );
