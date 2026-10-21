@@ -89,11 +89,10 @@ const implicitConsentFlow = () =>
     "default-provider-authorization-implicit-consent",
   );
 const invalidationFlow = () =>
-  new Find(
-    "authentik_flows.flow",
-    "slug",
-    "default-provider-invalidation-flow",
-  );
+  new Find("authentik_flows.flow", "slug", "default-invalidation-flow");
+// Authentik cannot tell the outpost that its session ended, so this bounds how long a user who
+// logged out of authentik keeps access to a forward-auth app.
+const PROXY_SESSION_VALIDITY = "minutes=15";
 const adminsGroup = () =>
   new Find("authentik_core.group", "name", "authentik Admins");
 
@@ -129,6 +128,7 @@ function providerEntry(app: OidcApp): Entry {
       attrs: {
         ...common,
         mode: "forward_single",
+        access_token_validity: PROXY_SESSION_VALIDITY,
         external_host: url,
         ...(oidc.skipPathRegex && {
           skip_path_regex: oidc.skipPathRegex.join("\n"),
@@ -290,7 +290,7 @@ export function buildAppsBlueprint(
     requiredBlueprint(
       "Default - Provider authorization flow (implicit consent)",
     ),
-    requiredBlueprint("Default - Provider invalidation flow"),
+    requiredBlueprint("Default - Invalidation flow"),
     requiredBlueprint("authentik Bootstrap"),
     ...(needsScopes
       ? [requiredBlueprint("System - OAuth2 Provider - Scopes")]
