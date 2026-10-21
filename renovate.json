@@ -99,6 +99,11 @@
       "automerge": false
     },
     {
+      "description": "authentik ships breaking changes between releases; review every update, minors included.",
+      "matchPackageNames": ["authentik", "ghcr.io/goauthentik/**"],
+      "automerge": false
+    },
+    {
       "description": "immich chart and server image move together.",
       "matchPackageNames": [
         "ghcr.io/immich-app/immich-charts/immich",

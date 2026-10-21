@@ -1,17 +1,28 @@
 import { Middleware } from "@kubernetes-models/traefik/traefik.io/v1alpha1/Middleware";
+import { ExternalSecret } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
 import type { IContainer, IVolume, IVolumeMount } from "kubernetes-models/v1";
+import {
+  authentikNamespace,
+  DEFAULT_CLIENT_SECRET_ROTATION,
+  oidcCredentialsSecretName,
+  oidcIssuer,
+  oidcSecretName,
+} from "./auth";
 import { buildBackupResources } from "./backup";
 import type { CronExpression } from "./cron";
 import { postgresProbes } from "./probes";
 import type { ResourceLike, StorageQuantity, WorkloadApp } from "./types";
 import {
   appUrl,
+  AWS_STORE,
+  awsRemoteKey,
   buildGeneratedSecret,
   buildHeadlessService,
   buildIscsiPvc,
   buildIscsiPvcTemplate,
   buildStatefulSet,
   postgresImage,
+  ROTATING_CONSUMER_REFRESH_INTERVAL,
 } from "./utils";
 import type { PostgresMajor } from "./versions";
 import type { WafOptions } from "./waf";
@@ -337,6 +348,85 @@ export function withOidcAuth(options?: OidcAuthOptions): WorkloadModifier {
       ...app,
       forwardAuth: addMiddleware ? true : app.forwardAuth,
       extraResources: [...(app.extraResources ?? []), ...extraResources],
+    };
+  };
+}
+
+export function withForwardAuth(options?: {
+  skipPathRegex?: readonly string[];
+}): WorkloadModifier {
+  return (app) => {
+    if (!app.webPort) {
+      throw new Error(`App '${app.name}' needs a webPort for forward auth`);
+    }
+
+    if (app.forwardAuth) {
+      throw new Error(
+        `App '${app.name}' already uses the Pocket ID forward auth plugin`,
+      );
+    }
+
+    return {
+      ...app,
+      oidc: {
+        kind: "proxy",
+        ...(options?.skipPathRegex && { skipPathRegex: options.skipPathRegex }),
+      },
+    };
+  };
+}
+
+export function buildOidcCredentialsSecret(appName: string): ExternalSecret {
+  const secretName = oidcCredentialsSecretName(appName);
+
+  return new ExternalSecret({
+    metadata: { name: secretName },
+    spec: {
+      refreshInterval: ROTATING_CONSUMER_REFRESH_INTERVAL,
+      secretStoreRef: AWS_STORE,
+      target: {
+        name: secretName,
+        template: {
+          data: {
+            client_id: appName,
+            client_secret: "{{ .client_secret }}",
+            issuer_url: oidcIssuer(appName),
+          },
+        },
+      },
+      data: [
+        {
+          secretKey: "client_secret",
+          remoteRef: {
+            key: awsRemoteKey(authentikNamespace, oidcSecretName(appName)),
+            property: "client_secret",
+          },
+        },
+      ],
+    },
+  });
+}
+
+export function withOidcClient(options: {
+  redirectPaths: readonly `/${string}`[];
+  rotate?: string;
+}): WorkloadModifier {
+  return (app) => {
+    if (!app.webPort) {
+      throw new Error(`App '${app.name}' needs a webPort for an OIDC client`);
+    }
+
+    return {
+      ...app,
+      oidc: {
+        kind: "oauth2",
+        redirectPaths: options.redirectPaths,
+        rotate: options.rotate ?? DEFAULT_CLIENT_SECRET_ROTATION,
+      },
+      extraResources: [
+        ...(app.extraResources ?? []),
+        buildOidcCredentialsSecret(app.name),
+      ],
     };
   };
 }

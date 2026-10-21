@@ -263,6 +263,12 @@ export const helmCharts = {
     chart: "traefik",
     version: "39.0.9",
   },
+  authentik: {
+    kind: "repo",
+    repo: "https://charts.goauthentik.io",
+    chart: "authentik",
+    version: "2026.8.4",
+  },
 } as const satisfies Record<string, HelmChartEntry>;
 
 export type ImageKey = keyof typeof images;

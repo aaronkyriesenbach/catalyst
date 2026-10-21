@@ -1,0 +1,145 @@
+# Password recovery: identification, email, new password, login. Also what emailing a user a recovery link uses.
+version: 1
+metadata:
+  name: catalyst-recovery-flow
+entries:
+  # Make sure the default login flow + default brand exist before we patch them below.
+  - model: authentik_blueprints.metaapplyblueprint
+    attrs:
+      identifiers:
+        name: Default - Authentication flow
+      required: true
+  - model: authentik_blueprints.metaapplyblueprint
+    attrs:
+      identifiers:
+        name: Default - Brand
+      required: true
+
+  - id: flow
+    model: authentik_flows.flow
+    identifiers:
+      slug: recovery-flow
+    attrs:
+      name: Recovery flow
+      title: Reset your password
+      designation: recovery
+      authentication: require_unauthenticated
+
+  - id: prompt-field-password
+    model: authentik_stages_prompt.prompt
+    identifiers:
+      name: recovery-field-password
+    attrs:
+      field_key: password
+      label: Password
+      type: password
+      required: true
+      placeholder: Password
+      placeholder_expression: false
+      order: 0
+  - id: prompt-field-password-repeat
+    model: authentik_stages_prompt.prompt
+    identifiers:
+      name: recovery-field-password-repeat
+    attrs:
+      field_key: password_repeat
+      label: Password (repeat)
+      type: password
+      required: true
+      placeholder: Password (repeat)
+      placeholder_expression: false
+      order: 1
+
+  - id: stage-identification
+    model: authentik_stages_identification.identificationstage
+    identifiers:
+      name: recovery-identification
+    attrs:
+      user_fields: [email, username]
+  - id: stage-email
+    model: authentik_stages_email.emailstage
+    identifiers:
+      name: recovery-email
+    attrs:
+      use_global_settings: true
+      token_expiry: minutes=30
+      subject: Password recovery
+      template: email/password_reset.html
+      activate_user_on_success: true
+      recovery_max_attempts: 5
+      recovery_cache_timeout: minutes=5
+  - id: stage-prompt-password
+    model: authentik_stages_prompt.promptstage
+    identifiers:
+      name: recovery-change-password
+    attrs:
+      fields:
+        - !KeyOf prompt-field-password
+        - !KeyOf prompt-field-password-repeat
+  - id: stage-user-write
+    model: authentik_stages_user_write.userwritestage
+    identifiers:
+      name: recovery-user-write
+    attrs:
+      user_creation_mode: never_create
+  - id: stage-login
+    model: authentik_stages_user_login.userloginstage
+    identifiers:
+      name: recovery-user-login
+
+  # Skip the identification stage when the user is already known. Needed for links made by
+  # /core/users/<pk>/recovery_email/ (the stored plan starts at the beginning of the flow).
+  # NOTE: the example's `bool(request.context.get('is_restored', True))` does NOT skip it.
+  - id: policy-skip-identification
+    model: authentik_policies_expression.expressionpolicy
+    identifiers:
+      name: recovery-skip-identification-if-user-known
+    attrs:
+      expression: |
+        return not (request.context.get("is_restored") or request.context.get("pending_user"))
+
+  - id: binding-identification
+    model: authentik_flows.flowstagebinding
+    identifiers:
+      { target: !KeyOf flow, stage: !KeyOf stage-identification, order: 10 }
+    attrs:
+      evaluate_on_plan: true
+      re_evaluate_policies: true
+  - model: authentik_flows.flowstagebinding
+    identifiers: { target: !KeyOf flow, stage: !KeyOf stage-email, order: 20 }
+  - model: authentik_flows.flowstagebinding
+    identifiers:
+      { target: !KeyOf flow, stage: !KeyOf stage-prompt-password, order: 30 }
+  - model: authentik_flows.flowstagebinding
+    identifiers:
+      { target: !KeyOf flow, stage: !KeyOf stage-user-write, order: 40 }
+  - model: authentik_flows.flowstagebinding
+    identifiers: { target: !KeyOf flow, stage: !KeyOf stage-login, order: 100 }
+
+  - model: authentik_policies.policybinding
+    identifiers:
+      policy: !KeyOf policy-skip-identification
+      target: !KeyOf binding-identification
+      order: 0
+    attrs:
+      negate: false
+      enabled: true
+      timeout: 30
+
+  # Attach: brand.flow_recovery is used by /core/users/<pk>/recovery_email/ and the
+  # "Forgot password?" link on the password stage; the identification stage's
+  # recovery_flow drives the link on the first login page.
+  - model: authentik_brands.brand
+    state: present
+    identifiers:
+      default: true
+    attrs:
+      flow_recovery: !KeyOf flow
+  - model: authentik_stages_identification.identificationstage
+    state: present
+    identifiers:
+      name: default-authentication-identification
+    attrs:
+      # user_fields must be restated: the serializer validates the attrs without the instance.
+      user_fields: [email, username]
+      recovery_flow: !KeyOf flow

@@ -1,0 +1,154 @@
+# Invitation-only enrollment. New users land in the `users` group, which grants no app access.
+version: 1
+metadata:
+  name: catalyst-enrollment-flow
+entries:
+  - model: authentik_blueprints.metaapplyblueprint
+    attrs:
+      identifiers:
+        name: Default - Authentication flow
+      required: true
+
+  # Group that new users are added to. `created` = never touches an existing group (members preserved).
+  - id: group-users
+    model: authentik_core.group
+    state: created
+    identifiers:
+      name: users
+
+  - id: flow
+    model: authentik_flows.flow
+    identifiers:
+      slug: enrollment-invitation
+    attrs:
+      name: Enrollment (invitation required)
+      title: Welcome! Create your account
+      designation: enrollment
+      authentication: require_unauthenticated
+
+  - id: stage-invitation
+    model: authentik_stages_invitation.invitationstage
+    identifiers:
+      name: enrollment-invitation
+    attrs:
+      continue_flow_without_invitation: false
+
+  - id: field-username
+    model: authentik_stages_prompt.prompt
+    identifiers: { name: enrollment-field-username }
+    attrs:
+      {
+        field_key: username,
+        label: Username,
+        type: username,
+        required: true,
+        placeholder: Username,
+        placeholder_expression: false,
+        order: 0,
+      }
+  - id: field-password
+    model: authentik_stages_prompt.prompt
+    identifiers: { name: enrollment-field-password }
+    attrs:
+      {
+        field_key: password,
+        label: Password,
+        type: password,
+        required: true,
+        placeholder: Password,
+        placeholder_expression: false,
+        order: 1,
+      }
+  - id: field-password-repeat
+    model: authentik_stages_prompt.prompt
+    identifiers: { name: enrollment-field-password-repeat }
+    attrs:
+      {
+        field_key: password_repeat,
+        label: Password (repeat),
+        type: password,
+        required: true,
+        placeholder: Password (repeat),
+        placeholder_expression: false,
+        order: 2,
+      }
+  - id: field-name
+    model: authentik_stages_prompt.prompt
+    identifiers: { name: enrollment-field-name }
+    attrs:
+      {
+        field_key: name,
+        label: Name,
+        type: text,
+        required: true,
+        placeholder: Name,
+        placeholder_expression: false,
+        order: 0,
+      }
+  - id: field-email
+    model: authentik_stages_prompt.prompt
+    identifiers: { name: enrollment-field-email }
+    attrs:
+      {
+        field_key: email,
+        label: Email,
+        type: email,
+        required: true,
+        placeholder: Email,
+        placeholder_expression: false,
+        order: 1,
+      }
+
+  - id: stage-prompt-credentials
+    model: authentik_stages_prompt.promptstage
+    identifiers: { name: enrollment-prompt-credentials }
+    attrs:
+      fields:
+        [
+          !KeyOf field-username,
+          !KeyOf field-password,
+          !KeyOf field-password-repeat,
+        ]
+  - id: stage-prompt-details
+    model: authentik_stages_prompt.promptstage
+    identifiers: { name: enrollment-prompt-details }
+    attrs:
+      fields: [!KeyOf field-name, !KeyOf field-email]
+  - id: stage-user-write
+    model: authentik_stages_user_write.userwritestage
+    identifiers: { name: enrollment-user-write }
+    attrs:
+      user_creation_mode: always_create
+      create_users_as_inactive: false
+      create_users_group: !KeyOf group-users
+      user_type: internal
+      user_path_template: users
+  - id: stage-login
+    model: authentik_stages_user_login.userloginstage
+    identifiers: { name: enrollment-user-login }
+
+  - model: authentik_flows.flowstagebinding
+    identifiers:
+      { target: !KeyOf flow, stage: !KeyOf stage-invitation, order: 5 }
+  - model: authentik_flows.flowstagebinding
+    identifiers:
+      { target: !KeyOf flow, stage: !KeyOf stage-prompt-credentials, order: 10 }
+  - model: authentik_flows.flowstagebinding
+    identifiers:
+      { target: !KeyOf flow, stage: !KeyOf stage-prompt-details, order: 15 }
+  - model: authentik_flows.flowstagebinding
+    identifiers:
+      { target: !KeyOf flow, stage: !KeyOf stage-user-write, order: 20 }
+  - model: authentik_flows.flowstagebinding
+    identifiers: { target: !KeyOf flow, stage: !KeyOf stage-login, order: 100 }
+
+  # There is no brand.flow_enrollment: the login page "Need an account?" link comes from
+  # the identification stage's enrollment_flow.
+  - model: authentik_stages_identification.identificationstage
+    state: present
+    identifiers:
+      name: default-authentication-identification
+    attrs:
+      # user_fields must be restated: the serializer validates the attrs without the instance.
+      user_fields: [email, username]
+      enrollment_flow: !KeyOf flow

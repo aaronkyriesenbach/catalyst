@@ -8,7 +8,9 @@ Kubernetes infrastructure-as-TypeScript repo. Defines cluster apps as typed conf
 catalyst/
 ├── main.ts              # CMP plugin entrypoint — two modes: single app (ARGOCD_ENV_APP = module name) or enumerate all
 ├── utils.ts             # Builders: Deployment, Service, HTTPRoute, GeneratedSecret + loadAppConfig
-├── modifiers.ts         # WorkloadModifier pattern: withNasMounts, withPostgres, withOidcAuth, applyModifiers
+├── hostnames.ts         # appHostname/appUrl (re-exported by utils.ts)
+├── auth.ts              # authentik URL, forward-auth Middleware, OIDC issuer/secret naming
+├── modifiers.ts         # WorkloadModifier pattern: withNasMounts, withPostgres, withForwardAuth, withOidcClient, withOidcAuth (legacy), applyModifiers
 ├── storage.ts           # PV/PVC builders for NAS-backed NFS storage
 ├── versions.ts          # Typed image + Helm chart version registry (Renovate-parsed; see Image sources)
 ├── types.ts             # AppConfig = WorkloadApp | StaticApp; HelmRelease, ExternalApp
@@ -56,7 +58,9 @@ bunx prettier --write .                      # Format the repo (config: .prettie
 - Compose via `applyModifiers(base, ...modifiers)` — each modifier is an immutable transform.
 - `withNasMounts(config)` — adds NFS volume + mounts keyed by container name. Throws if container name doesn't exist.
 - `withPostgres(version, options?)` — adds postgres as an **init container** with NAS-backed data at `cluster/<app>/postgres`. `version` is restricted to the majors in `postgresImages` (`versions.ts`); the image comes from there (mirrored `library/postgres:<major>-alpine`) unless `options.image` overrides it.
-- `withOidcAuth(options?)` — creates PocketID OIDC client/group resources. With `{ middleware: true }`, also adds Traefik OIDC middleware + ESO-generated plugin secret and sets `forwardAuth: true`. See `docs/forward-auth.md`.
+- `withForwardAuth({ skipPathRegex? })` — puts the app behind authentik forward auth (embedded outpost). Sets `oidc: { kind: "proxy" }`; `renderWorkload` then emits the `forward-auth` Middleware and `buildRoute` the outpost rule and filter. No secret involved.
+- `withOidcClient({ redirectPaths, rotate? })` — for apps that run their own OIDC flow. Sets `oidc: { kind: "oauth2" }` and emits the `<app>-oidc-credentials` ExternalSecret (`client_id`, `client_secret`, `issuer_url`). `apps/authentik.ts` creates the confidential client and its rotating secret (default every 90 days, `DEFAULT_CLIENT_SECRET_ROTATION`). See Identity (authentik).
+- `withOidcAuth(options?)` — legacy Pocket ID: creates PocketID OIDC client/group resources. With `{ middleware: true }`, also adds Traefik OIDC middleware + ESO-generated plugin secret and sets `forwardAuth: true`. Removed once the remaining apps move to authentik. See `docs/forward-auth.md`.
 
 ### Rollouts and probes
 
@@ -71,6 +75,8 @@ bunx prettier --write .                      # Format the repo (config: .prettie
 - `buildGeneratedSecret(name, keys)` in `utils.ts` creates ExternalSecret + optional per-key Password generators.
 - Depends on the `external-secrets` app being installed (`apps/external-secrets.ts`).
 - Keys can be strings (use cluster-wide default generator) or objects with `{ key, length?, encoding? }`.
+- `{ persist: true }` seeds the value into AWS once and reads it back, so every namespace (and a rebuilt cluster) sees the same value. Use one key per call: seeding skips the whole AWS secret once any property exists.
+- `{ persist: true, rotate: "<duration>" }` regenerates and overwrites the AWS value on that interval (`PushSecret` `Replace`) and makes the consumers re-read every minute. Only for values both sides re-read (OIDC client secrets). TODO in `buildSeedPushSecret`: move to a cron schedule once external-secrets supports it.
 
 ### Notifications
 
@@ -81,8 +87,13 @@ Services send push and email by POSTing `{title, body, type, tag}` to `<appriseU
 - Internal: `<name>.int.lab53.net` → gateway `traefik-internal`
 - External: `<name>.lab53.net` → gateways `traefik-external` + `traefik-internal`
 - Controlled by `externallyAccessible` flag. Override hostname with `subDomain`.
-- `forwardAuth: true` adds an `ExtensionRef` filter pointing to the `oidc-auth` Middleware.
+- `forwardAuth: true` adds an `ExtensionRef` filter pointing to the `oidc-auth` Middleware (legacy Pocket ID plugin).
+- `withForwardAuth()` adds the `forward-auth` filter plus a first rule routing `/outpost.goauthentik.io/` on the app's host to `authentik-server` (a `ReferenceGrant` from `apps/authentik.ts` allows it).
 - Every externally accessible route is behind the WAF unless exempted with a reason (see Web application firewall). `buildRoute` throws for an external route without `waf`.
+
+### Identity (authentik)
+
+authentik (`apps/authentik.ts`, `authentik` namespace, Helm chart + Postgres) is replacing Pocket ID app by app; see `docs/authentik.md`. Configuration is declarative through blueprints generated in TypeScript: an app declares `oidc` (via `withForwardAuth()` or `withOidcClient()`) and `apps/authentik.ts` scans every app (`loadAllAppConfigs`) to create its group, provider, application, policy binding and `ReferenceGrant`. Access is per app through a group named after the app. `apps/authentik/users.config.ts` lists users enforced from Git; everyone else is invited in the authentik UI. The hostname is `authentikHostOptions` in `auth.ts` (temporarily `authentik.int.lab53.net`; `auth.lab53.net` is taken by Pocket ID until cutover). Forward auth uses the embedded outpost through one identical `forward-auth` Middleware per namespace, so no plugin or per-app secret is needed. Client secrets for `withOidcClient` live in AWS (`lab53/cluster0/authentik/oidc-<app>`), rotate every 90 days, and reach authentik as a rendered blueprint file because authentik skips blueprints whose file hash is unchanged. The SMTP credentials (`lab53/cluster0/authentik/smtp-credentials`) are created by hand.
 
 ### Web application firewall
 
@@ -162,7 +173,7 @@ Mend Renovate (GitHub App) opens PRs for images, charts and npm packages from `r
 | denylist      | PR only, always                                               |
 | disabled      | no PR (`whisper.cpp`, `immich-app/postgres`, Postgres majors) |
 
-- **Where the lists live:** the denylist is a pair of `matchPackageNames` rules in `renovate.json`; every minor auto-merges unless it is on the denylist or a major, and charts follow the same rules as images. Denylist: immich (chart + server image, grouped), pocket-id (operator chart + image), cert-manager and trust-manager charts, external-secrets, volsync, home-assistant, kube-vip. Groups: `immich`, `typetype`, `bun` (image + `bun-types`).
+- **Where the lists live:** the denylist is a pair of `matchPackageNames` rules in `renovate.json`; every minor auto-merges unless it is on the denylist or a major, and charts follow the same rules as images. Denylist: immich (chart + server image, grouped), pocket-id (operator chart + image), cert-manager and trust-manager charts, external-secrets, volsync, home-assistant, kube-vip, authentik (chart + server image). Groups: `immich`, `typetype`, `bun` (image + `bun-types`).
 - **Vulnerability alerts** are disabled so security updates follow the same rules.
 - PR titles must stay within 80 characters; `commitMessageTopic` is `{{{depName}}}` to keep long OCI names short.
 
@@ -183,6 +194,7 @@ Some app files export named constants used by scripts and other modules:
 - `apps/apprise.ts` → `appriseUrl`, `appriseNotifiers`
 - `apps/healthchecks.ts` → `healthchecksUrl`
 - `waf.ts` → `wafProfiles`, `resolveWaf`, `buildWafMiddleware`, crowdsec namespace and secret names
+- `auth.ts` → `authentikUrl`, `authentikHostOptions`, `buildForwardAuthMiddleware`, `oidcIssuer`, `oidcSecretName`, `DEFAULT_CLIENT_SECRET_ROTATION`
 - `apps/traefik/externalApps.config.ts` → `externalApps`, helper functions
 
 ## Agent skills

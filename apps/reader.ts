@@ -3,8 +3,8 @@ import type { WorkloadApp } from "../types";
 import {
   applyModifiers,
   withIscsiVolumes,
+  withForwardAuth,
   withNasMounts,
-  withOidcAuth,
 } from "../modifiers";
 import { buildFileConfigMap, readFile, image } from "../utils";
 
@@ -152,5 +152,5 @@ export default applyModifiers(
   withNasMounts({
     qbittorrent: [{ mountPath: "/downloads", subPath: "downloads/reader" }],
   }),
-  withOidcAuth({ middleware: { enabled: true } }),
+  withForwardAuth(),
 );

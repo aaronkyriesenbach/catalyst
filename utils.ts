@@ -1,3 +1,4 @@
+import { readdirSync } from "node:fs";
 import {
   Application,
   AppProject,
@@ -35,7 +36,6 @@ import {
   images,
   postgresImages,
   type HelmChartEntry,
-  type HelmChartKey,
   type ImageEntry,
   type ImageKey,
   type PostgresMajor,
@@ -44,6 +44,15 @@ import {
   awsSecretStoreRef,
   clusterGeneratorRef,
 } from "./apps/external-secrets";
+import { appHostname } from "./hostnames";
+import {
+  authentikNamespace,
+  authentikServiceName,
+  authentikServicePort,
+  buildForwardAuthMiddleware,
+  FORWARD_AUTH_MIDDLEWARE_NAME,
+  OUTPOST_PATH_PREFIX,
+} from "./auth";
 import {
   helmReleaseNamespaces,
   MIRROR_HOST,
@@ -115,6 +124,17 @@ export async function loadAppConfig(path: string): Promise<AppConfig> {
   const mod = await import(`./apps/${path}`);
 
   return mod.default;
+}
+
+// `exclude` stops an aggregating app (authentik) from awaiting its own import.
+export async function loadAllAppConfigs(
+  exclude?: string,
+): Promise<AppConfig[]> {
+  const files = readdirSync("apps", { withFileTypes: true })
+    .filter((entry) => entry.isFile() && entry.name !== exclude)
+    .map((entry) => entry.name);
+
+  return Promise.all(files.map(loadAppConfig));
 }
 
 const REPO_URL = "https://github.com/aaronkyriesenbach/catalyst";
@@ -383,19 +403,7 @@ export function buildStatefulSet(
   });
 }
 
-type HostOptions = {
-  subDomain?: string;
-  externallyAccessible?: boolean;
-};
-
-export function appHostname(name: string, options?: HostOptions): string {
-  const { subDomain, externallyAccessible } = options ?? {};
-  return `${subDomain ?? name}${externallyAccessible ? "" : ".int"}.lab53.net`;
-}
-
-export function appUrl(name: string, options?: HostOptions): string {
-  return `https://${appHostname(name, options)}`;
-}
+export { appHostname, appUrl } from "./hostnames";
 
 type RouteOptions = {
   subDomain?: string;
@@ -403,6 +411,8 @@ type RouteOptions = {
   namespace?: string;
   externallyAccessible?: boolean;
   forwardAuth?: boolean;
+  /** Forward auth through the authentik outpost; the `forward-auth` Middleware must exist in the route's namespace. */
+  authentikForwardAuth?: boolean;
   /** Required for externally accessible routes. The `crowdsec-appsec` Middleware must exist in the route's namespace unless exempt. */
   waf?: WafSetting;
 };
@@ -429,8 +439,15 @@ export function buildRoute(
     namespace,
     externallyAccessible,
     forwardAuth,
+    authentikForwardAuth,
     waf,
   } = options ?? {};
+
+  if (forwardAuth && authentikForwardAuth) {
+    throw new Error(
+      `Route '${name}' can't use both the OIDC plugin and authentik forward auth`,
+    );
+  }
 
   if (externallyAccessible && waf === undefined) {
     throw new Error(
@@ -449,10 +466,37 @@ export function buildRoute(
     : [{ name: "traefik-internal", namespace: "traefik" }];
 
   // WAF first so attacks are rejected before the OIDC redirect.
+  const wafFilters = wafEnabled
+    ? [extensionRefFilter(WAF_MIDDLEWARE_NAME)]
+    : [];
   const filters = [
-    ...(wafEnabled ? [extensionRefFilter(WAF_MIDDLEWARE_NAME)] : []),
+    ...wafFilters,
     ...(forwardAuth ? [extensionRefFilter("oidc-auth")] : []),
+    ...(authentikForwardAuth
+      ? [extensionRefFilter(FORWARD_AUTH_MIDDLEWARE_NAME)]
+      : []),
   ];
+
+  // Login redirects and callbacks land on the app's own host, so the outpost must be routable there.
+  const outpostRule = authentikForwardAuth
+    ? [
+        {
+          matches: [
+            {
+              path: { type: "PathPrefix" as const, value: OUTPOST_PATH_PREFIX },
+            },
+          ],
+          filters: wafFilters.length > 0 ? wafFilters : undefined,
+          backendRefs: [
+            {
+              name: authentikServiceName,
+              namespace: authentikNamespace,
+              port: authentikServicePort,
+            },
+          ],
+        },
+      ]
+    : [];
 
   return new HTTPRoute({
     metadata: {
@@ -463,6 +507,7 @@ export function buildRoute(
       parentRefs,
       hostnames: [hostname],
       rules: [
+        ...outpostRule,
         {
           filters: filters.length > 0 ? filters : undefined,
           backendRefs: [
@@ -497,8 +542,13 @@ export type GeneratedSecretKey =
 
 type GeneratedSecretOptions = {
   persist?: boolean;
+  /** Needs `persist`. ESO duration after which the value is regenerated and pushed again. */
+  rotate?: string;
   template?: IExternalSecretTemplate;
 };
+
+// Consumers re-read a rotating secret often so the two sides of a client secret converge quickly.
+export const ROTATING_CONSUMER_REFRESH_INTERVAL = "1m";
 
 const PUSH_SECRET_PREFIX = "lab53/cluster0";
 
@@ -557,12 +607,14 @@ export function buildSeedPushSecret(
   remoteKey: string,
   property: string,
   generatorRef: IGeneratorRef,
+  rotate?: string,
 ): PushSecret {
   return new PushSecret({
     metadata: { name: pushSecretName },
     spec: {
-      refreshInterval: "0",
-      updatePolicy: "IfNotExists",
+      // TODO: switch to a cron schedule once external-secrets supports it (external-secrets#4931).
+      refreshInterval: rotate ?? "0",
+      updatePolicy: rotate ? "Replace" : "IfNotExists",
       deletionPolicy: "None",
       secretStoreRefs: [awsSecretStoreRef],
       selector: { generatorRef },
@@ -629,6 +681,10 @@ export function buildGeneratedSecret(
   options?: GeneratedSecretOptions,
 ): (ExternalSecret | Password | PushSecret)[] {
   const resources: (ExternalSecret | Password | PushSecret)[] = [];
+
+  if (options?.rotate && !options.persist) {
+    throw new Error(`Secret '${name}' sets rotate without persist`);
+  }
   const remoteKey = awsRemoteKey(namespace, name);
   const data: IExternalSecretData[] = [];
   const dataFrom: IExternalSecretDataFromRemoteRef[] = [];
@@ -666,6 +722,7 @@ export function buildGeneratedSecret(
           remoteKey,
           keyName,
           generatorRef,
+          options.rotate,
         ),
       );
       data.push({
@@ -685,12 +742,16 @@ export function buildGeneratedSecret(
     ...(options?.template && { template: options.template }),
   };
 
+  const persistedRefreshInterval = options?.rotate
+    ? ROTATING_CONSUMER_REFRESH_INTERVAL
+    : "1h";
+
   resources.push(
     new ExternalSecret({
       metadata: { name },
       spec: options?.persist
         ? {
-            refreshInterval: "1h",
+            refreshInterval: persistedRefreshInterval,
             secretStoreRef: AWS_STORE,
             target,
             data,
@@ -748,6 +809,12 @@ function renderWorkload(config: WorkloadApp): string[] {
     resources.push(toYaml(buildWafMiddleware(resolvedWaf)));
   }
 
+  const authentikForwardAuth = app.oidc?.kind === "proxy";
+
+  if (authentikForwardAuth) {
+    resources.push(toYaml(buildForwardAuthMiddleware()));
+  }
+
   resources.push(
     toYaml(
       buildDeployment(name, podSpec, {
@@ -781,6 +848,7 @@ function renderWorkload(config: WorkloadApp): string[] {
         subDomain,
         externallyAccessible,
         forwardAuth,
+        authentikForwardAuth,
         waf,
       });
       resources.push(toYaml(route));

@@ -1,0 +1,54 @@
+global:
+  env:
+    - name: AUTHENTIK_SECRET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: authentik-secret-key
+          key: secret-key
+    - name: AUTHENTIK_BOOTSTRAP_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: authentik-bootstrap-password
+          key: password
+    # The SMTP secret is created by hand in AWS; authentik must boot without it.
+    - name: AUTHENTIK_EMAIL__HOST
+      valueFrom:
+        secretKeyRef:
+          name: authentik-smtp
+          key: host
+          optional: true
+    - name: AUTHENTIK_EMAIL__USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: authentik-smtp
+          key: username
+          optional: true
+    - name: AUTHENTIK_EMAIL__PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: authentik-smtp
+          key: password
+          optional: true
+    - name: AUTHENTIK_EMAIL__FROM
+      valueFrom:
+        secretKeyRef:
+          name: authentik-smtp
+          key: from
+          optional: true
+
+authentik:
+  postgresql:
+    host: authentik-postgres
+    name: authentik
+    user: authentik
+    password: authentik
+  email:
+    port: 587
+    use_tls: true
+
+# Forward auth runs through the server pods, so keep two up through node drains.
+server:
+  replicas: 2
+  pdb:
+    enabled: true
+    minAvailable: 1

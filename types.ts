@@ -30,6 +30,18 @@ export type HelmRelease = {
   skipCrds?: boolean;
 };
 
+// `proxy` is forward auth through the embedded outpost (no shared secret).
+export type OidcDeclaration =
+  | {
+      kind: "proxy";
+      skipPathRegex?: readonly string[];
+    }
+  | {
+      kind: "oauth2";
+      redirectPaths: readonly `/${string}`[];
+      rotate: string;
+    };
+
 type BaseApp = {
   name: string;
   namespace?: string;
@@ -49,6 +61,7 @@ export type WorkloadApp = BaseApp & {
   subDomain?: string;
   externallyAccessible?: boolean;
   forwardAuth?: boolean;
+  oidc?: OidcDeclaration;
   /** Externally accessible apps get the WAF by default; set this to pick a profile or exempt the app. */
   waf?: WafSetting;
   extraResources?: ResourceLike[];

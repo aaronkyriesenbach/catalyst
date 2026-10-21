@@ -1,9 +1,9 @@
-import { readdirSync } from "fs";
 import { stringify } from "yaml";
 import { projectDefinitions } from "./constants";
 import {
   buildApplication,
   buildProject,
+  loadAllAppConfigs,
   loadAppConfig,
   renderAppFromConfig,
 } from "./utils";
@@ -19,11 +19,7 @@ if (appName) {
     resources.push(stringify(buildProject(name, spec)));
   }
 
-  for (const entry of readdirSync("apps", { withFileTypes: true })
-    .filter((entry) => entry.isFile())
-    .map((entry) => entry.name)) {
-    const appConfig = await loadAppConfig(entry);
-
+  for (const appConfig of await loadAllAppConfigs()) {
     resources.push(stringify(buildApplication(appConfig)));
   }
 
