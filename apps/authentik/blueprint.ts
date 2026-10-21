@@ -306,9 +306,9 @@ export const CLIENT_SECRET_PLACEHOLDER = "{{ .client_secret }}";
 
 // Rendered by ESO (not here) so the secret is part of the file: authentik only re-applies a
 // blueprint when the file itself changes, and a `!File` read would never trigger that.
+// No metaapplyblueprint on the apps blueprint: it is re-applied in full per secret (docs/authentik.md).
 export function buildClientSecretBlueprint(appName: string): string {
   return renderBlueprint(`${APPS_BLUEPRINT_NAME}-${appName}-secret`, [
-    requiredBlueprint(APPS_BLUEPRINT_NAME),
     {
       model: "authentik_providers_oauth2.oauth2provider",
       identifiers: { name: appName },
