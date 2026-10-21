@@ -175,10 +175,6 @@ const config: StaticApp = {
           configMaps: [blueprintsConfigMap],
           secrets: oauth2Apps.map((app) => oidcSecretName(app.name)),
         },
-        // Reloader restarts the worker when a blueprint or a client secret changes.
-        worker: {
-          deploymentAnnotations: { "reloader.stakater.com/auto": "true" },
-        },
       },
       parameters: {
         "global.image.repository": mirrorRepository(

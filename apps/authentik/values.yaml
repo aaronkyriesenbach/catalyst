@@ -1,4 +1,7 @@
 global:
+  # Reloader does not fire when an optional Secret is first created.
+  deploymentAnnotations:
+    reloader.stakater.com/auto: "true"
   env:
     - name: AUTHENTIK_SECRET_KEY
       valueFrom:
