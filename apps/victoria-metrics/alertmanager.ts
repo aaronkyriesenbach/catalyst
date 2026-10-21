@@ -1,36 +1,45 @@
 import { appriseUrl } from "../apprise";
+import {
+  alertSeverities,
+  alertSeverityOverrides,
+  type Severity,
+} from "../../notifications";
 
-// Apprise only accepts keys listed in `appriseNotifiers`.
+// Must be listed in `appriseNotifiers`.
 export const notifierKey = "victoria-metrics";
 
-// Alertmanager parses each rendered value as YAML and turns anything that looks like a
-// map or list into one, so colons are rewritten and every body line starts with a bullet.
+// Alertmanager YAML-parses rendered values, so colons are rewritten and lines start with a bullet.
 const NO_YAML_COLON = '| reReplaceAll `:(\\s|$)` " - "';
 
 const TITLE = `{{ $t := printf "%s - %s" (.Status | toUpper) .CommonLabels.alertname }}{{ with .CommonLabels.namespace }}{{ $t = printf "%s (%s)" $t . }}{{ end }}{{ $t ${NO_YAML_COLON} }}`;
 
 const BODY = `{{ $b := "" }}{{ range .Alerts }}{{ $s := .Labels.alertname }}{{ with .Annotations.summary }}{{ $s = . }}{{ end }}{{ with .Annotations.description }}{{ $s = printf "%s - %s" $s . }}{{ end }}{{ $b = printf "%s• %s\\n" $b ($s ${NO_YAML_COLON}) }}{{ end }}{{ $b }}`;
 
-// The receiver fixes Apprise's routing `tag`, so rules never name a channel.
-function appriseReceiver(name: string, tag: "warn" | "critical") {
+const TYPE =
+  '{{ if eq .Status "resolved" }}success{{ else if or (eq .CommonLabels.severity "critical") (eq .CommonLabels.severity "emergency") }}failure{{ else }}warning{{ end }}';
+
+const receiverName = (severity: Severity) => `apprise-${severity}`;
+
+function appriseReceiver(severity: Severity) {
   return {
-    name,
+    name: receiverName(severity),
     webhook_configs: [
       {
         url: `${appriseUrl}/notify/${notifierKey}`,
         send_resolved: true,
-        payload: {
-          title: TITLE,
-          body: BODY,
-          type: '{{ if eq .Status "resolved" }}success{{ else if eq .CommonLabels.severity "critical" }}failure{{ else }}warning{{ end }}',
-          tag,
-        },
+        payload: { title: TITLE, body: BODY, type: TYPE, tag: severity },
       },
     ],
   };
 }
 
-// Info and always-firing alerts go to blackhole: they are for dashboards, not a phone.
+const overrideRoutes = Object.entries(alertSeverityOverrides).map(
+  ([alertname, severity]) => ({
+    matchers: [`alertname="${alertname}"`],
+    receiver: receiverName(severity),
+  }),
+);
+
 export const alertmanagerConfig = {
   route: {
     receiver: "blackhole",
@@ -43,13 +52,12 @@ export const alertmanagerConfig = {
         matchers: ['alertname=~"Watchdog|InfoInhibitor"'],
         receiver: "blackhole",
       },
-      { matchers: ['severity="critical"'], receiver: "apprise-critical" },
-      { matchers: ['severity="warning"'], receiver: "apprise-warn" },
+      ...overrideRoutes,
+      ...alertSeverities.map((severity) => ({
+        matchers: [`severity="${severity}"`],
+        receiver: receiverName(severity),
+      })),
     ],
   },
-  receivers: [
-    { name: "blackhole" },
-    appriseReceiver("apprise-critical", "critical"),
-    appriseReceiver("apprise-warn", "warn"),
-  ],
+  receivers: [{ name: "blackhole" }, ...alertSeverities.map(appriseReceiver)],
 };

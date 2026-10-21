@@ -4,7 +4,8 @@ import {
 } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
 import { httpCheck, readiness } from "../probes";
 import type { WorkloadApp } from "../types";
-import { AWS_STORE, awsRemoteKey, image, readFile } from "../utils";
+import { buildAppriseConfig } from "../notifications";
+import { AWS_STORE, awsRemoteKey, image } from "../utils";
 
 const name = "apprise";
 const port = 8000;
@@ -53,10 +54,7 @@ const credentialData: IExternalSecretData[] = [
   remoteRef: { key, property },
 }));
 
-const notifierTemplate = await readFile(
-  "./apprise/notifier.yml",
-  import.meta.url,
-);
+const notifierTemplate = buildAppriseConfig();
 
 const configSecret = new ExternalSecret({
   metadata: { name: configSecretName },
