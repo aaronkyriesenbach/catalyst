@@ -8,7 +8,7 @@ export const authentikServicePort = 80;
 // TODO: move authentik to auth.lab53.net ({ subDomain: "auth", externallyAccessible: true }) at cutover.
 export const authentikHostOptions: HostOptions = {
   subDomain: "authentik",
-  externallyAccessible: false,
+  externallyAccessible: true,
 };
 
 export const authentikHostname = appHostname("authentik", authentikHostOptions);

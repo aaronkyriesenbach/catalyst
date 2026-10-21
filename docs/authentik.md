@@ -14,7 +14,7 @@ Identity provider for the cluster. It replaces Pocket ID app by app; see [forwar
 | `apps/authentik/enrollment-flow.yaml` | Invitation-only enrollment flow                                                  |
 | `auth.ts`                             | authentik URL, forward-auth Middleware, issuer helper                            |
 
-The hostname is `authentikHostOptions` in `auth.ts` (`authentik.int.lab53.net` for now). To move to `auth.lab53.net`, set it to `{ subDomain: "auth", externallyAccessible: true }` in the same change that removes Pocket ID, which holds that name today. Everything generated from it (provider URLs, the outpost host, each app's issuer) follows. The authentik route then gets the default WAF profile automatically.
+The hostname is `authentikHostOptions` in `auth.ts`: `authentik.lab53.net`, externally accessible because public apps send their users to it, so the route gets the default WAF profile (its `crowdsec-appsec` Middleware is emitted by `apps/authentik.ts`). To move to `auth.lab53.net`, set `subDomain` to `"auth"` in the same change that removes Pocket ID, which holds that name today. Everything generated from it (provider URLs, the outpost host, each app's issuer) follows.
 
 ## One-time setup
 

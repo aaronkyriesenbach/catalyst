@@ -21,6 +21,7 @@ import {
   readFile,
   readYaml,
 } from "../utils";
+import { buildWafMiddleware, resolveWaf } from "../waf";
 import {
   buildAppsBlueprint,
   buildClientSecretBlueprint,
@@ -141,6 +142,13 @@ const referenceGrant =
 
 const baseValues = await readYaml("./authentik/values.yaml", import.meta.url);
 
+const wafSetting = authentikHostOptions.externallyAccessible ? {} : undefined;
+const resolvedWaf = resolveWaf(
+  name,
+  authentikHostOptions.externallyAccessible,
+  wafSetting,
+);
+
 const config: StaticApp = {
   kind: "static",
   name,
@@ -150,10 +158,11 @@ const config: StaticApp = {
     ...secrets,
     blueprints,
     ...referenceGrant,
+    ...(resolvedWaf ? [buildWafMiddleware(resolvedWaf)] : []),
     buildRoute(name, authentikServicePort, {
       ...authentikHostOptions,
       serviceName: authentikServiceName,
-      waf: authentikHostOptions.externallyAccessible ? {} : undefined,
+      waf: wafSetting,
     }),
   ],
   helmReleases: [
