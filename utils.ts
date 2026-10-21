@@ -556,6 +556,7 @@ type GeneratedSecretOptions = {
 
 // Consumers re-read a rotating secret often so the two sides of a client secret converge quickly.
 export const ROTATING_CONSUMER_REFRESH_INTERVAL = "1m";
+export const STATIC_CONSUMER_REFRESH_INTERVAL = "1h";
 
 const PUSH_SECRET_PREFIX = "lab53/cluster0";
 
@@ -751,7 +752,7 @@ export function buildGeneratedSecret(
 
   const persistedRefreshInterval = options?.rotate
     ? ROTATING_CONSUMER_REFRESH_INTERVAL
-    : "1h";
+    : STATIC_CONSUMER_REFRESH_INTERVAL;
 
   resources.push(
     new ExternalSecret({

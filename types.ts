@@ -39,7 +39,7 @@ export type OidcDeclaration =
   | {
       kind: "oauth2";
       redirectPaths: readonly `/${string}`[];
-      rotate: string;
+      rotate: string | false;
     };
 
 type BaseApp = {

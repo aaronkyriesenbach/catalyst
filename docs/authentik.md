@@ -60,6 +60,8 @@ Apps that run their own OIDC flow use `withOidcClient({ redirectPaths })`. Forwa
 
 authentik allows one secret per provider, so for a minute or two after a rotation the two sides can disagree and token exchanges (new logins and token refreshes) fail until both converge. Established sessions aren't affected. Rotation is interval-based, so its time of day is arbitrary. `buildSeedPushSecret` has a TODO to move to a cron schedule once external-secrets supports it.
 
+Pass `rotate: false` to `withOidcClient` for an app that stores the secret itself, such as Jellyfin's SSO plugin, whose UI keeps its own copy. The secret is then seeded once and never replaced, and the app-side ExternalSecret refreshes hourly instead of every minute. Copy the value from the app's `<app>-oidc-credentials` Secret into the app's own settings.
+
 ## First boot
 
 Expect about 10 minutes from a fresh install until forward auth works. The pods are Ready after roughly 3 minutes of database migrations. `catalyst-apps` then waits for authentik's built-in blueprints, which takes several more minutes, and the embedded outpost loads its provider list about 30 seconds after that. Until then protected apps return a 404 from authentik. The `authentik` Argo app also stays Degraded while the `authentik-smtp` ExternalSecret has no AWS secret to read.

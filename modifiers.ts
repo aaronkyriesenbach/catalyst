@@ -23,6 +23,7 @@ import {
   buildStatefulSet,
   postgresImage,
   ROTATING_CONSUMER_REFRESH_INTERVAL,
+  STATIC_CONSUMER_REFRESH_INTERVAL,
 } from "./utils";
 import type { PostgresMajor } from "./versions";
 import type { WafOptions } from "./waf";
@@ -376,13 +377,18 @@ export function withForwardAuth(options?: {
   };
 }
 
-export function buildOidcCredentialsSecret(appName: string): ExternalSecret {
+export function buildOidcCredentialsSecret(
+  appName: string,
+  rotating: boolean,
+): ExternalSecret {
   const secretName = oidcCredentialsSecretName(appName);
 
   return new ExternalSecret({
     metadata: { name: secretName },
     spec: {
-      refreshInterval: ROTATING_CONSUMER_REFRESH_INTERVAL,
+      refreshInterval: rotating
+        ? ROTATING_CONSUMER_REFRESH_INTERVAL
+        : STATIC_CONSUMER_REFRESH_INTERVAL,
       secretStoreRef: AWS_STORE,
       target: {
         name: secretName,
@@ -409,7 +415,7 @@ export function buildOidcCredentialsSecret(appName: string): ExternalSecret {
 
 export function withOidcClient(options: {
   redirectPaths: readonly `/${string}`[];
-  rotate?: string;
+  rotate?: string | false;
 }): WorkloadModifier {
   return (app) => {
     if (!app.webPort) {
@@ -425,7 +431,7 @@ export function withOidcClient(options: {
       },
       extraResources: [
         ...(app.extraResources ?? []),
-        buildOidcCredentialsSecret(app.name),
+        buildOidcCredentialsSecret(app.name, options.rotate !== false),
       ],
     };
   };

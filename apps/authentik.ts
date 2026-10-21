@@ -97,7 +97,7 @@ const secrets: ResourceLike[] = [
           [{ key: "client_secret", length: 48, alphanumeric: true }],
           {
             persist: true,
-            rotate: app.oidc.rotate,
+            rotate: app.oidc.rotate || undefined,
             template: {
               data: {
                 [CLIENT_SECRET_BLUEPRINT_KEY]: buildClientSecretBlueprint(
