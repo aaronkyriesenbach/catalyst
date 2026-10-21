@@ -147,6 +147,8 @@ function providerEntry(app: OidcApp): Entry {
       ...common,
       client_type: "confidential",
       client_id: name,
+      // A blueprint-created provider allows no grant at all (the UI preselects every one).
+      grant_types: ["authorization_code", "refresh_token"],
       redirect_uris: oidc.redirectPaths.map((path) => ({
         matching_mode: "strict",
         url: `${url}${path}`,

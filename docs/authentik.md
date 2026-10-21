@@ -44,6 +44,7 @@ Things that behave differently than you might expect (all confirmed against auth
 - **First-boot ordering.** Blueprints apply in no fixed order, so each one starts with `metaapplyblueprint` entries naming the built-in blueprints it looks things up in.
 - **The outpost entry is a full set.** Every proxy provider must be in the one `authentik_outposts.outpost` entry, and `config` replaces the whole config, with `authentik_host` mandatory.
 - **Unchanged files are skipped.** authentik re-applies a blueprint only when the file's hash changes. A value read with `!File` or `!Env` doesn't count, which is why client secrets are rendered into a blueprint file (below).
+- **Grant types.** A provider created by a blueprint allows no grant type at all (the UI preselects every one), so the authorize endpoint answers `invalid_request` and the log says `Invalid grant_type for provider`. The generator sets `authorization_code` and `refresh_token`.
 - **Failures.** A bad entry fails the whole blueprint (status `error`, nothing applied). Check Customization, Blueprints in the admin UI, or the worker logs for `Blueprint invalid`.
 - **Editors.** `!KeyOf` and `!Find` are authentik tags, so generic YAML tooling reports them as unresolved. Registering them as custom tags (see authentik's blueprint docs) silences that.
 
