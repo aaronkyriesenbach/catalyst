@@ -80,6 +80,7 @@ config:
             - delete_key(attributes, "url.scheme")
             - delete_key(attributes, "net.host.port")
             - delete_key(attributes, "http.scheme")
+            - delete_matching_keys(attributes, "^k8s[.].*")
 
   exporters:
     debug: null

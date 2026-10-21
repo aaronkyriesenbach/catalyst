@@ -6,6 +6,9 @@ type TargetBase = {
   port: string;
   path?: string;
   dropMetrics?: string;
+  /** Regex over "<metric>;<le>" for histogram buckets to drop. */
+  dropBuckets?: string;
+  interval?: string;
   dropLabels?: string;
   honorLabels?: boolean;
 };
@@ -29,14 +32,22 @@ const serviceAccount = "/var/run/secrets/kubernetes.io/serviceaccount";
 // Histograms with no dashboard or rule consumer; they dominate the apiserver series count.
 const apiserverNoise = [
   "etcd_request_duration_seconds_bucket",
-  "apiserver_request_sli_duration_seconds_bucket",
   "apiserver_request_slo_duration_seconds_bucket",
   "apiserver_request_body_size_bytes_bucket",
   "apiserver_response_sizes_bucket",
   "apiserver_watch_events_sizes_bucket",
   "apiserver_watch_list_duration_seconds_bucket",
   "apiserver_watch_cache_read_wait_seconds_bucket",
+  "kubelet_.*",
+  "volume_manager_.*",
+  "storage_operation_.*",
+  "prober_.*",
+  "csi_.*",
 ].join("|");
+
+// The SLO burn-rate rules need these histograms, but not every bucket.
+const apiserverBuckets =
+  "(apiserver_request|apiserver_request_sli|etcd_request)_duration_seconds_bucket;(0.15|0.25|0.3|0.35|0.4|0.45|0.6|0.7|0.8|0.9|1.25|1.5|1.75|2.5|3|3.5|4.5|6|7|8|9|15|25|30|50)";
 
 const victoriaService = (job: string): ServiceTarget => ({
   kind: "service",
@@ -63,7 +74,10 @@ export const scrapeTargets: readonly ScrapeTarget[] = [
     serviceName: "kubernetes",
     port: "https",
     https: true,
+    honorLabels: true,
+    interval: "60s",
     dropMetrics: apiserverNoise,
+    dropBuckets: apiserverBuckets,
   },
   {
     kind: "service",
@@ -185,6 +199,15 @@ export function buildScrapeConfig(target: ScrapeTarget) {
     ...(target.dropLabels === undefined
       ? []
       : [{ action: "labeldrop", regex: target.dropLabels }]),
+    ...(target.dropBuckets === undefined
+      ? []
+      : [
+          {
+            action: "drop",
+            source_labels: ["__name__", "le"],
+            regex: target.dropBuckets,
+          },
+        ]),
     ...(target.dropMetrics === undefined
       ? []
       : [
@@ -198,7 +221,7 @@ export function buildScrapeConfig(target: ScrapeTarget) {
 
   return {
     job_name: `${target.job}-${target.kind}`,
-    scrape_interval: "30s",
+    scrape_interval: target.interval ?? "30s",
     ...(target.path === undefined ? {} : { metrics_path: target.path }),
     ...(target.honorLabels ? { honor_labels: true } : {}),
     ...(target.kind === "service" && target.https

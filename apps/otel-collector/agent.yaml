@@ -93,6 +93,12 @@ config:
               - action: drop
                 source_labels: [__name__]
                 regex: apiserver_.*|etcd_.*|rest_client_request_duration_.*
+              - action: drop
+                source_labels: [__name__]
+                regex: scheduler_.*|workqueue_.*|kubeproxy_.*|lasso_.*
+              - action: drop
+                source_labels: [__name__]
+                regex: apiextensions_.*
           - job_name: kubelet-cadvisor
             scrape_interval: 30s
             scrape_timeout: 10s
@@ -209,6 +215,7 @@ config:
             - delete_key(attributes, "url.scheme")
             - delete_key(attributes, "net.host.port")
             - delete_key(attributes, "http.scheme")
+            - delete_matching_keys(attributes, "^k8s[.].*")
     k8sattributes:
       filter:
         node_from_env_var: OTEL_K8S_NODE_NAME
