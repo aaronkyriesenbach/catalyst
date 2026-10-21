@@ -10,7 +10,7 @@ type Delivery = {
 
 // Edit this table to change who is told what; every sender posts a severity as its Apprise `tag`.
 export const severityDelivery: Record<Severity, Delivery> = {
-  info: { push: "normal" },
+  info: { email: true },
   warning: { email: true },
   critical: { push: "high", email: true },
   emergency: { push: "emergency", email: true },
