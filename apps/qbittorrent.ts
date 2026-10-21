@@ -1,8 +1,8 @@
 import {
   applyModifiers,
   withIscsiVolumes,
+  withForwardAuth,
   withNasMounts,
-  withOidcAuth,
 } from "../modifiers";
 import { readiness, startup, tcpCheck } from "../probes";
 import type { WorkloadApp } from "../types";
@@ -49,5 +49,5 @@ export default applyModifiers(
   withNasMounts({
     main: [{ mountPath: "/downloads", subPath: "etree" }],
   }),
-  withOidcAuth({ middleware: { enabled: true } }),
+  withForwardAuth(),
 );

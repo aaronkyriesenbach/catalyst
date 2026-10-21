@@ -27,7 +27,7 @@ import {
   buildClientSecretBlueprint,
   type OidcApp,
 } from "./authentik/blueprint";
-import { users } from "./authentik/users.config";
+import { groups, users } from "./authentik/users.config";
 
 const name = "authentik";
 const blueprintsConfigMap = `${name}-blueprints`;
@@ -112,7 +112,7 @@ const secrets: ResourceLike[] = [
 ];
 
 const blueprints = buildFileConfigMap(blueprintsConfigMap, {
-  "catalyst-apps.yaml": buildAppsBlueprint(oidcApps, users),
+  "catalyst-apps.yaml": buildAppsBlueprint(oidcApps, users, groups),
   "recovery-flow.yaml": await readFile(
     "./authentik/recovery-flow.yaml",
     import.meta.url,

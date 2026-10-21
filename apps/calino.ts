@@ -1,4 +1,4 @@
-import { applyModifiers, withOidcAuth } from "../modifiers";
+import { applyModifiers, withForwardAuth } from "../modifiers";
 import type { WorkloadApp } from "../types";
 import { image } from "../utils";
 import { httpCheck, readiness } from "../probes";
@@ -26,7 +26,4 @@ const base: WorkloadApp = {
   subDomain: "calendar",
 };
 
-export default applyModifiers(
-  base,
-  withOidcAuth({ middleware: { enabled: true } }),
-);
+export default applyModifiers(base, withForwardAuth());

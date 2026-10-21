@@ -1,9 +1,10 @@
 import {
   applyModifiers,
   withNasMounts,
-  withOidcAuth,
+  withOidcClient,
   withPostgres,
 } from "../modifiers";
+import { oidcIssuer } from "../auth";
 import type { WorkloadApp } from "../types";
 import { buildGeneratedSecret, image } from "../utils";
 import { httpCheck, readiness } from "../probes";
@@ -27,7 +28,7 @@ const base: WorkloadApp = {
               "postgres://shakedown:shakedown@shakedown-postgres:5432/shakedown?sslmode=disable",
           },
           { name: "STORAGE_ROOT", value: "/data" },
-          { name: "OIDC_ISSUER", value: "https://auth.lab53.net" },
+          { name: "OIDC_ISSUER", value: oidcIssuer(name) },
           {
             name: "OIDC_CLIENT_ID",
             valueFrom: {
@@ -89,5 +90,5 @@ export default applyModifiers(
     main: [{ mountPath: "/data", subPath: "cluster/shakedown" }],
   }),
   withPostgres(16, { backup: true }),
-  withOidcAuth(),
+  withOidcClient({ redirectPaths: ["/api/auth/callback"] }),
 );

@@ -1,4 +1,4 @@
-import { applyModifiers, withNasMounts, withOidcAuth } from "../modifiers";
+import { applyModifiers, withForwardAuth, withNasMounts } from "../modifiers";
 import { httpCheck, readiness } from "../probes";
 import type { WorkloadApp } from "../types";
 import { image } from "../utils";
@@ -25,5 +25,5 @@ export default applyModifiers(
   withNasMounts({
     main: [{ mountPath: "/data", subPath: "forscore" }],
   }),
-  withOidcAuth({ middleware: { enabled: true } }),
+  withForwardAuth(),
 );

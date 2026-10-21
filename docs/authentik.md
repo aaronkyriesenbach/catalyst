@@ -24,7 +24,7 @@ The hostname is `authentikHostOptions` in `auth.ts`: `authentik.lab53.net`, exte
 
 ## Users
 
-Users in `users.config.ts` are enforced from Git: `name` and group memberships are rewritten on every apply, and so is `email` when the entry sets one. Leave `email` unset to keep addresses out of the public repo and set it in the UI; the blueprint then never touches it. `groups` is a complete set, so memberships added to a declared user in the UI are reverted. Passwords are never touched. `admin: true` adds the user to authentik's `authentik Admins` group, and each entry in `apps` adds the app's group (which must have an `oidc` declaration, or the render fails).
+Users in `users.config.ts` are enforced from Git: `name` and group memberships are rewritten on every apply, and so is `email` when the entry sets one. Leave `email` unset to keep addresses out of the public repo and set it in the UI; the blueprint then never touches it. `groups` is a complete set, so memberships added to a declared user in the UI are reverted. Passwords are never touched. `admin: true` adds the user to authentik's `authentik Admins` group (authentik superuser). `apps` lists the apps the user may open, each of which must declare `oidc` or the render fails, or is `"all"` for every app that does, so new apps are granted automatically. `groups` lists extra groups from the `groups` array in the same file. Those exist for apps that read a group claim and are kept apart from authentik's own admin group: shakedown's `ADMIN_GROUP` is `admin`, for example. The names must not clash with an app or a built-in group.
 
 Everyone else is created in authentik and never appears in Git:
 

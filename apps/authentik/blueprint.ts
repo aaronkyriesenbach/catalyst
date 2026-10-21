@@ -77,6 +77,8 @@ type Entry = {
 };
 
 const groupId = (app: string) => `group-${app}`;
+const extraGroupId = (group: string) => `extra-group-${group}`;
+const RESERVED_GROUPS = ["authentik Admins", "users"];
 const providerId = (app: string) => `provider-${app}`;
 const applicationId = (app: string) => `app-${app}`;
 
@@ -210,13 +212,28 @@ function outpostEntry(apps: readonly OidcApp[]): Entry {
 }
 
 // `groups` is a full set too: memberships added to a declared user in the UI are reverted.
-function userEntry(user: DeclaredUser, apps: readonly OidcApp[]): Entry {
-  const known = new Set(apps.map((app) => app.name));
-  const unknown = user.apps.filter((app) => !known.has(app));
+function userEntry(
+  user: DeclaredUser,
+  apps: readonly OidcApp[],
+  extraGroups: readonly string[],
+): Entry {
+  const known = apps.map((app) => app.name);
+  const userApps = user.apps === "all" ? known : user.apps;
+  const unknownApps = userApps.filter((app) => !known.includes(app));
+  const userGroups = user.groups ?? [];
+  const unknownGroups = userGroups.filter(
+    (group) => !extraGroups.includes(group),
+  );
 
-  if (unknown.length > 0) {
+  if (unknownApps.length > 0) {
     throw new Error(
-      `User '${user.username}' lists apps without an oidc declaration: ${unknown.join(", ")}`,
+      `User '${user.username}' lists apps without an oidc declaration: ${unknownApps.join(", ")}`,
+    );
+  }
+
+  if (unknownGroups.length > 0) {
+    throw new Error(
+      `User '${user.username}' lists undeclared groups: ${unknownGroups.join(", ")}`,
     );
   }
 
@@ -228,10 +245,20 @@ function userEntry(user: DeclaredUser, apps: readonly OidcApp[]): Entry {
       ...(user.email !== undefined && { email: user.email }),
       is_active: true,
       groups: [
-        ...user.apps.map((app) => new KeyOf(groupId(app))),
+        ...userApps.map((app) => new KeyOf(groupId(app))),
+        ...userGroups.map((group) => new KeyOf(extraGroupId(group))),
         ...(user.admin ? [adminsGroup()] : []),
       ],
     },
+  };
+}
+
+function extraGroupEntry(name: string): Entry {
+  return {
+    model: "authentik_core.group",
+    id: extraGroupId(name),
+    identifiers: { name },
+    attrs: {},
   };
 }
 
@@ -245,8 +272,17 @@ function renderBlueprint(name: string, entries: readonly Entry[]): string {
 export function buildAppsBlueprint(
   apps: readonly OidcApp[],
   users: readonly DeclaredUser[],
+  extraGroups: readonly string[],
 ): string {
   const needsScopes = apps.some((app) => app.oidc.kind === "oauth2");
+  const taken = [...apps.map((app) => app.name), ...RESERVED_GROUPS];
+  const clashing = extraGroups.filter((group) => taken.includes(group));
+
+  if (clashing.length > 0) {
+    throw new Error(
+      `Groups clash with an app or built-in group: ${clashing.join(", ")}`,
+    );
+  }
 
   return renderBlueprint(APPS_BLUEPRINT_NAME, [
     requiredBlueprint(
@@ -258,8 +294,9 @@ export function buildAppsBlueprint(
       ? [requiredBlueprint("System - OAuth2 Provider - Scopes")]
       : []),
     ...apps.flatMap(appEntries),
+    ...extraGroups.map(extraGroupEntry),
     outpostEntry(apps),
-    ...users.map((user) => userEntry(user, apps)),
+    ...users.map((user) => userEntry(user, apps, extraGroups)),
   ]);
 }
 
