@@ -225,7 +225,7 @@ function userEntry(user: DeclaredUser, apps: readonly OidcApp[]): Entry {
     identifiers: { username: user.username },
     attrs: {
       name: user.name,
-      email: user.email,
+      ...(user.email !== undefined && { email: user.email }),
       is_active: true,
       groups: [
         ...user.apps.map((app) => new KeyOf(groupId(app))),

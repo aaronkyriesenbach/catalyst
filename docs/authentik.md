@@ -20,11 +20,11 @@ The hostname is `authentikHostOptions` in `auth.ts`: `authentik.lab53.net`, exte
 
 1. **SMTP.** Create SES SMTP credentials (SES console, SMTP settings). These are derived credentials, not the IAM access key `apprise` uses. Store them in AWS Secrets Manager as `lab53/cluster0/authentik/smtp-credentials` with the properties `host` (e.g. `email-smtp.us-east-1.amazonaws.com`), `username`, `password` and `from` (any address at the verified `lab53.net` domain). authentik starts without it, but recovery and invitation emails fail until it exists.
 2. **Break-glass admin.** On first start authentik creates `akadmin` with the generated password at `lab53/cluster0/authentik/authentik-bootstrap-password` (property `password`). It is only read on the first start.
-3. **Your own login.** Your user is declared in `users.config.ts` without a password. In the admin UI open Directory, Users, your user and choose **Email recovery link**.
+3. **Your own login.** Your user is declared in `users.config.ts` without a password or an email, because the repo is public. As `akadmin`, open Directory, Users, your user, set the email, and choose **Email recovery link**.
 
 ## Users
 
-Users in `users.config.ts` are enforced from Git: `name`, `email` and group memberships are rewritten on every apply. `groups` is a complete set, so memberships added to a declared user in the UI are reverted. Passwords are never touched. `admin: true` adds the user to authentik's `authentik Admins` group, and each entry in `apps` adds the app's group (which must have an `oidc` declaration, or the render fails).
+Users in `users.config.ts` are enforced from Git: `name` and group memberships are rewritten on every apply, and so is `email` when the entry sets one. Leave `email` unset to keep addresses out of the public repo and set it in the UI; the blueprint then never touches it. `groups` is a complete set, so memberships added to a declared user in the UI are reverted. Passwords are never touched. `admin: true` adds the user to authentik's `authentik Admins` group, and each entry in `apps` adds the app's group (which must have an `oidc` declaration, or the render fails).
 
 Everyone else is created in authentik and never appears in Git:
 
