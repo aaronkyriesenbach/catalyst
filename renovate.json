@@ -9,10 +9,10 @@
   "dependencyDashboard": true,
   "ignorePaths": ["cluster/**", "**/node_modules/**"],
   "timezone": "America/New_York",
-  "schedule": ["before 6am on saturday"],
   "minimumReleaseAge": "7d",
   "internalChecksFilter": "strict",
-  "prConcurrentLimit": 5,
+  "prConcurrentLimit": 0,
+  "rebaseWhen": "conflicted",
   "prHourlyLimit": 0,
   "platformAutomerge": true,
   "automergeType": "pr",
@@ -96,11 +96,6 @@
     {
       "description": "Denylist, never auto-merge (minors included): images and OCI charts. A kube-vip rollout moves the API and ingress VIPs.",
       "matchPackageNames": ["ghcr.io/kube-vip/kube-vip"],
-      "automerge": false
-    },
-    {
-      "description": "authentik ships breaking changes between releases; review every update, minors included.",
-      "matchPackageNames": ["authentik", "ghcr.io/goauthentik/**"],
       "automerge": false
     },
     {
