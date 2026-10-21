@@ -168,7 +168,7 @@ export const images = {
   },
   pocketId: {
     name: "ghcr.io/pocket-id/pocket-id",
-    tag: "v2.18.0",
+    tag: "v2.19.0",
     mirrored: true,
   },
   kubeVip: {
