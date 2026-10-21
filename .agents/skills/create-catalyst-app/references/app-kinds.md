@@ -7,7 +7,8 @@ what the upstream app provides.
 
 The most common kind. Provide a `podSpec` with containers, and catalyst
 auto-generates the Deployment, Service, and HTTPRoute. Use modifiers
-(`withNasMounts`, `withPostgres`, `withOidcAuth`, `withIscsiVolumes`) to add
+(`withNasMounts`, `withPostgres`, `withForwardAuth`, `withOidcClient`,
+`withIscsiVolumes`) to add
 storage, databases, and auth.
 
 **When to use:** The app provides a Docker image and you can describe it with
@@ -90,8 +91,8 @@ export default config;
 **Example — VolSync** (`apps/volsync.ts`):
 Single helm release with a custom namespace.
 
-**Example — Pocket ID** (`apps/pocket-id.ts`):
-Helm release with `values` loaded from a file, plus backup resources.
+**Example — authentik** (`apps/authentik.ts`):
+Helm release with `values` loaded from a file, plus Postgres and generated secrets.
 
 **Example — Cert Manager** (`apps/cert-manager.ts`):
 Helm release with `parameters` (`--set`), plus hand-crafted custom resources
@@ -99,11 +100,11 @@ from a subdirectory.
 
 ## Choosing Between Them
 
-| Situation                                          | Use                                          |
-| -------------------------------------------------- | -------------------------------------------- |
-| App has a Docker image, runs as a single pod       | WorkloadApp                                  |
-| App needs a database managed by catalyst           | WorkloadApp + `withPostgres`                 |
-| App needs OIDC auth                                | WorkloadApp + `withOidcAuth`                 |
-| Canonical install is a Helm chart                  | StaticApp + `helmReleases`                   |
-| Need resources beyond Deployment/Service/HTTPRoute | StaticApp, or WorkloadApp + `extraResources` |
-| Multiple related resources from a chart            | StaticApp + `helmReleases`                   |
+| Situation                                          | Use                                                |
+| -------------------------------------------------- | -------------------------------------------------- |
+| App has a Docker image, runs as a single pod       | WorkloadApp                                        |
+| App needs a database managed by catalyst           | WorkloadApp + `withPostgres`                       |
+| App needs a login (forward auth or its own OIDC)   | WorkloadApp + `withForwardAuth` / `withOidcClient` |
+| Canonical install is a Helm chart                  | StaticApp + `helmReleases`                         |
+| Need resources beyond Deployment/Service/HTTPRoute | StaticApp, or WorkloadApp + `extraResources`       |
+| Multiple related resources from a chart            | StaticApp + `helmReleases`                         |

@@ -91,44 +91,47 @@ withPostgres(17, {
 The Postgres container includes startup and readiness probes using `pg_isready`.
 Environment variables are: `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `PGDATA`.
 
-## withOidcAuth
+## withForwardAuth
 
-Creates PocketID OIDC client and group resources. With `middleware: true`, also
-adds Traefik OIDC middleware with ESO-generated plugin secret and sets
-`forwardAuth: true` on the HTTPRoute.
-
-**Without middleware** (just create the OIDC client + group):
+Puts the app behind a login with authentik's embedded outpost. The app needs a
+`webPort`; it gets a `forward-auth` Middleware and an outpost rule on its route,
+and `apps/authentik.ts` creates its group, provider and application.
 
 ```typescript
-withOidcAuth();
+withForwardAuth();
+withForwardAuth({ skipPathRegex: ["^/api/webhook$"] });
 ```
 
-**With middleware** (full auth enforcement at the reverse proxy):
+| Field           | Required | Description                                                |
+| --------------- | -------- | ---------------------------------------------------------- |
+| `skipPathRegex` | No       | Regexes for paths the outpost lets through without a login |
+
+Add the app's name to `apps` for each user in `apps/authentik/users.config.ts`
+who should have access (`"all"` covers every app). See `docs/forward-auth.md`.
+
+## withOidcClient
+
+For an app that runs its own OIDC flow. It registers a confidential authentik
+client and creates the `<app>-oidc-credentials` Secret (`client_id`,
+`client_secret`, `issuer_url`) for the app to read.
 
 ```typescript
-withOidcAuth({
-  middleware: {
-    enabled: true,
-    headers: [
-      { name: "Remote-User", value: "{{ .claims.preferred_username }}" },
-      { name: "Remote-Email", value: "{{ .claims.email }}" },
-    ],
-    bypassPaths: [{ type: "prefix", path: "/api/public" }],
-  },
+withOidcClient({ redirectPaths: ["/api/auth/callback"] });
+withOidcClient({
+  redirectPaths: ["/sso/OID/redirect/authentik"],
+  rotate: false,
 });
 ```
 
-| Field                    | Required | Description                                                                                       |
-| ------------------------ | -------- | ------------------------------------------------------------------------------------------------- |
-| `middleware.enabled`     | No       | If `true`, creates the Traefik OIDC middleware and sets `forwardAuth: true`. Defaults to `false`. |
-| `middleware.headers`     | No       | Headers to pass from the OIDC claims to the backend                                               |
-| `middleware.bypassPaths` | No       | Paths to skip auth (e.g. public health endpoints)                                                 |
+| Field           | Required | Description                                                                               |
+| --------------- | -------- | ----------------------------------------------------------------------------------------- |
+| `redirectPaths` | Yes      | Callback paths on the app's own host; authentik matches them exactly                      |
+| `rotate`        | No       | Rotation interval, default 90 days. `false` when the app keeps its own copy of the secret |
 
-Without middleware, the app is responsible for its own auth. With middleware,
-Traefik intercepts all requests, redirects unauthenticated users to PocketID,
-and passes user headers to the backend.
+A `StaticApp` calls `defineOidcClient(name, options)` instead and puts the
+returned `oidc` and `credentialsSecret` on the app. See `docs/authentik.md`.
 
 ## Precedence
 
-Modifiers are applied left-to-right. `withPostgres` and `withOidcAuth` add to
+Modifiers are applied left-to-right. `withPostgres` and `withOidcClient` add to
 `extraResources`, so put them after storage modifiers if order matters.

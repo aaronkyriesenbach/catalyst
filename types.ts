@@ -64,7 +64,6 @@ export type WorkloadApp = BaseApp & {
   webPort?: number;
   subDomain?: string;
   externallyAccessible?: boolean;
-  forwardAuth?: boolean;
   oidc?: OidcDeclaration;
   /** Externally accessible apps get the WAF by default; set this to pick a profile or exempt the app. */
   waf?: WafSetting;

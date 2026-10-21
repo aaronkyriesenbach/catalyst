@@ -166,11 +166,6 @@ export const images = {
     tag: "2026.10.0",
     mirrored: true,
   },
-  pocketId: {
-    name: "ghcr.io/pocket-id/pocket-id",
-    tag: "v2.19.0",
-    mirrored: true,
-  },
   kubeVip: {
     name: "ghcr.io/kube-vip/kube-vip",
     tag: "v1.3.1",
@@ -235,11 +230,6 @@ export const helmCharts = {
     kind: "oci",
     chart: "oci://quay.io/jetstack/charts/trust-manager",
     version: "v0.25.0",
-  },
-  pocketIdOperator: {
-    kind: "oci",
-    chart: "oci://ghcr.io/aclerici38/charts/pocket-id-operator",
-    version: "0.15.0",
   },
   immich: {
     kind: "oci",

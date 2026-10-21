@@ -1,6 +1,6 @@
 # authentik
 
-Identity provider for the cluster. It replaces Pocket ID app by app; see [forward-auth.md](forward-auth.md) for the migration state.
+Identity provider for the cluster. Apps use it through forward auth ([forward-auth.md](forward-auth.md)) or their own OIDC client.
 
 ## Layout
 
@@ -14,7 +14,7 @@ Identity provider for the cluster. It replaces Pocket ID app by app; see [forwar
 | `apps/authentik/enrollment-flow.yaml` | Invitation-only enrollment flow                                                  |
 | `auth.ts`                             | authentik URL, forward-auth Middleware, issuer helper                            |
 
-The hostname is `authentikHostOptions` in `auth.ts`: `auth.lab53.net`, externally accessible because public apps send their users to it, so the route gets the default WAF profile (its `crowdsec-appsec` Middleware is emitted by `apps/authentik.ts`). Everything generated from it (provider URLs, the outpost host, each app's issuer) follows. `authentik.lab53.net` is a second route (`authentik-previous`) while clients move over; each hostname gets its own issuer URL, so an app must be on one of them consistently.
+The hostname is `authentikHostOptions` in `auth.ts`: `auth.lab53.net`, externally accessible because public apps send their users to it, so the route gets the default WAF profile (its `crowdsec-appsec` Middleware is emitted by `apps/authentik.ts`). Everything generated from it (provider URLs, the outpost host, each app's issuer) follows. Each hostname the server answers on yields its own issuer URL, so an app must use one consistently.
 
 ## One-time setup
 
@@ -83,9 +83,6 @@ Forward auth for reader through Traefik (login redirect, the `/outpost.goauthent
 
 ## Not verified yet
 
-- SES delivery of recovery and invitation emails (needs the SMTP secret).
-- A browser login completing end to end (the declared user has no password until the recovery email is sent).
-- A rotation reaching authentik itself: the pieces are tested separately, but not with a real `withOidcClient` app.
-- The Cloudflare tunnel path, which matters for externally accessible apps (reader is internal).
+- A scheduled rotation of a real `withOidcClient` secret. The pieces were tested in a scratch namespace, but no app has reached its first 90 days yet.
 
 ESO's AWS user cannot delete secrets, so a deleted `PushSecret` leaves its AWS secret behind. The seeds use `deletionPolicy: None` for the same reason, and removing an app's secret is a manual step in AWS.

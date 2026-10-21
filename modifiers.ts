@@ -1,4 +1,3 @@
-import { Middleware } from "@kubernetes-models/traefik/traefik.io/v1alpha1/Middleware";
 import { ExternalSecret } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
 import type { IContainer, IVolume, IVolumeMount } from "kubernetes-models/v1";
 import {
@@ -18,10 +17,8 @@ import type {
   WorkloadApp,
 } from "./types";
 import {
-  appUrl,
   AWS_STORE,
   awsRemoteKey,
-  buildGeneratedSecret,
   buildHeadlessService,
   buildIscsiPvc,
   buildIscsiPvcTemplate,
@@ -208,168 +205,12 @@ export function withPostgres(
   });
 }
 
-const POCKET_ID_API_VERSION = "pocketid.internal/v1alpha1";
-const POCKET_ID_URL = "https://pocketid.lab53.net/";
-const DEFAULT_MIDDLEWARE_CALLBACK_PATH = "/oidc/callback";
-
-export type OidcClientApp = Pick<
-  WorkloadApp,
-  "name" | "webPort" | "subDomain" | "externallyAccessible"
->;
-
-export function buildOidcClient(
-  app: OidcClientApp,
-  callbackUrls?: string[],
-): ResourceLike {
-  const credentialsSecretName = `${app.name}-oidc-credentials`;
-
-  return {
-    apiVersion: POCKET_ID_API_VERSION,
-    kind: "PocketIDOIDCClient",
-    metadata: { name: app.name },
-    spec: {
-      secret: { name: credentialsSecretName },
-      allowedUserGroups: [{ name: app.name }],
-      ...(callbackUrls && { callbackUrls }),
-      ...(app.webPort && {
-        launchUrl: appUrl(app.name, {
-          subDomain: app.subDomain,
-          externallyAccessible: app.externallyAccessible,
-        }),
-      }),
-    },
-  };
-}
-
-export function buildOidcGroup(app: OidcClientApp): ResourceLike {
-  return {
-    apiVersion: POCKET_ID_API_VERSION,
-    kind: "PocketIDUserGroup",
-    metadata: { name: app.name },
-    spec: {
-      friendlyName: app.name,
-    },
-  };
-}
-
-function buildOidcMiddleware(
-  app: WorkloadApp,
-  bypassPaths?: BypassPath[],
-  headers?: OidcMiddlewareHeader[],
-): Middleware {
-  const credentialsSecretName = `${app.name}-oidc-credentials`;
-  const pluginSecretName = `${app.name}-oidc-plugin`;
-  const bypassRule =
-    bypassPaths && bypassPaths.length > 0
-      ? buildBypassRule(bypassPaths)
-      : undefined;
-
-  return new Middleware({
-    metadata: { name: "oidc-auth" },
-    spec: {
-      plugin: {
-        "traefik-oidc-auth": {
-          Secret: `urn:k8s:secret:${pluginSecretName}:plugin-secret`,
-          Provider: {
-            Url: POCKET_ID_URL,
-            ClientId: `urn:k8s:secret:${credentialsSecretName}:client_id`,
-            ClientSecret: `urn:k8s:secret:${credentialsSecretName}:client_secret`,
-          },
-          Scopes: ["openid", "profile", "email"],
-          CallbackUri: DEFAULT_MIDDLEWARE_CALLBACK_PATH,
-          SessionCookie: {
-            Name: `oidc-${app.name}`,
-            Domain: ".lab53.net",
-            Secure: true,
-            HttpOnly: true,
-            SameSite: "lax",
-          },
-          ...(bypassRule && { BypassAuthenticationRule: bypassRule }),
-          ...(headers &&
-            headers.length > 0 && {
-              Headers: headers.map((h) => ({
-                Name: h.name,
-                Value: h.value,
-              })),
-            }),
-        },
-      },
-    },
-  });
-}
-
-export type BypassPath = {
-  type: "exact" | "prefix";
-  path: `/${string}`;
-};
-
-function buildBypassRule(paths: BypassPath[]): string {
-  return paths
-    .map(({ type, path }) =>
-      type === "exact" ? `Path(\`${path}\`)` : `PathPrefix(\`${path}\`)`,
-    )
-    .join(" || ");
-}
-
-export type OidcMiddlewareHeader = {
-  name: string;
-  value: string;
-};
-
-export type OidcMiddlewareOptions = {
-  enabled: boolean;
-  bypassPaths?: BypassPath[];
-  headers?: OidcMiddlewareHeader[];
-};
-
-export type OidcAuthOptions = {
-  middleware?: OidcMiddlewareOptions;
-};
-
-export function withOidcAuth(options?: OidcAuthOptions): WorkloadModifier {
-  const middlewareOptions = options?.middleware;
-  const addMiddleware = middlewareOptions?.enabled ?? false;
-
-  return (app) => {
-    const extraResources: ResourceLike[] = [
-      buildOidcGroup(app),
-      buildOidcClient(app),
-    ];
-
-    if (addMiddleware) {
-      const pluginSecretName = `${app.name}-oidc-plugin`;
-      extraResources.push(
-        ...buildGeneratedSecret(app.namespace ?? app.name, pluginSecretName, [
-          { key: "plugin-secret", length: 32 },
-        ]),
-        buildOidcMiddleware(
-          app,
-          middlewareOptions?.bypassPaths,
-          middlewareOptions?.headers,
-        ),
-      );
-    }
-
-    return {
-      ...app,
-      forwardAuth: addMiddleware ? true : app.forwardAuth,
-      extraResources: [...(app.extraResources ?? []), ...extraResources],
-    };
-  };
-}
-
 export function withForwardAuth(options?: {
   skipPathRegex?: readonly string[];
 }): WorkloadModifier {
   return (app) => {
     if (!app.webPort) {
       throw new Error(`App '${app.name}' needs a webPort for forward auth`);
-    }
-
-    if (app.forwardAuth) {
-      throw new Error(
-        `App '${app.name}' already uses the Pocket ID forward auth plugin`,
-      );
     }
 
     return {

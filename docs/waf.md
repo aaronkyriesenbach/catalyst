@@ -6,7 +6,7 @@ Externally accessible apps are inspected by the [CrowdSec AppSec component](http
 
 - `apps/crowdsec.ts` installs the CrowdSec chart: LAPI, plus the AppSec pod with one listener per profile. The agent (log parsing) is disabled.
 - `waf.ts` holds the profile table, constants and the `Middleware` builder. `apps/crowdsec.ts` generates the AppSec acquisitions, collections and per-profile Services from it.
-- `renderWorkload` adds a `crowdsec-appsec` `Middleware` to the app's namespace and a matching `ExtensionRef` filter to its `HTTPRoute` for every app with `externallyAccessible: true`. The WAF filter comes before `oidc-auth`.
+- `renderWorkload` adds a `crowdsec-appsec` `Middleware` to the app's namespace and a matching `ExtensionRef` filter to its `HTTPRoute` for every app with `externallyAccessible: true`. The WAF filter comes before `forward-auth`.
 - The bouncer key is generated once into AWS (`lab53/cluster0/crowdsec/crowdsec-keys`) and pulled into two namespaces: `crowdsec` (for LAPI) and `traefik` (`crowdsec-bouncer-key`, mounted into Traefik at `/etc/traefik/crowdsec`).
 
 ## Defaults and failure behaviour

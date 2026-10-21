@@ -417,7 +417,6 @@ type RouteOptions = {
   serviceName?: string;
   namespace?: string;
   externallyAccessible?: boolean;
-  forwardAuth?: boolean;
   /** Forward auth through the authentik outpost; the `forward-auth` Middleware must exist in the route's namespace. */
   authentikForwardAuth?: boolean;
   /** Required for externally accessible routes. The `crowdsec-appsec` Middleware must exist in the route's namespace unless exempt. */
@@ -445,16 +444,9 @@ export function buildRoute(
     serviceName,
     namespace,
     externallyAccessible,
-    forwardAuth,
     authentikForwardAuth,
     waf,
   } = options ?? {};
-
-  if (forwardAuth && authentikForwardAuth) {
-    throw new Error(
-      `Route '${name}' can't use both the OIDC plugin and authentik forward auth`,
-    );
-  }
 
   if (externallyAccessible && waf === undefined) {
     throw new Error(
@@ -478,7 +470,6 @@ export function buildRoute(
     : [];
   const filters = [
     ...wafFilters,
-    ...(forwardAuth ? [extensionRefFilter("oidc-auth")] : []),
     ...(authentikForwardAuth
       ? [extensionRefFilter(FORWARD_AUTH_MIDDLEWARE_NAME)]
       : []),
@@ -802,7 +793,6 @@ function renderWorkload(config: WorkloadApp): string[] {
     webPort,
     subDomain,
     externallyAccessible,
-    forwardAuth,
     extraResources,
   } = app;
   const resources: string[] = [];
@@ -855,7 +845,6 @@ function renderWorkload(config: WorkloadApp): string[] {
       const route = buildRoute(name, webPort, {
         subDomain,
         externallyAccessible,
-        forwardAuth,
         authentikForwardAuth,
         waf,
       });

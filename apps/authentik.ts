@@ -164,13 +164,6 @@ const config: StaticApp = {
       serviceName: authentikServiceName,
       waf: wafSetting,
     }),
-    // Old hostname, kept until every client has moved to the new issuer URL.
-    buildRoute(`${name}-previous`, authentikServicePort, {
-      subDomain: "authentik",
-      externallyAccessible: authentikHostOptions.externallyAccessible,
-      serviceName: authentikServiceName,
-      waf: wafSetting,
-    }),
   ],
   helmReleases: [
     {

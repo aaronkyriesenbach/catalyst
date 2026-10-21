@@ -63,7 +63,7 @@ Translate the upstream setup into catalyst-specific patterns:
 | `docker run -v /data`            | `withIscsiVolumes({ main: [{ name: "data", mountPath: "/data" }] })`        |
 | `-e DATABASE_URL=postgres://...` | `withPostgres(17)` — see [references/modifiers.md](references/modifiers.md) |
 | `docker run your/image:1.2.3`    | Add an entry to `versions.ts` and use `image("key")`                        |
-| Sign-in page in the app          | `withOidcAuth({ middleware: { enabled: true, headers: [...] } })`           |
+| Sign-in page in the app          | `withForwardAuth()`, or `withOidcClient({ redirectPaths })` for native OIDC |
 | Config files                     | `buildFileConfigMap(...)` and volume mount                                  |
 | Arbitrary k8s resources          | `extraResources` on a WorkloadApp, or use a StaticApp                       |
 
@@ -126,4 +126,4 @@ gotchas specific to scaffold decisions:
 ## Reference Files
 
 - [references/app-kinds.md](references/app-kinds.md) — decision guide: when to use each kind, with code structures and example app pointers
-- [references/modifiers.md](references/modifiers.md) — field reference for `withIscsiVolumes`, `withNasMounts`, `withPostgres`, `withOidcAuth`
+- [references/modifiers.md](references/modifiers.md) — field reference for `withIscsiVolumes`, `withNasMounts`, `withPostgres`, `withForwardAuth`, `withOidcClient`

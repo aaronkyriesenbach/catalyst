@@ -74,7 +74,6 @@ export const helmReleaseNamespaces: Record<string, string> = {
   "trust-manager": "cert-manager",
   "external-secrets": "external-secrets",
   immich: "immich",
-  "pocket-id-operator": "pocket-id",
 };
 
 // Not secrets: the tunnel UUID is only usable by DNS records in this Cloudflare account.

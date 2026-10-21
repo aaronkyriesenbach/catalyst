@@ -1,13 +1,6 @@
 # Forward Auth
 
-Apps can be put behind a login in two ways while the Pocket ID to authentik migration is in progress:
-
-| Mechanism                              | Modifier                       | Status                                              |
-| -------------------------------------- | ------------------------------ | --------------------------------------------------- |
-| authentik embedded outpost             | `withForwardAuth()`            | Current. See [authentik](authentik.md).             |
-| `traefik-oidc-auth` plugin + Pocket ID | `withOidcAuth({ middleware })` | Legacy, until the remaining apps move to authentik. |
-
-An app uses one or the other, never both: `withForwardAuth()` throws if `forwardAuth` is already set.
+Apps are put behind a login with authentik's embedded outpost. An app that runs its own OIDC flow uses `withOidcClient` instead; see [authentik](authentik.md).
 
 ## authentik forward auth
 
@@ -66,20 +59,3 @@ The app render should contain a `forward-auth` Middleware and an `HTTPRoute` wit
 | Route rule and filter logic        | `utils.ts` (`buildRoute()`)   |
 | Blueprint generation               | `apps/authentik/blueprint.ts` |
 | authentik app and `ReferenceGrant` | `apps/authentik.ts`           |
-
-## Legacy: Pocket ID plugin
-
-[traefik-oidc-auth](https://github.com/sevensolutions/traefik-oidc-auth) with [Pocket ID](https://pocketid.lab53.net/), managed by the [pocket-id-operator](https://github.com/aclerici38/pocket-id-operator). It stays until the apps that still use it move to authentik, then this section, `withOidcAuth` and the plugin entry in `apps/traefik/values.yaml` go away.
-
-`withOidcAuth()` creates a `PocketIDUserGroup` and a `PocketIDOIDCClient` per app. With `{ middleware: { enabled: true } }` it also adds a Traefik `Middleware` named `oidc-auth` and an ESO-generated `<app>-oidc-plugin` secret, and sets `forwardAuth: true` so `buildRoute()` adds the filter. The session cookie is scoped to `.lab53.net`, so one login covers every plugin-protected app.
-
-```typescript
-export default applyModifiers(
-  base,
-  withOidcAuth({ middleware: { enabled: true } }),
-);
-```
-
-Without `middleware` the app handles OIDC itself, using the `<app>-oidc-credentials` secret the operator creates (`client_id`, `client_secret`, `issuer_url` and the endpoint URLs).
-
-Requirements: the pocket-id-operator (`apps/pocket-id.ts`), External Secrets (`apps/external-secrets.ts`) and the plugin declared in `apps/traefik/values.yaml`.
