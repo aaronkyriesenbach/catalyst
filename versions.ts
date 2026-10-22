@@ -143,7 +143,7 @@ export const images = {
   },
   calino: {
     name: "ghcr.io/ivan-malinovski/calino",
-    tag: "0.40.0",
+    tag: "0.41.0",
     mirrored: true,
   },
   forscore: {
