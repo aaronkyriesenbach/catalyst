@@ -1,4 +1,3 @@
-import { applyModifiers, withForwardAuth } from "../modifiers";
 import type { WorkloadApp } from "../types";
 import { image } from "../utils";
 import { httpCheck, readiness } from "../probes";
@@ -32,4 +31,4 @@ const base: WorkloadApp = {
   subDomain: "dispatcharr",
 };
 
-export default applyModifiers(base, withForwardAuth());
+export default base;
