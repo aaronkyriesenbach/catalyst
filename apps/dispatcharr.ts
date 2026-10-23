@@ -1,6 +1,7 @@
 import type { WorkloadApp } from "../types";
 import { image } from "../utils";
 import { httpCheck, readiness } from "../probes";
+import { applyModifiers, withIscsiVolumes } from "../modifiers";
 
 const base: WorkloadApp = {
   kind: "workload",
@@ -31,4 +32,7 @@ const base: WorkloadApp = {
   subDomain: "dispatcharr",
 };
 
-export default base;
+export default applyModifiers(
+  base,
+  withIscsiVolumes({ main: [{ name: "data", mountPath: "/data" }] }),
+);
