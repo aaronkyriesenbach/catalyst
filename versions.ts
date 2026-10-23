@@ -176,6 +176,11 @@ export const images = {
     tag: "v2.1.22",
     mirrored: false,
   },
+  dispatcharr: {
+    name: "ghcr.io/dispatcharr/dispatcharr",
+    tag: "0.32.0",
+    mirrored: true,
+  },
 } as const satisfies Record<string, ImageEntry>;
 
 export const postgresImages = {
