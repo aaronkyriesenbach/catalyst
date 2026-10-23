@@ -27,6 +27,8 @@ const base: WorkloadApp = {
         readinessProbe: readiness(httpCheck("/", 9191)),
       },
     ],
+    // TEMP: tighten this up once it's working
+    securityContext: {},
   },
   webPort: 9191,
   subDomain: "dispatcharr",
