@@ -178,7 +178,7 @@ export const images = {
   },
   dispatcharr: {
     name: "ghcr.io/dispatcharr/dispatcharr",
-    tag: "0.32.0",
+    tag: "0.33.0",
     mirrored: true,
   },
 } as const satisfies Record<string, ImageEntry>;
