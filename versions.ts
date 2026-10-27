@@ -234,7 +234,7 @@ export const helmCharts = {
   trustManager: {
     kind: "oci",
     chart: "oci://quay.io/jetstack/charts/trust-manager",
-    version: "v0.25.0",
+    version: "v0.26.0",
   },
   immich: {
     kind: "oci",
