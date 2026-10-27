@@ -48,7 +48,7 @@ export const images = {
   },
   curl: {
     name: "docker.io/curlimages/curl",
-    tag: "8.22.0",
+    tag: "8.23.0",
     mirrored: true,
   },
   linkwarden: {
