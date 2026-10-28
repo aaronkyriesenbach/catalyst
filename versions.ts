@@ -262,7 +262,7 @@ export const helmCharts = {
     kind: "repo",
     repo: "https://charts.goauthentik.io",
     chart: "authentik",
-    version: "2026.8.4",
+    version: "2026.8.5",
   },
   victoriaMetricsK8sStack: {
     kind: "repo",
