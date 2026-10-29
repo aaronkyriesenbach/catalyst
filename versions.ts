@@ -108,17 +108,17 @@ export const images = {
   },
   typetype: {
     name: "ghcr.io/typetype-video/typetype",
-    tag: "1.11.1",
+    tag: "1.12.0",
     mirrored: true,
   },
   typetypeServer: {
     name: "ghcr.io/typetype-video/typetype-server",
-    tag: "1.11.1",
+    tag: "1.12.0",
     mirrored: true,
   },
   typetypeDownloader: {
     name: "ghcr.io/typetype-video/typetype-downloader",
-    tag: "1.10.0",
+    tag: "1.12.0",
     mirrored: true,
   },
   typetypeToken: {
