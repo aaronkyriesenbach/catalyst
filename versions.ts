@@ -274,7 +274,7 @@ export const helmCharts = {
     kind: "repo",
     repo: "https://open-telemetry.github.io/opentelemetry-helm-charts",
     chart: "opentelemetry-collector",
-    version: "0.176.1",
+    version: "0.177.0",
   },
 } as const satisfies Record<string, HelmChartEntry>;
 
