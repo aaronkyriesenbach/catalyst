@@ -42,6 +42,9 @@ vmsingle:
       limits:
         memory: 1Gi
     extraArgs:
+      # Pin the cache budget: VictoriaMetrics otherwise sizes caches at 60% of
+      # the cgroup limit, starving the Go heap and tripping TooHighMemoryUsage.
+      memory.allowedBytes: "256MiB"
       # OTLP arrives from the collector; this keeps Prometheus metric names
       # (counters regain `_total`) so the chart's dashboards and rules match.
       opentelemetry.usePrometheusNaming: "true"
@@ -152,7 +155,8 @@ grafana:
         memory: 32Mi
       limits:
         memory: 128Mi
-  # Rotated client secrets reach Grafana through env, so it must restart on change.
+  # Rotated client secrets reach Grafana through env, so it must restart on
+  # change.
   podAnnotations:
     reloader.stakater.com/auto: "true"
   plugins:
