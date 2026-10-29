@@ -78,7 +78,7 @@ export const images = {
   },
   bun: {
     name: "docker.io/oven/bun",
-    tag: "1.4.3",
+    tag: "1.4.4",
     mirrored: true,
   },
   navidrome: {
