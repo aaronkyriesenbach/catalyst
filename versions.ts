@@ -108,7 +108,7 @@ export const images = {
   },
   typetype: {
     name: "ghcr.io/typetype-video/typetype",
-    tag: "1.13.0",
+    tag: "1.13.1",
     mirrored: true,
   },
   typetypeServer: {
