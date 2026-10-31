@@ -58,7 +58,7 @@ export const images = {
   },
   trilium: {
     name: "docker.io/triliumnext/trilium",
-    tag: "v0.106.0",
+    tag: "v0.106.1",
     mirrored: true,
   },
   shakedown: {
