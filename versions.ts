@@ -268,7 +268,7 @@ export const helmCharts = {
     kind: "repo",
     repo: "https://victoriametrics.github.io/helm-charts/",
     chart: "victoria-metrics-k8s-stack",
-    version: "0.96.0",
+    version: "0.96.1",
   },
   opentelemetryCollector: {
     kind: "repo",
