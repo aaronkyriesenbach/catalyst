@@ -250,7 +250,7 @@ export const helmCharts = {
   kyoo: {
     kind: "oci",
     chart: "oci://ghcr.io/zoriya/helm-charts/kyoo",
-    version: "5.2.1",
+    version: "5.3.0",
   },
   traefik: {
     kind: "repo",
