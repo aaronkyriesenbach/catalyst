@@ -153,7 +153,7 @@ export const images = {
   },
   apprise: {
     name: "docker.io/caronc/apprise",
-    tag: "2.0.1",
+    tag: "2.0.2",
     mirrored: true,
   },
   healthchecks: {
