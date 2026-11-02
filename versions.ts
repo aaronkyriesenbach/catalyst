@@ -158,7 +158,7 @@ export const images = {
   },
   healthchecks: {
     name: "docker.io/healthchecks/healthchecks",
-    tag: "v4.4",
+    tag: "v5.0",
     mirrored: true,
   },
   cloudflared: {
