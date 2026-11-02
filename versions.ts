@@ -173,7 +173,7 @@ export const images = {
   },
   zot: {
     name: "ghcr.io/project-zot/zot",
-    tag: "v2.1.22",
+    tag: "v2.1.23",
     mirrored: false,
   },
   dispatcharr: {
