@@ -213,7 +213,7 @@ export const images = {
   },
   qbittorrentNox: {
     name: "docker.io/qbittorrentofficial/qbittorrent-nox",
-    tag: "5.2.4-1",
+    tag: "5.3.0-1",
     mirrored: true,
   },
   configarr: {
