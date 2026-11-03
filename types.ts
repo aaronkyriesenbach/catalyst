@@ -44,6 +44,16 @@ export type OAuth2OidcDeclaration = {
 
 export type OidcDeclaration = ProxyOidcDeclaration | OAuth2OidcDeclaration;
 
+/** One more authentik application for an app that serves several hostnames (e.g. a media stack). */
+export type AdditionalOidcApp = {
+  /** Names the authentik group and application, so it must be unique across apps. */
+  name: string;
+  /** Hostname label; defaults to `name`. */
+  subDomain?: string;
+  externallyAccessible?: boolean;
+  oidc: OidcDeclaration;
+};
+
 type BaseApp = {
   name: string;
   namespace?: string;
@@ -60,6 +70,8 @@ type BaseApp = {
   subDomain?: string;
   /** Declares the authentik group, provider and application for this app. */
   oidc?: OidcDeclaration;
+  /** Registered next to `oidc`, in the app's namespace. The app builds the routes and Middleware itself. */
+  additionalOidc?: readonly AdditionalOidcApp[];
 };
 
 export type WorkloadApp = BaseApp & {

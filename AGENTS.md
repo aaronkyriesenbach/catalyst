@@ -59,7 +59,7 @@ bunx prettier --write .                      # Format the repo (config: .prettie
 - `withNasMounts(config)` — adds NFS volume + mounts keyed by container name. Throws if container name doesn't exist.
 - `withPostgres(version, options?)` — adds postgres as an **init container** with NAS-backed data at `cluster/<app>/postgres`. `version` is restricted to the majors in `postgresImages` (`versions.ts`); the image comes from there (mirrored `library/postgres:<major>-alpine`) unless `options.image` overrides it.
 - `withForwardAuth({ skipPathRegex? })` — puts the app behind authentik forward auth (embedded outpost). Sets `oidc: { kind: "proxy" }`; `renderWorkload` then emits the `forward-auth` Middleware and `buildRoute` the outpost rule and filter. No secret involved.
-- `withOidcClient({ redirectPaths, rotate? })` — for apps that run their own OIDC flow. Sets `oidc: { kind: "oauth2" }` and emits the `<app>-oidc-credentials` ExternalSecret (`client_id`, `client_secret`, `issuer_url`). `apps/authentik.ts` creates the confidential client and its rotating secret (default every 90 days, `DEFAULT_CLIENT_SECRET_ROTATION`; `rotate: false` for an app that stores the secret itself). `StaticApp`s use `defineOidcClient(name, options)` and put its `oidc` and `credentialsSecret` on the app. See Identity (authentik).
+- `withOidcClient({ redirectPaths, rotate? })` — for apps that run their own OIDC flow. Sets `oidc: { kind: "oauth2" }` and emits the `<app>-oidc-credentials` ExternalSecret (`client_id`, `client_secret`, `issuer_url`). `apps/authentik.ts` creates the confidential client and its rotating secret (default every 90 days, `DEFAULT_CLIENT_SECRET_ROTATION`; `rotate: false` for an app that stores the secret itself). `StaticApp`s use `defineOidcClient(name, options)` and put its `oidc` and `credentialsSecret` on the app. See Identity (authentik). An app that serves several hostnames (the arr stack) registers the extra ones, each with its own group and provider, in `additionalOidc` and builds their routes and the `forward-auth` Middleware itself.
 
 ### Rollouts and probes
 
@@ -92,6 +92,10 @@ Services send push and email by POSTing `{title, body, type, tag}` to `<appriseU
 ### Identity (authentik)
 
 authentik (`apps/authentik.ts`, `authentik` namespace, Helm chart + Postgres) provides login for the cluster's apps; see `docs/authentik.md`. Configuration is declarative through blueprints generated in TypeScript: an app declares `oidc` (via `withForwardAuth()` or `withOidcClient()`) and `apps/authentik.ts` scans every app (`loadAllAppConfigs`) to create its group, provider, application, policy binding and `ReferenceGrant`. Access is per app through a group named after the app. `apps/authentik/users.config.ts` lists users enforced from Git; everyone else is invited in the authentik UI. The hostname is `authentikHostOptions` in `auth.ts` (`auth.lab53.net`, externally accessible because public apps use it). Forward auth uses the embedded outpost through one identical `forward-auth` Middleware per namespace, so no plugin or per-app secret is needed. Client secrets for `withOidcClient` live in AWS (`lab53/cluster0/authentik/oidc-<app>`), rotate every 90 days, and reach authentik as a rendered blueprint file because authentik skips blueprints whose file hash is unchanged. The SMTP credentials (`lab53/cluster0/authentik/smtp-credentials`) are created by hand.
+
+### Media stack (arr)
+
+`apps/arr.ts` is one Argo app (namespace `arr`) for Radarr, Sonarr, Lidarr, Prowlarr, SABnzbd, FlareSolverr and a gluetun + qBittorrent pod, with every setting in Git: env vars, init scripts and a Configarr CronJob (`apps/arr/configarr.config.ts`). Every container starts non-root except gluetun, which needs root and `NET_ADMIN`; no Pod Security level is enforced on the namespace yet. The apps share one NFS export (`/mnt/tank/data/media`) mounted at `/data` so downloads hardlink into libraries. Each UI is its own forward-auth application, registered through `additionalOidc`.
 
 ### Web application firewall
 
@@ -171,7 +175,7 @@ Mend Renovate (GitHub App) opens PRs for images, charts and npm packages from `r
 | denylist      | PR only, always                                               |
 | disabled      | no PR (`whisper.cpp`, `immich-app/postgres`, Postgres majors) |
 
-- **Where the lists live:** the denylist is a pair of `matchPackageNames` rules in `renovate.json`; every minor auto-merges unless it is on the denylist or a major, and charts follow the same rules as images. Denylist: immich (chart + server image, grouped), cert-manager and trust-manager charts, external-secrets, volsync, home-assistant, kube-vip, authentik (chart + server image). Groups: `immich`, `typetype`, `bun` (image + `bun-types`).
+- **Where the lists live:** the denylist is a pair of `matchPackageNames` rules in `renovate.json`; every minor auto-merges unless it is on the denylist or a major, and charts follow the same rules as images. Denylist: immich (chart + server image, grouped), cert-manager and trust-manager charts, external-secrets, volsync, home-assistant, kube-vip, authentik (chart + server image), the home-operations Radarr/Sonarr/Lidarr/Prowlarr images (they publish pre-releases under normal tags; `allowedVersions` pins Sonarr 4, Radarr 6, Lidarr 3.1). Groups: `immich`, `typetype`, `bun` (image + `bun-types`).
 - **Vulnerability alerts** are disabled so security updates follow the same rules.
 - PR titles must stay within 80 characters; `commitMessageTopic` is `{{{depName}}}` to keep long OCI names short.
 

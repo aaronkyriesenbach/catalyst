@@ -181,6 +181,46 @@ export const images = {
     tag: "0.33.0",
     mirrored: true,
   },
+  radarr: {
+    name: "ghcr.io/home-operations/radarr",
+    tag: "6.4.4.10685",
+    mirrored: true,
+  },
+  sonarr: {
+    name: "ghcr.io/home-operations/sonarr",
+    tag: "4.0.20.3012",
+    mirrored: true,
+  },
+  lidarr: {
+    name: "ghcr.io/home-operations/lidarr",
+    tag: "3.1.6.5078",
+    mirrored: true,
+  },
+  prowlarr: {
+    name: "ghcr.io/home-operations/prowlarr",
+    tag: "2.7.0.5723",
+    mirrored: true,
+  },
+  sabnzbd: {
+    name: "ghcr.io/home-operations/sabnzbd",
+    tag: "5.1.3",
+    mirrored: true,
+  },
+  flaresolverr: {
+    name: "ghcr.io/flaresolverr/flaresolverr",
+    tag: "v3.5.2",
+    mirrored: true,
+  },
+  qbittorrentNox: {
+    name: "docker.io/qbittorrentofficial/qbittorrent-nox",
+    tag: "5.2.4-1",
+    mirrored: true,
+  },
+  configarr: {
+    name: "ghcr.io/raydak-labs/configarr",
+    tag: "1.38.0",
+    mirrored: true,
+  },
 } as const satisfies Record<string, ImageEntry>;
 
 export const postgresImages = {

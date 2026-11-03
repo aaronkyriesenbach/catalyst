@@ -37,22 +37,35 @@ type DeclaredApp = OidcApp & { namespace: string };
 
 function collectOidcApps(configs: readonly AppConfig[]): DeclaredApp[] {
   const apps = configs.flatMap((config): DeclaredApp[] => {
-    if (config.oidc === undefined) {
-      return [];
-    }
+    const namespace = appNamespace(config);
+    const declared: DeclaredApp[] = [];
 
-    return [
-      {
+    if (config.oidc !== undefined) {
+      declared.push({
         name: config.name,
-        namespace: appNamespace(config),
+        namespace,
         url: appUrl(config.name, {
           subDomain: config.subDomain,
           externallyAccessible:
             config.kind === "workload" ? config.externallyAccessible : false,
         }),
         oidc: config.oidc,
-      },
-    ];
+      });
+    }
+
+    for (const extra of config.additionalOidc ?? []) {
+      declared.push({
+        name: extra.name,
+        namespace,
+        url: appUrl(extra.name, {
+          subDomain: extra.subDomain,
+          externallyAccessible: extra.externallyAccessible,
+        }),
+        oidc: extra.oidc,
+      });
+    }
+
+    return declared;
   });
 
   return apps.sort((a, b) => a.name.localeCompare(b.name));

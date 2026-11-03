@@ -94,6 +94,33 @@
       "addLabels": ["needs-review"]
     },
     {
+      "description": "Denylist, never auto-merge (minors included): home-operations publishes pre-release Servarr builds under ordinary tags, so a human confirms each bump is a stable release. The version rules keep develop-branch majors (Sonarr 5, Radarr 7, Lidarr 3.2) out; they all carry the pre-release flag upstream.",
+      "matchPackageNames": [
+        "ghcr.io/home-operations/radarr",
+        "ghcr.io/home-operations/sonarr",
+        "ghcr.io/home-operations/lidarr",
+        "ghcr.io/home-operations/prowlarr"
+      ],
+      "automerge": false
+    },
+    {
+      "matchPackageNames": ["ghcr.io/home-operations/sonarr"],
+      "allowedVersions": "/^4\\./"
+    },
+    {
+      "matchPackageNames": ["ghcr.io/home-operations/radarr"],
+      "allowedVersions": "/^6\\./"
+    },
+    {
+      "matchPackageNames": ["ghcr.io/home-operations/lidarr"],
+      "allowedVersions": "/^3\\.1\\./"
+    },
+    {
+      "description": "The official qBittorrent image also publishes -lt1/-lt2 (libtorrent) variants of each release; stay on the default build.",
+      "matchPackageNames": ["docker.io/qbittorrentofficial/qbittorrent-nox"],
+      "allowedVersions": "/^\\d+\\.\\d+\\.\\d+-\\d+$/"
+    },
+    {
       "description": "Denylist, never auto-merge (minors included): images and OCI charts. A kube-vip rollout moves the API and ingress VIPs.",
       "matchPackageNames": ["ghcr.io/kube-vip/kube-vip"],
       "automerge": false
