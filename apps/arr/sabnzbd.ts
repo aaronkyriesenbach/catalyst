@@ -1,4 +1,3 @@
-import { buildBackupResources } from "../../backup";
 import { readiness, startup, tcpCheck } from "../../probes";
 import type { ResourceLike } from "../../types";
 import {
@@ -87,7 +86,6 @@ export const sabnzbdResources: ResourceLike[] = [
   ),
   initScript,
   buildIscsiPvc(pvcName, "2Gi"),
-  ...buildBackupResources(arrNamespace, pvcName),
   buildDeployment(
     sabnzbdName,
     {

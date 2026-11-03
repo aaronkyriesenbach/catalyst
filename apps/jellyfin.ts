@@ -42,9 +42,9 @@ export default applyModifiers(
   }),
   withNasMounts({
     main: [
-      { mountPath: "/movies", subPath: "movies" },
-      { mountPath: "/tv", subPath: "tv" },
-      { mountPath: "/live", subPath: "live" },
+      { mountPath: "/movies", subPath: "media/movies" },
+      { mountPath: "/tv", subPath: "media/tv" },
+      { mountPath: "/live", subPath: "media/live" },
     ],
   }),
   withOidcClient({

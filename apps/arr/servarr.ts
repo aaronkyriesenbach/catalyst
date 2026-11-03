@@ -1,4 +1,3 @@
-import { buildBackupResources } from "../../backup";
 import { httpCheck, readiness, startup } from "../../probes";
 import type { ResourceLike, StorageQuantity } from "../../types";
 import {
@@ -73,7 +72,6 @@ export function buildServarr(spec: ServarrSpec): ResourceLike[] {
       { persist: true },
     ),
     buildIscsiPvc(pvcName, spec.configStorage),
-    ...buildBackupResources(arrNamespace, pvcName),
     buildDeployment(
       spec.name,
       {

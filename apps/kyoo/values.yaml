@@ -37,11 +37,11 @@ media:
   volumeMounts:
     - name: media
       mountPath: /media/movies
-      subPath: movies
+      subPath: media/movies
       readOnly: true
     - name: media
       mountPath: /media/tv
-      subPath: tv
+      subPath: media/tv
       readOnly: true
   baseMountPath: /media
 

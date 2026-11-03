@@ -1,4 +1,3 @@
-import { buildBackupResources } from "../../backup";
 import { execCheck, readiness, startup, tcpCheck } from "../../probes";
 import type { ResourceLike } from "../../types";
 import {
@@ -153,7 +152,6 @@ export const torrentResources: ResourceLike[] = [
   ]),
   initScript,
   buildIscsiPvc(pvcName, "2Gi"),
-  ...buildBackupResources(arrNamespace, pvcName),
   deployment,
   buildService(torrentName, [{ port: torrentPort, name: "http" }]),
 ];

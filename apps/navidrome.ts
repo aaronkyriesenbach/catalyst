@@ -38,6 +38,6 @@ export default applyModifiers(
     main: [{ name: "data", mountPath: "/data", storageRequest: "10Gi" }],
   }),
   withNasMounts({
-    main: [{ mountPath: "/music", subPath: "music" }],
+    main: [{ mountPath: "/music", subPath: "media/music" }],
   }),
 );
