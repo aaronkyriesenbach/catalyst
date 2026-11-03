@@ -68,7 +68,7 @@ export const images = {
   },
   jellyfin: {
     name: "docker.io/jellyfin/jellyfin",
-    tag: "12.3",
+    tag: "12.4",
     mirrored: true,
   },
   radicale: {
