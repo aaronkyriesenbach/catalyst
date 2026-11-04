@@ -157,7 +157,14 @@ const config = {
     music: {
       base_url: "http://lidarr:8686",
       api_key: env(configarrEnvNames.lidarr),
-      root_folders: [mediaPaths.music],
+      root_folders: [
+        {
+          path: mediaPaths.music,
+          name: "Music",
+          metadata_profile: "Standard",
+          quality_profile: "Standard",
+        },
+      ],
       download_clients: downloadClients("music_category", "lidarr"),
     },
   },

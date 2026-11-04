@@ -781,9 +781,11 @@ export function buildGeneratedSecret(
   return resources;
 }
 
+// Kubernetes and ArgoCD parse YAML 1.1, where unquoted `on`/`off`/`yes`/`no` are booleans, but the
+// `yaml` package defaults to 1.2 and leaves them bare; version "1.1" makes it quote them.
 // Literal blocks keep embedded scripts readable; the default folds long lines into `>` blocks.
-function toYaml(value: unknown): string {
-  return stringify(value, { blockQuote: "literal" });
+export function toYaml(value: unknown): string {
+  return stringify(value, { blockQuote: "literal", version: "1.1" });
 }
 
 const defaultSecurityContext: IPodSecurityContext = {

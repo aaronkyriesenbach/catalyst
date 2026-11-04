@@ -1,9 +1,8 @@
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { stringify } from "yaml";
 import { assertChartImagesMirrored } from "./chart-images";
-import { appNamespace, loadAppConfig } from "../utils";
+import { appNamespace, loadAppConfig, toYaml } from "../utils";
 import { helmCharts, type HelmChartEntry } from "../versions";
 import type { HelmRelease } from "../types";
 
@@ -36,7 +35,7 @@ async function templateRelease(
   const entry: HelmChartEntry = helmCharts[release.chart];
   const valuesFile = join(tempDir, `${release.releaseName}-values.yaml`);
 
-  writeFileSync(valuesFile, stringify(release.values ?? {}));
+  writeFileSync(valuesFile, toYaml(release.values ?? {}));
 
   const setArgs = Object.entries(release.parameters ?? {}).flatMap(
     ([key, value]) => ["--set", `${key}=${value}`],

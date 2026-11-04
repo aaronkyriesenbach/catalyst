@@ -1,6 +1,10 @@
-import { stringify } from "yaml";
 import { Project, projectDefinitions } from "../constants";
-import { buildApplication, buildProject, loadAppConfig } from "../utils";
+import {
+  buildApplication,
+  buildProject,
+  loadAppConfig,
+  toYaml,
+} from "../utils";
 
 const usage =
   "Usage: bun run render <app-name> | bun run render argo <app|project> <name>";
@@ -32,10 +36,10 @@ if (arg1 === "argo") {
       process.exit(1);
     }
 
-    console.log(stringify(buildProject(name, projectDefinitions[name])));
+    console.log(toYaml(buildProject(name, projectDefinitions[name])));
   } else {
     const appConfig = await loadAppConfig(moduleName(name));
-    console.log(stringify(buildApplication(appConfig)));
+    console.log(toYaml(buildApplication(appConfig)));
   }
 } else {
   if (!arg1) {
