@@ -28,6 +28,7 @@ export const configarrEnvNames = {
   lidarr: "LIDARR_API_KEY",
   prowlarr: "PROWLARR_API_KEY",
   sabnzbd: "SABNZBD_API_KEY",
+  nzbgeek: "NZBGEEK_API_KEY",
 } as const;
 
 type CategoryField = "movie_category" | "tv_category" | "music_category";
@@ -81,9 +82,31 @@ function downloadClients(categoryField: CategoryField, category: string) {
   };
 }
 
-// Add the trackers you use here; each needs a Prowlarr `definition` name, e.g. "1337x".
-// Credentials do not belong in Git: read them with env() from a Secret on the CronJob.
-const indexers: { name: string; definition: string; tags?: string[] }[] = [];
+// Add the indexers you use here; each needs a Prowlarr `definition` name, e.g. "1337x". Prowlarr
+// syncs them to every app, and anything not listed here is deleted. Credentials do not belong in
+// Git: read them with env() from a Secret on the CronJob.
+const indexers: {
+  name: string;
+  definition: string;
+  sync_profile?: string;
+  priority?: number;
+  fields?: Record<string, unknown>;
+  tags?: string[];
+}[] = [
+  {
+    // `definition` is the preset's display name: its `definitionName` is the generic "Newznab",
+    // which would match the first Newznab preset instead.
+    name: "NZBgeek",
+    definition: "NZBgeek",
+    sync_profile: "Standard",
+    priority: 25,
+    fields: {
+      baseUrl: "https://api.nzbgeek.info",
+      apiPath: "/api",
+      apiKey: env(configarrEnvNames.nzbgeek),
+    },
+  },
+];
 
 const flaresolverrTag = "flaresolverr";
 

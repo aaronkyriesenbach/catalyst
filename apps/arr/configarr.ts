@@ -1,7 +1,12 @@
 import { CronJob } from "kubernetes-models/batch/v1";
 import type { ResourceLike } from "../../types";
-import { buildFileConfigMap, image } from "../../utils";
-import { restrictedContainer, timezone } from "./common";
+import {
+  awsRemoteKey,
+  buildAwsExternalSecret,
+  buildFileConfigMap,
+  image,
+} from "../../utils";
+import { arrNamespace, restrictedContainer, timezone } from "./common";
 import { buildConfigarrYaml, configarrEnvNames } from "./configarr.config";
 import { API_KEY_SECRET_KEY, apiKeySecretName } from "./servarr";
 import { sabnzbdApiKeySecret } from "./sabnzbd";
@@ -14,6 +19,16 @@ const apiKeyEnv = (envName: string, secret: string, key: string) => ({
   name: envName,
   valueFrom: { secretKeyRef: { name: secret, key } },
 });
+
+const nzbgeekSecretName = "nzbgeek-credentials";
+
+const nzbgeekSecret = buildAwsExternalSecret(nzbgeekSecretName, [
+  {
+    remoteKey: awsRemoteKey(arrNamespace, nzbgeekSecretName),
+    property: "api-key",
+    secretKey: "api-key",
+  },
+]);
 
 const configMap = buildFileConfigMap(configMapName, {
   "config.yml": buildConfigarrYaml(),
@@ -67,6 +82,11 @@ const cronJob = new CronJob({
                     sabnzbdApiKeySecret.name,
                     sabnzbdApiKeySecret.key,
                   ),
+                  apiKeyEnv(
+                    configarrEnvNames.nzbgeek,
+                    nzbgeekSecretName,
+                    "api-key",
+                  ),
                 ],
                 securityContext: restrictedContainer({
                   readOnlyRootFilesystem: true,
@@ -88,4 +108,8 @@ const cronJob = new CronJob({
   },
 });
 
-export const configarrResources: ResourceLike[] = [configMap, cronJob];
+export const configarrResources: ResourceLike[] = [
+  nzbgeekSecret,
+  configMap,
+  cronJob,
+];
