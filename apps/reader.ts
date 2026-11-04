@@ -145,7 +145,6 @@ export default applyModifiers(
         name: "config",
         mountPath: "/config",
         storageRequest: "2Gi",
-        backup: true,
       },
     ],
   }),
