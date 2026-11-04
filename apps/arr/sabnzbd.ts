@@ -45,6 +45,7 @@ const initScript = buildFileConfigMap(initScriptName, {
 // SABnzbd rejects any Host header it does not know, including the in-cluster Service name.
 const hostWhitelist = [
   appHostname(sabnzbdName),
+  sabnzbdName,
   `${sabnzbdName}.${arrNamespace}`,
   `${sabnzbdName}.${arrNamespace}.svc`,
   `${sabnzbdName}.${arrNamespace}.svc.cluster.local`,

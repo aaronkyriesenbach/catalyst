@@ -1,5 +1,7 @@
 #!/bin/sh
 # Rewrites qBittorrent.conf on every start, so the Web UI cannot drift from Git.
+# qBittorrent 5 reads Web UI settings from [WebUI]; with a current MigrationVersion it no longer
+# migrates the legacy [Preferences] WebUI\* keys, so those would be silently ignored.
 set -eu
 
 conf_dir=/config/qBittorrent/config
@@ -16,14 +18,14 @@ Session\Port=6881
 Accepted=true
 
 [Meta]
-MigrationVersion=9999
+MigrationVersion=12
 
-[Preferences]
-WebUI\Port=8080
-WebUI\Address=*
-WebUI\CSRFProtection=false
-WebUI\HostHeaderValidation=false
-WebUI\LocalHostAuth=false
-WebUI\AuthSubnetWhitelistEnabled=true
-WebUI\AuthSubnetWhitelist=${TRUSTED_SUBNET}
+[WebUI]
+Port=8080
+Address=*
+CSRFProtection=false
+HostHeaderValidation=false
+LocalHostAuth=false
+AuthSubnetWhitelistEnabled=true
+AuthSubnetWhitelist=${TRUSTED_SUBNET}
 EOF
