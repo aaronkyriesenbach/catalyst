@@ -218,7 +218,7 @@ export const images = {
   },
   configarr: {
     name: "ghcr.io/raydak-labs/configarr",
-    tag: "1.38.0",
+    tag: "1.39.0",
     mirrored: true,
   },
 } as const satisfies Record<string, ImageEntry>;
