@@ -14,6 +14,22 @@ set_misc() {
 set_misc download_dir "$INCOMPLETE_DIR"
 set_misc complete_dir "$COMPLETE_DIR"
 
+# An unquoted ini value ends at `#`, which silently truncates passwords that contain one.
+ini_quote() {
+  case $1 in
+  *\"*)
+    case $1 in
+    *\'*)
+      echo "value contains both quote characters" >&2
+      return 1
+      ;;
+    esac
+    printf "'%s'" "$1"
+    ;;
+  *) printf '"%s"' "$1" ;;
+  esac
+}
+
 {
   echo "[categories]"
   echo "[[*]]"
@@ -46,8 +62,8 @@ if [[ -n "${USENET_HOST:-}" ]]; then
     echo "host = $USENET_HOST"
     echo "port = $USENET_PORT"
     echo "timeout = 60"
-    echo "username = ${USENET_USERNAME:-}"
-    echo "password = ${USENET_PASSWORD:-}"
+    echo "username = $(ini_quote "${USENET_USERNAME:-}")"
+    echo "password = $(ini_quote "${USENET_PASSWORD:-}")"
     echo "connections = $USENET_CONNECTIONS"
     echo "ssl = 1"
     echo "ssl_verify = 2"
