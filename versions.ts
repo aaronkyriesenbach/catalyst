@@ -163,7 +163,7 @@ export const images = {
   },
   cloudflared: {
     name: "docker.io/cloudflare/cloudflared",
-    tag: "2026.10.5",
+    tag: "2026.10.6",
     mirrored: true,
   },
   kubeVip: {
