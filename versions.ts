@@ -36,16 +36,6 @@ export const images = {
     tag: "5.5.2",
     mirrored: true,
   },
-  sublime: {
-    name: "ghcr.io/aaronkyriesenbach/sublime",
-    tag: "0.4.0",
-    mirrored: true,
-  },
-  whisperCpp: {
-    name: "ghcr.io/ggml-org/whisper.cpp",
-    tag: "main-c62adfbd1ecdaea9e295c72d672992514a2d887c",
-    mirrored: true,
-  },
   curl: {
     name: "docker.io/curlimages/curl",
     tag: "8.23.0",

@@ -173,7 +173,7 @@ Mend Renovate (GitHub App) opens PRs for images, charts and npm packages from `r
 | minor         | auto-merge                                                    |
 | major         | PR only, `needs-review` label                                 |
 | denylist      | PR only, always                                               |
-| disabled      | no PR (`whisper.cpp`, `immich-app/postgres`, Postgres majors) |
+| disabled      | no PR (`immich-app/postgres`, Postgres majors) |
 
 - **Where the lists live:** the denylist is a pair of `matchPackageNames` rules in `renovate.json`; every minor auto-merges unless it is on the denylist or a major, and charts follow the same rules as images. Denylist: immich (chart + server image, grouped), cert-manager and trust-manager charts, external-secrets, volsync, home-assistant, kube-vip, authentik (chart + server image), the home-operations Radarr/Sonarr/Lidarr/Prowlarr images (they publish pre-releases under normal tags; `allowedVersions` pins Sonarr 4, Radarr 6, Lidarr 3.1). Groups: `immich`, `typetype`, `bun` (image + `bun-types`).
 - **Vulnerability alerts** are disabled so security updates follow the same rules.

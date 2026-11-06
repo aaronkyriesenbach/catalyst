@@ -160,10 +160,7 @@
     },
     {
       "description": "Disabled: floating or compound tags Renovate cannot order, and Postgres majors (see docs/postgres-migration.md).",
-      "matchPackageNames": [
-        "ghcr.io/ggml-org/whisper.cpp",
-        "ghcr.io/immich-app/postgres"
-      ],
+      "matchPackageNames": ["ghcr.io/immich-app/postgres"],
       "enabled": false
     },
     {

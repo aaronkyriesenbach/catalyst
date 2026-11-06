@@ -45,8 +45,6 @@ media:
       readOnly: true
   baseMountPath: /media
 
-# Requests only: without them these pods get the minimum CPU share when a
-# neighbour (e.g. whisper) saturates the node.
 api:
   kyoo_api:
     resources:
