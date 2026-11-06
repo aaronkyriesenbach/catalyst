@@ -21,6 +21,10 @@ const base: WorkloadApp = {
       {
         name: "main",
         image: image("zot"),
+        resources: {
+          requests: { cpu: "25m", memory: "128Mi" },
+          limits: { memory: "1Gi" },
+        },
         args: ["serve", "/etc/zot/config.json"],
         ports: [{ name: "http", containerPort: port }],
         startupProbe: startup(httpCheck("/v2/", port), 120),

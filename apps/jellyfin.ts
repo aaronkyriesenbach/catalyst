@@ -16,6 +16,10 @@ const base: WorkloadApp = {
       {
         name: "main",
         image: image("jellyfin"),
+        resources: {
+          requests: { cpu: "100m", memory: "512Mi" },
+          limits: { cpu: "4", memory: "3Gi" },
+        },
         ports: [{ name: "http", containerPort: 8096 }],
         readinessProbe: readiness(httpCheck("/health", 8096)),
         startupProbe: startup(httpCheck("/health", 8096), 300),

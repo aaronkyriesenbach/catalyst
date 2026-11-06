@@ -10,12 +10,36 @@ import { torrentName, torrentPort, torrentResources } from "./arr/torrent";
 
 const name = "arr";
 
-type ServarrApp = Pick<ServarrSpec, "name" | "image" | "port">;
+type ServarrApp = Pick<ServarrSpec, "name" | "image" | "port" | "resources">;
 
 const servarrDefinitions: ServarrApp[] = [
-  { name: "radarr", image: "radarr", port: 7878 },
-  { name: "sonarr", image: "sonarr", port: 8989 },
-  { name: "lidarr", image: "lidarr", port: 8686 },
+  {
+    name: "radarr",
+    image: "radarr",
+    port: 7878,
+    resources: {
+      requests: { cpu: "25m", memory: "128Mi" },
+      limits: { memory: "768Mi" },
+    },
+  },
+  {
+    name: "sonarr",
+    image: "sonarr",
+    port: 8989,
+    resources: {
+      requests: { cpu: "50m", memory: "256Mi" },
+      limits: { memory: "1Gi" },
+    },
+  },
+  {
+    name: "lidarr",
+    image: "lidarr",
+    port: 8686,
+    resources: {
+      requests: { cpu: "50m", memory: "256Mi" },
+      limits: { memory: "1Gi" },
+    },
+  },
   { name: "prowlarr", image: "prowlarr", port: 9696 },
 ];
 

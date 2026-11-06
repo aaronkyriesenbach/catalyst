@@ -36,6 +36,10 @@ const base: WorkloadApp = {
       {
         name: "main",
         image: image("healthchecks"),
+        resources: {
+          requests: { cpu: "25m", memory: "128Mi" },
+          limits: { memory: "768Mi" },
+        },
         env: [
           {
             name: "SECRET_KEY",

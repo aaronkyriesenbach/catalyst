@@ -16,6 +16,10 @@ const base: WorkloadApp = {
       {
         name: "main",
         image: image("qbittorrent"),
+        resources: {
+          requests: { cpu: "50m", memory: "512Mi" },
+          limits: { memory: "3Gi" },
+        },
         env: [
           { name: "PUID", value: "1000" },
           { name: "PGID", value: "1000" },

@@ -2,6 +2,7 @@
 # `traefik`). The image is intentionally not mirrored through
 # zot.int.lab53.net: that registry is served through this Traefik, so a
 # restarted pod could not pull its own image.
+---
 deployment:
   replicas: 2
   podAnnotations:
@@ -33,6 +34,9 @@ resources:
   requests:
     cpu: 100m
     memory: 256Mi
+  limits:
+    cpu: "2"
+    memory: 512Mi
 service:
   annotations:
     kube-vip.io/loadbalancerIPs: 192.168.53.201

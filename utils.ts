@@ -148,10 +148,10 @@ export async function loadAppConfig(path: string): Promise<AppConfig> {
 // `exclude` stops an aggregating app (authentik) from awaiting its own import. Sequential on
 // purpose: the CMP has no node_modules, and concurrent imports race Bun's auto-install.
 export async function loadAllAppConfigs(
-  exclude?: string,
+  exclude: readonly string[] = [],
 ): Promise<AppConfig[]> {
   const files = readdirSync("apps", { withFileTypes: true })
-    .filter((entry) => entry.isFile() && entry.name !== exclude)
+    .filter((entry) => entry.isFile() && !exclude.includes(entry.name))
     .map((entry) => entry.name);
   const configs: AppConfig[] = [];
 

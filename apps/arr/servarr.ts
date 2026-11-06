@@ -1,3 +1,4 @@
+import type { IResourceRequirements } from "kubernetes-models/v1";
 import { httpCheck, readiness, startup } from "../../probes";
 import type { ResourceLike, StorageQuantity } from "../../types";
 import {
@@ -33,6 +34,8 @@ export type ServarrSpec = {
   /** Prowlarr only talks to indexers and the other apps, so it needs no media. */
   mountsMedia: boolean;
   mediaClaim: string;
+  /** Unset keeps the namespace LimitRange defaults. */
+  resources?: IResourceRequirements;
 };
 
 // Servarr apps read <APP>__<SECTION>__<KEY> from the environment over config.xml, which keeps
@@ -80,6 +83,7 @@ export function buildServarr(spec: ServarrSpec): ResourceLike[] {
           {
             name: "main",
             image: image(spec.image),
+            ...(spec.resources && { resources: spec.resources }),
             env: servarrEnv(spec),
             ports: [{ name: "http", containerPort: spec.port }],
             readinessProbe: readiness(ping),

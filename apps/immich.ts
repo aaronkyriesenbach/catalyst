@@ -25,6 +25,10 @@ const postgresStatefulSet = buildStatefulSet(
       {
         name: "postgres",
         image: image("immichPostgres"),
+        resources: {
+          requests: { cpu: "50m", memory: "256Mi" },
+          limits: { memory: "1Gi" },
+        },
         env: [
           {
             name: "POSTGRES_USER",

@@ -11,6 +11,10 @@ const base: WorkloadApp = {
       {
         name: "main",
         image: image("homeAssistant"),
+        resources: {
+          requests: { cpu: "25m", memory: "128Mi" },
+          limits: { memory: "768Mi" },
+        },
         env: [
           {
             name: "TZ",

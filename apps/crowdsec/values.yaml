@@ -1,7 +1,15 @@
+---
 agent:
   enabled: false
 
 lapi:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 500Mi
   env:
     - name: BOUNCER_KEY_traefik
       valueFrom:

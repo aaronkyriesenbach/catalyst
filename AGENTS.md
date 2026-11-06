@@ -69,6 +69,10 @@ bunx prettier --write .                      # Format the repo (config: .prettie
 - `withIscsiVolumes` forces `Recreate` (RWO volume); those apps have a short outage on every rollout. NFS-only apps may overlap.
 - external-dns stays `Recreate`: upstream says it has no leader election and must not run duplicate instances.
 
+### Resource requests and limits
+
+`apps/limit-ranges.ts` generates a `LimitRange` named `defaults` in every namespace an app deploys into (plus `unmanagedNamespaces` in `constants.ts`: argocd, default, kube-system). It fills in `defaultContainerResources` (`constants.ts`) for any container that sets neither request nor limit, so Git never needs to repeat the defaults. Every app therefore gets default requests and limits automatically. An app that needs something different must set **both** requests and limits explicitly, on the container or in chart values, because a partial setting is completed from the defaults (a request above the default limit with no limit is rejected by the API). LimitRange applies at pod creation only, so existing pods keep running unbounded until they restart. A namespace created in the same sync as its LimitRange fails the first attempt and succeeds on retry; pods started in between have no defaults. Apps that scan every app with `loadAllAppConfigs` must exclude `limit-ranges.ts`, which scans them too. `cluster/argocd-values.yaml` is applied by hand, so its resource values take effect after `bun run install-argo`.
+
 ### Generated Secrets
 
 - `buildGeneratedSecret(name, keys)` in `utils.ts` creates ExternalSecret + optional per-key Password generators.
@@ -167,13 +171,13 @@ Mend Renovate (GitHub App) opens PRs for images, charts and npm packages from `r
 - **Timing:** Docker Hub, Helm-repo and npm updates are created once a version is 7 days old (`minimumReleaseAge`). `ghcr.io`, `quay.io` and `docker.dragonflydb.io` expose no registry-provided release date, so a rule sets `minimumReleaseAgeBehaviour: timestamp-optional` and they skip the age check. There is no schedule: PRs are created as soon as an update passes the age check, so minors and patches roll in one at a time. `prConcurrentLimit` is `0` (unlimited) and `rebaseWhen` is `conflicted`, so open PRs are rebased only on a real conflict instead of after every merge.
 - **Verify:** `.github/workflows/verify.yml` (required check `verify`) runs typecheck, Prettier, `check-versions`, `render-all` and `render-charts` (`helm template` for every app with `helmReleases`, so a chart that rejects our values fails the check). On PRs it posts a sticky comment with the rendered-manifest and chart diff against the base, and a failure banner if a chart does not render or renders an unmirrored image.
 
-| Update        | Behaviour                                                     |
-| ------------- | ------------------------------------------------------------- |
-| patch, digest | auto-merge (GitHub auto-merge once `verify` is green)         |
-| minor         | auto-merge                                                    |
-| major         | PR only, `needs-review` label                                 |
-| denylist      | PR only, always                                               |
-| disabled      | no PR (`immich-app/postgres`, Postgres majors) |
+| Update        | Behaviour                                             |
+| ------------- | ----------------------------------------------------- |
+| patch, digest | auto-merge (GitHub auto-merge once `verify` is green) |
+| minor         | auto-merge                                            |
+| major         | PR only, `needs-review` label                         |
+| denylist      | PR only, always                                       |
+| disabled      | no PR (`immich-app/postgres`, Postgres majors)        |
 
 - **Where the lists live:** the denylist is a pair of `matchPackageNames` rules in `renovate.json`; every minor auto-merges unless it is on the denylist or a major, and charts follow the same rules as images. Denylist: immich (chart + server image, grouped), cert-manager and trust-manager charts, external-secrets, volsync, home-assistant, kube-vip, authentik (chart + server image), the home-operations Radarr/Sonarr/Lidarr/Prowlarr images (they publish pre-releases under normal tags; `allowedVersions` pins Sonarr 4, Radarr 6, Lidarr 3.1). Groups: `immich`, `typetype`, `bun` (image + `bun-types`).
 - **Vulnerability alerts** are disabled so security updates follow the same rules.

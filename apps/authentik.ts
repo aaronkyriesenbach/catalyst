@@ -71,7 +71,10 @@ function collectOidcApps(configs: readonly AppConfig[]): DeclaredApp[] {
   return apps.sort((a, b) => a.name.localeCompare(b.name));
 }
 
-const oidcApps = collectOidcApps(await loadAllAppConfigs(`${name}.ts`));
+// limit-ranges scans every app too, so loading it from here would be circular.
+const oidcApps = collectOidcApps(
+  await loadAllAppConfigs([`${name}.ts`, "limit-ranges.ts"]),
+);
 const oauth2Apps = oidcApps.filter((app) => app.oidc.kind === "oauth2");
 const proxyNamespaces = [
   ...new Set(
@@ -171,7 +174,13 @@ const config: StaticApp = {
   name,
   namespace: authentikNamespace,
   resources: [
-    ...buildPostgresResources(name, authentikNamespace, 17, { backup: true }),
+    ...buildPostgresResources(name, authentikNamespace, 17, {
+      backup: true,
+      resources: {
+        requests: { cpu: "50m", memory: "128Mi" },
+        limits: { memory: "768Mi" },
+      },
+    }),
     ...secrets,
     blueprints,
     ...referenceGrant,

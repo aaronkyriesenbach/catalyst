@@ -128,8 +128,11 @@ export const sabnzbdResources: ResourceLike[] = [
             { name: "SABNZBD__LOCAL_RANGES_ENTRIES", value: podCidr },
           ],
           ports: [{ name: "http", containerPort: sabnzbdPort }],
-          // Requests without limits: a BestEffort pod gets the lowest CPU weight and starves on a busy node.
-          resources: { requests: { cpu: "1", memory: "512Mi" } },
+          // Unpacking and par2 repair use several cores in bursts.
+          resources: {
+            requests: { cpu: "500m", memory: "512Mi" },
+            limits: { cpu: "2", memory: "2Gi" },
+          },
           // `/` can answer 403 to the kubelet's Host header, so only the port is probed.
           readinessProbe: readiness(tcpCheck(sabnzbdPort)),
           startupProbe: startup(tcpCheck(sabnzbdPort), 120),

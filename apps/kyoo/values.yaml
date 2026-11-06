@@ -5,7 +5,8 @@ kyoo:
   # API key for a JWT.
   middlewareRootURL: https://kyoo.int.lab53.net
   oidc_providers:
-    # The endpoint addresses are set in apps/kyoo.ts so they follow authentik's hostname.
+    # The endpoint addresses are set in apps/kyoo.ts so they follow
+    # authentik's hostname.
     - name: authentik
       existingSecret: kyoo-oidc-credentials
       clientIdKey: client_id
@@ -48,7 +49,11 @@ media:
 api:
   kyoo_api:
     resources:
-      requests: { cpu: 250m, memory: 512Mi }
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        memory: 768Mi
   persistence:
     storageClass: truenas-iscsi
     size: 10Gi
@@ -57,7 +62,12 @@ auth:
     reloader.stakater.com/auto: "true"
   kyoo_auth:
     resources:
-      requests: { cpu: 100m, memory: 64Mi }
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 500m
+        memory: 256Mi
   # RWO profile-picture PVC: a surge pod on the other node can't attach it.
   updateStrategy:
     type: Recreate
@@ -66,18 +76,32 @@ auth:
 transcoder:
   kyoo_transcoder:
     resources:
-      requests: { cpu: 100m, memory: 64Mi }
+      requests:
+        cpu: 100m
+        memory: 64Mi
+      limits:
+        cpu: "2"
+        memory: 1Gi
   persistence:
     storageClass: truenas-iscsi
 
 front:
   kyoo_front:
     resources:
-      requests: { cpu: 50m, memory: 32Mi }
+      requests:
+        cpu: 50m
+        memory: 32Mi
+      limits:
+        cpu: 500m
+        memory: 128Mi
 scanner:
   kyoo_scanner:
     resources:
-      requests: { cpu: 100m, memory: 384Mi }
+      requests:
+        cpu: 100m
+        memory: 384Mi
+      limits:
+        memory: 768Mi
 
 traefikproxy:
   enabled: false

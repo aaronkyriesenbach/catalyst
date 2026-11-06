@@ -1,20 +1,24 @@
 # install: helm upgrade --install -n argocd --create-namespace \
 #   -f argocd-values.yaml --version 9.4.17 argocd argocd/argo-cd
 
+---
 global:
   domain: argocd.int.lab53.net
 
 configs:
   cm:
     exec.enabled: true
-    resource.exclusions:
-      | # Default exclusion list minus Endpoints and EndpointSlices because we managed EndpointSlices in Argo to route traffic to external hosts.
-      ### Internal Kubernetes resources excluded reduce the number of watched events
+    # Default exclusion list minus Endpoints and EndpointSlices because we
+    # manage EndpointSlices in Argo to route traffic to external hosts.
+    resource.exclusions: |
+      ### Internal Kubernetes resources excluded reduce the number of watched
+      ### events
       - apiGroups:
         - coordination.k8s.io
         kinds:
         - Lease
-      ### Internal Kubernetes Authz/Authn resources excluded reduce the number of watched events
+      ### Internal Kubernetes Authz/Authn resources excluded reduce the number
+      ### of watched events
       - apiGroups:
         - authentication.k8s.io
         - authorization.k8s.io
@@ -25,7 +29,8 @@ configs:
         - SelfSubjectAccessReview
         - SelfSubjectRulesReview
         - SubjectAccessReview
-      ### Intermediate Certificate Request excluded reduce the number of watched events
+      ### Intermediate Certificate Request excluded reduce the number of
+      ### watched events
       - apiGroups:
         - certificates.k8s.io
         kinds:
@@ -34,14 +39,16 @@ configs:
         - cert-manager.io
         kinds:
         - CertificateRequest
-      ### Cilium internal resources excluded reduce the number of watched events and UI Clutter
+      ### Cilium internal resources excluded reduce the number of watched
+      ### events and UI Clutter
       - apiGroups:
         - cilium.io
         kinds:
         - CiliumIdentity
         - CiliumEndpoint
         - CiliumEndpointSlice
-      ### Kyverno intermediate and reporting resources excluded reduce the number of watched events and improve performance
+      ### Kyverno intermediate and reporting resources excluded reduce the
+      ### number of watched events and improve performance
       - apiGroups:
         - kyverno.io
         - reports.kyverno.io
@@ -65,17 +72,34 @@ configs:
         discover:
           fileName: main.ts
   params:
-    server.insecure: true # This is the Argo project's recommendation for TLS termination at the Gateway level; terminate there, connect to Argo at :80.
+    # The Argo project's recommendation for TLS termination at the Gateway
+    # level: terminate there, connect to Argo at :80.
+    server.insecure: true
+
+controller:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      memory: 2Gi
 
 repoServer:
   extraContainers:
     - name: ts-cmp
       command: ["/var/run/argocd/argocd-cmp-server"]
       image: oven/bun:1.3.11
+      resources:
+        requests:
+          cpu: 50m
+          memory: 128Mi
+        limits:
+          memory: 1Gi
       securityContext:
         runAsNonRoot: true
         runAsUser: 999
-      env: # This is required to allow Bun to install dependencies at a path it has write access to
+      # Lets Bun install dependencies at a path it has write access to.
+      env:
         - name: BUN_INSTALL_CACHE_DIR
           value: /tmp
       volumeMounts:

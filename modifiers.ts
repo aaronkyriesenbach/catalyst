@@ -1,5 +1,10 @@
 import { ExternalSecret } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
-import type { IContainer, IVolume, IVolumeMount } from "kubernetes-models/v1";
+import type {
+  IContainer,
+  IResourceRequirements,
+  IVolume,
+  IVolumeMount,
+} from "kubernetes-models/v1";
 import {
   authentikNamespace,
   DEFAULT_CLIENT_SECRET_ROTATION,
@@ -114,6 +119,8 @@ export type PostgresOptions = {
   storageRequest?: StorageQuantity;
   backup?: boolean;
   backupSchedule?: CronExpression;
+  /** Unset keeps the namespace LimitRange defaults. */
+  resources?: IResourceRequirements;
 };
 
 /**
@@ -150,6 +157,7 @@ export function buildPostgresResources(
         {
           name: "postgres",
           image,
+          ...(options?.resources && { resources: options.resources }),
           env: [
             ...pgEnv,
             {

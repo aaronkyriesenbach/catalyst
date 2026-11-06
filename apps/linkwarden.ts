@@ -21,6 +21,10 @@ const base: WorkloadApp = {
       {
         name: "main",
         image: image("linkwarden"),
+        resources: {
+          requests: { cpu: "25m", memory: "128Mi" },
+          limits: { memory: "1Gi" },
+        },
         ports: [{ name: "http", containerPort: 3000 }],
         env: [
           {

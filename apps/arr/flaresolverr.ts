@@ -16,6 +16,11 @@ export const flaresolverrResources: ResourceLike[] = [
       {
         name: "main",
         image: image("flaresolverr"),
+        // Includes the memory-backed /dev/shm Chromium needs.
+        resources: {
+          requests: { cpu: "25m", memory: "128Mi" },
+          limits: { memory: "1Gi" },
+        },
         env: [
           { name: "TZ", value: timezone },
           { name: "LOG_LEVEL", value: "info" },

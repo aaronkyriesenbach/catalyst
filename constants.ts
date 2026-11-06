@@ -47,6 +47,22 @@ export const unmirroredChartImages: readonly UnmirroredChartImage[] = [
   },
 ];
 
+// Applied by apps/limit-ranges.ts to containers that set none. The default limit
+// must stay at or above every request that is set without a limit, or the API
+// rejects the pod.
+export const defaultContainerResources = {
+  requests: { cpu: "10m", memory: "64Mi" },
+  limits: { cpu: "1", memory: "512Mi" },
+} as const;
+
+// Namespaces that run pods but are not owned by a catalyst app (argocd is
+// bootstrapped by hand from cluster/).
+export const unmanagedNamespaces: readonly string[] = [
+  "argocd",
+  "default",
+  "kube-system",
+];
+
 export enum Project {
   SYSTEM = "system",
 }

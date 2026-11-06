@@ -1,3 +1,4 @@
+---
 controllers:
   main:
     containers:
@@ -24,6 +25,13 @@ server:
                 name: immich-db
           env:
             DB_VECTOR_EXTENSION: vectorchord
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              cpu: "2"
+              memory: 3Gi
 
 machine-learning:
   enabled: true
@@ -31,6 +39,15 @@ machine-learning:
     main:
       # RWO cache PVC: a surge pod scheduled on the other node can't attach it.
       strategy: Recreate
+      containers:
+        main:
+          resources:
+            requests:
+              cpu: 100m
+              memory: 1Gi
+            limits:
+              cpu: "2"
+              memory: 3Gi
   persistence:
     cache:
       enabled: true

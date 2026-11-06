@@ -11,6 +11,10 @@ const base: WorkloadApp = {
       {
         name: "main",
         image: image("dispatcharr"),
+        resources: {
+          requests: { cpu: "50m", memory: "512Mi" },
+          limits: { memory: "2Gi" },
+        },
         ports: [{ name: "http", containerPort: 9191 }],
         env: [
           { name: "DISPATCHARR_ENV", value: "aio" },
