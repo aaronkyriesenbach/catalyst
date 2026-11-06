@@ -4,6 +4,8 @@
 ---
 global:
   domain: argocd.int.lab53.net
+  # Argo is not on the serving path, but a stalled Argo stops every sync.
+  priorityClassName: system-cluster-critical
 
 configs:
   cm:
@@ -82,9 +84,17 @@ controller:
       cpu: 100m
       memory: 512Mi
     limits:
+      cpu: "1"
       memory: 2Gi
 
 repoServer:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: "1"
+      memory: 512Mi
   extraContainers:
     - name: ts-cmp
       command: ["/var/run/argocd/argocd-cmp-server"]
@@ -94,6 +104,7 @@ repoServer:
           cpu: 50m
           memory: 128Mi
         limits:
+          cpu: "1"
           memory: 1Gi
       securityContext:
         runAsNonRoot: true
@@ -120,3 +131,48 @@ repoServer:
         name: argocd-cmp-cm
     - name: cmp-tmp
       emptyDir: {}
+
+server:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: "1"
+      memory: 256Mi
+
+redis:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: "1"
+      memory: 128Mi
+
+dex:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      cpu: "1"
+      memory: 128Mi
+
+applicationSet:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      cpu: "1"
+      memory: 256Mi
+
+notifications:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      cpu: "1"
+      memory: 256Mi

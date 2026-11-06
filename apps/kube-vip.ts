@@ -81,6 +81,9 @@ const daemonSet = new DaemonSet({
     template: {
       metadata: { labels },
       spec: {
+        // Holds the API server and ingress VIPs, so it must be the last pod
+        // evicted under node pressure.
+        priorityClassName: "system-node-critical",
         serviceAccountName: name,
         affinity: {
           nodeAffinity: {
@@ -139,6 +142,12 @@ const daemonSet = new DaemonSet({
               // DNS is managed by external-dns.
               { name: "vip_ddns", value: "false" },
             ],
+            // Requests equal limits for Guaranteed QoS (lowest OOM score). Real
+            // usage is ~5m CPU and ~25Mi, so throttling at 250m is not a concern.
+            resources: {
+              requests: { cpu: "250m", memory: "128Mi" },
+              limits: { cpu: "250m", memory: "128Mi" },
+            },
             securityContext: {
               capabilities: { add: ["NET_ADMIN", "NET_RAW"] },
             },
