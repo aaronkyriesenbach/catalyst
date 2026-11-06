@@ -8,7 +8,8 @@ const RESTIC_SERVER_URL = "rest:http://restic-server.restic-server:8000";
 const VOLSYNC_API_VERSION = "volsync.backube/v1alpha1";
 const DEFAULT_SNAPSHOT_CLASS = "truenas-iscsi";
 const DEFAULT_STORAGE_CLASS = "truenas-iscsi";
-const BACKUP_WINDOW_START_HOUR = 0;
+// UTC (VolSync cron): 05:00-10:00 is 00:00-05:00 EST, 01:00-06:00 in EDT.
+const BACKUP_WINDOW_START_HOUR = 5;
 const BACKUP_WINDOW_MINUTES = 300;
 const DEFAULT_PRUNE_INTERVAL_DAYS = 14;
 
