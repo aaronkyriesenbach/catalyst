@@ -98,22 +98,22 @@ export const images = {
   },
   typetype: {
     name: "ghcr.io/typetype-video/typetype",
-    tag: "1.15.0",
+    tag: "1.16.1",
     mirrored: true,
   },
   typetypeServer: {
     name: "ghcr.io/typetype-video/typetype-server",
-    tag: "1.15.0",
+    tag: "1.16.1",
     mirrored: true,
   },
   typetypeDownloader: {
     name: "ghcr.io/typetype-video/typetype-downloader",
-    tag: "1.15.0",
+    tag: "1.16.1",
     mirrored: true,
   },
   typetypeToken: {
     name: "ghcr.io/typetype-video/typetype-token",
-    tag: "1.15.0",
+    tag: "1.16.1",
     mirrored: true,
   },
   immichPostgres: {
