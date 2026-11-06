@@ -1,6 +1,6 @@
 import { ExternalSecret } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
 import { clusterGeneratorRef } from "./apps/external-secrets";
-import { dailyAt, type CronExpression } from "./cron";
+import { cron, type CronExpression } from "./cron";
 import type { ResourceLike } from "./types";
 import { AWS_STORE, awsRemoteKey, buildSeedPushSecret } from "./utils";
 
@@ -8,7 +8,8 @@ const RESTIC_SERVER_URL = "rest:http://restic-server.restic-server:8000";
 const VOLSYNC_API_VERSION = "volsync.backube/v1alpha1";
 const DEFAULT_SNAPSHOT_CLASS = "truenas-iscsi";
 const DEFAULT_STORAGE_CLASS = "truenas-iscsi";
-const DEFAULT_SCHEDULE = dailyAt(3);
+const BACKUP_WINDOW_START_HOUR = 0;
+const BACKUP_WINDOW_MINUTES = 300;
 const DEFAULT_PRUNE_INTERVAL_DAYS = 14;
 
 const DEFAULT_RETAIN = {
@@ -16,6 +17,28 @@ const DEFAULT_RETAIN = {
   weekly: 4,
   monthly: 2,
 };
+
+// FNV-1a: stable across runs, so a PVC keeps its slot between renders.
+function fnv1a(input: string): number {
+  let hash = 0x811c9dc5;
+  for (const char of input) {
+    hash ^= char.codePointAt(0) ?? 0;
+    hash = Math.imul(hash, 0x01000193) >>> 0;
+  }
+  return hash;
+}
+
+// Stagger backups within the window to keep load on TrueNAS low
+export function staggeredBackupSchedule(
+  namespace: string,
+  pvcName: string,
+): CronExpression {
+  const offset = fnv1a([namespace, pvcName].join("/")) % BACKUP_WINDOW_MINUTES;
+  return cron({
+    minute: offset % 60,
+    hour: BACKUP_WINDOW_START_HOUR + Math.floor(offset / 60),
+  });
+}
 
 export type BackupOptions = {
   schedule?: CronExpression;
@@ -73,6 +96,7 @@ function buildResticConfigSecret(
 }
 
 function buildReplicationSource(
+  namespace: string,
   pvcName: string,
   options?: BackupOptions,
 ): ResourceLike {
@@ -89,7 +113,8 @@ function buildReplicationSource(
     spec: {
       sourcePVC: pvcName,
       trigger: {
-        schedule: options?.schedule ?? DEFAULT_SCHEDULE,
+        schedule:
+          options?.schedule ?? staggeredBackupSchedule(namespace, pvcName),
       },
       restic: {
         copyMethod: "Snapshot",
@@ -115,6 +140,6 @@ export function buildBackupResources(
 ): ResourceLike[] {
   return [
     ...buildResticConfigSecret(namespace, pvcName),
-    buildReplicationSource(pvcName, options),
+    buildReplicationSource(namespace, pvcName, options),
   ];
 }
