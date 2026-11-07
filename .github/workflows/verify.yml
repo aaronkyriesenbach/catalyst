@@ -53,6 +53,7 @@ jobs:
         run: bun run check-versions
 
       - name: Render all apps
+        id: render-head
         run: bun run render-all "$HEAD_RENDER_DIR"
 
       - name: Setup Helm
@@ -91,7 +92,9 @@ jobs:
             "$BASE_CHARTS_DIR"
 
       - name: Diff renders
-        if: ${{ !cancelled() && github.event_name == 'pull_request' }}
+        if: >-
+          ${{ !cancelled() && github.event_name == 'pull_request' &&
+          steps.render-head.outcome == 'success' }}
         run: |
           mkdir -p "$DIFF_DIR"
           bun run diff-renders "$BASE_RENDER_DIR" "$HEAD_RENDER_DIR" \
