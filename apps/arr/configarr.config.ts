@@ -136,7 +136,7 @@ const lidarrNaming = {
   replaceIllegalCharacters: true,
   artistFolderFormat: "{Artist Name}",
   standardTrackFormat: `${lidarrAlbumFolder}/${lidarrTrackName}`,
-  multiDiscTrackFormat: `${lidarrAlbumFolder}/{Medium Format} {medium:00}/${lidarrTrackName}`,
+  multiDiscTrackFormat: `${lidarrAlbumFolder}/{medium:00}-${lidarrTrackName}`,
 };
 
 // Lidarr only knows "FLAC" and "FLAC 24bit" as separate qualities, so leaving 24bit out of the profile keeps hi-res out.
