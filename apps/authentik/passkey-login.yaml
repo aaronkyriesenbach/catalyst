@@ -1,0 +1,26 @@
+# Passkey as a first factor: the identification stage offers conditional
+# WebAuthn (autofill) through the default MFA validation stage.
+version: 1
+metadata:
+  name: catalyst-passkey-login
+entries:
+  # Creates the default identification and MFA validation stages.
+  - model: authentik_blueprints.metaapplyblueprint
+    attrs:
+      identifiers:
+        name: Default - Authentication flow
+      required: true
+
+  - model: authentik_stages_identification.identificationstage
+    state: present
+    identifiers:
+      name: default-authentication-identification
+    attrs:
+      # user_fields must be restated: the serializer validates the attrs
+      # without the instance.
+      user_fields: [email, username]
+      webauthn_stage:
+        !Find [
+          authentik_stages_authenticator_validate.authenticatorvalidatestage,
+          [name, default-authentication-mfa-validation],
+        ]

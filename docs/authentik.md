@@ -37,6 +37,7 @@ Everyone else is created in authentik and never appears in Git:
 authentik applies YAML blueprints from `/blueprints`. This app mounts one ConfigMap (`authentik-blueprints`) and one Secret per OIDC client:
 
 - `catalyst-apps.yaml`: generated. For every app that declares `oidc` it creates a group, a provider, an application and a policy binding limiting the application to the group. It binds all proxy providers to the embedded outpost and applies the declared users.
+- `passkey-login.yaml`: sets `webauthn_stage` on the default identification stage so the login page offers passkey autofill without a username or password.
 - `recovery-flow.yaml`, `enrollment-flow.yaml`: static flows, kept separate because a blueprint with any failing entry is rolled back as a whole.
 
 Things that behave differently than you might expect (all confirmed against authentik 2026.8.4):

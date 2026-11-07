@@ -137,6 +137,10 @@ const blueprints = buildFileConfigMap(blueprintsConfigMap, {
     "./authentik/recovery-flow.yaml",
     import.meta.url,
   ),
+  "passkey-login.yaml": await readFile(
+    "./authentik/passkey-login.yaml",
+    import.meta.url,
+  ),
   "enrollment-flow.yaml": await readFile(
     "./authentik/enrollment-flow.yaml",
     import.meta.url,
