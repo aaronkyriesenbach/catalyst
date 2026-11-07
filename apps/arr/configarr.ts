@@ -30,6 +30,26 @@ const nzbgeekSecret = buildAwsExternalSecret(nzbgeekSecretName, [
   },
 ]);
 
+const nzbLifeSecretName = "nzblife-credentials";
+
+const nzbLifeSecret = buildAwsExternalSecret(nzbLifeSecretName, [
+  {
+    remoteKey: awsRemoteKey(arrNamespace, nzbLifeSecretName),
+    property: "api-key",
+    secretKey: "api-key",
+  },
+]);
+
+const nzbFinderSecretName = "nzbfinder-credentials";
+
+const nzbFinderSecret = buildAwsExternalSecret(nzbFinderSecretName, [
+  {
+    remoteKey: awsRemoteKey(arrNamespace, nzbFinderSecretName),
+    property: "api-key",
+    secretKey: "api-key",
+  },
+]);
+
 const configMap = buildFileConfigMap(configMapName, {
   "config.yml": buildConfigarrYaml(),
 });
@@ -87,6 +107,16 @@ const cronJob = new CronJob({
                     nzbgeekSecretName,
                     "api-key",
                   ),
+                  apiKeyEnv(
+                    configarrEnvNames.nzbLife,
+                    nzbLifeSecretName,
+                    "api-key",
+                  ),
+                  apiKeyEnv(
+                    configarrEnvNames.nzbFinder,
+                    nzbFinderSecretName,
+                    "api-key",
+                  ),
                 ],
                 securityContext: restrictedContainer({
                   readOnlyRootFilesystem: true,
@@ -110,6 +140,8 @@ const cronJob = new CronJob({
 
 export const configarrResources: ResourceLike[] = [
   nzbgeekSecret,
+  nzbLifeSecret,
+  nzbFinderSecret,
   configMap,
   cronJob,
 ];

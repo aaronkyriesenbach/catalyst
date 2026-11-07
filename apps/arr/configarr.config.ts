@@ -29,6 +29,8 @@ export const configarrEnvNames = {
   prowlarr: "PROWLARR_API_KEY",
   sabnzbd: "SABNZBD_API_KEY",
   nzbgeek: "NZBGEEK_API_KEY",
+  nzbLife: "NZBLIFE_API_KEY",
+  nzbFinder: "NZBFINDER_API_KEY",
 } as const;
 
 type CategoryField = "movie_category" | "tv_category" | "music_category";
@@ -104,6 +106,28 @@ const indexers: {
       baseUrl: "https://api.nzbgeek.info",
       apiPath: "/api",
       apiKey: env(configarrEnvNames.nzbgeek),
+    },
+  },
+  {
+    name: "NZB.life",
+    definition: "Nzb.life",
+    sync_profile: "Standard",
+    priority: 25,
+    fields: {
+      baseUrl: "https://api.nzb.life",
+      apiPath: "/api",
+      apiKey: env(configarrEnvNames.nzbLife),
+    },
+  },
+  {
+    name: "NZBFinder",
+    definition: "NZBFinder",
+    sync_profile: "Standard",
+    priority: 25,
+    fields: {
+      baseUrl: "https://nzbfinder.ws",
+      apiPath: "/api",
+      apiKey: env(configarrEnvNames.nzbFinder),
     },
   },
 ];
