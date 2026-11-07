@@ -127,6 +127,40 @@ const prowlarrApplication = (
   },
 });
 
+// Lidarr has no album-folder field; the first path segment of the track format is the album folder.
+const lidarrTrackName = "{track:00} - {Track Title}";
+const lidarrAlbumFolder = "{Album Title} ({Release Year})";
+
+const lidarrNaming = {
+  renameTracks: true,
+  replaceIllegalCharacters: true,
+  artistFolderFormat: "{Artist Name}",
+  standardTrackFormat: `${lidarrAlbumFolder}/${lidarrTrackName}`,
+  multiDiscTrackFormat: `${lidarrAlbumFolder}/{Medium Format} {medium:00}/${lidarrTrackName}`,
+};
+
+// Lidarr only knows "FLAC" and "FLAC 24bit" as separate qualities, so leaving 24bit out of the profile keeps hi-res out.
+const lidarrFlacProfile = "FLAC 16-bit";
+
+// Backstop for hi-res releases that don't label themselves 24bit, so Lidarr rates them as plain FLAC.
+const lidarrHiResTerms = [
+  "24bit",
+  "24-bit",
+  "24 bit",
+  "24-44",
+  "24-48",
+  "24-88",
+  "24-96",
+  "24-176",
+  "24-192",
+  "88.2khz",
+  "96khz",
+  "176.4khz",
+  "192khz",
+  "DSD",
+  "SACD",
+];
+
 const config = {
   trashGuideUrl: "https://github.com/TRaSH-Guides/Guides",
   recyclarrConfigUrl: "https://github.com/recyclarr/config-templates",
@@ -175,17 +209,26 @@ const config = {
     },
   },
 
-  // TRaSH publishes no Lidarr profiles, so quality profiles stay as Lidarr ships them.
+  // TRaSH publishes no Lidarr profiles, so the quality profile is defined here.
   lidarr: {
     music: {
       base_url: "http://lidarr:8686",
       api_key: env(configarrEnvNames.lidarr),
+      media_naming_api: lidarrNaming,
+      quality_profiles: [
+        {
+          name: lidarrFlacProfile,
+          upgrade: { allowed: false, until_quality: "FLAC" },
+          qualities: [{ name: "FLAC" }],
+        },
+      ],
+      release_profiles: [{ enabled: true, ignored: lidarrHiResTerms }],
       root_folders: [
         {
           path: mediaPaths.music,
           name: "Music",
           metadata_profile: "Standard",
-          quality_profile: "Standard",
+          quality_profile: lidarrFlacProfile,
         },
       ],
       download_clients: downloadClients("music_category", "lidarr"),
