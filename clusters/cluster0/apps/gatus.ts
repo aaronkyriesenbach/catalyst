@@ -1,25 +1,11 @@
 import { stringify } from "yaml";
-import {
-  authentikHostOptions,
-  authentikNamespace,
-  authentikServiceName,
-  authentikServicePort,
-} from "@catalyst/platform/auth";
 import { applyModifiers, withPostgres } from "@catalyst/platform/modifiers";
 import { httpCheck, readiness, startup } from "@catalyst/k8s/probes";
-import {
-  httpTarget,
-  resolveStatusTargets,
-  routeTargets,
-  serviceUrl,
-  StatusGroup,
-  type StatusTarget,
-} from "@catalyst/platform/status";
-import type { WorkloadApp } from "@catalyst/core/types";
+import { resolveStatusTargets, StatusGroup } from "@catalyst/platform/status";
+import type { AppConfig, WorkloadApp } from "@catalyst/core/types";
 import { buildFileConfigMap } from "@catalyst/k8s/workload";
 import { buildGeneratedSecret } from "@catalyst/k8s/secrets";
 import { image } from "@catalyst/versions/images";
-import { loadAllAppConfigs } from "@catalyst/core/apps";
 import { buildAlerting } from "./gatus/alerting";
 import {
   gatusName,
@@ -38,25 +24,6 @@ const health = httpCheck("/health", gatusPort);
 
 const HEARTBEAT_INTERVAL = "3h";
 
-const aggregatingApps = ["authentik.ts", "limit-ranges.ts", `${gatusName}.ts`];
-
-const manualTargets: StatusTarget[] = [
-  httpTarget(
-    "Authentik",
-    StatusGroup.Platform,
-    serviceUrl(
-      authentikServiceName,
-      authentikNamespace,
-      authentikServicePort,
-      "/-/health/live/",
-    ),
-  ),
-  ...routeTargets("Authentik", "authentik", authentikHostOptions),
-];
-
-const appConfigs = await loadAllAppConfigs(aggregatingApps);
-const targets = [...appConfigs.flatMap(resolveStatusTargets), ...manualTargets];
-
 const heartbeats: Heartbeat[] = externalApps
   .filter((app) => app.certDeploy !== undefined)
   .map((app) => ({
@@ -64,17 +31,22 @@ const heartbeats: Heartbeat[] = externalApps
     interval: HEARTBEAT_INTERVAL,
   }));
 
-const gatusConfig = buildGatusConfig(targets, heartbeats, {
-  storagePath: `postgres://${gatusName}:${gatusName}@${gatusName}-postgres:5432/${gatusName}?sslmode=disable`,
-  alerting: buildAlerting(),
-});
+function buildConfigMap(configs: readonly AppConfig[]) {
+  const targets = configs
+    .filter((config) => config.name !== gatusName)
+    .flatMap(resolveStatusTargets);
+  const gatusConfig = buildGatusConfig(targets, heartbeats, {
+    storagePath: `postgres://${gatusName}:${gatusName}@${gatusName}-postgres:5432/${gatusName}?sslmode=disable`,
+    alerting: buildAlerting(),
+  });
 
-const configMap = buildFileConfigMap(configMapName, {
-  [configFile]: stringify(gatusConfig, {
-    version: "1.1",
-    aliasDuplicateObjects: false,
-  }),
-});
+  return buildFileConfigMap(configMapName, {
+    [configFile]: stringify(gatusConfig, {
+      version: "1.1",
+      aliasDuplicateObjects: false,
+    }),
+  });
+}
 
 const base: WorkloadApp = {
   kind: "workload",
@@ -127,7 +99,6 @@ const base: WorkloadApp = {
   webPort: gatusPort,
   strategy: { type: "Recreate" },
   extraResources: [
-    configMap,
     ...buildGeneratedSecret(
       gatusName,
       heartbeatSecretName,
@@ -135,6 +106,9 @@ const base: WorkloadApp = {
       { persist: true },
     ),
   ],
+  derive: ({ catalog, cluster }) => ({
+    extraResources: [buildConfigMap(catalog.onCluster(cluster))],
+  }),
 };
 
 export default applyModifiers(base, withPostgres(17, { backup: true }));

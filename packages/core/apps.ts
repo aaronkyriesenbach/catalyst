@@ -1,6 +1,6 @@
 import { readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import type { AppConfig } from "./types";
+import type { AppConfig, Catalog, CatalogEntry, DeriveContext } from "./types";
 
 const CLUSTERS_DIR = fileURLToPath(new URL("../../clusters/", import.meta.url));
 
@@ -40,23 +40,110 @@ export function clusterAppsDir(cluster: string = currentCluster()): string {
   return `${CLUSTERS_DIR}${cluster}/apps/`;
 }
 
-export async function loadAppConfig(path: string): Promise<AppConfig> {
-  const mod = await import(`${clusterAppsDir()}${path}`);
+function listAppFiles(cluster: string): string[] {
+  return readdirSync(clusterAppsDir(cluster), { withFileTypes: true })
+    .filter((entry) => entry.isFile())
+    .map((entry) => entry.name)
+    .sort((a, b) => a.localeCompare(b));
+}
+
+async function importApp(cluster: string, file: string): Promise<AppConfig> {
+  const mod = await import(`${clusterAppsDir(cluster)}${file}`);
 
   return mod.default;
 }
 
-export async function loadAllAppConfigs(
-  exclude: readonly string[] = [],
-): Promise<AppConfig[]> {
-  const files = readdirSync(clusterAppsDir(), { withFileTypes: true })
-    .filter((entry) => entry.isFile() && !exclude.includes(entry.name))
-    .map((entry) => entry.name)
-    .sort((a, b) => a.localeCompare(b));
+function createCatalog(entries: readonly CatalogEntry[]): Catalog {
+  return {
+    entries,
+    onCluster: (cluster) =>
+      entries
+        .filter((entry) => entry.cluster === cluster)
+        .map((entry) => entry.config),
+  };
+}
+
+async function buildCatalog(): Promise<Catalog> {
+  const entries: CatalogEntry[] = [];
+
+  for (const cluster of listClusters()) {
+    for (const file of listAppFiles(cluster)) {
+      entries.push({ cluster, config: await importApp(cluster, file) });
+    }
+  }
+
+  return createCatalog(entries);
+}
+
+let catalog: Promise<Catalog> | undefined;
+
+export function loadCatalog(): Promise<Catalog> {
+  catalog ??= buildCatalog();
+
+  return catalog;
+}
+
+function resolveApp(config: AppConfig, context: DeriveContext): AppConfig {
+  if (config.kind === "static") {
+    const { derive, ...declared } = config;
+
+    if (derive === undefined) {
+      return config;
+    }
+
+    const derived = derive(context);
+
+    return {
+      ...declared,
+      resources: [...(declared.resources ?? []), ...(derived.resources ?? [])],
+      helmReleases: [
+        ...(declared.helmReleases ?? []),
+        ...(derived.helmReleases ?? []),
+      ],
+    };
+  }
+
+  const { derive, ...declared } = config;
+
+  if (derive === undefined) {
+    return config;
+  }
+
+  const derived = derive(context);
+
+  return {
+    ...declared,
+    extraResources: [
+      ...(declared.extraResources ?? []),
+      ...(derived.extraResources ?? []),
+    ],
+    helmReleases: [
+      ...(declared.helmReleases ?? []),
+      ...(derived.helmReleases ?? []),
+    ],
+  };
+}
+
+async function loadResolved(cluster: string, file: string): Promise<AppConfig> {
+  const config = await importApp(cluster, file);
+
+  if (config.derive === undefined) {
+    return config;
+  }
+
+  return resolveApp(config, { catalog: await loadCatalog(), cluster });
+}
+
+export function loadAppConfig(file: string): Promise<AppConfig> {
+  return loadResolved(currentCluster(), file);
+}
+
+export async function loadAllAppConfigs(): Promise<AppConfig[]> {
+  const cluster = currentCluster();
   const configs: AppConfig[] = [];
 
-  for (const file of files) {
-    configs.push(await loadAppConfig(file));
+  for (const file of listAppFiles(cluster)) {
+    configs.push(await loadResolved(cluster, file));
   }
 
   return configs;

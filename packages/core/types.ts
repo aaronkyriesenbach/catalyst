@@ -84,6 +84,7 @@ export type WorkloadApp = BaseApp & {
   /** Externally accessible apps get the WAF by default; set this to pick a profile or exempt the app. */
   waf?: WafSetting;
   extraResources?: ResourceLike[];
+  derive?: (context: DeriveContext) => WorkloadDerived;
   strategy?: WorkloadStrategy;
   /** Seconds a rollout may go without progress before Argo reports it Degraded. */
   progressDeadlineSeconds?: number;
@@ -98,12 +99,28 @@ export type StaticApp = BaseApp & {
   /** Forward auth needs a route the app builder owns, so a StaticApp can only be an OIDC client. */
   oidc?: OAuth2OidcDeclaration;
   resources?: ResourceLike[];
+  derive?: (context: DeriveContext) => StaticDerived;
   remoteResources?: string[];
   /** Merged into the metadata annotations of every remote resource. */
   remoteResourceAnnotations?: Record<string, string>;
 };
 
 export type AppConfig = WorkloadApp | StaticApp;
+
+export type CatalogEntry = { cluster: string; config: AppConfig };
+
+export type Catalog = {
+  readonly entries: readonly CatalogEntry[];
+  onCluster(cluster: string): AppConfig[];
+};
+
+export type DeriveContext = { catalog: Catalog; cluster: string };
+
+type DerivedHelm = { helmReleases?: HelmRelease[] };
+
+export type StaticDerived = DerivedHelm & { resources?: ResourceLike[] };
+
+export type WorkloadDerived = DerivedHelm & { extraResources?: ResourceLike[] };
 
 export type CertDeployStrategy =
   | { type: "proxmox"; nodes: { name: string; ipAddress: string }[] }
