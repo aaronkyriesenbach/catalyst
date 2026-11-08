@@ -11,7 +11,7 @@ import { AWS_STORE, awsRemoteKey } from "@catalyst/k8s/secrets";
 import { buildFileConfigMap } from "@catalyst/k8s/workload";
 import { readFile } from "@catalyst/core/files";
 import { image } from "@catalyst/versions/images";
-import { appriseNotifiers, appriseUrl } from "./apprise";
+import { appriseNotifiers, appriseUrl } from "./apprise/common";
 import {
   gatusName,
   gatusUrl,
@@ -19,7 +19,7 @@ import {
   heartbeatSecretKey,
   heartbeatSecretName,
 } from "./gatus/common";
-import { traefikNamespace } from "./traefik";
+import { traefikNamespace } from "./traefik/common";
 import {
   externalAppBackendCertSecretName,
   externalAppBackendHostname,

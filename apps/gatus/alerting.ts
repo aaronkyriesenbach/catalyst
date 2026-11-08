@@ -1,6 +1,6 @@
 import { type Severity } from "@catalyst/platform/notifications";
 import { StatusGroup } from "@catalyst/platform/status";
-import { appriseUrl } from "../apprise";
+import { appriseUrl } from "../apprise/common";
 import { notifierKey } from "./common";
 
 const defaultSeverity: Severity = "warning";

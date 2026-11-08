@@ -2,8 +2,7 @@ import {
   Certificate,
   ClusterIssuer,
 } from "@kubernetes-models/cert-manager/cert-manager.io/v1";
-
-export const internalRootCaSecretName = "internal-root-ca";
+import { internalRootCaSecretName } from "./common";
 
 const internalCaBootstrapIssuer = new ClusterIssuer({
   metadata: {
