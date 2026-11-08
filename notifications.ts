@@ -1,7 +1,7 @@
 import { stringify } from "yaml";
 
 export type Severity = "info" | "warning" | "critical" | "emergency";
-type PushPriority = "normal" | "high" | "emergency";
+type PushPriority = "normal" | "emergency";
 
 type Delivery = {
   push?: PushPriority;
@@ -12,7 +12,7 @@ type Delivery = {
 export const severityDelivery: Record<Severity, Delivery> = {
   info: { email: true },
   warning: { email: true },
-  critical: { push: "high", email: true },
+  critical: { email: true },
   emergency: { push: "emergency", email: true },
 };
 
@@ -23,7 +23,7 @@ export const alertSeverities = ["warning", "critical", "emergency"] as const;
 export const alertSeverityOverrides: Record<string, Severity> = {};
 
 const severities = ["info", "warning", "critical", "emergency"] as const;
-const pushPriorities = ["normal", "high", "emergency"] as const;
+const pushPriorities = ["normal", "emergency"] as const;
 
 function pushoverUrl(priority: PushPriority): string {
   const base = `pover://{{ .pushover_user_key }}@{{ .pushover_app_token }}?priority=${priority}`;
