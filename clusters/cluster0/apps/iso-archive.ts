@@ -16,7 +16,7 @@ const image =
 
 const scripts = buildFileConfigMap(scriptsConfigMapName, {
   [scriptFileName]: await readFile(
-    `../scripts/${scriptFileName}`,
+    `./iso-archive/${scriptFileName}`,
     import.meta.url,
   ),
 });

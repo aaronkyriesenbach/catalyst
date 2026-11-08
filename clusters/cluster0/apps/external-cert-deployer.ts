@@ -49,7 +49,7 @@ const deployApps = externalApps.filter(
 
 const scriptConfigMap = buildFileConfigMap(scriptConfigMapName, {
   [scriptFileName]: await readFile(
-    `../scripts/${scriptFileName}`,
+    `./external-cert-deployer/${scriptFileName}`,
     import.meta.url,
   ),
 });

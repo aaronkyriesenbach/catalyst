@@ -7,7 +7,7 @@
   "extends": ["config:recommended"],
   "ignorePresets": [":semanticPrefixFixDepsChoreOthers"],
   "dependencyDashboard": true,
-  "ignorePaths": ["cluster/**", "**/node_modules/**"],
+  "ignorePaths": ["clusters/*/bootstrap/**", "**/node_modules/**"],
   "timezone": "America/New_York",
   "minimumReleaseAge": "7d",
   "internalChecksFilter": "strict",
@@ -59,7 +59,7 @@
   "helm-values": {
     "managerFilePatterns": [
       "/(^|/)values\\.ya?ml$/",
-      "/^apps/.+values\\.ya?ml$/"
+      "/^clusters/.+values\\.ya?ml$/"
     ]
   },
   "packageRules": [
