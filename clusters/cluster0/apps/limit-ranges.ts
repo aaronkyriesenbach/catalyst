@@ -1,9 +1,6 @@
 import { LimitRange } from "kubernetes-models/v1";
-import {
-  defaultContainerResources,
-  Project,
-  unmanagedNamespaces,
-} from "@catalyst/core/constants";
+import { Project } from "@catalyst/core/constants";
+import { site } from "@catalyst/site";
 import type { StaticApp } from "@catalyst/core/types";
 import { appNamespace } from "@catalyst/core/apps";
 
@@ -18,8 +15,8 @@ const config: StaticApp = {
   derive: ({ catalog, cluster }) => {
     const namespaces = [
       ...new Set([
-        ...unmanagedNamespaces,
-        ...catalog.onCluster(cluster).map(appNamespace),
+        ...cluster.gitops.unmanagedNamespaces,
+        ...catalog.onCluster(cluster.name).map(appNamespace),
       ]),
     ].sort((a, b) => a.localeCompare(b));
 
@@ -32,8 +29,8 @@ const config: StaticApp = {
               limits: [
                 {
                   type: "Container",
-                  defaultRequest: defaultContainerResources.requests,
-                  default: defaultContainerResources.limits,
+                  defaultRequest: site.defaultContainerResources.requests,
+                  default: site.defaultContainerResources.limits,
                 },
               ],
             },

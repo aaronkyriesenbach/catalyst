@@ -1,3 +1,4 @@
+import { site } from "@catalyst/site";
 import { readiness, startup, tcpCheck } from "@catalyst/k8s/probes";
 import type { WorkloadApp } from "@catalyst/core/types";
 import { applyModifiers, withNasMounts } from "@catalyst/platform/modifiers";
@@ -34,7 +35,7 @@ const base: WorkloadApp = {
               },
             },
           },
-          { name: "LOCAL_NETWORK", value: "192.168.0.0/16" },
+          { name: "LOCAL_NETWORK", value: site.lanCidr },
           { name: "HEALTH_CHECK_HOST", value: "1.1.1.1" },
           { name: "GLOBAL_APPLY_PERMISSIONS", value: "false" },
           { name: "PUID", value: "1000" },

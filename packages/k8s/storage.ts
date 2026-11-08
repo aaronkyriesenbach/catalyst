@@ -6,9 +6,8 @@ import {
   type IPersistentVolumeSpec,
 } from "kubernetes-models/v1";
 import type { StorageQuantity } from "@catalyst/core/types";
+import { site } from "@catalyst/site";
 
-const DEFAULT_NAS_IP = "192.168.53.120";
-const DEFAULT_NAS_PATH = "/mnt/tank/data";
 const DEFAULT_RECLAIM_POLICY = "Retain";
 const DEFAULT_ACCESS_MODES = ["ReadWriteMany"] as const;
 
@@ -51,8 +50,8 @@ export function buildPersistentVolume(options: BuildPersistentVolumeOptions) {
     storageClassName,
     accessModes,
     reclaimPolicy = DEFAULT_RECLAIM_POLICY,
-    nfsServer = DEFAULT_NAS_IP,
-    nfsPath = DEFAULT_NAS_PATH,
+    nfsServer = site.nas.ip,
+    nfsPath = site.nas.path,
   } = options;
 
   return new PersistentVolume({

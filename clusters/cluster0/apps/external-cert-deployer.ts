@@ -130,7 +130,7 @@ function buildCredentialsSecret(app: DeployApp): ExternalSecret {
       dataFrom: [
         {
           extract: {
-            key: `lab53/cluster0/${traefikNamespace}/${name}`,
+            key: awsRemoteKey(traefikNamespace, name),
           },
         },
       ],
