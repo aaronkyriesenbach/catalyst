@@ -32,7 +32,7 @@ catalyst/
 bun run render <app-name>                    # Render single app to stdout YAML (verify changes)
 bun run sync-external-certs [--dry-run]      # Pull TLS certs from cluster via kubectl
 bun run typecheck                            # tsc --noEmit
-bun run validate                             # Check the app catalog: names match files, unique hostnames, oidc needs authentik
+bun run validate                             # Check the app catalog: names match files, unique hostnames
 bun run secrets [--json]                     # List every AWS Secrets Manager key the cluster uses (generated vs external)
 bun run render-all <outdir>                  # Render every app + project + enumerate-all into <outdir> (what CI runs)
 bun run render-charts <outdir>               # render-chart for every app with helmReleases (needs helm)
@@ -49,7 +49,7 @@ bunx prettier --write .                      # Format the repo (config: .prettie
 
 ### Clusters and sites
 
-- **One directory per cluster** under `clusters/`. The target cluster is `ARGOCD_ENV_CLUSTER`; with a single cluster directory it defaults to that one. `import { cluster } from "@catalyst/core/cluster"` gives the target cluster's definition, and `cluster.name` must equal its directory name.
+- **One directory per cluster** under `clusters/`. The target cluster is `ARGOCD_ENV_CLUSTER`; with a single cluster directory it defaults to that one. `import { cluster } from "@catalyst/core/cluster"` gives the target cluster's definition, and `cluster.name` is the directory name (`cluster.ts` does not declare it).
 - **`site.ts` vs `cluster.ts`**: `site.ts` holds facts that are the same for every cluster (domain, NAS, mirror, Cloudflare zone). `cluster.ts` holds what varies per cluster (pod and service CIDRs, VIPs, tunnel id, Argo projects, unmanaged namespaces, unmirrored chart images). Values another toolchain (OpenTofu, Omni) also needs belong in a plain YAML file both can read, not in either TS file.
 - **Packages never import from `clusters/`**. They read the target cluster through `@catalyst/core/cluster`; an app reads the same singleton.
 - **Placement is the directory**: an app runs on the cluster whose `apps/` directory contains it. There is no `cluster` field and no registry.

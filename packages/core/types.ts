@@ -142,6 +142,8 @@ export type Cluster = {
   };
 };
 
+export type ClusterDefinition = Omit<Cluster, "name">;
+
 type DerivedHelm = { helmReleases?: HelmRelease[] };
 
 export type StaticDerived = DerivedHelm & { resources?: ResourceLike[] };

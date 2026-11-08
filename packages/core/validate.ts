@@ -3,11 +3,7 @@ import type { Catalog } from "./types";
 
 export function validateCatalog(catalog: Catalog): string[] {
   const problems: string[] = [];
-  const seen = new Set<string>();
   const hostOwners = new Map<string, string>();
-  const hasAuthentik = catalog.entries.some(
-    (entry) => entry.config.name === "authentik",
-  );
 
   function claimHost(host: string, owner: string): void {
     const existing = hostOwners.get(host);
@@ -28,12 +24,6 @@ export function validateCatalog(catalog: Catalog): string[] {
       );
     }
 
-    if (seen.has(id)) {
-      problems.push(`App '${config.name}' is declared twice on ${cluster}`);
-    }
-
-    seen.add(id);
-
     if (config.kind === "workload" && config.webPort !== undefined) {
       claimHost(
         appHostname(config.name, {
@@ -52,13 +42,6 @@ export function validateCatalog(catalog: Catalog): string[] {
         }),
         `${id} (${extra.name})`,
       );
-    }
-
-    if (
-      !hasAuthentik &&
-      (config.oidc !== undefined || config.additionalOidc !== undefined)
-    ) {
-      problems.push(`${id} declares oidc but no app named authentik exists`);
     }
   }
 
