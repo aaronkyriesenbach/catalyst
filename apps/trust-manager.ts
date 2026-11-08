@@ -3,7 +3,7 @@ import { Bundle } from "@kubernetes-models/cert-manager/trust.cert-manager.io/v1
 import { StatusGroup, tcpTarget } from "@catalyst/platform/status";
 import type { StaticApp } from "@catalyst/core/types";
 import { mirrorRepository } from "@catalyst/versions/images";
-import { certManagerNamespace } from "./cert-manager";
+import { certManagerNamespace } from "./cert-manager/common";
 
 const internalRootCaBundle = new Bundle({
   metadata: {

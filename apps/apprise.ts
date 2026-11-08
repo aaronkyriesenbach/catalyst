@@ -8,20 +8,11 @@ import type { WorkloadApp } from "@catalyst/core/types";
 import { buildAppriseConfig } from "@catalyst/platform/notifications";
 import { AWS_STORE, awsRemoteKey } from "@catalyst/k8s/secrets";
 import { image } from "@catalyst/versions/images";
+import { appriseName, appriseNotifiers, apprisePort } from "./apprise/common";
 
-const name = "apprise";
-const port = 8000;
+const name = appriseName;
+const port = apprisePort;
 const configSecretName = `${name}-config`;
-
-// No HTTPRoute exists on purpose: Apprise has no auth, so it stays in-cluster.
-export const appriseUrl = `http://${name}.${name}.svc:${port}`;
-
-// Simple stateful mode reads /config/<key>.yml, one file per notifying app.
-export const appriseNotifiers = [
-  "external-cert-deployer",
-  "gatus",
-  "victoria-metrics",
-];
 
 const pushoverSecret = awsRemoteKey(name, "pushover-credentials");
 const sesSecret = awsRemoteKey(name, "ses-credentials");

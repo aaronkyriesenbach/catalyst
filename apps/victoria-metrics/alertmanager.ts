@@ -1,4 +1,4 @@
-import { appriseUrl } from "../apprise";
+import { appriseUrl } from "../apprise/common";
 import {
   alertSeverities,
   alertSeverityOverrides,

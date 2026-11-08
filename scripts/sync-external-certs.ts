@@ -6,9 +6,9 @@ import {
   externalAppDownloadBaseName,
   externalApps,
 } from "../apps/traefik/externalApps.config";
-import { certManagerNamespace } from "../apps/cert-manager";
-import { traefikNamespace } from "../apps/traefik";
-import { internalRootCaSecretName } from "../apps/cert-manager/internal-ca";
+import { certManagerNamespace } from "../apps/cert-manager/common";
+import { traefikNamespace } from "../apps/traefik/common";
+import { internalRootCaSecretName } from "../apps/cert-manager/common";
 
 type Options = {
   dryRun: boolean;

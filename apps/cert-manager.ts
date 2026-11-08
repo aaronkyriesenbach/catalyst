@@ -3,9 +3,8 @@ import { StatusGroup, tcpTarget } from "@catalyst/platform/status";
 import type { StaticApp } from "@catalyst/core/types";
 import { awsRemoteKey, buildAwsExternalSecret } from "@catalyst/k8s/secrets";
 import { internalCaResources } from "./cert-manager/internal-ca";
+import { certManagerNamespace } from "./cert-manager/common";
 import { issuers } from "./cert-manager/issuers";
-
-export const certManagerNamespace = "cert-manager";
 
 // Unused until the issuers switch to the Cloudflare solver once the zone is active.
 const cloudflareTokenSecret = buildAwsExternalSecret("cloudflare-api-token", [
