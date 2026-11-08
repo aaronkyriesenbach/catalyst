@@ -137,7 +137,6 @@ export type Cluster = {
   edge: { cloudflareTunnelId: string };
   gitops: {
     projects: Record<Project, ProjectSpec>;
-    adoptedHelmNamespaces: Record<string, string>;
     unmanagedNamespaces: readonly string[];
     unmirroredChartImages: readonly UnmirroredChartImage[];
   };

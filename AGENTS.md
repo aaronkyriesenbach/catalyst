@@ -10,7 +10,7 @@ catalyst/
 ├── site.ts                  # Site-wide facts shared by every cluster: domain, NAS, mirror, Cloudflare zone, LimitRange defaults
 ├── clusters/
 │   └── cluster0/            # One directory per cluster; everything about that cluster lives here
-│       ├── cluster.ts       # Cluster definition: network, VIPs, tunnel, Argo projects, adopted Helm namespaces
+│       ├── cluster.ts       # Cluster definition: network, VIPs, tunnel, Argo projects
 │       ├── apps/            # Each top-level *.ts exports default AppConfig (apps/<name>/ holds its values, scripts, helpers)
 │       ├── bootstrap/       # Applied by hand: ArgoCD Helm values, root Application
 │       ├── tools/           # Cluster-specific CLIs (sync-external-certs)
@@ -50,7 +50,7 @@ bunx prettier --write .                      # Format the repo (config: .prettie
 ### Clusters and sites
 
 - **One directory per cluster** under `clusters/`. The target cluster is `ARGOCD_ENV_CLUSTER`; with a single cluster directory it defaults to that one. `import { cluster } from "@catalyst/core/cluster"` gives the target cluster's definition, and `cluster.name` must equal its directory name.
-- **`site.ts` vs `cluster.ts`**: `site.ts` holds facts that are the same for every cluster (domain, NAS, mirror, Cloudflare zone). `cluster.ts` holds what varies per cluster (pod and service CIDRs, VIPs, tunnel id, Argo projects, adopted Helm namespaces, unmanaged namespaces, unmirrored chart images). Values another toolchain (OpenTofu, Omni) also needs belong in a plain YAML file both can read, not in either TS file.
+- **`site.ts` vs `cluster.ts`**: `site.ts` holds facts that are the same for every cluster (domain, NAS, mirror, Cloudflare zone). `cluster.ts` holds what varies per cluster (pod and service CIDRs, VIPs, tunnel id, Argo projects, unmanaged namespaces, unmirrored chart images). Values another toolchain (OpenTofu, Omni) also needs belong in a plain YAML file both can read, not in either TS file.
 - **Packages never import from `clusters/`**. They read the target cluster through `@catalyst/core/cluster`; an app reads the same singleton.
 - **Placement is the directory**: an app runs on the cluster whose `apps/` directory contains it. There is no `cluster` field and no registry.
 
@@ -99,7 +99,7 @@ bunx prettier --write .                      # Format the repo (config: .prettie
 
 - Declare charts with `helmReleases: [{ chart, releaseName, values?, parameters?, skipCrds? }]` on the app. `buildApplication` turns each release into a native ArgoCD Helm source (multi-source Application), so chart resources are tracked by Argo with diffs in its UI. Helm is **not** in the CMP sidecar, and the k3s `HelmChart` CRD is not used for apps.
 - Chart repo/name/version live in `helmCharts` in `packages/versions/versions.ts` (`chart` is a `HelmChartKey`). Never write repo URLs or versions in `apps/*.ts`.
-- `releaseName` must equal the live Helm release name when adopting an existing install. Charts install into the app's destination namespace (`namespace ?? name`); adopted releases are pinned in `gitops.adoptedHelmNamespaces` (`cluster.ts`) so a namespace change fails the render.
+- `releaseName` must equal the live Helm release name when adopting an existing install. Charts install into the app's destination namespace (`namespace ?? name`).
 - Load values from a file with `await readYaml("./app/values.yaml", import.meta.url)`; `--set` equivalents go in `parameters`.
 - When several releases of one chart share a namespace, set `skipCrds: true` on all but one so a `crds/` directory is not rendered twice.
 - Use `ignoreDifferences` (typed from `@kubernetes-models/argo-cd`) for fields written at runtime by controllers. Apps with `helmReleases` also get `ServerSideApply=true` and `ServerSideDiff=true`.
