@@ -17,9 +17,9 @@ containers, ports, volumes, and env vars.
 **Structure:**
 
 ```typescript
-import { applyModifiers, withIscsiVolumes } from "../modifiers";
-import type { WorkloadApp } from "../types";
-import { image } from "../utils";
+import { applyModifiers, withIscsiVolumes } from "@catalyst/platform/modifiers";
+import type { WorkloadApp } from "@catalyst/core/types";
+import { image } from "@catalyst/versions/images";
 
 const base: WorkloadApp = {
   kind: "workload",
@@ -28,7 +28,7 @@ const base: WorkloadApp = {
     containers: [
       {
         name: "main",
-        image: image("myApp"), // entry in versions.ts `images`
+        image: image("myApp"), // entry in packages/versions/versions.ts `images`
         ports: [{ name: "http", containerPort: 8080 }],
         env: [{ name: "CONFIG_VAR", value: "some-value" }],
       },
@@ -46,14 +46,14 @@ export default applyModifiers(
 );
 ```
 
-**Example — Memos** (`apps/memos.ts`):
+**Example — Memos** (`clusters/cluster0/apps/memos.ts`):
 A simple web app with iSCSI storage and OIDC auth. No Postgres needed.
 
-**Example — Navidrome** (`apps/navidrome.ts`):
+**Example — Navidrome** (`clusters/cluster0/apps/navidrome.ts`):
 A music server with NAS mounts for music files, iSCSI for its database, and
 OIDC auth with custom headers.
 
-**Example — Home Assistant** (`apps/home-assistant.ts`):
+**Example — Home Assistant** (`clusters/cluster0/apps/home-assistant.ts`):
 Minimal — just a container, port, and iSCSI volume.
 
 ## StaticApp
@@ -68,13 +68,13 @@ doesn't fit.
 **Structure:**
 
 ```typescript
-import type { StaticApp } from "../types";
-import { readYaml } from "../utils";
+import type { StaticApp } from "@catalyst/core/types";
+import { readYaml } from "@catalyst/core/files";
 
 const config: StaticApp = {
   kind: "static",
   name: "my-app",
-  // "myApp" is an entry in versions.ts `helmCharts`; the chart installs into
+  // "myApp" is an entry in packages/versions/versions.ts `helmCharts`; the chart installs into
   // the app's namespace (`namespace ?? name`) as a native ArgoCD Helm source.
   helmReleases: [
     {
@@ -88,13 +88,13 @@ const config: StaticApp = {
 export default config;
 ```
 
-**Example — VolSync** (`apps/volsync.ts`):
+**Example — VolSync** (`clusters/cluster0/apps/volsync.ts`):
 Single helm release with a custom namespace.
 
-**Example — authentik** (`apps/authentik.ts`):
+**Example — authentik** (`clusters/cluster0/apps/authentik.ts`):
 Helm release with `values` loaded from a file, plus Postgres and generated secrets.
 
-**Example — Cert Manager** (`apps/cert-manager.ts`):
+**Example — Cert Manager** (`clusters/cluster0/apps/cert-manager.ts`):
 Helm release with `parameters` (`--set`), plus hand-crafted custom resources
 from a subdirectory.
 

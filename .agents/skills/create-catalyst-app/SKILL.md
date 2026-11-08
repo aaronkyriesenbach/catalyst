@@ -62,7 +62,7 @@ Translate the upstream setup into catalyst-specific patterns:
 | `docker run -p 8080:8080`        | `ports: [{ name: "http", containerPort: 8080 }]`, `webPort: 8080`           |
 | `docker run -v /data`            | `withIscsiVolumes({ main: [{ name: "data", mountPath: "/data" }] })`        |
 | `-e DATABASE_URL=postgres://...` | `withPostgres(17)` — see [references/modifiers.md](references/modifiers.md) |
-| `docker run your/image:1.2.3`    | Add an entry to `versions.ts` and use `image("key")`                        |
+| `docker run your/image:1.2.3`    | Add an entry to `packages/versions/versions.ts` and use `image("key")`      |
 | Sign-in page in the app          | `withForwardAuth()`, or `withOidcClient({ redirectPaths })` for native OIDC |
 | Config files                     | `buildFileConfigMap(...)` and volume mount                                  |
 | Arbitrary k8s resources          | `extraResources` on a WorkloadApp, or use a StaticApp                       |
@@ -79,7 +79,7 @@ multiple valid approaches, present the decision to the user. Examples:
 
 ### 6. Scaffold the App
 
-Write the app file at `apps/<name>.ts` following the chosen kind's pattern.
+Write the app file at `clusters/cluster0/apps/<name>.ts` following the chosen kind's pattern.
 
 **WorkloadApp checklist:**
 
@@ -94,9 +94,9 @@ Write the app file at `apps/<name>.ts` following the chosen kind's pattern.
 
 - `kind: "static"`, `name`, `resources` array
 - Each resource is an instantiated k8s model or a plain object
-- Helm charts go in `helmReleases: [{ chart, releaseName, values?, parameters? }]`, where `chart` is an entry in `versions.ts` `helmCharts` and `values` comes from `await readYaml(...)`. Chart output is only visible in ArgoCD or via `bun run render-chart <app>`, not `bun run render`.
+- Helm charts go in `helmReleases: [{ chart, releaseName, values?, parameters? }]`, where `chart` is an entry in `packages/versions/versions.ts` `helmCharts` and `values` comes from `await readYaml(...)`. Chart output is only visible in ArgoCD or via `bun run render-chart <app>`, not `bun run render`.
 
-If the app needs a subdirectory (e.g. `apps/<name>/values.yaml`), create it.
+If the app needs a subdirectory (e.g. `clusters/cluster0/apps/<name>/values.yaml`), create it.
 If files go into a ConfigMap, use `buildFileConfigMap(name, files)`. Shell scripts
 belong in their own `.sh` file (space-indented, not tabs) read with `readFile`,
 not inline in the TS; see AGENTS.md "Scripts and embedded files".
@@ -118,9 +118,9 @@ security context). Read that first. These are additional
 gotchas specific to scaffold decisions:
 
 - **`withIscsiVolumes` forces `Recreate` strategy.** If the app needs `RollingUpdate`, use `withNasMounts` instead.
-- **Images and chart versions go in `versions.ts`**, never as literals in the app file. Docker Hub images are `docker.io/<path>` with `mirrored: true` (only `registry` is `false`); other registries omit `mirrored`. Keep the entry shape/field order exactly like its neighbours (Renovate parses it) and run `bun run check-versions` and `bun run typecheck`.
-- **Decide how Renovate treats the new app.** A new `versions.ts` entry is tracked automatically (patch bumps auto-merge). Add it to the minor-update allowlist or the never-auto-merge denylist in `renovate.json` if it deserves that; see AGENTS.md "Dependency updates (Renovate)". Floating or compound tags (`latest`, `main-<sha>`) need a `enabled: false` rule.
-- **Postgres images come from `postgresImages` in `versions.ts`** — `withPostgres` only accepts the majors listed there; add a new major entry to use one.
+- **Images and chart versions go in `packages/versions/versions.ts`**, never as literals in the app file. Docker Hub images are `docker.io/<path>` with `mirrored: true` (only `registry` is `false`); other registries omit `mirrored`. Keep the entry shape/field order exactly like its neighbours (Renovate parses it) and run `bun run check-versions` and `bun run typecheck`.
+- **Decide how Renovate treats the new app.** A new `packages/versions/versions.ts` entry is tracked automatically (patch bumps auto-merge). Add it to the minor-update allowlist or the never-auto-merge denylist in `renovate.json` if it deserves that; see AGENTS.md "Dependency updates (Renovate)". Floating or compound tags (`latest`, `main-<sha>`) need a `enabled: false` rule.
+- **Postgres images come from `postgresImages` in `packages/versions/versions.ts`** — `withPostgres` only accepts the majors listed there; add a new major entry to use one.
 - **Modifier container names must match exactly.** If `podSpec.containers[0].name` is `"main"`, the modifier key must also be `"main"`. Mismatches throw at render time, not at build time.
 
 ## Reference Files

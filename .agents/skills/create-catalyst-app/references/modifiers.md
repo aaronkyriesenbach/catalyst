@@ -1,12 +1,12 @@
 # Modifiers
 
 Modifiers are immutable transforms that add capabilities to a WorkloadApp.
-Compose them with `applyModifiers(base, ...modifiers)`. Import from `"../modifiers"`.
+Compose them with `applyModifiers(base, ...modifiers)`. Import from `"@catalyst/platform/modifiers"`.
 
 ## applyModifiers
 
 ```typescript
-import { applyModifiers } from "../modifiers";
+import { applyModifiers } from "@catalyst/platform/modifiers";
 
 export default applyModifiers(base, mod1, mod2, mod3);
 ```
@@ -78,15 +78,15 @@ withPostgres(17, {
 });
 ```
 
-| Field                  | Required | Description                                                                            |
-| ---------------------- | -------- | -------------------------------------------------------------------------------------- |
-| `version` (positional) | Yes      | Postgres major in `postgresImages` in `versions.ts` (`16`, `17`, `18`)                 |
-| `user`                 | No       | Defaults to app name                                                                   |
-| `password`             | No       | Defaults to app name                                                                   |
-| `database`             | No       | Defaults to app name                                                                   |
-| `image`                | No       | Override the image. Defaults to `postgresImage(version)` (mirrored `<version>-alpine`) |
-| `storageRequest`       | No       | PVC size. Defaults to `"10Gi"`                                                         |
-| `backup`               | No       | If `true`, creates VolSync backup resources for the Postgres data                      |
+| Field                  | Required | Description                                                                              |
+| ---------------------- | -------- | ---------------------------------------------------------------------------------------- |
+| `version` (positional) | Yes      | Postgres major in `postgresImages` in `packages/versions/versions.ts` (`16`, `17`, `18`) |
+| `user`                 | No       | Defaults to app name                                                                     |
+| `password`             | No       | Defaults to app name                                                                     |
+| `database`             | No       | Defaults to app name                                                                     |
+| `image`                | No       | Override the image. Defaults to `postgresImage(version)` (mirrored `<version>-alpine`)   |
+| `storageRequest`       | No       | PVC size. Defaults to `"10Gi"`                                                           |
+| `backup`               | No       | If `true`, creates VolSync backup resources for the Postgres data                        |
 
 The Postgres container includes startup and readiness probes using `pg_isready`.
 Environment variables are: `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `PGDATA`.
@@ -95,7 +95,7 @@ Environment variables are: `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, 
 
 Puts the app behind a login with authentik's embedded outpost. The app needs a
 `webPort`; it gets a `forward-auth` Middleware and an outpost rule on its route,
-and `apps/authentik.ts` creates its group, provider and application.
+and `clusters/cluster0/apps/authentik.ts` creates its group, provider and application.
 
 ```typescript
 withForwardAuth();
@@ -106,7 +106,7 @@ withForwardAuth({ skipPathRegex: ["^/api/webhook$"] });
 | --------------- | -------- | ---------------------------------------------------------- |
 | `skipPathRegex` | No       | Regexes for paths the outpost lets through without a login |
 
-Add the app's name to `apps` for each user in `apps/authentik/users.config.ts`
+Add the app's name to `apps` for each user in `clusters/cluster0/apps/authentik/users.config.ts`
 who should have access (`"all"` covers every app). See `docs/forward-auth.md`.
 
 ## withOidcClient

@@ -11,7 +11,7 @@ self-signed-bootstrapped `internal-root-ca` Certificate). It issues leaf certs
 for the externally-proxied appliances at `*.backend.lab53.net`:
 
 - `unifi-backend-cert`, `truenas-backend-cert`, `proxmox-backend-cert` (in the
-  `traefik` namespace), defined in `apps/traefik/externalApps.ts`.
+  `traefik` namespace), defined in `clusters/cluster0/apps/traefik/externalApps.ts`.
 
 These leaves are presented by each appliance **to Traefik**, which validates
 them against the `internal-root-ca-bundle` ConfigMap via a `BackendTLSPolicy`.
@@ -99,7 +99,7 @@ Guardrails:
   leaves; the **CA stays `Never`**.
 
 Implementation: update `duration` / `renewBefore` / `privateKey.rotationPolicy`
-on the leaf `Certificate` in `apps/traefik/externalApps.ts`.
+on the leaf `Certificate` in `clusters/cluster0/apps/traefik/externalApps.ts`.
 
 ## Automated in-cluster deployment
 
@@ -189,10 +189,10 @@ as `acme.sh deploy/unifi.sh` does) on a small custom image, scoped to UniFi only
 
 ### GitOps modeling
 
-Extend `ExternalApp` (`types.ts`) with an optional `certDeploy` discriminated
+Extend `ExternalApp` (`packages/core/types.ts`) with an optional `certDeploy` discriminated
 union; add the strategy to the three entries in `externalApps.config.ts`
 (referencing credential **Secret names/keys only**, never values, provisioned
-via ESO). Add a top-level `apps/external-cert-deployer.ts` `StaticApp` (top-level
+via ESO). Add a top-level `clusters/cluster0/apps/external-cert-deployer.ts` `StaticApp` (top-level
 file — `main.ts` only discovers files directly under `apps/`) that renders one
 CronJob per configured appliance plus the shared script ConfigMap. The runtime
 script reads a small **target JSON** (cert Secret name, backend hostname, IP,
@@ -237,12 +237,12 @@ fallback is a `unifi-ssh` strategy on a small custom image, scoped to UniFi only
 
 1. ✅ Leaf `duration`/`renewBefore`/`rotationPolicy` set to `2160h`/`720h`/`Always`
    in `externalApps.ts`; CA stays `87600h` + `Never`.
-2. ✅ `ExternalApp` extended with the `certDeploy` discriminated union (`types.ts`);
+2. ✅ `ExternalApp` extended with the `certDeploy` discriminated union (`packages/core/types.ts`);
    strategies added to the three entries in `externalApps.config.ts`.
-3. ✅ `scripts/deploy-external-certs.ts` — self-contained Bun deploy script
+3. ✅ `clusters/cluster0/apps/external-cert-deployer/deploy-external-certs.ts` — self-contained Bun deploy script
    (TLS-probe → SHA-256 compare → per-strategy deploy), with no-op `notify()`
    (Apprise) + Gatus heartbeat push gated on env.
-4. ✅ `apps/external-cert-deployer.ts` — `StaticApp` (namespace `traefik`)
+4. ✅ `clusters/cluster0/apps/external-cert-deployer.ts` — `StaticApp` (namespace `traefik`)
    rendering the script ConfigMap + one ExternalSecret + one staggered CronJob
    per appliance. Verified via `bun run render`.
 
@@ -323,11 +323,11 @@ notification system** supporting **push + email**, reusable by any service.
 
 - **No** monitoring/alerting stack exists (no Prometheus/Alertmanager/Grafana).
 - **No** existing notification tooling (no ntfy/apprise/gotify/etc.).
-- **Stalwart** mail server is bootstrapped (`apps/stalwart/`) but the repo shows
+- **Stalwart** mail server is bootstrapped (`clusters/cluster0/apps/stalwart/`) but the repo shows
   **no exposed SMTP submission Service/port** — usability as a relay must be
   verified before relying on it for email.
-- ESO secret pattern (`buildGeneratedSecret` in `utils.ts`) and the idiomatic
-  `WorkloadApp` shape (e.g. `apps/shakedown.ts`) are the templates to copy.
+- ESO secret pattern (`buildGeneratedSecret` in `packages/k8s/secrets.ts`) and the idiomatic
+  `WorkloadApp` shape (e.g. `clusters/cluster0/apps/shakedown.ts`) are the templates to copy.
 
 ### Recommended stack: Apprise gateway + ntfy push + AWS SES email
 
@@ -373,7 +373,7 @@ verified domain/sender and likely a production-access request are needed to emai
 arbitrary recipients.
 
 **4. Gatus — dead-man-switch for "the job never ran".**
-Self-hosted Gatus (`apps/gatus.ts`). Each cert-deploy CronJob **pushes its result**
+Self-hosted Gatus (`clusters/cluster0/apps/gatus.ts`). Each cert-deploy CronJob **pushes its result**
 to a Gatus external endpoint; Gatus alerts when a push fails or no push arrives
 within the heartbeat interval. This catches the failure
 modes in-script notification cannot — pod crash-before-script, image-pull
@@ -397,15 +397,15 @@ alerting is later desired.
 
 ### Build order
 
-1. `apps/ntfy.ts` — self-hosted ntfy (`WorkloadApp`, PVC, ACL auth-file via ESO,
+1. `clusters/cluster0/apps/ntfy.ts` — self-hosted ntfy (`WorkloadApp`, PVC, ACL auth-file via ESO,
    `externallyAccessible`/internal route). Install phone apps, verify push.
-2. `apps/apprise.ts` — Apprise API (`WorkloadApp`, internal-only), with a stored
+2. `clusters/cluster0/apps/apprise.ts` — Apprise API (`WorkloadApp`, internal-only), with a stored
    config defining `push`/`email`/`critical` tag routing to ntfy + `ses://`.
 3. Set up AWS SES: verify a sender/domain, request production access, and grant
    the Apprise pod an IRSA role with `ses:SendEmail` (no static creds).
-4. `apps/gatus.ts` — self-hosted Gatus; one heartbeat endpoint per
+4. `clusters/cluster0/apps/gatus.ts` — self-hosted Gatus; one heartbeat endpoint per
    cert-deploy CronJob, generated from `externalApps`.
-5. Wire the cert-deploy script: done in `apps/external-cert-deployer.ts` (see
+5. Wire the cert-deploy script: done in `clusters/cluster0/apps/external-cert-deployer.ts` (see
    the Notifications section of `AGENTS.md`).
 
 ## Observability (deferred, designed-for)

@@ -4,17 +4,17 @@ Identity provider for the cluster. Apps use it through forward auth ([forward-au
 
 ## Layout
 
-| Path                                  | Purpose                                                                          |
-| ------------------------------------- | -------------------------------------------------------------------------------- |
-| `apps/authentik.ts`                   | Helm release, Postgres, secrets, route, `ReferenceGrant`, blueprint ConfigMap    |
-| `apps/authentik/values.yaml`          | Chart values (env from secrets, 2 server replicas, PDB)                          |
-| `apps/authentik/blueprint.ts`         | Generates the `catalyst-apps` blueprint and the per-app client-secret blueprints |
-| `apps/authentik/users.config.ts`      | Users enforced from Git                                                          |
-| `apps/authentik/recovery-flow.yaml`   | Password recovery flow, also used to email a user a set-password link            |
-| `apps/authentik/enrollment-flow.yaml` | Invitation-only enrollment flow                                                  |
-| `auth.ts`                             | authentik URL, forward-auth Middleware, issuer helper                            |
+| Path                                                    | Purpose                                                                          |
+| ------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `clusters/cluster0/apps/authentik.ts`                   | Helm release, Postgres, secrets, route, `ReferenceGrant`, blueprint ConfigMap    |
+| `clusters/cluster0/apps/authentik/values.yaml`          | Chart values (env from secrets, 2 server replicas, PDB)                          |
+| `clusters/cluster0/apps/authentik/blueprint.ts`         | Generates the `catalyst-apps` blueprint and the per-app client-secret blueprints |
+| `clusters/cluster0/apps/authentik/users.config.ts`      | Users enforced from Git                                                          |
+| `clusters/cluster0/apps/authentik/recovery-flow.yaml`   | Password recovery flow, also used to email a user a set-password link            |
+| `clusters/cluster0/apps/authentik/enrollment-flow.yaml` | Invitation-only enrollment flow                                                  |
+| `packages/platform/auth.ts`                             | authentik URL, forward-auth Middleware, issuer helper                            |
 
-The hostname is `authentikHostOptions` in `auth.ts`: `auth.lab53.net`, externally accessible because public apps send their users to it, so the route gets the default WAF profile (its `crowdsec-appsec` Middleware is emitted by `apps/authentik.ts`). Everything generated from it (provider URLs, the outpost host, each app's issuer) follows. Each hostname the server answers on yields its own issuer URL, so an app must use one consistently.
+The hostname is `authentikHostOptions` in `packages/platform/auth.ts`: `auth.lab53.net`, externally accessible because public apps send their users to it, so the route gets the default WAF profile (its `crowdsec-appsec` Middleware is emitted by `clusters/cluster0/apps/authentik.ts`). Everything generated from it (provider URLs, the outpost host, each app's issuer) follows. Each hostname the server answers on yields its own issuer URL, so an app must use one consistently.
 
 ## One-time setup
 
@@ -56,9 +56,9 @@ Things that behave differently than you might expect (all confirmed against auth
 
 Apps that run their own OIDC flow use `withOidcClient({ redirectPaths })`. Forward-auth apps need no secret.
 
-A `StaticApp` (such as kyoo) has no modifiers, so it calls `defineOidcClient(name, { redirectPaths })` from `modifiers.ts` instead, which `withOidcClient` itself uses. Put the returned `oidc` on the app and `credentialsSecret` in its `resources`. Only OIDC clients are supported there, since forward auth needs the route the app builder generates. The hostname for the redirect URLs comes from the StaticApp's `subDomain` and `externallyAccessible`, defaulting to `<name>.int.lab53.net`. Endpoint URLs that a Helm chart needs come from `oidcEndpointUrl` and `oidcDiscoveryUrl` in `auth.ts`, so a hostname change reaches them.
+A `StaticApp` (such as kyoo) has no modifiers, so it calls `defineOidcClient(name, { redirectPaths })` from `packages/platform/modifiers.ts` instead, which `withOidcClient` itself uses. Put the returned `oidc` on the app and `credentialsSecret` in its `resources`. Only OIDC clients are supported there, since forward auth needs the route the app builder generates. The hostname for the redirect URLs comes from the StaticApp's `subDomain` and `externallyAccessible`, defaulting to `<name>.int.lab53.net`. Endpoint URLs that a Helm chart needs come from `oidcEndpointUrl` and `oidcDiscoveryUrl` in `packages/platform/auth.ts`, so a hostname change reaches them.
 
-1. `apps/authentik.ts` generates the secret (48 characters) and stores it in AWS at `lab53/cluster0/authentik/oidc-<app>` (property `client_secret`). Every 90 days (`DEFAULT_CLIENT_SECRET_ROTATION`) ESO generates a new value and overwrites it.
+1. `clusters/cluster0/apps/authentik.ts` generates the secret (48 characters) and stores it in AWS at `lab53/cluster0/authentik/oidc-<app>` (property `client_secret`). Every 90 days (`DEFAULT_CLIENT_SECRET_ROTATION`) ESO generates a new value and overwrites it.
 2. In the `authentik` namespace an ExternalSecret renders the value into a small blueprint (`client-secret.yaml`) that sets only the provider's `client_secret`. The chart mounts it through `blueprints.secrets`. Because the secret is part of the file, a rotation changes its hash and authentik re-applies it.
 3. In the app's namespace `withOidcClient` creates `<app>-oidc-credentials` with `client_id`, `client_secret` and `issuer_url` from the same AWS key.
 4. Both ExternalSecrets re-read every minute, and Reloader restarts the app and the authentik worker when their secret changes.
@@ -69,7 +69,7 @@ Pass `rotate: false` to `withOidcClient` for an app that stores the secret itsel
 
 Jellyfin's SSO plugin (Dashboard, Plugins, SSO-Auth) is configured by hand with these values; the plugin links a user by the `preferred_username` claim, so an authentik username has to equal the Jellyfin one:
 
-- Provider name `authentik`, which gives the callback `/sso/OID/redirect/authentik` that `apps/jellyfin.ts` registers.
+- Provider name `authentik`, which gives the callback `/sso/OID/redirect/authentik` that `clusters/cluster0/apps/jellyfin.ts` registers.
 - OID endpoint `https://auth.lab53.net/application/o/jellyfin/`, client ID `jellyfin`, and the secret from `jellyfin-oidc-credentials`.
 - Role claim `groups`, role `jellyfin`, admin role `admin`. Both are authentik groups: `jellyfin` is the app's group and `admin` is the one declared in `users.config.ts`.
 - The login button in Dashboard, General, Login disclaimer points at `/sso/OID/start/authentik`.
