@@ -10,6 +10,7 @@
     "diff-renders": "bun run scripts/diff-renders.ts",
     "typecheck": "tsc --noEmit",
     "check-versions": "bun run scripts/check-versions.ts",
+    "secrets": "bun run scripts/secrets.ts",
     "sync-external-certs": "bun run clusters/cluster0/tools/sync-external-certs.ts",
     "install-argo": "helm upgrade --install -n argocd --create-namespace -f ./clusters/cluster0/bootstrap/argocd-values.yaml --version 10.14.0 argocd argocd/argo-cd"
   },
