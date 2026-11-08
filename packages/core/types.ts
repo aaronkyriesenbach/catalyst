@@ -109,7 +109,6 @@ export type AppConfig = WorkloadApp | StaticApp;
 
 export type CatalogEntry = {
   cluster: string;
-  file: string;
   config: AppConfig;
 };
 

@@ -32,7 +32,7 @@ catalyst/
 bun run render <app-name>                    # Render single app to stdout YAML (verify changes)
 bun run sync-external-certs [--dry-run]      # Pull TLS certs from cluster via kubectl
 bun run typecheck                            # tsc --noEmit
-bun run validate                             # Check the app catalog: names match files, unique hostnames
+bun run validate                             # Check the app catalog: unique hostnames
 bun run secrets [--json]                     # List every AWS Secrets Manager key the cluster uses (generated vs external)
 bun run render-all <outdir>                  # Render every app + project + enumerate-all into <outdir> (what CI runs)
 bun run render-charts <outdir>               # render-chart for every app with helmReleases (needs helm)
@@ -58,7 +58,7 @@ bunx prettier --write .                      # Format the repo (config: .prettie
 
 - **App discovery**: the loader reads `clusters/<cluster>/apps/` with `readdirSync`, sorted by name, filtering `entry.isFile()`. Only top-level `.ts` files are discovered — not subdirectories. Imports stay sequential: concurrent imports race Bun's auto-install in the CMP, which has no `node_modules`.
 - **Default export required**: the loader reads `mod.default`. Named-only exports will silently produce no config.
-- **Name equals file name**: the CMP loads `${ARGOCD_ENV_APP}.ts` while the Application is named from `config.name`. `bun run validate` fails when they differ.
+- **Name equals file name**: the CMP loads `${ARGOCD_ENV_APP}.ts` while the Application is named from `config.name`. Keep them equal; nothing checks it.
 - **Two app kinds**: `WorkloadApp` (auto-generates Deployment+Service+HTTPRoute from `podSpec`) and `StaticApp` (explicit `resources` array).
 - **App namespace**: Defaults to `name` when `namespace` is omitted.
 - **Security context**: `renderWorkload` auto-applies `runAsNonRoot: true, runAsUser/Group: 1000` if `podSpec.securityContext` is not set. Set it explicitly to override.
