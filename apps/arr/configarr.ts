@@ -40,16 +40,6 @@ const nzbLifeSecret = buildAwsExternalSecret(nzbLifeSecretName, [
   },
 ]);
 
-const nzbFinderSecretName = "nzbfinder-credentials";
-
-const nzbFinderSecret = buildAwsExternalSecret(nzbFinderSecretName, [
-  {
-    remoteKey: awsRemoteKey(arrNamespace, nzbFinderSecretName),
-    property: "api-key",
-    secretKey: "api-key",
-  },
-]);
-
 const jellyfinSecretName = "jellyfin-credentials";
 
 const jellyfinSecret = buildAwsExternalSecret(jellyfinSecretName, [
@@ -123,11 +113,6 @@ const cronJob = new CronJob({
                     "api-key",
                   ),
                   apiKeyEnv(
-                    configarrEnvNames.nzbFinder,
-                    nzbFinderSecretName,
-                    "api-key",
-                  ),
-                  apiKeyEnv(
                     configarrEnvNames.jellyfin,
                     jellyfinSecretName,
                     "api-key",
@@ -156,7 +141,6 @@ const cronJob = new CronJob({
 export const configarrResources: ResourceLike[] = [
   nzbgeekSecret,
   nzbLifeSecret,
-  nzbFinderSecret,
   jellyfinSecret,
   configMap,
   cronJob,

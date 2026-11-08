@@ -31,7 +31,6 @@ export const configarrEnvNames = {
   sabnzbd: "SABNZBD_API_KEY",
   nzbgeek: "NZBGEEK_API_KEY",
   nzbLife: "NZBLIFE_API_KEY",
-  nzbFinder: "NZBFINDER_API_KEY",
   jellyfin: "JELLYFIN_API_KEY",
 } as const;
 
@@ -144,17 +143,6 @@ const indexers: {
       baseUrl: "https://api.nzb.life",
       apiPath: "/api",
       apiKey: env(configarrEnvNames.nzbLife),
-    },
-  },
-  {
-    name: "NZBFinder",
-    definition: "NZBFinder",
-    sync_profile: "Standard",
-    priority: 25,
-    fields: {
-      baseUrl: "https://nzbfinder.ws",
-      apiPath: "/api",
-      apiKey: env(configarrEnvNames.nzbFinder),
     },
   },
 ];
