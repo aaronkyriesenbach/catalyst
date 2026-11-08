@@ -52,6 +52,9 @@ jobs:
       - name: Check versions
         run: bun run check-versions
 
+      - name: Validate app catalog
+        run: bun run validate
+
       - name: Render all apps
         id: render-head
         run: bun run render-all "$HEAD_RENDER_DIR"
