@@ -21,7 +21,7 @@ catalyst/
 │   ├── argocd/              # Application and AppProject builders
 │   ├── platform/            # auth (authentik), waf, status, notifications, hostnames, modifiers
 │   └── versions/            # versions.ts (Renovate-parsed image and chart registry) and image() helpers
-├── tools/                   # Dev CLIs: render, render-all, render-chart(s), diff-renders, check-versions, secrets, validate
+├── tools/                   # Dev CLIs: render, render-all, render-chart(s), diff-renders, check-versions, validate
 ├── docs/                    # Design docs and ADRs
 └── irsa.md                  # IRSA setup docs (AWS OIDC, S3, IAM)
 ```
@@ -33,7 +33,6 @@ bun run render <app-name>                    # Render single app to stdout YAML 
 bun run sync-external-certs [--dry-run]      # Pull TLS certs from cluster via kubectl
 bun run typecheck                            # tsc --noEmit
 bun run validate                             # Render every app and fail on a hostname served by two HTTPRoutes (remote resources and Helm charts are not rendered)
-bun run secrets [--json]                     # List every AWS Secrets Manager key the cluster uses (generated vs external)
 bun run render-all <outdir>                  # Render every app + project + enumerate-all into <outdir> (what CI runs)
 bun run render-charts <outdir>               # render-chart for every app with helmReleases (needs helm)
 bun run check-versions                       # Verify versions.ts matches the Renovate-parsed format
@@ -88,7 +87,6 @@ bunx prettier --write .                      # Format the repo (config: .prettie
 ### Secrets
 
 - Every AWS Secrets Manager key is `lab53/<cluster name>/<namespace>/<secret name>`. Build it with `awsRemoteKey(namespace, name)` (a key that must already exist or another app generates) or let `buildGeneratedSecret`/`buildBackupResources` build it (generated). Never type a key as a string: the cluster name comes from `cluster.ts`, so a renamed cluster changes every key and its persisted secrets would regenerate.
-- `bun run secrets` lists every key in use and whether the cluster generates it or it must exist already. Use it instead of a hand-written list when documenting a secret.
 - `buildGeneratedSecret(namespace, name, keys, options?)` in `packages/k8s/secrets.ts` creates ExternalSecret + optional per-key Password generators.
 - Depends on the `external-secrets` app being installed (`apps/external-secrets.ts`); the store and generator names it relies on are defined in `packages/k8s/external-secrets.ts`.
 - Keys can be strings (use cluster-wide default generator) or objects with `{ key, length?, encoding? }`.
