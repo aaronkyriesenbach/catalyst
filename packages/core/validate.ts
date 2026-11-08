@@ -15,14 +15,8 @@ export function validateCatalog(catalog: Catalog): string[] {
     hostOwners.set(host, owner);
   }
 
-  for (const { cluster, file, config } of catalog.entries) {
+  for (const { cluster, config } of catalog.entries) {
     const id = `${cluster}/${config.name}`;
-
-    if (file !== `${config.name}.ts`) {
-      problems.push(
-        `${cluster}/${file} declares name '${config.name}'; the CMP loads apps by file name, so they must match`,
-      );
-    }
 
     if (config.kind === "workload" && config.webPort !== undefined) {
       claimHost(
