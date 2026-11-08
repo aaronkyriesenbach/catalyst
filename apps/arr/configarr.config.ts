@@ -178,26 +178,58 @@ const lidarrNaming = {
   multiDiscTrackFormat: `${lidarrAlbumFolder}/{medium:00}-${lidarrTrackName}`,
 };
 
-// Lidarr only knows "FLAC" and "FLAC 24bit" as separate qualities, so leaving 24bit out of the profile keeps hi-res out.
 const lidarrFlacProfile = "FLAC 16-bit";
 
-// Backstop for hi-res releases that don't label themselves 24bit, so Lidarr rates them as plain FLAC.
-const lidarrHiResTerms = [
-  "24bit",
-  "24-bit",
-  "24 bit",
-  "24-44",
-  "24-48",
-  "24-88",
-  "24-96",
-  "24-176",
-  "24-192",
-  "88.2khz",
-  "96khz",
-  "176.4khz",
-  "192khz",
-  "DSD",
-  "SACD",
+const lidarrQualityOrder = [
+  { name: "FLAC" },
+  {
+    name: "Other lossless",
+    qualities: ["FLAC 24bit", "ALAC", "ALAC 24bit", "APE", "WavPack", "WAV"],
+  },
+  {
+    name: "High Quality Lossy",
+    qualities: [
+      "MP3-VBR-V0",
+      "AAC-VBR",
+      "MP3-320",
+      "OGG Vorbis Q9",
+      "AAC-320",
+      "OGG Vorbis Q10",
+    ],
+  },
+  {
+    name: "Mid Quality Lossy",
+    qualities: [
+      "OGG Vorbis Q7",
+      "MP3-VBR-V2",
+      "MP3-256",
+      "OGG Vorbis Q8",
+      "AAC-256",
+    ],
+  },
+  {
+    name: "Low Quality Lossy",
+    qualities: ["MP3-192", "OGG Vorbis Q6", "AAC-192", "WMA", "MP3-224"],
+  },
+  {
+    name: "Poor Quality Lossy",
+    qualities: ["MP3-96", "MP3-112", "MP3-128", "OGG Vorbis Q5", "MP3-160"],
+  },
+  {
+    name: "Trash Quality Lossy",
+    qualities: [
+      "MP3-8",
+      "MP3-16",
+      "MP3-24",
+      "MP3-32",
+      "MP3-40",
+      "MP3-48",
+      "MP3-56",
+      "MP3-64",
+      "MP3-80",
+    ],
+  },
+  { name: "Unknown" },
 ];
 
 const config = {
@@ -279,11 +311,11 @@ const config = {
       quality_profiles: [
         {
           name: lidarrFlacProfile,
-          upgrade: { allowed: false, until_quality: "FLAC" },
-          qualities: [{ name: "FLAC" }],
+          upgrade: { allowed: true, until_quality: "FLAC" },
+          qualities: lidarrQualityOrder,
         },
       ],
-      release_profiles: [{ enabled: true, ignored: lidarrHiResTerms }],
+      release_profiles: [],
       root_folders: [
         {
           path: mediaPaths.music,

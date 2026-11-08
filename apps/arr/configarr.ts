@@ -5,6 +5,7 @@ import {
   buildAwsExternalSecret,
   buildFileConfigMap,
   image,
+  readFile,
 } from "../../utils";
 import { arrNamespace, restrictedContainer, timezone } from "./common";
 import { buildConfigarrYaml, configarrEnvNames } from "./configarr.config";
@@ -50,8 +51,14 @@ const jellyfinSecret = buildAwsExternalSecret(jellyfinSecretName, [
   },
 ]);
 
+const lidarrQualitySizesScript = "lidarr-quality-sizes.sh";
+
 const configMap = buildFileConfigMap(configMapName, {
   "config.yml": buildConfigarrYaml(),
+  [lidarrQualitySizesScript]: await readFile(
+    `./${lidarrQualitySizesScript}`,
+    import.meta.url,
+  ),
 });
 
 // Runs every 15 minutes rather than once, so the apps converge on first boot (they start empty and
@@ -77,6 +84,27 @@ const cronJob = new CronJob({
               runAsGroup: 1000,
               seccompProfile: { type: "RuntimeDefault" },
             },
+            initContainers: [
+              {
+                name: "lidarr-quality-sizes",
+                image: image("curl"),
+                command: ["/bin/sh", `/config/${lidarrQualitySizesScript}`],
+                env: [
+                  { name: "LIDARR_URL", value: "http://lidarr:8686" },
+                  apiKeyEnv(
+                    "LIDARR_API_KEY",
+                    apiKeySecretName("lidarr"),
+                    API_KEY_SECRET_KEY,
+                  ),
+                ],
+                securityContext: restrictedContainer({
+                  readOnlyRootFilesystem: true,
+                }),
+                volumeMounts: [
+                  { name: "config", mountPath: "/config", readOnly: true },
+                ],
+              },
+            ],
             containers: [
               {
                 name,

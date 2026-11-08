@@ -15,7 +15,7 @@ const RESOLVED = "success";
 function notifyBody(severity: Severity): string {
   return JSON.stringify({
     title: "[ALERT_TRIGGERED_OR_RESOLVED]: [ENDPOINT_NAME] ([ENDPOINT_GROUP])",
-    body: "[RESULT_ERRORS]",
+    body: "[ENDPOINT_GROUP] / [ENDPOINT_NAME]: [ALERT_TRIGGERED_OR_RESOLVED]. [RESULT_ERRORS]",
     type: "[ALERT_TRIGGERED_OR_RESOLVED]",
     tag: severity,
   });
