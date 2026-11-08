@@ -84,6 +84,7 @@ const cronJob = new CronJob({
 
 const config: StaticApp = {
   kind: "static",
+  status: { exempt: "CronJob with no endpoint" },
   name,
   resources: [scripts, cronJob],
 };

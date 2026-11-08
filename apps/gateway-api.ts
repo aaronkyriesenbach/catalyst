@@ -5,6 +5,7 @@ const VERSION = "v1.6.3";
 
 const config: StaticApp = {
   kind: "static",
+  status: { exempt: "CRDs only; nothing runs" },
   name: "gateway-api",
   namespace: "kube-system",
   project: Project.SYSTEM,

@@ -1,5 +1,6 @@
 import { Service } from "kubernetes-models/v1";
 import { Project } from "../constants";
+import { StatusGroup, tcpTarget } from "../status";
 import type { StaticApp } from "../types";
 import {
   awsRemoteKey,
@@ -96,6 +97,24 @@ const config: StaticApp = {
   name: "crowdsec",
   namespace: crowdsecNamespace,
   project: Project.SYSTEM,
+  status: {
+    targets: [
+      tcpTarget(
+        "CrowdSec",
+        StatusGroup.Platform,
+        `crowdsec-service.${crowdsecNamespace}.svc`,
+        8080,
+      ),
+      ...profiles.map(([profile, { port }]) =>
+        tcpTarget(
+          `WAF (${profile})`,
+          StatusGroup.Platform,
+          `${wafAppsecServiceName(profile)}.${crowdsecNamespace}.svc`,
+          port,
+        ),
+      ),
+    ],
+  },
   resources: [
     ...keysSecret,
     ...lapiSecrets,

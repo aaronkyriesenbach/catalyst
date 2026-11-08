@@ -110,6 +110,9 @@ const deployment = buildDeployment(
 
 const config: StaticApp = {
   kind: "static",
+  status: {
+    exempt: "The Public checks travel the tunnel, so they fail when it does",
+  },
   name,
   project: Project.SYSTEM,
   resources: [configMap, credentialsSecret, deployment],

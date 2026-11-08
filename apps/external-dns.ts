@@ -1,4 +1,6 @@
 import { cloudflareZoneId, Project } from "../constants";
+import { appHostname } from "../hostnames";
+import { dnsTarget, httpTarget, serviceUrl, StatusGroup } from "../status";
 import type { StaticApp } from "../types";
 import {
   awsRemoteKey,
@@ -16,10 +18,32 @@ const cloudflareTokenSecret = buildAwsExternalSecret("cloudflare-api-token", [
   },
 ]);
 
+const name = "external-dns";
+const healthPort = 7979;
+
 const config: StaticApp = {
   kind: "static",
-  name: "external-dns",
+  name,
   project: Project.SYSTEM,
+  status: {
+    targets: [
+      ...["external-dns-int", "external-dns-ext"].map((release) =>
+        httpTarget(
+          release === "external-dns-int"
+            ? "External DNS (LAN)"
+            : "External DNS (public)",
+          StatusGroup.Platform,
+          serviceUrl(release, name, healthPort, "/healthz"),
+        ),
+      ),
+      dnsTarget(
+        "Public DNS",
+        "1.1.1.1",
+        appHostname("status", { externallyAccessible: true }),
+      ),
+      dnsTarget("LAN DNS", "192.168.1.1", appHostname("zot")),
+    ],
+  },
   resources: [cloudflareTokenSecret],
   helmReleases: [
     {

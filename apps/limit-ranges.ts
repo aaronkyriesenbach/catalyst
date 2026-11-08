@@ -21,6 +21,7 @@ const namespaces = [
 
 const config: StaticApp = {
   kind: "static",
+  status: { exempt: "Generates LimitRanges only; nothing runs" },
   name,
   namespace: "kube-system",
   project: Project.SYSTEM,

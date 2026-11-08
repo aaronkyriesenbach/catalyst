@@ -1,4 +1,5 @@
 import { Project } from "../constants";
+import { StatusGroup, tcpTarget } from "../status";
 import type { StaticApp } from "../types";
 import { awsRemoteKey, buildAwsExternalSecret } from "../utils";
 import { internalCaResources } from "./cert-manager/internal-ca";
@@ -18,6 +19,16 @@ const cloudflareTokenSecret = buildAwsExternalSecret("cloudflare-api-token", [
 const config: StaticApp = {
   kind: "static",
   name: "cert-manager",
+  status: {
+    targets: [
+      tcpTarget(
+        "Cert Manager",
+        StatusGroup.Platform,
+        `cert-manager-webhook.${certManagerNamespace}.svc`,
+        443,
+      ),
+    ],
+  },
   project: Project.SYSTEM,
   resources: [...issuers, ...internalCaResources, cloudflareTokenSecret],
   helmReleases: [

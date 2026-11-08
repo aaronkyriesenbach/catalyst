@@ -5,11 +5,14 @@ import {
 } from "kubernetes-models/rbac.authorization.k8s.io/v1";
 import { ServiceAccount } from "kubernetes-models/v1";
 import { Project } from "../constants";
+import { StatusGroup, tcpTarget } from "../status";
 import type { StaticApp } from "../types";
 import { image } from "../utils";
 
 const name = "kube-vip";
 const namespace = "kube-system";
+const apiVip = "192.168.53.200";
+const traefikVip = "192.168.53.201";
 
 // kube-vip holds the API server VIP and the Traefik VIP, so losing these objects
 // takes down kubectl access and all ingress. Never let Argo prune them or
@@ -125,7 +128,7 @@ const daemonSet = new DaemonSet({
               { name: "vip_arp", value: "true" },
               { name: "vip_interface", value: "eth0" },
               // Control plane VIP (API server HA).
-              { name: "address", value: "192.168.53.200" },
+              { name: "address", value: apiVip },
               { name: "port", value: "6443" },
               { name: "vip_subnet", value: "32" },
               { name: "cp_enable", value: "true" },
@@ -163,6 +166,12 @@ const config: StaticApp = {
   name,
   namespace,
   project: Project.SYSTEM,
+  status: {
+    targets: [
+      tcpTarget("Kubernetes API", StatusGroup.Infrastructure, apiVip, 6443),
+      tcpTarget("Ingress", StatusGroup.Infrastructure, traefikVip, 443),
+    ],
+  },
   // A rollout moves both VIPs, so merges that change the DaemonSet are
   // deliberate; Renovate bumps are PR-only.
   resources: [serviceAccount, clusterRole, clusterRoleBinding, daemonSet],

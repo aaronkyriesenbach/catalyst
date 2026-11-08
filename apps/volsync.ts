@@ -1,4 +1,5 @@
 import { Project } from "../constants";
+import { StatusGroup, tcpTarget } from "../status";
 import type { StaticApp } from "../types";
 import { mirrorRepository } from "../utils";
 
@@ -16,6 +17,16 @@ const repository = mirrorRepository("quay.io/backube/volsync");
 const config: StaticApp = {
   kind: "static",
   name: "volsync",
+  status: {
+    targets: [
+      tcpTarget(
+        "VolSync",
+        StatusGroup.Platform,
+        "volsync-metrics.volsync-system.svc",
+        8443,
+      ),
+    ],
+  },
   namespace: "volsync-system",
   project: Project.SYSTEM,
   helmReleases: [

@@ -175,6 +175,10 @@ const resolvedWaf = resolveWaf(
 
 const config: StaticApp = {
   kind: "static",
+  status: {
+    exempt:
+      "Checked from apps/gatus.ts: it and authentik cannot import each other",
+  },
   name,
   namespace: authentikNamespace,
   resources: [

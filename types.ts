@@ -7,6 +7,7 @@ import type { IDeploymentStrategy } from "kubernetes-models/apps/v1";
 import { IPodSpec } from "kubernetes-models/v1";
 import type { Project } from "./constants";
 import type { HelmChartKey } from "./versions";
+import type { StatusDeclaration } from "./status";
 import type { WafSetting } from "./waf";
 
 export type WorkloadStrategy = Pick<IDeploymentStrategy, "type">;
@@ -72,6 +73,7 @@ type BaseApp = {
   oidc?: OidcDeclaration;
   /** Registered next to `oidc`, in the app's namespace. The app builds the routes and Middleware itself. */
   additionalOidc?: readonly AdditionalOidcApp[];
+  status?: StatusDeclaration;
 };
 
 export type WorkloadApp = BaseApp & {

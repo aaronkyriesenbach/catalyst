@@ -6,6 +6,9 @@ const BASE = `https://raw.githubusercontent.com/kubernetes-csi/external-snapshot
 
 const config: StaticApp = {
   kind: "static",
+  status: {
+    exempt: "Controller with no endpoint; VictoriaMetrics alerts cover it",
+  },
   name: "snapshot-controller",
   namespace: "kube-system",
   project: Project.SYSTEM,

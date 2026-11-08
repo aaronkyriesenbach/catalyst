@@ -4,6 +4,9 @@ import { mirrorRepository } from "../utils";
 
 const config: StaticApp = {
   kind: "static",
+  status: {
+    exempt: "Controller with no endpoint; VictoriaMetrics alerts cover it",
+  },
   name: "reloader",
   project: Project.SYSTEM,
   helmReleases: [

@@ -3,6 +3,7 @@ import {
   type IExternalSecretData,
 } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
 import { httpCheck, readiness } from "../probes";
+import { httpTarget, serviceUrl, StatusGroup } from "../status";
 import type { WorkloadApp } from "../types";
 import { buildAppriseConfig } from "../notifications";
 import { AWS_STORE, awsRemoteKey, image } from "../utils";
@@ -17,7 +18,7 @@ export const appriseUrl = `http://${name}.${name}.svc:${port}`;
 // Simple stateful mode reads /config/<key>.yml, one file per notifying app.
 export const appriseNotifiers = [
   "external-cert-deployer",
-  "healthchecks",
+  "gatus",
   "victoria-metrics",
 ];
 
@@ -80,6 +81,15 @@ const configSecret = new ExternalSecret({
 const config: WorkloadApp = {
   kind: "workload",
   name,
+  status: {
+    targets: [
+      httpTarget(
+        "Apprise",
+        StatusGroup.Platform,
+        serviceUrl(name, name, port, "/status"),
+      ),
+    ],
+  },
   podSpec: {
     containers: [
       {

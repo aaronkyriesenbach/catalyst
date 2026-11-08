@@ -38,6 +38,9 @@ const volumeSnapshotClass: ResourceLike = {
 
 const config: StaticApp = {
   kind: "static",
+  status: {
+    exempt: "Storage failures surface in the checks of the apps that use it",
+  },
   name: "truenas-csi",
   project: Project.SYSTEM,
   resources: [...deployResources, storageClass, volumeSnapshotClass],

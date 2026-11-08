@@ -6,6 +6,7 @@ import { externalAppResources } from "./traefik/externalApps";
 import { externalGateway, internalGateway } from "./traefik/gateway";
 import { httpRedirect } from "./traefik/redirect";
 import { routes } from "./traefik/routes";
+import { traefikStatusTargets } from "./traefik/status";
 
 export const traefikNamespace = "traefik";
 
@@ -13,6 +14,7 @@ const config: StaticApp = {
   kind: "static",
   name: "traefik",
   project: Project.SYSTEM,
+  status: { targets: traefikStatusTargets },
   helmReleases: [
     {
       chart: "traefik",

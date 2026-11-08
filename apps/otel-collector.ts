@@ -1,4 +1,5 @@
 import { Project } from "../constants";
+import { StatusGroup, tcpTarget } from "../status";
 import type { StaticApp } from "../types";
 import { mergeValues, mirrorRepository, readYaml } from "../utils";
 import { buildScrapeConfig, scrapeTargets } from "./otel-collector/targets";
@@ -66,6 +67,16 @@ const config: StaticApp = {
   name,
   namespace: monitoringNamespace,
   project: Project.SYSTEM,
+  status: {
+    targets: [
+      tcpTarget(
+        "Telemetry Gateway",
+        StatusGroup.Platform,
+        `otel-gateway.${monitoringNamespace}.svc`,
+        4318,
+      ),
+    ],
+  },
   helmReleases: [
     {
       chart: "opentelemetryCollector",

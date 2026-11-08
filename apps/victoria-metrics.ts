@@ -6,12 +6,16 @@ import {
 import { Project } from "../constants";
 import { appUrl } from "../hostnames";
 import { buildOidcCredentialsSecret } from "../modifiers";
+import { httpTarget, routeTargets, serviceUrl, StatusGroup } from "../status";
 import type { StaticApp } from "../types";
 import { buildRoute, mergeValues, mirrorRepository, readYaml } from "../utils";
 import { alertmanagerConfig } from "./victoria-metrics/alertmanager";
 import {
   grafanaServiceName,
   monitoringNamespace,
+  vlSingleUrl,
+  vmSingleUrl,
+  vtSingleUrl,
 } from "./victoria-metrics/endpoints";
 
 const name = "victoria-metrics";
@@ -76,6 +80,42 @@ const config: StaticApp = {
   namespace: monitoringNamespace,
   project: Project.SYSTEM,
   subDomain: grafanaSubDomain,
+  status: {
+    targets: [
+      httpTarget(
+        "Grafana",
+        StatusGroup.Platform,
+        serviceUrl(grafanaServiceName, monitoringNamespace, 80, "/api/health"),
+      ),
+      httpTarget(
+        "VictoriaMetrics",
+        StatusGroup.Platform,
+        `${vmSingleUrl}/health`,
+      ),
+      httpTarget("VictoriaLogs", StatusGroup.Platform, `${vlSingleUrl}/health`),
+      httpTarget(
+        "VictoriaTraces",
+        StatusGroup.Platform,
+        `${vtSingleUrl}/health`,
+      ),
+      httpTarget(
+        "Alert Rules",
+        StatusGroup.Platform,
+        serviceUrl("vmalert-vm", monitoringNamespace, 8080, "/health"),
+      ),
+      httpTarget(
+        "Alertmanager",
+        StatusGroup.Platform,
+        serviceUrl(
+          "vmalertmanager-vm",
+          monitoringNamespace,
+          9093,
+          "/-/healthy",
+        ),
+      ),
+      ...routeTargets("Grafana", grafanaSubDomain, {}),
+    ],
+  },
   oidc: {
     kind: "oauth2",
     redirectPaths: ["/login/generic_oauth"],

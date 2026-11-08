@@ -1,12 +1,23 @@
 import { Project } from "../constants";
 import { applyModifiers, withNasMounts } from "../modifiers";
 import { readiness, tcpCheck } from "../probes";
+import { StatusGroup, tcpTarget } from "../status";
 import type { WorkloadApp } from "../types";
 import { image } from "../utils";
 
 const base: WorkloadApp = {
   kind: "workload",
   name: "restic-server",
+  status: {
+    targets: [
+      tcpTarget(
+        "Restic Server",
+        StatusGroup.Platform,
+        "restic-server.restic-server.svc",
+        8000,
+      ),
+    ],
+  },
   project: Project.SYSTEM,
   podSpec: {
     containers: [

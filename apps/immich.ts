@@ -11,6 +11,7 @@ import {
   readYaml,
 } from "../utils";
 import { postgresProbes } from "../probes";
+import { httpTarget, routeTargets, serviceUrl, StatusGroup } from "../status";
 
 const { pv: libraryPv, pvc: libraryPvc } = buildNasPersistentVolumePair({
   name: "immich-library",
@@ -96,6 +97,16 @@ const route = buildRoute("immich", 2283, {
 const config: StaticApp = {
   kind: "static",
   name: "immich",
+  status: {
+    targets: [
+      httpTarget(
+        "Immich",
+        StatusGroup.Media,
+        serviceUrl("immich-server", "immich", 2283, "/api/server/ping"),
+      ),
+      ...routeTargets("Immich", "immich", { externallyAccessible: true }),
+    ],
+  },
   resources: [
     libraryPv,
     libraryPvc,

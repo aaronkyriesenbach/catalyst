@@ -5,6 +5,7 @@ import {
 import type { IPushSecretStoreRef } from "@kubernetes-models/external-secrets/external-secrets.io/v1alpha1";
 import { ClusterGenerator } from "@kubernetes-models/external-secrets/generators.external-secrets.io/v1alpha1";
 import { Project } from "../constants";
+import { StatusGroup, tcpTarget } from "../status";
 import type { StaticApp } from "../types";
 
 const clusterGeneratorName = "generated-password";
@@ -69,6 +70,16 @@ export const awsSecretStoreRef: IPushSecretStoreRef = {
 const config: StaticApp = {
   kind: "static",
   name: "external-secrets",
+  status: {
+    targets: [
+      tcpTarget(
+        "External Secrets",
+        StatusGroup.Platform,
+        "external-secrets-webhook.external-secrets.svc",
+        443,
+      ),
+    ],
+  },
   project: Project.SYSTEM,
   resources: [clusterGenerator, awsSecretStore],
   helmReleases: [

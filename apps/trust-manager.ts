@@ -1,5 +1,6 @@
 import { Project } from "../constants";
 import { Bundle } from "@kubernetes-models/cert-manager/trust.cert-manager.io/v1alpha1";
+import { StatusGroup, tcpTarget } from "../status";
 import type { StaticApp } from "../types";
 import { mirrorRepository } from "../utils";
 import { certManagerNamespace } from "./cert-manager";
@@ -37,6 +38,16 @@ const internalRootCaBundle = new Bundle({
 const config: StaticApp = {
   kind: "static",
   name: "trust-manager",
+  status: {
+    targets: [
+      tcpTarget(
+        "Trust Manager",
+        StatusGroup.Platform,
+        `trust-manager.${certManagerNamespace}.svc`,
+        443,
+      ),
+    ],
+  },
   namespace: certManagerNamespace,
   project: Project.SYSTEM,
   resources: [internalRootCaBundle],
