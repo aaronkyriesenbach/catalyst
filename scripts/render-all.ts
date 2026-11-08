@@ -1,4 +1,4 @@
-import { readdirSync } from "node:fs";
+import { listAppNames } from "./app-names";
 import { type Job, runJobs } from "./job-runner";
 
 const outDir = process.argv[2];
@@ -8,16 +8,8 @@ if (!outDir) {
   process.exit(1);
 }
 
-const appNames = readdirSync("apps", { withFileTypes: true })
-  .flatMap((entry) =>
-    entry.isFile() && entry.name.endsWith(".ts")
-      ? [entry.name.replace(/\.ts$/, "")]
-      : [],
-  )
-  .sort((a, b) => a.localeCompare(b));
-
 const jobs: Job[] = [
-  ...appNames.flatMap((name) => [
+  ...listAppNames().flatMap((name) => [
     { label: `render-${name}`, args: ["render", name] },
     {
       label: `render-argo-app-${name}`,

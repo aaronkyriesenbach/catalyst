@@ -103,7 +103,16 @@ async function getSecret(namespace: string, name: string) {
     "json",
   ]);
 
-  return JSON.parse(stdout) as ISecret;
+  try {
+    return JSON.parse(stdout) as ISecret;
+  } catch (error) {
+    throw new Error(
+      `kubectl returned invalid JSON for secret ${namespace}/${name}`,
+      {
+        cause: error,
+      },
+    );
+  }
 }
 
 function decodeSecretKey(secret: ISecret, key: string, secretName: string) {
