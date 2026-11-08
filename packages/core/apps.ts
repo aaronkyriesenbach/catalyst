@@ -17,7 +17,8 @@ export async function loadAllAppConfigs(
 ): Promise<AppConfig[]> {
   const files = readdirSync(APPS_DIR, { withFileTypes: true })
     .filter((entry) => entry.isFile() && !exclude.includes(entry.name))
-    .map((entry) => entry.name);
+    .map((entry) => entry.name)
+    .sort((a, b) => a.localeCompare(b));
   const configs: AppConfig[] = [];
 
   for (const file of files) {
