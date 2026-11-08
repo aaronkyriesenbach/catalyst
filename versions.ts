@@ -61,6 +61,11 @@ export const images = {
     tag: "12.4",
     mirrored: true,
   },
+  jellarr: {
+    name: "ghcr.io/aaronkyriesenbach/jellarr",
+    tag: "0.2.0",
+    mirrored: true,
+  },
   radicale: {
     name: "docker.io/11notes/radicale",
     tag: "3.9.0",

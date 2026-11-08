@@ -1,5 +1,6 @@
 import { Scalar, stringify, type ScalarTag } from "yaml";
 import { flaresolverrName, flaresolverrPort } from "./flaresolverr";
+import { jellyfinHost, jellyfinPort } from "../jellyfin/common";
 import { mediaPaths } from "./common";
 import { sabnzbdName, sabnzbdPort } from "./sabnzbd";
 import { torrentHost, torrentPort } from "./torrent";
@@ -31,6 +32,7 @@ export const configarrEnvNames = {
   nzbgeek: "NZBGEEK_API_KEY",
   nzbLife: "NZBLIFE_API_KEY",
   nzbFinder: "NZBFINDER_API_KEY",
+  jellyfin: "JELLYFIN_API_KEY",
 } as const;
 
 type CategoryField = "movie_category" | "tv_category" | "music_category";
@@ -84,9 +86,34 @@ function downloadClients(categoryField: CategoryField, category: string) {
   };
 }
 
-// Add the indexers you use here; each needs a Prowlarr `definition` name, e.g. "1337x". Prowlarr
-// syncs them to every app, and anything not listed here is deleted. Credentials do not belong in
-// Git: read them with env() from a Secret on the CronJob.
+function jellyfinNotification(
+  events: Record<string, boolean>,
+  mapFrom: string,
+  mapTo: string,
+) {
+  return {
+    data: [
+      {
+        name: "Jellyfin",
+        type: "MediaBrowser",
+        events,
+        fields: {
+          host: jellyfinHost,
+          port: jellyfinPort,
+          useSsl: false,
+          apiKey: env(configarrEnvNames.jellyfin),
+          notify: false,
+          updateLibrary: true,
+          mapFrom,
+          mapTo,
+        },
+      },
+    ],
+    delete_unmanaged: { enabled: true },
+  };
+}
+
+// Prowlarr syncs these to every app and deletes unlisted ones; credentials come from env(), not Git.
 const indexers: {
   name: string;
   definition: string;
@@ -205,6 +232,17 @@ const config = {
       },
       root_folders: [mediaPaths.movies],
       download_clients: downloadClients("movie_category", "radarr"),
+      notifications: jellyfinNotification(
+        {
+          onDownload: true,
+          onUpgrade: true,
+          onRename: true,
+          onMovieDelete: true,
+          onMovieFileDelete: true,
+        },
+        mediaPaths.movies,
+        "/movies",
+      ),
     },
   },
 
@@ -230,6 +268,17 @@ const config = {
       },
       root_folders: [mediaPaths.tv],
       download_clients: downloadClients("tv_category", "sonarr"),
+      notifications: jellyfinNotification(
+        {
+          onDownload: true,
+          onUpgrade: true,
+          onRename: true,
+          onSeriesDelete: true,
+          onEpisodeFileDelete: true,
+        },
+        mediaPaths.tv,
+        "/tv",
+      ),
     },
   },
 

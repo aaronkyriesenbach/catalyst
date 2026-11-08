@@ -7,10 +7,12 @@ import {
 import { httpCheck, readiness, startup } from "../probes";
 import type { WorkloadApp } from "../types";
 import { image } from "../utils";
+import { jellyfinName, jellyfinPort } from "./jellyfin/common";
+import { jellarrResources } from "./jellyfin/jellarr";
 
 const base: WorkloadApp = {
   kind: "workload",
-  name: "jellyfin",
+  name: jellyfinName,
   podSpec: {
     containers: [
       {
@@ -20,13 +22,14 @@ const base: WorkloadApp = {
           requests: { cpu: "100m", memory: "512Mi" },
           limits: { cpu: "4", memory: "3Gi" },
         },
-        ports: [{ name: "http", containerPort: 8096 }],
-        readinessProbe: readiness(httpCheck("/health", 8096)),
-        startupProbe: startup(httpCheck("/health", 8096), 300),
+        ports: [{ name: "http", containerPort: jellyfinPort }],
+        readinessProbe: readiness(httpCheck("/health", jellyfinPort)),
+        startupProbe: startup(httpCheck("/health", jellyfinPort), 300),
       },
     ],
   },
-  webPort: 8096,
+  webPort: jellyfinPort,
+  extraResources: jellarrResources,
   progressDeadlineSeconds: 600,
   externallyAccessible: true,
 };
