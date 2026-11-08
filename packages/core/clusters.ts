@@ -1,6 +1,6 @@
 import { readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import type { Cluster } from "./types";
+import type { Cluster, ClusterDefinition } from "./types";
 
 export const CLUSTERS_DIR = fileURLToPath(
   new URL("../../clusters/", import.meta.url),
@@ -40,13 +40,7 @@ export function currentCluster(): string {
 
 export async function loadCluster(name: string): Promise<Cluster> {
   const mod = await import(`${CLUSTERS_DIR}${name}/cluster.ts`);
-  const cluster: Cluster = mod.default;
+  const definition: ClusterDefinition = mod.default;
 
-  if (cluster.name !== name) {
-    throw new Error(
-      `clusters/${name}/cluster.ts declares name '${cluster.name}'`,
-    );
-  }
-
-  return cluster;
+  return { ...definition, name };
 }

@@ -1,8 +1,7 @@
 import { Project } from "@catalyst/core/constants";
-import type { Cluster } from "@catalyst/core/types";
+import type { ClusterDefinition } from "@catalyst/core/types";
 
-const cluster: Cluster = {
-  name: "cluster0",
+const cluster: ClusterDefinition = {
   kind: "standalone",
   network: {
     podCidr: "10.42.0.0/16",
