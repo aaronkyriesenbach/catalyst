@@ -2,11 +2,12 @@ import {
   ExternalSecret,
   type IExternalSecretData,
 } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
-import { httpCheck, readiness } from "../probes";
-import { httpTarget, serviceUrl, StatusGroup } from "../status";
-import type { WorkloadApp } from "../types";
-import { buildAppriseConfig } from "../notifications";
-import { AWS_STORE, awsRemoteKey, image } from "../utils";
+import { httpCheck, readiness } from "@catalyst/k8s/probes";
+import { httpTarget, serviceUrl, StatusGroup } from "@catalyst/platform/status";
+import type { WorkloadApp } from "@catalyst/core/types";
+import { buildAppriseConfig } from "@catalyst/platform/notifications";
+import { AWS_STORE, awsRemoteKey } from "@catalyst/k8s/secrets";
+import { image } from "@catalyst/versions/images";
 
 const name = "apprise";
 const port = 8000;

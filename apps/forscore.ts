@@ -1,7 +1,11 @@
-import { applyModifiers, withForwardAuth, withNasMounts } from "../modifiers";
-import { httpCheck, readiness } from "../probes";
-import type { WorkloadApp } from "../types";
-import { image } from "../utils";
+import {
+  applyModifiers,
+  withForwardAuth,
+  withNasMounts,
+} from "@catalyst/platform/modifiers";
+import { httpCheck, readiness } from "@catalyst/k8s/probes";
+import type { WorkloadApp } from "@catalyst/core/types";
+import { image } from "@catalyst/versions/images";
 
 const base: WorkloadApp = {
   kind: "workload",

@@ -1,6 +1,7 @@
-import { httpCheck, readiness, startup } from "../../probes";
-import type { ResourceLike } from "../../types";
-import { buildDeployment, buildService, image } from "../../utils";
+import { httpCheck, readiness, startup } from "@catalyst/k8s/probes";
+import type { ResourceLike } from "@catalyst/core/types";
+import { buildDeployment, buildService } from "@catalyst/k8s/workload";
+import { image } from "@catalyst/versions/images";
 import { podSecurityContext, restrictedContainer, timezone } from "./common";
 
 export const flaresolverrName = "flaresolverr";

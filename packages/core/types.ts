@@ -6,9 +6,9 @@ import { Model } from "@kubernetes-models/base";
 import type { IDeploymentStrategy } from "kubernetes-models/apps/v1";
 import { IPodSpec } from "kubernetes-models/v1";
 import type { Project } from "./constants";
-import type { HelmChartKey } from "./versions";
-import type { StatusDeclaration } from "./status";
-import type { WafSetting } from "./waf";
+import type { HelmChartKey } from "@catalyst/versions/versions";
+import type { StatusDeclaration } from "@catalyst/platform/status";
+import type { WafSetting } from "@catalyst/platform/waf";
 
 export type WorkloadStrategy = Pick<IDeploymentStrategy, "type">;
 

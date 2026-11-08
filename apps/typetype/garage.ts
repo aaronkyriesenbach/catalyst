@@ -1,14 +1,14 @@
-import type { ResourceLike } from "../../types";
+import type { ResourceLike } from "@catalyst/core/types";
 import {
   buildFileConfigMap,
   buildHeadlessService,
-  buildIscsiPvcTemplate,
   buildStatefulSet,
-  image,
-  readFile,
-} from "../../utils";
+} from "@catalyst/k8s/workload";
+import { buildIscsiPvcTemplate } from "@catalyst/k8s/storage";
+import { image } from "@catalyst/versions/images";
+import { readFile } from "@catalyst/core/files";
 import { DOWNLOADER_S3_CREDENTIALS_SECRET, GARAGE_RPC_SECRET } from "./secrets";
-import { execCheck, readiness, startup } from "../../probes";
+import { execCheck, readiness, startup } from "@catalyst/k8s/probes";
 
 export const GARAGE_NAME = "garage";
 export const GARAGE_S3_PORT = 3900;

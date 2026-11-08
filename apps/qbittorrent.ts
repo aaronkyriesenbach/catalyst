@@ -3,11 +3,11 @@ import {
   withIscsiVolumes,
   withForwardAuth,
   withNasMounts,
-} from "../modifiers";
-import { readiness, startup, tcpCheck } from "../probes";
-import { StatusGroup } from "../status";
-import type { WorkloadApp } from "../types";
-import { image } from "../utils";
+} from "@catalyst/platform/modifiers";
+import { readiness, startup, tcpCheck } from "@catalyst/k8s/probes";
+import { StatusGroup } from "@catalyst/platform/status";
+import type { WorkloadApp } from "@catalyst/core/types";
+import { image } from "@catalyst/versions/images";
 
 const base: WorkloadApp = {
   kind: "workload",

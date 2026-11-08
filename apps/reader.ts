@@ -1,12 +1,14 @@
-import { execCheck, readiness, startup, tcpCheck } from "../probes";
-import type { WorkloadApp } from "../types";
+import { execCheck, readiness, startup, tcpCheck } from "@catalyst/k8s/probes";
+import type { WorkloadApp } from "@catalyst/core/types";
 import {
   applyModifiers,
   withIscsiVolumes,
   withForwardAuth,
   withNasMounts,
-} from "../modifiers";
-import { buildFileConfigMap, readFile, image } from "../utils";
+} from "@catalyst/platform/modifiers";
+import { buildFileConfigMap } from "@catalyst/k8s/workload";
+import { readFile } from "@catalyst/core/files";
+import { image } from "@catalyst/versions/images";
 
 const vpnSecretName = "reader-vpn-creds";
 const mamSecretName = "reader-mam";

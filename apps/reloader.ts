@@ -1,6 +1,6 @@
-import { Project } from "../constants";
-import type { StaticApp } from "../types";
-import { mirrorRepository } from "../utils";
+import { Project } from "@catalyst/core/constants";
+import type { StaticApp } from "@catalyst/core/types";
+import { mirrorRepository } from "@catalyst/versions/images";
 
 const config: StaticApp = {
   kind: "static",

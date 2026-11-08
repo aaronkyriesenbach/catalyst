@@ -27,7 +27,7 @@
     {
       "description": "Images in versions.ts. check-versions.ts reads this regex, so keep it as the single source of truth.",
       "customType": "regex",
-      "managerFilePatterns": ["/^versions\\.ts$/"],
+      "managerFilePatterns": ["/^packages\\/versions\\/versions\\.ts$/"],
       "matchStrings": [
         "name:\\s*\"(?<depName>[^\"]+)\",\\s*tag:\\s*\"(?<currentValue>[^\"]+)\""
       ],
@@ -37,7 +37,7 @@
     {
       "description": "Helm charts from a classic chart repository (kind: repo) in versions.ts.",
       "customType": "regex",
-      "managerFilePatterns": ["/^versions\\.ts$/"],
+      "managerFilePatterns": ["/^packages\\/versions\\/versions\\.ts$/"],
       "matchStrings": [
         "kind:\\s*\"repo\",\\s*repo:\\s*\"(?<registryUrl>[^\"]+)\",\\s*chart:\\s*\"(?<depName>[^\"]+)\",\\s*version:\\s*\"(?<currentValue>[^\"]+)\""
       ],
@@ -47,7 +47,7 @@
     {
       "description": "Helm charts from an OCI registry (kind: oci) in versions.ts; looked up as registry tags. Chart tags are semver, some with a v prefix.",
       "customType": "regex",
-      "managerFilePatterns": ["/^versions\\.ts$/"],
+      "managerFilePatterns": ["/^packages\\/versions\\/versions\\.ts$/"],
       "matchStrings": [
         "kind:\\s*\"oci\",\\s*chart:\\s*\"oci://(?<depName>[^\"]+)\",\\s*version:\\s*\"(?<currentValue>[^\"]+)\""
       ],

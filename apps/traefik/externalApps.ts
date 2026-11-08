@@ -2,7 +2,7 @@ import { EndpointSlice } from "kubernetes-models/discovery.k8s.io/v1";
 import { Service } from "kubernetes-models/v1";
 import { Certificate } from "@kubernetes-models/cert-manager/cert-manager.io/v1";
 import { BackendTLSPolicy } from "@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1";
-import { buildRoute } from "../../utils";
+import { buildRoute } from "@catalyst/k8s/route";
 import {
   externalAppBackendCertSecretName,
   externalAppBackendHostname,

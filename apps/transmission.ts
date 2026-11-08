@@ -1,7 +1,7 @@
-import { readiness, startup, tcpCheck } from "../probes";
-import type { WorkloadApp } from "../types";
-import { applyModifiers, withNasMounts } from "../modifiers";
-import { image } from "../utils";
+import { readiness, startup, tcpCheck } from "@catalyst/k8s/probes";
+import type { WorkloadApp } from "@catalyst/core/types";
+import { applyModifiers, withNasMounts } from "@catalyst/platform/modifiers";
+import { image } from "@catalyst/versions/images";
 
 const openvpnSecretName = "openvpn-creds";
 

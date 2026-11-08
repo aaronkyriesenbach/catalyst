@@ -5,8 +5,8 @@ import {
   type CollectionTag,
   type ScalarTag,
 } from "yaml";
-import { authentikUrl } from "../../auth";
-import type { OidcDeclaration } from "../../types";
+import { authentikUrl } from "@catalyst/platform/auth";
+import type { OidcDeclaration } from "@catalyst/core/types";
 import type { DeclaredUser } from "./users.config";
 
 export type OidcApp = {

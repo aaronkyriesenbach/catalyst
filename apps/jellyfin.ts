@@ -3,10 +3,10 @@ import {
   withIscsiVolumes,
   withNasMounts,
   withOidcClient,
-} from "../modifiers";
-import { httpCheck, readiness, startup } from "../probes";
-import type { WorkloadApp } from "../types";
-import { image } from "../utils";
+} from "@catalyst/platform/modifiers";
+import { httpCheck, readiness, startup } from "@catalyst/k8s/probes";
+import type { WorkloadApp } from "@catalyst/core/types";
+import { image } from "@catalyst/versions/images";
 import { jellyfinName, jellyfinPort } from "./jellyfin/common";
 import { jellarrResources } from "./jellyfin/jellarr";
 

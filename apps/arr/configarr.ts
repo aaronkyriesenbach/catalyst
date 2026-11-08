@@ -1,12 +1,9 @@
 import { CronJob } from "kubernetes-models/batch/v1";
-import type { ResourceLike } from "../../types";
-import {
-  awsRemoteKey,
-  buildAwsExternalSecret,
-  buildFileConfigMap,
-  image,
-  readFile,
-} from "../../utils";
+import type { ResourceLike } from "@catalyst/core/types";
+import { awsRemoteKey, buildAwsExternalSecret } from "@catalyst/k8s/secrets";
+import { buildFileConfigMap } from "@catalyst/k8s/workload";
+import { image } from "@catalyst/versions/images";
+import { readFile } from "@catalyst/core/files";
 import { arrNamespace, restrictedContainer, timezone } from "./common";
 import { buildConfigarrYaml, configarrEnvNames } from "./configarr.config";
 import { API_KEY_SECRET_KEY, apiKeySecretName } from "./servarr";

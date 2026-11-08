@@ -1,4 +1,4 @@
-import { StatusGroup, type StatusTarget } from "../../status";
+import { StatusGroup, type StatusTarget } from "@catalyst/platform/status";
 import { customAlert } from "./alerting";
 import { endpointKey, gatusPort, heartbeatTokenEnv } from "./common";
 

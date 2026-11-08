@@ -1,17 +1,19 @@
-import { readiness, startup, tcpCheck } from "../../probes";
-import type { ResourceLike } from "../../types";
+import { readiness, startup, tcpCheck } from "@catalyst/k8s/probes";
+import type { ResourceLike } from "@catalyst/core/types";
 import {
   awsRemoteKey,
   buildAwsExternalSecret,
+  buildGeneratedSecret,
+} from "@catalyst/k8s/secrets";
+import {
   buildDeployment,
   buildFileConfigMap,
-  buildGeneratedSecret,
-  buildIscsiPvc,
   buildService,
-  image,
-  readFile,
-} from "../../utils";
-import { appHostname } from "../../hostnames";
+} from "@catalyst/k8s/workload";
+import { buildIscsiPvc } from "@catalyst/k8s/storage";
+import { image } from "@catalyst/versions/images";
+import { readFile } from "@catalyst/core/files";
+import { appHostname } from "@catalyst/platform/hostnames";
 import {
   arrNamespace,
   mediaClaim,

@@ -1,13 +1,15 @@
-import { cloudflareZoneId, Project } from "../constants";
-import { appHostname } from "../hostnames";
-import { dnsTarget, httpTarget, serviceUrl, StatusGroup } from "../status";
-import type { StaticApp } from "../types";
+import { cloudflareZoneId, Project } from "@catalyst/core/constants";
+import { appHostname } from "@catalyst/platform/hostnames";
 import {
-  awsRemoteKey,
-  buildAwsExternalSecret,
-  mirrorRepository,
-  readYaml,
-} from "../utils";
+  dnsTarget,
+  httpTarget,
+  serviceUrl,
+  StatusGroup,
+} from "@catalyst/platform/status";
+import type { StaticApp } from "@catalyst/core/types";
+import { awsRemoteKey, buildAwsExternalSecret } from "@catalyst/k8s/secrets";
+import { mirrorRepository } from "@catalyst/versions/images";
+import { readYaml } from "@catalyst/core/files";
 
 // Unused until external-dns-ext switches to the Cloudflare provider once the zone is active.
 const cloudflareTokenSecret = buildAwsExternalSecret("cloudflare-api-token", [

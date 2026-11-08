@@ -5,23 +5,21 @@ import {
   authentikServiceName,
   authentikServicePort,
   oidcSecretName,
-} from "../auth";
-import { appUrl } from "../hostnames";
-import { buildPostgresResources } from "../modifiers";
-import type { AppConfig, ResourceLike, StaticApp } from "../types";
+} from "@catalyst/platform/auth";
+import { appUrl } from "@catalyst/platform/hostnames";
+import { buildPostgresResources } from "@catalyst/platform/modifiers";
+import type { AppConfig, ResourceLike, StaticApp } from "@catalyst/core/types";
+import { appNamespace, loadAllAppConfigs } from "@catalyst/core/apps";
 import {
-  appNamespace,
   awsRemoteKey,
   buildAwsExternalSecret,
-  buildFileConfigMap,
   buildGeneratedSecret,
-  buildRoute,
-  loadAllAppConfigs,
-  mirrorRepository,
-  readFile,
-  readYaml,
-} from "../utils";
-import { buildWafMiddleware, resolveWaf } from "../waf";
+} from "@catalyst/k8s/secrets";
+import { buildFileConfigMap } from "@catalyst/k8s/workload";
+import { buildRoute } from "@catalyst/k8s/route";
+import { mirrorRepository } from "@catalyst/versions/images";
+import { readFile, readYaml } from "@catalyst/core/files";
+import { buildWafMiddleware, resolveWaf } from "@catalyst/platform/waf";
 import {
   buildAppsBlueprint,
   buildClientSecretBlueprint,

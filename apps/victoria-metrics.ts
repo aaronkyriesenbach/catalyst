@@ -2,13 +2,21 @@ import {
   authentikUrl,
   DEFAULT_CLIENT_SECRET_ROTATION,
   oidcCredentialsSecretName,
-} from "../auth";
-import { Project } from "../constants";
-import { appUrl } from "../hostnames";
-import { buildOidcCredentialsSecret } from "../modifiers";
-import { httpTarget, routeTargets, serviceUrl, StatusGroup } from "../status";
-import type { StaticApp } from "../types";
-import { buildRoute, mergeValues, mirrorRepository, readYaml } from "../utils";
+} from "@catalyst/platform/auth";
+import { Project } from "@catalyst/core/constants";
+import { appUrl } from "@catalyst/platform/hostnames";
+import { buildOidcCredentialsSecret } from "@catalyst/platform/modifiers";
+import {
+  httpTarget,
+  routeTargets,
+  serviceUrl,
+  StatusGroup,
+} from "@catalyst/platform/status";
+import type { StaticApp } from "@catalyst/core/types";
+import { buildRoute } from "@catalyst/k8s/route";
+import { mergeValues } from "@catalyst/core/yaml";
+import { mirrorRepository } from "@catalyst/versions/images";
+import { readYaml } from "@catalyst/core/files";
 import { alertmanagerConfig } from "./victoria-metrics/alertmanager";
 import {
   grafanaServiceName,

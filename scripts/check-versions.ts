@@ -1,4 +1,8 @@
-import { helmCharts, images, postgresImages } from "../versions";
+import {
+  helmCharts,
+  images,
+  postgresImages,
+} from "@catalyst/versions/versions";
 
 type Datasource = "docker" | "helm";
 
@@ -50,10 +54,10 @@ async function loadManagers(): Promise<CustomManager[]> {
   return config.customManagers.filter(isCustomManager);
 }
 
-const versionsPattern = "/^versions\\.ts$/";
+const versionsPattern = "/^packages\\/versions\\/versions\\.ts$/";
 
 const source = await Bun.file(
-  new URL("../versions.ts", import.meta.url),
+  new URL("../packages/versions/versions.ts", import.meta.url),
 ).text();
 
 const managers = (await loadManagers()).filter((manager) =>

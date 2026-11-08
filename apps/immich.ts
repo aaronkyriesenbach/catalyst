@@ -1,17 +1,20 @@
-import { buildBackupResources } from "../backup";
-import { buildNasPersistentVolumePair } from "../storage";
-import type { StaticApp } from "../types";
+import { buildBackupResources } from "@catalyst/k8s/backup";
 import {
-  buildHeadlessService,
+  buildNasPersistentVolumePair,
   buildIscsiPvcTemplate,
-  buildRoute,
-  buildStatefulSet,
-  image,
-  mirrorRepository,
-  readYaml,
-} from "../utils";
-import { postgresProbes } from "../probes";
-import { httpTarget, routeTargets, serviceUrl, StatusGroup } from "../status";
+} from "@catalyst/k8s/storage";
+import type { StaticApp } from "@catalyst/core/types";
+import { buildHeadlessService, buildStatefulSet } from "@catalyst/k8s/workload";
+import { buildRoute } from "@catalyst/k8s/route";
+import { image, mirrorRepository } from "@catalyst/versions/images";
+import { readYaml } from "@catalyst/core/files";
+import { postgresProbes } from "@catalyst/k8s/probes";
+import {
+  httpTarget,
+  routeTargets,
+  serviceUrl,
+  StatusGroup,
+} from "@catalyst/platform/status";
 
 const { pv: libraryPv, pvc: libraryPvc } = buildNasPersistentVolumePair({
   name: "immich-library",

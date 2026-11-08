@@ -1,7 +1,7 @@
-import { Project } from "../constants";
-import { StatusGroup, tcpTarget } from "../status";
-import type { StaticApp } from "../types";
-import { mirrorRepository } from "../utils";
+import { Project } from "@catalyst/core/constants";
+import { StatusGroup, tcpTarget } from "@catalyst/platform/status";
+import type { StaticApp } from "@catalyst/core/types";
+import { mirrorRepository } from "@catalyst/versions/images";
 
 // The chart passes each mover image to the operator as a `--*-container-image` arg.
 const imageKeys = [

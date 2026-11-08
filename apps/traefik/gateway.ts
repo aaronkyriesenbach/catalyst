@@ -1,5 +1,5 @@
 import { Gateway } from "@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1";
-import { cloudflareTunnelTarget } from "../../constants";
+import { cloudflareTunnelTarget } from "@catalyst/core/constants";
 
 export const internalGateway = new Gateway({
   metadata: {

@@ -4,7 +4,7 @@ import type {
   IVolume,
   IVolumeMount,
 } from "kubernetes-models/v1";
-import { buildNasPersistentVolumePair } from "../../storage";
+import { buildNasPersistentVolumePair } from "@catalyst/k8s/storage";
 
 export const arrNamespace = "arr";
 

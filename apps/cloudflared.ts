@@ -1,14 +1,10 @@
 import { stringify } from "yaml";
-import { cloudflareTunnelId, Project } from "../constants";
-import { httpCheck, readiness } from "../probes";
-import type { StaticApp } from "../types";
-import {
-  awsRemoteKey,
-  buildAwsExternalSecret,
-  buildDeployment,
-  buildFileConfigMap,
-  image,
-} from "../utils";
+import { cloudflareTunnelId, Project } from "@catalyst/core/constants";
+import { httpCheck, readiness } from "@catalyst/k8s/probes";
+import type { StaticApp } from "@catalyst/core/types";
+import { awsRemoteKey, buildAwsExternalSecret } from "@catalyst/k8s/secrets";
+import { buildDeployment, buildFileConfigMap } from "@catalyst/k8s/workload";
+import { image } from "@catalyst/versions/images";
 
 const name = "cloudflared";
 const credentialsSecretName = "cloudflared-credentials";

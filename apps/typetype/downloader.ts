@@ -1,6 +1,7 @@
-import type { ResourceLike } from "../../types";
-import { httpCheck, readiness, startup } from "../../probes";
-import { buildDeployment, buildService, image } from "../../utils";
+import type { ResourceLike } from "@catalyst/core/types";
+import { httpCheck, readiness, startup } from "@catalyst/k8s/probes";
+import { buildDeployment, buildService } from "@catalyst/k8s/workload";
+import { image } from "@catalyst/versions/images";
 import { DRAGONFLY_NAME, DRAGONFLY_PORT } from "./dragonfly";
 import { GARAGE_BUCKET, GARAGE_NAME, GARAGE_S3_PORT } from "./garage";
 import { DOWNLOADER_S3_CREDENTIALS_SECRET } from "./secrets";

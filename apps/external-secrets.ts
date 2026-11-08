@@ -4,9 +4,9 @@ import {
 } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
 import type { IPushSecretStoreRef } from "@kubernetes-models/external-secrets/external-secrets.io/v1alpha1";
 import { ClusterGenerator } from "@kubernetes-models/external-secrets/generators.external-secrets.io/v1alpha1";
-import { Project } from "../constants";
-import { StatusGroup, tcpTarget } from "../status";
-import type { StaticApp } from "../types";
+import { Project } from "@catalyst/core/constants";
+import { StatusGroup, tcpTarget } from "@catalyst/platform/status";
+import type { StaticApp } from "@catalyst/core/types";
 
 const clusterGeneratorName = "generated-password";
 

@@ -4,9 +4,9 @@ import {
   authentikNamespace,
   authentikServiceName,
   authentikServicePort,
-} from "../auth";
-import { applyModifiers, withPostgres } from "../modifiers";
-import { httpCheck, readiness, startup } from "../probes";
+} from "@catalyst/platform/auth";
+import { applyModifiers, withPostgres } from "@catalyst/platform/modifiers";
+import { httpCheck, readiness, startup } from "@catalyst/k8s/probes";
 import {
   httpTarget,
   resolveStatusTargets,
@@ -14,14 +14,12 @@ import {
   serviceUrl,
   StatusGroup,
   type StatusTarget,
-} from "../status";
-import type { WorkloadApp } from "../types";
-import {
-  buildFileConfigMap,
-  buildGeneratedSecret,
-  image,
-  loadAllAppConfigs,
-} from "../utils";
+} from "@catalyst/platform/status";
+import type { WorkloadApp } from "@catalyst/core/types";
+import { buildFileConfigMap } from "@catalyst/k8s/workload";
+import { buildGeneratedSecret } from "@catalyst/k8s/secrets";
+import { image } from "@catalyst/versions/images";
+import { loadAllAppConfigs } from "@catalyst/core/apps";
 import { buildAlerting } from "./gatus/alerting";
 import {
   gatusName,

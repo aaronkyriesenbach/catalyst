@@ -1,10 +1,7 @@
-import { Project, projectDefinitions } from "../constants";
-import {
-  buildApplication,
-  buildProject,
-  loadAppConfig,
-  toYaml,
-} from "../utils";
+import { Project, projectDefinitions } from "@catalyst/core/constants";
+import { buildApplication, buildProject } from "@catalyst/argocd/application";
+import { loadAppConfig } from "@catalyst/core/apps";
+import { toYaml } from "@catalyst/core/yaml";
 
 const usage =
   "Usage: bun run render <app-name> | bun run render argo <app|project> <name>";

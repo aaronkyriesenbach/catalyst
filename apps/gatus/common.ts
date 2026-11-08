@@ -1,4 +1,4 @@
-import { StatusGroup } from "../../status";
+import { StatusGroup } from "@catalyst/platform/status";
 
 export const gatusName = "gatus";
 export const gatusPort = 8080;

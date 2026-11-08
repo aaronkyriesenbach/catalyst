@@ -1,4 +1,4 @@
-import { buildForwardAuthMiddleware } from "../auth";
+import { buildForwardAuthMiddleware } from "@catalyst/platform/auth";
 import {
   httpTarget,
   routeTargets,
@@ -7,9 +7,13 @@ import {
   tcpTarget,
   titleCase,
   type StatusTarget,
-} from "../status";
-import type { AdditionalOidcApp, ResourceLike, StaticApp } from "../types";
-import { buildRoute } from "../utils";
+} from "@catalyst/platform/status";
+import type {
+  AdditionalOidcApp,
+  ResourceLike,
+  StaticApp,
+} from "@catalyst/core/types";
+import { buildRoute } from "@catalyst/k8s/route";
 import { configarrResources } from "./arr/configarr";
 import { arrNamespace, buildMediaVolume, mediaClaim } from "./arr/common";
 import {

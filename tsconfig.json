@@ -10,7 +10,10 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noUncheckedIndexedAccess": true,
-    "types": ["bun-types"]
+    "types": ["bun-types"],
+    "paths": {
+      "@catalyst/*": ["./packages/*"]
+    }
   },
   "include": ["**/*.ts"],
   "exclude": ["node_modules"]

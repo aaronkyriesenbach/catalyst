@@ -1,8 +1,8 @@
 import { ExternalSecret } from "@kubernetes-models/external-secrets/external-secrets.io/v1";
-import { clusterGeneratorRef } from "./apps/external-secrets";
+import { clusterGeneratorRef } from "./external-secrets";
 import { cron, type CronExpression } from "./cron";
-import type { ResourceLike } from "./types";
-import { AWS_STORE, awsRemoteKey, buildSeedPushSecret } from "./utils";
+import type { ResourceLike } from "@catalyst/core/types";
+import { AWS_STORE, awsRemoteKey, buildSeedPushSecret } from "./secrets";
 
 const RESTIC_SERVER_URL = "rest:http://restic-server.restic-server:8000";
 const VOLSYNC_API_VERSION = "volsync.backube/v1alpha1";

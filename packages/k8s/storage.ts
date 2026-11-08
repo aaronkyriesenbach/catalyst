@@ -1,11 +1,11 @@
 import {
   PersistentVolume,
   PersistentVolumeClaim,
+  type IPersistentVolumeClaimSpec,
+  type IPersistentVolumeClaimTemplate,
   type IPersistentVolumeSpec,
 } from "kubernetes-models/v1";
-import type { StorageQuantity } from "./types";
-import type { PersistentVolumeAccessMode } from "./utils";
-import { buildPvcSpec } from "./utils";
+import type { StorageQuantity } from "@catalyst/core/types";
 
 const DEFAULT_NAS_IP = "192.168.53.120";
 const DEFAULT_NAS_PATH = "/mnt/tank/data";
@@ -121,4 +121,43 @@ export function buildNasPersistentVolumePair(
       volumeName: name,
     }),
   };
+}
+
+const DEFAULT_ISCSI_STORAGE = "10Gi";
+const DEFAULT_ISCSI_STORAGE_CLASS = "truenas-iscsi";
+
+export type PersistentVolumeAccessMode = NonNullable<
+  IPersistentVolumeClaimSpec["accessModes"]
+>[number];
+
+export function buildPvcSpec(opts: {
+  storage: StorageQuantity;
+  storageClassName: string;
+  accessModes: PersistentVolumeAccessMode[];
+  volumeName?: string;
+}): IPersistentVolumeClaimSpec {
+  return {
+    accessModes: opts.accessModes,
+    storageClassName: opts.storageClassName,
+    resources: { requests: { storage: opts.storage } },
+    ...(opts.volumeName ? { volumeName: opts.volumeName } : {}),
+  };
+}
+
+export function buildIscsiPvcTemplate(
+  name: string,
+  storageRequest?: StorageQuantity,
+): IPersistentVolumeClaimTemplate {
+  return {
+    metadata: { name },
+    spec: buildPvcSpec({
+      storage: storageRequest ?? DEFAULT_ISCSI_STORAGE,
+      storageClassName: DEFAULT_ISCSI_STORAGE_CLASS,
+      accessModes: ["ReadWriteOnce"],
+    }),
+  };
+}
+
+export function buildIscsiPvc(name: string, storageRequest?: StorageQuantity) {
+  return new PersistentVolumeClaim(buildIscsiPvcTemplate(name, storageRequest));
 }

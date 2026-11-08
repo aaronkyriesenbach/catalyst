@@ -4,10 +4,10 @@ import {
   ClusterRoleBinding,
 } from "kubernetes-models/rbac.authorization.k8s.io/v1";
 import { ServiceAccount } from "kubernetes-models/v1";
-import { Project } from "../constants";
-import { StatusGroup, tcpTarget } from "../status";
-import type { StaticApp } from "../types";
-import { image } from "../utils";
+import { Project } from "@catalyst/core/constants";
+import { StatusGroup, tcpTarget } from "@catalyst/platform/status";
+import type { StaticApp } from "@catalyst/core/types";
+import { image } from "@catalyst/versions/images";
 
 const name = "kube-vip";
 const namespace = "kube-system";

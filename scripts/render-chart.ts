@@ -2,9 +2,10 @@ import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { assertChartImagesMirrored } from "./chart-images";
-import { appNamespace, loadAppConfig, toYaml } from "../utils";
-import { helmCharts, type HelmChartEntry } from "../versions";
-import type { HelmRelease } from "../types";
+import { appNamespace, loadAppConfig } from "@catalyst/core/apps";
+import { toYaml } from "@catalyst/core/yaml";
+import { helmCharts, type HelmChartEntry } from "@catalyst/versions/versions";
+import type { HelmRelease } from "@catalyst/core/types";
 
 const usage = `Usage: bun run render-chart <app-name>
 

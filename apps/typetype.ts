@@ -2,16 +2,16 @@ import {
   applyModifiers,
   buildPostgresResources,
   withOidcClient,
-} from "../modifiers";
-import type { WorkloadApp } from "../types";
+} from "@catalyst/platform/modifiers";
+import type { WorkloadApp } from "@catalyst/core/types";
 import { dragonflyResources } from "./typetype/dragonfly";
 import { downloaderResources } from "./typetype/downloader";
 import { garageResources } from "./typetype/garage";
 import { serverResources } from "./typetype/server";
 import { secretsResources } from "./typetype/secrets";
 import { tokenResources } from "./typetype/token";
-import { image } from "../utils";
-import { httpCheck, readiness } from "../probes";
+import { image } from "@catalyst/versions/images";
+import { httpCheck, readiness } from "@catalyst/k8s/probes";
 
 const namespace = "typetype";
 

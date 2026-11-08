@@ -1,9 +1,9 @@
-import { Project } from "../constants";
-import { applyModifiers, withNasMounts } from "../modifiers";
-import { readiness, tcpCheck } from "../probes";
-import { StatusGroup, tcpTarget } from "../status";
-import type { WorkloadApp } from "../types";
-import { image } from "../utils";
+import { Project } from "@catalyst/core/constants";
+import { applyModifiers, withNasMounts } from "@catalyst/platform/modifiers";
+import { readiness, tcpCheck } from "@catalyst/k8s/probes";
+import { StatusGroup, tcpTarget } from "@catalyst/platform/status";
+import type { WorkloadApp } from "@catalyst/core/types";
+import { image } from "@catalyst/versions/images";
 
 const base: WorkloadApp = {
   kind: "workload",
