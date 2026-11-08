@@ -44,36 +44,8 @@ export const STATIC_CONSUMER_REFRESH_INTERVAL = "1h";
 
 const PUSH_SECRET_PREFIX = `lab53/${cluster.name}`;
 
-export type SecretKind = "generated" | "external";
-
-const inventory = new Map<string, SecretKind>();
-
-function secretPath(namespace: string, name: string): string {
-  return `${PUSH_SECRET_PREFIX}/${namespace}/${name}`;
-}
-
 export function awsRemoteKey(namespace: string, name: string): string {
-  const key = secretPath(namespace, name);
-
-  if (!inventory.has(key)) {
-    inventory.set(key, "external");
-  }
-
-  return key;
-}
-
-export function generatedRemoteKey(namespace: string, name: string): string {
-  const key = secretPath(namespace, name);
-
-  inventory.set(key, "generated");
-
-  return key;
-}
-
-export function listSecrets(): { key: string; kind: SecretKind }[] {
-  return [...inventory]
-    .map(([key, kind]) => ({ key, kind }))
-    .sort((a, b) => a.key.localeCompare(b.key));
+  return `${PUSH_SECRET_PREFIX}/${namespace}/${name}`;
 }
 
 // Source of truth for generated secrets: seed AWS once, never overwrite, read back.
@@ -166,9 +138,7 @@ export function buildGeneratedSecret(
   if (options?.rotate && !options.persist) {
     throw new Error(`Secret '${name}' sets rotate without persist`);
   }
-  const remoteKey = options?.persist
-    ? generatedRemoteKey(namespace, name)
-    : secretPath(namespace, name);
+  const remoteKey = awsRemoteKey(namespace, name);
   const data: IExternalSecretData[] = [];
   const dataFrom: IExternalSecretDataFromRemoteRef[] = [];
 

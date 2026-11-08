@@ -2,7 +2,7 @@ import { ExternalSecret } from "@kubernetes-models/external-secrets/external-sec
 import { clusterGeneratorRef } from "./external-secrets";
 import { cron, type CronExpression } from "./cron";
 import type { ResourceLike } from "@catalyst/core/types";
-import { AWS_STORE, buildSeedPushSecret, generatedRemoteKey } from "./secrets";
+import { AWS_STORE, awsRemoteKey, buildSeedPushSecret } from "./secrets";
 
 const RESTIC_SERVER_URL = "rest:http://restic-server.restic-server:8000";
 const VOLSYNC_API_VERSION = "volsync.backube/v1alpha1";
@@ -58,7 +58,7 @@ function buildResticConfigSecret(
   pvcName: string,
 ): ResourceLike[] {
   const secretName = `${pvcName}-restic-config`;
-  const remoteKey = generatedRemoteKey(namespace, secretName);
+  const remoteKey = awsRemoteKey(namespace, secretName);
   const repoUrl = `${RESTIC_SERVER_URL}/${namespace}/${pvcName}`;
 
   return [
