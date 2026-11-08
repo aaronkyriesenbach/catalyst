@@ -560,7 +560,7 @@ once the webhook injects the right environment variables.
 The external-dns Helm chart's `serviceAccount.annotations` value configures IRSA.
 Remove the static credential env vars from the values file.
 
-**Before** (`apps/external-dns/external-values.yaml`):
+**Before** (`clusters/cluster0/apps/external-dns/external-values.yaml`):
 
 ```yaml
 env:
@@ -628,7 +628,7 @@ cert-manager supports IRSA natively via ambient credentials. When the cert-manag
 controller pod runs with a ServiceAccount that has IRSA credentials, the Route53
 DNS01 solver uses them automatically.
 
-**Before** (`apps/cert-manager/issuers.ts`):
+**Before** (`clusters/cluster0/apps/cert-manager/issuers.ts`):
 
 ```typescript
 dns01: {

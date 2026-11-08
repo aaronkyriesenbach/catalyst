@@ -43,9 +43,9 @@ bun run install-argo
 - `server.insecure: true` for TLS termination at the Gateway level
 - Resource exclusions to reduce watch event noise
 
-`catalyst-app.yaml` is the root Application that renders every AppProject and child Application. Apply it by hand with `kubectl apply -f cluster/catalyst-app.yaml`; it is not self-managed. It auto-syncs with `prune: true` and `selfHeal: true`, so removing an `apps/*.ts` file prunes that app's Application and, through its finalizer, the app's resources.
+`catalyst-app.yaml` is the root Application that renders every AppProject and child Application. Apply it by hand with `kubectl apply -f clusters/cluster0/bootstrap/catalyst-app.yaml`; it is not self-managed. It auto-syncs with `prune: true` and `selfHeal: true`, so removing an `clusters/cluster0/apps/*.ts` file prunes that app's Application and, through its finalizer, the app's resources.
 
-ArgoCD syncs apps defined in `apps/*.ts` from this repo. The CMP sidecar container (`oven/bun:1.3.11`) runs in the repo-server pod.
+ArgoCD syncs apps defined in `clusters/cluster0/apps/*.ts` from this repo. The CMP sidecar container (`oven/bun:1.3.11`) runs in the repo-server pod.
 
 ## Bootstrapping a New Cluster
 

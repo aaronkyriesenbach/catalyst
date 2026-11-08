@@ -1,29 +1,29 @@
 # PROJECT KNOWLEDGE BASE
 
-Kubernetes infrastructure-as-TypeScript repo. Defines cluster apps as typed configs (`AppConfig`) that ArgoCD renders into manifests via a Bun-based CMP plugin. Domain: `lab53.net`.
+Kubernetes infrastructure-as-TypeScript repo. Defines cluster apps as typed configs (`AppConfig`) that ArgoCD renders into manifests via a Bun-based CMP plugin. Domain: `lab53.net`. This file covers the framework; each cluster's own services and wiring are in `clusters/<name>/AGENTS.md`.
 
 ## STRUCTURE
 
-```
+```text
 catalyst/
-├── main.ts              # CMP plugin entrypoint — two modes: single app (ARGOCD_ENV_APP = module name) or enumerate all
-├── utils.ts             # Builders: Deployment, Service, HTTPRoute, GeneratedSecret + loadAppConfig
-├── hostnames.ts         # appHostname/appUrl (re-exported by utils.ts)
-├── auth.ts              # authentik URL, forward-auth Middleware, OIDC issuer/secret naming
-├── modifiers.ts         # WorkloadModifier pattern: withNasMounts, withPostgres, withForwardAuth, withOidcClient, applyModifiers
-├── storage.ts           # PV/PVC builders for NAS-backed NFS storage
-├── versions.ts          # Typed image + Helm chart version registry (Renovate-parsed; see Image sources)
-├── types.ts             # AppConfig = WorkloadApp | StaticApp; HelmRelease, ExternalApp
-├── apps/                # Each *.ts exports default AppConfig — auto-discovered by main.ts
-│   ├── traefik/         # Submodule: gateways, routes, certs, external app proxy config
-│   ├── cert-manager/    # Submodule: internal CA, issuers
-│   └── <app>/           # Some apps have subdirectories for values YAML or config files
-├── scripts/
-│   ├── render.ts        # CLI: bun run render <app-name> → stdout YAML
-│   └── sync-external-certs.ts
-├── docs/                # Design docs (e.g., forward-auth.md)
-├── cluster/             # Bootstrap files applied by hand: ArgoCD values, root app
-└── irsa.md              # IRSA setup docs (AWS OIDC, S3, IAM)
+├── main.ts                  # CMP entrypoint: single app (ARGOCD_ENV_APP = file name) or enumerate every app of the target cluster
+├── site.ts                  # Site-wide facts shared by every cluster: domain, NAS, mirror, Cloudflare zone, LimitRange defaults
+├── clusters/
+│   └── cluster0/            # One directory per cluster; everything about that cluster lives here
+│       ├── cluster.ts       # Cluster definition: network, VIPs, tunnel, Argo projects, adopted Helm namespaces
+│       ├── apps/            # Each top-level *.ts exports default AppConfig (apps/<name>/ holds its values, scripts, helpers)
+│       ├── bootstrap/       # Applied by hand: ArgoCD Helm values, root Application
+│       ├── tools/           # Cluster-specific CLIs (sync-external-certs)
+│       └── AGENTS.md        # Services and wiring specific to this cluster
+├── packages/                # Libraries, imported as @catalyst/<package>/<module>; never import from clusters/
+│   ├── core/                # types, app loader and catalog, render pipeline, validation, cluster selection
+│   ├── k8s/                 # Builders: workload, route, secrets, storage, probes, cron, backup
+│   ├── argocd/              # Application and AppProject builders
+│   ├── platform/            # auth (authentik), waf, status, notifications, hostnames, modifiers
+│   └── versions/            # versions.ts (Renovate-parsed image and chart registry) and image() helpers
+├── tools/                   # Dev CLIs: render, render-all, render-chart(s), diff-renders, check-versions, secrets, validate
+├── docs/                    # Design docs and ADRs
+└── irsa.md                  # IRSA setup docs (AWS OIDC, S3, IAM)
 ```
 
 ## COMMANDS
@@ -32,6 +32,8 @@ catalyst/
 bun run render <app-name>                    # Render single app to stdout YAML (verify changes)
 bun run sync-external-certs [--dry-run]      # Pull TLS certs from cluster via kubectl
 bun run typecheck                            # tsc --noEmit
+bun run validate                             # Check the app catalog: names match files, unique hostnames, oidc needs authentik
+bun run secrets [--json]                     # List every AWS Secrets Manager key the cluster uses (generated vs external)
 bun run render-all <outdir>                  # Render every app + project + enumerate-all into <outdir> (what CI runs)
 bun run render-charts <outdir>               # render-chart for every app with helmReleases (needs helm)
 bun run check-versions                       # Verify versions.ts matches the Renovate-parsed format
@@ -41,149 +43,101 @@ bunx prettier --write .                      # Format the repo (config: .prettie
 
 **kubectl access**: The agent has `kubectl` configured and may query the cluster to verify live state — CIDR ranges, services, nodes, etc.
 
-**Verification**: Always run `bun run render <app-name>` after editing an app file to confirm valid YAML output.
+**Verification**: Always run `bun run render <app-name>` after editing an app file to confirm valid YAML output. A change that should not alter manifests (a refactor) must leave `bun run render-all` output identical: render before and after and `diff -r`.
 
 ## CONVENTIONS
 
+### Clusters and sites
+
+- **One directory per cluster** under `clusters/`. The target cluster is `ARGOCD_ENV_CLUSTER`; with a single cluster directory it defaults to that one. `import { cluster } from "@catalyst/core/cluster"` gives the target cluster's definition, and `cluster.name` must equal its directory name.
+- **`site.ts` vs `cluster.ts`**: `site.ts` holds facts that are the same for every cluster (domain, NAS, mirror, Cloudflare zone). `cluster.ts` holds what varies per cluster (pod and service CIDRs, VIPs, tunnel id, Argo projects, adopted Helm namespaces, unmanaged namespaces, unmirrored chart images). Values another toolchain (OpenTofu, Omni) also needs belong in a plain YAML file both can read, not in either TS file.
+- **Packages never import from `clusters/`**. They read the target cluster through `@catalyst/core/cluster`; an app reads the same singleton.
+- **Placement is the directory**: an app runs on the cluster whose `apps/` directory contains it. There is no `cluster` field and no registry.
+
 ### App System
 
-- **App discovery**: `main.ts` reads `apps/` with `readdirSync` filtering `entry.isFile()`. Only top-level `.ts` files are discovered — not subdirectories.
-- **Default export required**: `loadAppConfig` reads `mod.default`. Named-only exports will silently produce no config.
+- **App discovery**: the loader reads `clusters/<cluster>/apps/` with `readdirSync`, sorted by name, filtering `entry.isFile()`. Only top-level `.ts` files are discovered — not subdirectories. Imports stay sequential: concurrent imports race Bun's auto-install in the CMP, which has no `node_modules`.
+- **Default export required**: the loader reads `mod.default`. Named-only exports will silently produce no config.
+- **Name equals file name**: the CMP loads `${ARGOCD_ENV_APP}.ts` while the Application is named from `config.name`. `bun run validate` fails when they differ.
 - **Two app kinds**: `WorkloadApp` (auto-generates Deployment+Service+HTTPRoute from `podSpec`) and `StaticApp` (explicit `resources` array).
 - **App namespace**: Defaults to `name` when `namespace` is omitted.
 - **Security context**: `renderWorkload` auto-applies `runAsNonRoot: true, runAsUser/Group: 1000` if `podSpec.securityContext` is not set. Set it explicitly to override.
+- **Output that depends on other apps** goes in `derive: ({ catalog, cluster }) => ({ resources | extraResources, helmReleases })`. It runs at render time against every app's declaration and its result is appended to the declared lists, so modifiers still compose with it. `catalog.entries` holds every app on every cluster (`{ cluster, file, config }`) and `catalog.onCluster(cluster.name)` one cluster's apps. A `derive` sees other apps' declarations but never their `derive` output, so two aggregating apps cannot form a cycle; never import another app's module to read it. authentik (OIDC clients), Gatus (checks) and limit-ranges (namespaces) use it.
+- **Sharing constants between apps**: put them in the owning app's `common.ts` (`apps/<app>/common.ts`), which imports nothing from other apps, and import that. Never import another app's top-level module.
 
 ### Modifiers (WorkloadApp only)
 
 - Compose via `applyModifiers(base, ...modifiers)` — each modifier is an immutable transform.
 - `withNasMounts(config)` — adds NFS volume + mounts keyed by container name. Throws if container name doesn't exist.
-- `withPostgres(version, options?)` — adds postgres as an **init container** with NAS-backed data at `cluster/<app>/postgres`. `version` is restricted to the majors in `postgresImages` (`versions.ts`); the image comes from there (mirrored `library/postgres:<major>-alpine`) unless `options.image` overrides it.
+- `withPostgres(version, options?)` — adds a postgres StatefulSet `<app>-postgres` with an iSCSI-backed PVC and a headless Service, addressable at `<app>-postgres:5432`, plus restic backup resources with `backup: true`. `version` is restricted to the majors in `postgresImages` (`versions.ts`); the image comes from there (mirrored `library/postgres:<major>-alpine`) unless `options.image` overrides it.
 - `withForwardAuth({ skipPathRegex? })` — puts the app behind authentik forward auth (embedded outpost). Sets `oidc: { kind: "proxy" }`; `renderWorkload` then emits the `forward-auth` Middleware and `buildRoute` the outpost rule and filter. No secret involved.
-- `withOidcClient({ redirectPaths, rotate? })` — for apps that run their own OIDC flow. Sets `oidc: { kind: "oauth2" }` and emits the `<app>-oidc-credentials` ExternalSecret (`client_id`, `client_secret`, `issuer_url`). `apps/authentik.ts` creates the confidential client and its rotating secret (default every 90 days, `DEFAULT_CLIENT_SECRET_ROTATION`; `rotate: false` for an app that stores the secret itself). `StaticApp`s use `defineOidcClient(name, options)` and put its `oidc` and `credentialsSecret` on the app. See Identity (authentik). An app that serves several hostnames (the arr stack) registers the extra ones, each with its own group and provider, in `additionalOidc` and builds their routes and the `forward-auth` Middleware itself.
+- `withOidcClient({ redirectPaths, rotate? })` — for apps that run their own OIDC flow. Sets `oidc: { kind: "oauth2" }` and emits the `<app>-oidc-credentials` ExternalSecret (`client_id`, `client_secret`, `issuer_url`). `apps/authentik.ts` creates the confidential client and its rotating secret (default every 90 days, `DEFAULT_CLIENT_SECRET_ROTATION`; `rotate: false` for an app that stores the secret itself). `StaticApp`s use `defineOidcClient(name, options)` and put its `oidc` and `credentialsSecret` on the app. See Identity (authentik) in the cluster file. An app that serves several hostnames (the arr stack) registers the extra ones, each with its own group and provider, in `additionalOidc` and builds their routes and the `forward-auth` Middleware itself.
 
 ### Rollouts and probes
 
 - `buildDeployment`/`buildStatefulSet` throw unless some container has a `readinessProbe`, because without one a pod is Ready at container start and the old pod is dropped immediately. Set `probeExempt: "<reason>"` (on `WorkloadApp` or the builder options) only when nothing can be probed.
-- Build probes with `probes.ts` (`readiness`, `startup`, `httpCheck`/`tcpCheck`/`execCheck`) instead of hand-writing them. Prefer the app's real health endpoint; use `tcpCheck` on the web port when `/` needs auth or returns non-2xx/3xx. Add `startup(..., budgetSeconds)` for slow boots rather than `initialDelaySeconds`.
+- Build probes with `packages/k8s/probes.ts` (`readiness`, `startup`, `httpCheck`/`tcpCheck`/`execCheck`) instead of hand-writing them. Prefer the app's real health endpoint; use `tcpCheck` on the web port when `/` needs auth or returns non-2xx/3xx. Add `startup(..., budgetSeconds)` for slow boots rather than `initialDelaySeconds`.
 - Deployments default to `RollingUpdate` (`maxSurge: 1`, `maxUnavailable: 0`), `minReadySeconds: 15` and `progressDeadlineSeconds: 300`. Raise `progressDeadlineSeconds` on the app when startup plus image pulls can exceed that.
 - `withIscsiVolumes` forces `Recreate` (RWO volume); those apps have a short outage on every rollout. NFS-only apps may overlap.
 - external-dns stays `Recreate`: upstream says it has no leader election and must not run duplicate instances.
 
 ### Resource requests and limits
 
-`apps/limit-ranges.ts` generates a `LimitRange` named `defaults` in every namespace an app deploys into (plus `unmanagedNamespaces` in `constants.ts`: argocd, default, kube-system). It fills in `defaultContainerResources` (`constants.ts`) for any container that sets neither request nor limit, so Git never needs to repeat the defaults. Every app therefore gets default requests and limits automatically. An app that needs something different must set **both** requests and limits explicitly, on the container or in chart values, because a partial setting is completed from the defaults (a request above the default limit with no limit is rejected by the API). LimitRange applies at pod creation only, so existing pods keep running unbounded until they restart. A namespace created in the same sync as its LimitRange fails the first attempt and succeeds on retry; pods started in between have no defaults. Apps that scan every app with `loadAllAppConfigs` must exclude `limit-ranges.ts`, which scans them too. `cluster/argocd-values.yaml` is applied by hand, so its resource values take effect after `bun run install-argo`.
+`apps/limit-ranges.ts` generates a `LimitRange` named `defaults` in every namespace an app on the cluster deploys into (plus `gitops.unmanagedNamespaces` from `cluster.ts`: argocd, default, kube-system). It fills in `site.defaultContainerResources` for any container that sets neither request nor limit, so Git never needs to repeat the defaults. Every app therefore gets default requests and limits automatically. An app that needs something different must set **both** requests and limits explicitly, on the container or in chart values, because a partial setting is completed from the defaults (a request above the default limit with no limit is rejected by the API). LimitRange applies at pod creation only, so existing pods keep running unbounded until they restart. A namespace created in the same sync as its LimitRange fails the first attempt and succeeds on retry; pods started in between have no defaults. `clusters/cluster0/bootstrap/argocd-values.yaml` is applied by hand, so its resource values take effect after `bun run install-argo`.
 
-### Generated Secrets
+### Secrets
 
-- `buildGeneratedSecret(name, keys)` in `utils.ts` creates ExternalSecret + optional per-key Password generators.
-- Depends on the `external-secrets` app being installed (`apps/external-secrets.ts`).
+- Every AWS Secrets Manager key is `lab53/<cluster name>/<namespace>/<secret name>`. Build it with `awsRemoteKey(namespace, name)` (a key that must already exist or another app generates) or let `buildGeneratedSecret`/`buildBackupResources` build it (generated). Never type a key as a string: the cluster name comes from `cluster.ts`, so a renamed cluster changes every key and its persisted secrets would regenerate.
+- `bun run secrets` lists every key in use and whether the cluster generates it or it must exist already. Use it instead of a hand-written list when documenting a secret.
+- `buildGeneratedSecret(namespace, name, keys, options?)` in `packages/k8s/secrets.ts` creates ExternalSecret + optional per-key Password generators.
+- Depends on the `external-secrets` app being installed (`apps/external-secrets.ts`); the store and generator names it relies on are defined in `packages/k8s/external-secrets.ts`.
 - Keys can be strings (use cluster-wide default generator) or objects with `{ key, length?, encoding? }`.
 - `{ persist: true }` seeds the value into AWS once and reads it back, so every namespace (and a rebuilt cluster) sees the same value. Use one key per call: seeding skips the whole AWS secret once any property exists.
 - `{ persist: true, rotate: "<duration>" }` regenerates and overwrites the AWS value on that interval (`PushSecret` `Replace`) and makes the consumers re-read every minute. Only for values both sides re-read (OIDC client secrets). TODO in `buildSeedPushSecret`: move to a cron schedule once external-secrets supports it.
 
-### Notifications
-
-Services send push and email by POSTing `{title, body, type, tag}` to `<appriseUrl>/notify/<app-name>` (`apps/apprise.ts`). Apprise has no authentication, so it has no HTTPRoute and is reachable only inside the cluster; the key is just the notifying app's name and must be listed in `appriseNotifiers`, which renders `/config/<app-name>.yml` from `buildAppriseConfig()` in `notifications.ts`. The `tag` is a severity and `severityDelivery` in `notifications.ts` is the one table that says what each delivers: `info` and `warning` → SES email only, `critical` → SES email only, `emergency` → Pushover emergency (repeats until acknowledged) + email; add `push` or `email` (space-separated) to narrow to one channel, and a tag no URL carries returns 424. Alertmanager (`apps/victoria-metrics/alertmanager.ts`) sends `warning`, `critical` and `emergency` alerts with the matching tag and drops the rest; `alertSeverityOverrides` re-routes a single alert by name. Credentials come from AWS Secrets Manager through an ExternalSecret template (`lab53/cluster0/apprise/pushover-credentials` and `ses-credentials`, key names in `apps/apprise.ts`). Gatus (`apps/gatus.ts`) is the dead-man switch for the cert-deploy CronJobs: see Status page. It posts to `/notify/gatus`.
-
-### Status page (Gatus)
-
-`apps/gatus.ts` serves a public status page at `status.lab53.net` (`externallyAccessible`, default WAF, no login) with history in Postgres. Its config is generated in TypeScript into the `gatus-config` ConfigMap; do not hand-write Gatus YAML.
-
-- **What it checks** comes from each app's `status` field (`StatusDeclaration`, `status.ts`). A `WorkloadApp` with a `webPort` derives it from its readiness probe (Service check) plus its hostname (`Routes` group, and `Public` for externally accessible apps: resolved through 1.1.1.1 so it travels Cloudflare and the Tunnel). Every other app must declare `status: { targets }` (built with `httpTarget`, `tcpTarget`, `dnsTarget`, `routeTargets`, `serviceUrl`) or `status: { exempt: "<reason>" }`; `bun run render gatus` throws for an app with neither. An app with `autoSync: false` is skipped, because it may not be deployed and its checks would only report it down. A route check counts any status below 500 except 404 as up, because forward auth answers 302/401.
-- **Import cycle:** `gatus.ts` scans every app, as `authentik.ts` and `limit-ranges.ts` do, so it excludes those two and `apps/gatus.ts` adds the authentik checks by hand. A new app that scans all apps must be added to `aggregatingApps` there. Code that other apps import from Gatus belongs in `apps/gatus/common.ts`, which loads nothing.
-- **The page is public:** every endpoint sets `ui.hide-*`, so URLs, hostnames, ports, errors and conditions never render. Keep `metrics` off, because `/metrics` shares the public port.
-- **Alerts** go to Apprise through Gatus's `custom` provider (`apps/gatus/alerting.ts`). `groupSeverity` there maps a group to a severity: `Certificates` → `critical`, every other group → `warning`. Both are email only, so nothing from Gatus pages. Groups are the `StatusGroup` enum in `status.ts`; renaming one changes its routing.
-- **Cert-deploy heartbeats:** each cert-deploy CronJob pushes its result to `POST <gatusUrl>/api/v1/endpoints/certificates_<cronjob-name>/external` with a bearer token (`heartbeatKey` in `apps/gatus/common.ts`; Gatus lowercases keys and matches them exactly, and rejects two checks in a group whose names differ only by case). Gatus fails the check when nothing arrives for 3h, so a job that never ran alerts. The token is generated and seeded into AWS by `apps/gatus.ts` (`lab53/cluster0/gatus/gatus-heartbeat`) and copied into the `traefik` namespace by the deployer's ExternalSecret.
-
-### Routing
-
-- Internal: `<name>.int.lab53.net` → gateway `traefik-internal`
-- External: `<name>.lab53.net` → gateways `traefik-external` + `traefik-internal`
-- Controlled by `externallyAccessible` flag. Override hostname with `subDomain`.
-- `withForwardAuth()` adds the `forward-auth` filter plus a first rule routing `/outpost.goauthentik.io/` on the app's host to `authentik-server` (a `ReferenceGrant` from `apps/authentik.ts` allows it).
-- Every externally accessible route is behind the WAF unless exempted with a reason (see Web application firewall). `buildRoute` throws for an external route without `waf`.
-
-### Identity (authentik)
-
-authentik (`apps/authentik.ts`, `authentik` namespace, Helm chart + Postgres) provides login for the cluster's apps; see `docs/authentik.md`. Configuration is declarative through blueprints generated in TypeScript: an app declares `oidc` (via `withForwardAuth()` or `withOidcClient()`) and `apps/authentik.ts` scans every app (`loadAllAppConfigs`) to create its group, provider, application, policy binding and `ReferenceGrant`. Access is per app through a group named after the app. `apps/authentik/users.config.ts` lists users enforced from Git; everyone else is invited in the authentik UI. The hostname is `authentikHostOptions` in `auth.ts` (`auth.lab53.net`, externally accessible because public apps use it). Forward auth uses the embedded outpost through one identical `forward-auth` Middleware per namespace, so no plugin or per-app secret is needed. Client secrets for `withOidcClient` live in AWS (`lab53/cluster0/authentik/oidc-<app>`), rotate every 90 days, and reach authentik as a rendered blueprint file because authentik skips blueprints whose file hash is unchanged. The SMTP credentials (`lab53/cluster0/authentik/smtp-credentials`) are created by hand.
-
-### Media stack (arr)
-
-`apps/arr.ts` is one Argo app (namespace `arr`) for Radarr, Sonarr, Lidarr, Prowlarr, SABnzbd, FlareSolverr and a gluetun + qBittorrent pod, with every setting in Git: env vars, init scripts and a Configarr CronJob (`apps/arr/configarr.config.ts`). Every container starts non-root except gluetun, which needs root and `NET_ADMIN`; no Pod Security level is enforced on the namespace yet. The apps share one NFS export (`/mnt/tank/data/media`) mounted at `/data` so downloads hardlink into libraries. Each UI is its own forward-auth application, registered through `additionalOidc`.
-
-### Jellyfin configuration
-
-Jellyfin cannot be given an API key from outside, so two keys are created by hand (Dashboard, API Keys) and stored in AWS: `lab53/cluster0/jellyfin/jellarr-credentials` (Jellarr) and `lab53/cluster0/arr/jellyfin-credentials` (Configarr), both with property `api-key`. `apps/jellyfin/jellarr.ts` is a Jellarr CronJob applying `apps/jellyfin/jellarr.config.ts` (system, encoding, libraries, branding, plugin repositories). Users and the SSO-Auth settings stay in the Jellyfin UI. The CronJob runs `ghcr.io/aaronkyriesenbach/jellarr`, built from the `aaronkyriesenbach/jellarr` fork, because upstream Jellarr v0.1.0 authenticates with `X-Emby-Token`, which Jellyfin 12 rejects with 401 (upstream PR venkyr77/jellarr#79, merged in the fork); switch back to upstream once a release contains that fix. Configarr's `Jellyfin` connection on Radarr and Sonarr refreshes the library on import, upgrade, rename and delete, mapping `/data/movies` and `/data/tv` to Jellyfin's `/movies` and `/tv`.
-
-### Web application firewall
-
-`externallyAccessible: true` apps are inspected by CrowdSec AppSec through the community Traefik bouncer plugin; see `docs/waf.md`. `renderWorkload` adds a `crowdsec-appsec` Middleware and a WAF `ExtensionRef` filter (before `forward-auth`) automatically. Change it per app with `withWaf({ profile?, bodyLimit? })` (profiles `default` and `strict`, defined in `waf.ts`) or opt out with `withoutWaf("<reason>")`; the reason is mandatory. `StaticApp`s that call `buildRoute` directly must pass `waf` (Immich is exempt for large uploads). Profiles each need their own AppSec port, so `apps/crowdsec.ts` generates listeners and Services from the table in `waf.ts`. The plugin fails open on AppSec/LAPI errors and trusts pod/service/LAN CIDRs. The bouncer key lives in AWS (`lab53/cluster0/crowdsec/crowdsec-keys`) and is copied into the `traefik` namespace for Traefik to mount (its pods wait in `ContainerCreating` until `crowdsec` has created that secret). The plugin version is pinned in `apps/traefik/values.yaml`, which Renovate does not track.
-
-### Public access (Cloudflare Tunnel)
-
-No inbound ports are open. `apps/cloudflared.ts` runs a locally-managed tunnel (`cloudflareTunnelId` in `constants.ts`) whose `config.yml` forwards `*.lab53.net` to Traefik over HTTPS and answers 404 for `*.int.lab53.net`. Public DNS exists only for hostnames external-dns publishes, so internal names are never routable through it.
-
-- **DNS**: `lab53.net` is hosted at Cloudflare (registration stays at Route 53). `external-dns-ext` uses the Cloudflare provider with `--cloudflare-proxied`; the `external-dns.kubernetes.io/target` annotation on the `traefik-external` Gateway points every record at `<tunnel-id>.cfargotunnel.com`. Annotations must use the `external-dns.kubernetes.io/` prefix: external-dns ignores the old `alpha` prefix since v0.22, which silently turns records into A records for the Gateway's private IP.
-- **Certificates**: the cert-manager issuers solve DNS-01 through Cloudflare.
-- **Secrets** (AWS Secrets Manager): `lab53/cluster0/cloudflared/tunnel-credentials` (raw `cloudflared tunnel create` JSON), `lab53/cluster0/external-dns/cloudflare-api-token` and `lab53/cluster0/cert-manager/cloudflare-api-token` (JSON property `api-token`, zone-scoped DNS edit tokens).
-- **Limits**: Cloudflare caps proxied request bodies at 100 MB on the Free plan, so large uploads (e.g. Immich videos) must go through the internal hostname on the LAN. Streaming large media through the proxy is restricted by Cloudflare's terms.
-- **Traefik** is the official `traefik/traefik` chart in the `traefik` namespace, declared in `apps/traefik.ts` with values in `apps/traefik/values.yaml`; k3s's bundled Traefik is turned off with `disable: traefik` in `/etc/rancher/k3s/config.yaml`. The values raise the `https` read/idle timeouts for long uploads and trust pod IPs for forwarded headers. It runs 2 replicas with soft pod anti-affinity and a PodDisruptionBudget (`minAvailable: 1`), and the Service takes the kube-vip VIP `192.168.53.201`. The chart ships the Traefik CRDs, so deleting the Application would delete every Middleware: use `argocd app delete --cascade=false`. The Gateway API CRDs come from `apps/gateway-api.ts` (upstream standard-install bundle, pinned in that file, Renovate does not track it), applied server-side with `Prune=false,Delete=false`; only upgrade within the standard channel and never downgrade. Its image is not mirrored through `zot.int.lab53.net`, because that registry is served through Traefik and a restarted pod could not pull its own image.
-
 ### Helm Charts
 
 - Declare charts with `helmReleases: [{ chart, releaseName, values?, parameters?, skipCrds? }]` on the app. `buildApplication` turns each release into a native ArgoCD Helm source (multi-source Application), so chart resources are tracked by Argo with diffs in its UI. Helm is **not** in the CMP sidecar, and the k3s `HelmChart` CRD is not used for apps.
-- Chart repo/name/version live in `helmCharts` in `versions.ts` (`chart` is a `HelmChartKey`). Never write repo URLs or versions in `apps/*.ts`.
-- `releaseName` must equal the live Helm release name when adopting an existing install. Charts install into the app's destination namespace (`namespace ?? name`); adopted releases are pinned in `helmReleaseNamespaces` (`constants.ts`) so a namespace change fails the render.
+- Chart repo/name/version live in `helmCharts` in `packages/versions/versions.ts` (`chart` is a `HelmChartKey`). Never write repo URLs or versions in `apps/*.ts`.
+- `releaseName` must equal the live Helm release name when adopting an existing install. Charts install into the app's destination namespace (`namespace ?? name`); adopted releases are pinned in `gitops.adoptedHelmNamespaces` (`cluster.ts`) so a namespace change fails the render.
 - Load values from a file with `await readYaml("./app/values.yaml", import.meta.url)`; `--set` equivalents go in `parameters`.
 - When several releases of one chart share a namespace, set `skipCrds: true` on all but one so a `crds/` directory is not rendered twice.
 - Use `ignoreDifferences` (typed from `@kubernetes-models/argo-cd`) for fields written at runtime by controllers. Apps with `helmReleases` also get `ServerSideApply=true` and `ServerSideDiff=true`.
-- `bun run render <app>` only shows CMP-rendered resources. Chart output is visible in ArgoCD (`argocd app manifests <app>`) or via `bun run render-chart <app>` (needs the `helm` CLI; an approximation of Argo's output).
+- `bun run render <app>` only shows CMP-rendered resources. Chart output is visible in ArgoCD (`argocd app manifests <app>`) or via `bun run render-chart <app>` (needs the `helm` CLI; an approximation of Argo's output). Helm generates random certificates and passwords on every run for some charts (victoria-metrics), so two chart renders of identical code differ in those values.
 
 ### Scripts and embedded files
 
 - Never inline shell scripts in `apps/*.ts`. Put them in a file next to the app (e.g. `apps/<app>/<name>.sh`), load with `readFile(...)` into `buildFileConfigMap(...)`, mount the ConfigMap, and run it with `command: ["/bin/sh", "/scripts/<name>.sh"]`. Pass values the script needs as container `env`, not TS string interpolation, so the file stays a plain, lintable script.
 - Indent anything embedded in a ConfigMap with **spaces, not tabs** (`.editorconfig` enforces this for `*.sh`). A tab makes Go/JS YAML encoders (kubectl, ArgoCD UI) render the whole value as one quoted `\n`-escaped string.
 
-### External Apps (traefik module)
-
-- Defined in `apps/traefik/externalApps.config.ts` — proxied non-cluster services (UniFi, TrueNAS, Proxmox).
-- Auto-generates EndpointSlice, Service, Certificate, BackendTLSPolicy, and HTTPRoute per entry.
-
 ### Runtime & TypeScript
 
 - **Bun only**. Scripts use `Bun.spawn`, `Bun.file`, `Bun.write`. Bun-compatible `node:` imports are fine.
 - Strict mode, `noUncheckedIndexedAccess`, ES2022 target, ESM, `moduleResolution: bundler`.
-- Relative imports only (no path aliases). Standard for flat repo.
-- No linter, tests, or CI. ArgoCD CMP plugin renders in-cluster.
+- **Imports**: `@catalyst/<package>/<module>` for packages and `@catalyst/site` for `site.ts` (`tsconfig` `paths`; Bun resolves them at runtime, so the CMP needs no `node_modules` link). Use relative imports only inside one app directory or one package. Do not add `baseUrl`: TypeScript 7 rejects it.
+- No linter or unit tests. CI (`verify.yml`) runs typecheck, Prettier, `check-versions`, `validate`, `render-all` and `render-charts`; the CMP plugin renders in-cluster.
 - **Formatting**: Prettier is a devDependency, configured via `.prettierrc` (explicit defaults) and `.prettierignore` (`node_modules/`, `downloads/`, `bun.lock`, `.sisyphus/`, `.omo/`). Run `bunx prettier --write .` before committing.
 - **Prefer imported types over hand-rolled ones.** Before defining a new type, check whether `kubernetes-models`, `@kubernetes-models/gateway-api`, `@kubernetes-models/traefik`, or other installed packages already export a matching interface (e.g. `IPersistentVolumeClaimTemplate`, `IPodSpec`, `IServicePort`). Hand-roll types only when no package provides them.
 
-### Infrastructure
-
-- NAS: IP `192.168.53.120`, base path `/mnt/tank/data`. Hardcoded in `modifiers.ts` and `storage.ts`.
-- Private registry mirror: `zot.int.lab53.net` (pull-through cache for Docker Hub, ghcr.io, quay.io, registry.k8s.io and docker.dragonflydb.io).
-
 ### Image sources
 
-- Every container image and Helm chart version is declared in `versions.ts` (`images`, `postgresImages`, `helmCharts`) and consumed via `image(key)`, `postgresImage(major)` and `HelmRelease.chart` keys. Do not write image strings in `apps/*.ts`.
-- **Mirroring**: every entry sets `mirrored`. `true` renders `zot.int.lab53.net/<prefix>/<path>:<tag>` (the zot app, `apps/zot.ts`), where the prefix comes from `mirrorPrefixes` in `constants.ts` and must match the sync `destination` in `apps/zot/config.json`. `false` renders the upstream name unchanged. `mirrorRepository(name)` in `utils.ts` does the same mapping for images set in Helm values.
-- **Registries** are the `ImageRegistry` union in `versions.ts` (docker.io, ghcr.io, quay.io, registry.k8s.io, docker.dragonflydb.io). Adding one means extending the union, `mirrorPrefixes`, and a sync entry in `apps/zot/config.json`.
+- Every container image and Helm chart version is declared in `packages/versions/versions.ts` (`images`, `postgresImages`, `helmCharts`) and consumed via `image(key)`, `postgresImage(major)` and `HelmRelease.chart` keys. Do not write image strings in `apps/*.ts`.
+- **Mirroring**: every entry sets `mirrored`. `true` renders `zot.int.lab53.net/<prefix>/<path>:<tag>` (the zot app, `apps/zot.ts`), where the prefix comes from `site.mirror.prefixes` in `site.ts` and must match the sync `destination` in `apps/zot/config.json`. `false` renders the upstream name unchanged. `mirrorRepository(name)` in `@catalyst/versions/images` does the same mapping for images set in Helm values.
+- **Registries** are the `ImageRegistry` union in `versions.ts` (docker.io, ghcr.io, quay.io, registry.k8s.io, docker.dragonflydb.io). Adding one means extending the union, `site.mirror.prefixes`, and a sync entry in `apps/zot/config.json`.
 - `versions.ts` is parsed by Renovate regexes: keep the exact field order and one-entry-per-object shape, then run `bun run check-versions` and `bun run typecheck`.
-- Exceptions: digest-pinned images (`apps/iso-archive.ts`) and images inside YAML files (`cluster/*.yaml`, `apps/*/values.yaml`) that are not Helm chart images.
+- Exceptions: digest-pinned images (`apps/iso-archive.ts`) and images inside YAML files (`bootstrap/*.yaml`, `apps/*/values.yaml`) that are not Helm chart images.
 - **Chart images** are mirrored through `parameters`, not by editing `apps/*/values.yaml`, so Renovate keeps reading the upstream repository and tag from the YAML. Set each image's `repository` key (or the chart's registry key) to `mirrorRepository(...)`. An image that is a single `repo:tag` string in a CR lives in `versions.ts` and is passed as `image(key)`.
-- **Unmirrored chart images**: `render-chart` fails when a release renders an image outside `zot.int.lab53.net` that is not in `unmirroredChartImages` (`constants.ts`), which lists the releases zot's startup depends on (traefik, external-secrets, cert-manager, external-dns-int) with the reason for each. `helm test` hooks and CRDs are not scanned.
+- **Unmirrored chart images**: `render-chart` fails when a release renders an image outside `zot.int.lab53.net` that is not in `gitops.unmirroredChartImages` (`cluster.ts`), which lists the releases zot's startup depends on (traefik, external-secrets, cert-manager, external-dns-int) with the reason for each. `helm test` hooks and CRDs are not scanned.
 - ArgoCD CMP sidecar: `oven/bun` image, plugin name "ts", discovery key `main.ts`.
-- `cluster/` holds only what bootstraps ArgoCD (its Helm values and the root Application), applied by hand. Everything else, including kube-vip and Traefik, is an ArgoCD app under `apps/`; nothing is copied to the k3s server manifest directory.
-- **kube-vip** (`apps/kube-vip.ts`, `kube-system`) holds the API server VIP `192.168.53.200` and the Traefik VIP `192.168.53.201`. Its resources carry `Prune=false,Delete=false` so removing the app or a file never deletes the VIP provider, and a rollout fails both VIPs over one node at a time, so merge changes to it deliberately. Renovate bumps are PR-only. Its image is on ghcr.io, not the mirror, because the mirror is served through the VIP.
 
 ## Dependency updates (Renovate)
 
 Mend Renovate (GitHub App) opens PRs for images, charts and npm packages from `renovate.json`. Merging updates git and Argo auto-syncs every Application (`prune: true`, `selfHeal: false`, `CreateNamespace=true`, retry with backoff), so a merged PR is applied without a manual sync. Set `autoSync: false` on an app (e.g. work in progress) to omit `automated` and sync it by hand.
 
-- **What it reads:** custom regex managers over `versions.ts` (images, repo charts, OCI charts; `depType` `image` / `helm-chart`), the built-in `helm-values` manager over `apps/**/*values.yaml`, `bun` (`package.json`/`bun.lock`) and `github-actions`. `cluster/**` is ignored (manual), and the ArgoCD chart is pinned by `--version` in the `install-argo` script, so Renovate never sees it.
-- **`versions.ts` shape:** the regexes live in `renovate.json` and `scripts/check-versions.ts` reads them from there. Keep the file Prettier-formatted, one entry per object, fields in the existing order, no computed values. Run `bun run check-versions`.
+- **What it reads:** custom regex managers over `packages/versions/versions.ts` (images, repo charts, OCI charts; `depType` `image` / `helm-chart`), the built-in `helm-values` manager over `clusters/**/*values.yaml`, `bun` (`package.json`/`bun.lock`) and `github-actions`. `clusters/*/bootstrap/**` is ignored (manual), and the ArgoCD chart is pinned by `--version` in the `install-argo` script, so Renovate never sees it.
+- **`versions.ts` shape:** the regexes live in `renovate.json` and `tools/check-versions.ts` reads them from there. Keep the file Prettier-formatted, one entry per object, fields in the existing order, no computed values. Run `bun run check-versions`.
 - **Timing:** Docker Hub, Helm-repo and npm updates are created once a version is 7 days old (`minimumReleaseAge`). `ghcr.io`, `quay.io` and `docker.dragonflydb.io` expose no registry-provided release date, so a rule sets `minimumReleaseAgeBehaviour: timestamp-optional` and they skip the age check. There is no schedule: PRs are created as soon as an update passes the age check, so minors and patches roll in one at a time. `prConcurrentLimit` is `0` (unlimited) and `rebaseWhen` is `conflicted`, so open PRs are rebased only on a real conflict instead of after every merge.
-- **Verify:** `.github/workflows/verify.yml` (required check `verify`) runs typecheck, Prettier, `check-versions`, `render-all` and `render-charts` (`helm template` for every app with `helmReleases`, so a chart that rejects our values fails the check). On PRs it posts a sticky comment with the rendered-manifest and chart diff against the base, and a failure banner if a chart does not render or renders an unmirrored image.
+- **Verify:** `.github/workflows/verify.yml` (required check `verify`) runs typecheck, Prettier, `check-versions`, `validate`, `render-all` and `render-charts` (`helm template` for every app with `helmReleases`, so a chart that rejects our values fails the check). On PRs it posts a sticky comment with the rendered-manifest and chart diff against the base, and a failure banner if a chart does not render or renders an unmirrored image. `render-all` and `render-charts` run in the base checkout from head's `tools/` and must not import app code, so they list apps by directory scan only (and fall back to a top-level `apps/` for base branches older than `clusters/`).
 
 | Update        | Behaviour                                             |
 | ------------- | ----------------------------------------------------- |
@@ -199,23 +153,26 @@ Mend Renovate (GitHub App) opens PRs for images, charts and npm packages from `r
 
 ## ANTI-PATTERNS
 
-- **No `index.ts` in `apps/`** — `main.ts` filters `entry.isFile()`, directories with index exports won't be discovered.
-- **No named-only exports** — `loadAppConfig` reads `mod.default`. Apps that only export named values produce nothing.
+- **No `index.ts` in `clusters/*/apps/`** — the loader filters `entry.isFile()`, directories with index exports won't be discovered.
+- **No named-only exports** — the loader reads `mod.default`. Apps that only export named values produce nothing.
 - **No `HelmChart` CRD resources for apps** — use `helmReleases`; the helm-controller would own (and on delete, uninstall) the release.
-- **Don't add apps to a registry** — discovery is automatic from the `apps/` directory.
+- **Don't add apps to a registry** — discovery is automatic from the cluster's `apps/` directory.
+- **Don't import another app's module or scan every app at module top level** — use `derive`; a top-level `loadAllAppConfigs` in an app is a cycle waiting to happen.
+- **Don't import from `clusters/` inside `packages/`** — read the target cluster through `@catalyst/core/cluster`.
+- **Don't write `lab53/<cluster>/...` keys by hand** — use `awsRemoteKey` so the cluster name stays in one place.
 
 ## CROSS-MODULE EXPORTS
 
-Some app files export named constants used by scripts and other modules:
+Constants that more than one app or tool needs live in a module that imports nothing from other apps:
 
-- `apps/traefik.ts` → `traefikNamespace`
-- `apps/cert-manager.ts` → `certManagerNamespace`
-- `apps/cert-manager/internal-ca.ts` → `internalRootCaSecretName`
-- `apps/apprise.ts` → `appriseUrl`, `appriseNotifiers`
+- `apps/traefik/common.ts` → `traefikNamespace`
+- `apps/cert-manager/common.ts` → `certManagerNamespace`, `internalRootCaSecretName`
+- `apps/apprise/common.ts` → `appriseName`, `apprisePort`, `appriseUrl`, `appriseNotifiers`
 - `apps/gatus/common.ts` → `gatusUrl`, `heartbeatKey`, `heartbeatSecretName`
-- `waf.ts` → `wafProfiles`, `resolveWaf`, `buildWafMiddleware`, crowdsec namespace and secret names
-- `auth.ts` → `authentikUrl`, `authentikHostOptions`, `buildForwardAuthMiddleware`, `oidcIssuer`, `oidcSecretName`, `DEFAULT_CLIENT_SECRET_ROTATION`
 - `apps/traefik/externalApps.config.ts` → `externalApps`, helper functions
+- `packages/platform/waf.ts` → `wafProfiles`, `resolveWaf`, `buildWafMiddleware`, crowdsec namespace and secret names
+- `packages/platform/auth.ts` → `authentikUrl`, `authentikHostOptions`, `buildForwardAuthMiddleware`, `oidcIssuer`, `oidcSecretName`, `DEFAULT_CLIENT_SECRET_ROTATION`
+- `packages/k8s/external-secrets.ts` → `clusterGenerator`, `awsSecretStore` and their refs
 
 ## Agent skills
 

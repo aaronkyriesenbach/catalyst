@@ -4,8 +4,8 @@ Externally accessible apps are inspected by the [CrowdSec AppSec component](http
 
 ## How it works
 
-- `apps/crowdsec.ts` installs the CrowdSec chart: LAPI, plus the AppSec pod with one listener per profile. The agent (log parsing) is disabled.
-- `waf.ts` holds the profile table, constants and the `Middleware` builder. `apps/crowdsec.ts` generates the AppSec acquisitions, collections and per-profile Services from it.
+- `clusters/cluster0/apps/crowdsec.ts` installs the CrowdSec chart: LAPI, plus the AppSec pod with one listener per profile. The agent (log parsing) is disabled.
+- `packages/platform/waf.ts` holds the profile table, constants and the `Middleware` builder. `clusters/cluster0/apps/crowdsec.ts` generates the AppSec acquisitions, collections and per-profile Services from it.
 - `renderWorkload` adds a `crowdsec-appsec` `Middleware` to the app's namespace and a matching `ExtensionRef` filter to its `HTTPRoute` for every app with `externallyAccessible: true`. The WAF filter comes before `forward-auth`.
 - The bouncer key is generated once into AWS (`lab53/cluster0/crowdsec/crowdsec-keys`) and pulled into two namespaces: `crowdsec` (for LAPI) and `traefik` (`crowdsec-bouncer-key`, mounted into Traefik at `/etc/traefik/crowdsec`).
 
@@ -22,7 +22,7 @@ Everything fails open: if AppSec or LAPI is unreachable, errors, or the body can
 
 `default` has few false positives. `strict` can block legitimate traffic and needs tuning (see Tuning).
 
-Each AppSec acquisition runs its own HTTP server, so a profile costs a port and another copy of its rules in memory. Add a profile by extending `wafProfiles` in `waf.ts`.
+Each AppSec acquisition runs its own HTTP server, so a profile costs a port and another copy of its rules in memory. Add a profile by extending `wafProfiles` in `packages/platform/waf.ts`.
 
 ## Changing an app
 
@@ -57,4 +57,4 @@ kubectl -n crowdsec exec deploy/crowdsec-lapi -- cscli decisions delete --ip <ip
 
 - The `external-secrets` app must be installed.
 - Traefik mounts `crowdsec-bouncer-key` from its own namespace, so its pods stay in `ContainerCreating` until the `crowdsec` app has created that secret in `traefik`. On a rebuilt cluster they recover on their own once `crowdsec` syncs.
-- The plugin version is pinned in `apps/traefik/values.yaml`. Renovate does not track it, so bump it by hand.
+- The plugin version is pinned in `clusters/cluster0/apps/traefik/values.yaml`. Renovate does not track it, so bump it by hand.

@@ -16,13 +16,13 @@ browser ─► Traefik ─► [WAF] ─► forward-auth Middleware ──► aut
 
 - `renderWorkload` emits one `forward-auth` `Middleware` into the app's namespace. It is identical for every app, because authentik picks the provider from the forwarded host. It has to exist per namespace because an `ExtensionRef` filter can only name a Middleware next to the route.
 - `buildRoute` adds the `ExtensionRef` filter and a first rule sending `/outpost.goauthentik.io/` on the app's host to `authentik-server`. Login redirects and the OIDC callback land on the app's own hostname, so this rule is required. The rule carries the WAF filter but not the forward-auth filter.
-- `apps/authentik.ts` scans every app for `oidc` declarations and generates, per app, an authentik group, a proxy provider (`forward_single`), an application, and a policy binding that restricts the application to the group. It binds the providers to the embedded outpost and writes a `ReferenceGrant` in the `authentik` namespace so each app's `HTTPRoute` may reference `authentik-server`.
+- `clusters/cluster0/apps/authentik.ts` scans every app for `oidc` declarations and generates, per app, an authentik group, a proxy provider (`forward_single`), an application, and a policy binding that restricts the application to the group. It binds the providers to the embedded outpost and writes a `ReferenceGrant` in the `authentik` namespace so each app's `HTTPRoute` may reference `authentik-server`.
 
 There is no shared secret to create or rotate: the outpost and authentik handle the provider credentials internally.
 
 ### Access control
 
-Access is per app. Each app has an authentik group with the app's name, and only members can open it. Declared users get their groups from `apps/authentik/users.config.ts`; anyone else is added to a group in the authentik admin UI.
+Access is per app. Each app has an authentik group with the app's name, and only members can open it. Declared users get their groups from `clusters/cluster0/apps/authentik/users.config.ts`; anyone else is added to a group in the authentik admin UI.
 
 ### Adding forward auth to an app
 
@@ -36,7 +36,7 @@ The app needs a `webPort`. To let paths through without a login, pass regexes th
 withForwardAuth({ skipPathRegex: ["^/api/webhook$"] });
 ```
 
-Then add the app's name to the `apps` list of any user in `apps/authentik/users.config.ts` who should have access, and check the output:
+Then add the app's name to the `apps` list of any user in `clusters/cluster0/apps/authentik/users.config.ts` who should have access, and check the output:
 
 ```bash
 bun run render <app-name>
@@ -47,15 +47,15 @@ The app render should contain a `forward-auth` Middleware and an `HTTPRoute` wit
 
 ### Prerequisites
 
-- The `authentik` app must be installed (`apps/authentik.ts`).
-- The authentik hostname is `authentikHostOptions` in `auth.ts`. Changing it regenerates every provider's URLs, the outpost host and each app's issuer.
+- The `authentik` app must be installed (`clusters/cluster0/apps/authentik.ts`).
+- The authentik hostname is `authentikHostOptions` in `packages/platform/auth.ts`. Changing it regenerates every provider's URLs, the outpost host and each app's issuer.
 
 ### Reference
 
-| Component                          | Location                      |
-| ---------------------------------- | ----------------------------- |
-| `withForwardAuth()` modifier       | `modifiers.ts`                |
-| Middleware, URLs, constants        | `auth.ts`                     |
-| Route rule and filter logic        | `utils.ts` (`buildRoute()`)   |
-| Blueprint generation               | `apps/authentik/blueprint.ts` |
-| authentik app and `ReferenceGrant` | `apps/authentik.ts`           |
+| Component                          | Location                                        |
+| ---------------------------------- | ----------------------------------------------- |
+| `withForwardAuth()` modifier       | `packages/platform/modifiers.ts`                |
+| Middleware, URLs, constants        | `packages/platform/auth.ts`                     |
+| Route rule and filter logic        | `packages/k8s/route.ts`                         |
+| Blueprint generation               | `clusters/cluster0/apps/authentik/blueprint.ts` |
+| authentik app and `ReferenceGrant` | `clusters/cluster0/apps/authentik.ts`           |
