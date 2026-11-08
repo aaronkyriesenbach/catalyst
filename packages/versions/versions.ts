@@ -63,7 +63,7 @@ export const images = {
   },
   jellarr: {
     name: "ghcr.io/aaronkyriesenbach/jellarr",
-    tag: "0.2.0",
+    tag: "0.2.1",
     mirrored: true,
   },
   radicale: {
