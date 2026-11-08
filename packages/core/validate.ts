@@ -1,43 +1,37 @@
-import { appHostname } from "@catalyst/platform/hostnames";
-import type { Catalog } from "./types";
+import { parseAllDocuments } from "yaml";
 
-export function validateCatalog(catalog: Catalog): string[] {
-  const problems: string[] = [];
-  const hostOwners = new Map<string, string>();
+export type RenderedApp = { name: string; documents: readonly string[] };
 
-  function claimHost(host: string, owner: string): void {
-    const existing = hostOwners.get(host);
+type RouteDocument = {
+  kind?: string;
+  metadata?: { name?: string };
+  spec?: { hostnames?: string[] };
+};
 
-    if (existing !== undefined) {
-      problems.push(`${host} is served by both ${existing} and ${owner}`);
-    }
+export function findDuplicateRouteHosts(
+  apps: readonly RenderedApp[],
+): string[] {
+  const owners = new Map<string, string[]>();
 
-    hostOwners.set(host, owner);
-  }
+  for (const app of apps) {
+    for (const text of app.documents) {
+      for (const parsed of parseAllDocuments(text)) {
+        const route = parsed.toJSON() as RouteDocument | null;
 
-  for (const { cluster, config } of catalog.entries) {
-    const id = `${cluster}/${config.name}`;
+        if (route?.kind !== "HTTPRoute") {
+          continue;
+        }
 
-    if (config.kind === "workload" && config.webPort !== undefined) {
-      claimHost(
-        appHostname(config.name, {
-          subDomain: config.subDomain,
-          externallyAccessible: config.externallyAccessible,
-        }),
-        id,
-      );
-    }
+        for (const host of route.spec?.hostnames ?? []) {
+          const owner = `${app.name}/${route.metadata?.name}`;
 
-    for (const extra of config.additionalOidc ?? []) {
-      claimHost(
-        appHostname(extra.name, {
-          subDomain: extra.subDomain,
-          externallyAccessible: extra.externallyAccessible,
-        }),
-        `${id} (${extra.name})`,
-      );
+          owners.set(host, [...(owners.get(host) ?? []), owner]);
+        }
+      }
     }
   }
 
-  return problems;
+  return [...owners]
+    .filter(([, routes]) => routes.length > 1)
+    .map(([host, routes]) => `${host} is served by ${routes.join(" and ")}`);
 }
