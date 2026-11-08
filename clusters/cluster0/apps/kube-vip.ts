@@ -4,6 +4,7 @@ import {
   ClusterRoleBinding,
 } from "kubernetes-models/rbac.authorization.k8s.io/v1";
 import { ServiceAccount } from "kubernetes-models/v1";
+import { cluster } from "@catalyst/core/cluster";
 import { Project } from "@catalyst/core/constants";
 import { StatusGroup, tcpTarget } from "@catalyst/platform/status";
 import type { StaticApp } from "@catalyst/core/types";
@@ -11,8 +12,8 @@ import { image } from "@catalyst/versions/images";
 
 const name = "kube-vip";
 const namespace = "kube-system";
-const apiVip = "192.168.53.200";
-const traefikVip = "192.168.53.201";
+const apiVip = cluster.network.vips.api;
+const traefikVip = cluster.network.vips.gateway;
 
 // kube-vip holds the API server VIP and the Traefik VIP, so losing these objects
 // takes down kubectl access and all ingress. Never let Argo prune them or

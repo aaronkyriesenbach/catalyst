@@ -1,4 +1,6 @@
 import { Middleware } from "@kubernetes-models/traefik/traefik.io/v1alpha1/Middleware";
+import { cluster } from "@catalyst/core/cluster";
+import { site } from "@catalyst/site";
 
 export const crowdsecNamespace = "crowdsec";
 
@@ -104,10 +106,14 @@ export function resolveWaf(
 }
 
 // Trusted clients skip every check, so a misread forwarded header can't ban cloudflared's pod IP.
-const TRUSTED_CLIENT_CIDRS = ["10.42.0.0/16", "10.43.0.0/16", "192.168.0.0/16"];
+const TRUSTED_CLIENT_CIDRS = [
+  cluster.network.podCidr,
+  cluster.network.serviceCidr,
+  site.lanCidr,
+];
 
 // Must match `entryPoints.https.forwardedHeaders.trustedIPs` in apps/traefik/values.yaml.
-const TRUSTED_PROXY_CIDRS = ["10.42.0.0/16"];
+const TRUSTED_PROXY_CIDRS = [cluster.network.podCidr];
 
 // Fails open on AppSec/LAPI errors so a restarting AppSec pod can't take every public app down.
 export function buildWafMiddleware({

@@ -1,4 +1,4 @@
-import { MIRROR_HOST, mirrorPrefixes } from "@catalyst/core/constants";
+import { site } from "@catalyst/site";
 import {
   images,
   postgresImages,
@@ -8,9 +8,9 @@ import {
 } from "./versions";
 
 export function mirrorRepository(name: ImageEntry["name"]): string {
-  for (const [registry, prefix] of Object.entries(mirrorPrefixes)) {
+  for (const [registry, prefix] of Object.entries(site.mirror.prefixes)) {
     if (name.startsWith(`${registry}/`)) {
-      return `${MIRROR_HOST}/${prefix}/${name.slice(registry.length + 1)}`;
+      return `${site.mirror.host}/${prefix}/${name.slice(registry.length + 1)}`;
     }
   }
 

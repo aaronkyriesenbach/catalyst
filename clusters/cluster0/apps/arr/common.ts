@@ -4,6 +4,7 @@ import type {
   IVolume,
   IVolumeMount,
 } from "kubernetes-models/v1";
+import { cluster } from "@catalyst/core/cluster";
 import { buildNasPersistentVolumePair } from "@catalyst/k8s/storage";
 
 export const arrNamespace = "arr";
@@ -11,7 +12,7 @@ export const arrNamespace = "arr";
 export const timezone = "America/New_York";
 export const nonRootId = 1000;
 // Pod CIDR of the cluster; qBittorrent and SABnzbd trust it because forward auth guards the route.
-export const podCidr = "10.42.0.0/16";
+export const podCidr = cluster.network.podCidr;
 
 // Every app mounts the same export at the same path, so a hardlink or atomic move between
 // downloads and a library never crosses a mount point and paths agree between apps.

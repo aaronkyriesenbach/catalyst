@@ -12,6 +12,7 @@
     "noUncheckedIndexedAccess": true,
     "types": ["bun-types"],
     "paths": {
+      "@catalyst/site": ["./site.ts"],
       "@catalyst/*": ["./packages/*"]
     }
   },

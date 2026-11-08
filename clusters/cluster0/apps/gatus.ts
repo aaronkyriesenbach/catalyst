@@ -107,7 +107,7 @@ const base: WorkloadApp = {
     ),
   ],
   derive: ({ catalog, cluster }) => ({
-    extraResources: [buildConfigMap(catalog.onCluster(cluster))],
+    extraResources: [buildConfigMap(catalog.onCluster(cluster.name))],
   }),
 };
 

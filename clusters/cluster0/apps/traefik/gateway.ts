@@ -1,11 +1,13 @@
 import { Gateway } from "@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1";
-import { cloudflareTunnelTarget } from "@catalyst/core/constants";
+import { cluster } from "@catalyst/core/cluster";
+
+const tunnelTarget = `${cluster.edge.cloudflareTunnelId}.cfargotunnel.com`;
 
 export const internalGateway = new Gateway({
   metadata: {
     name: "traefik-internal",
     annotations: {
-      "external-dns.kubernetes.io/target": "192.168.53.201",
+      "external-dns.kubernetes.io/target": cluster.network.vips.gateway,
     },
   },
   spec: {
@@ -62,7 +64,7 @@ export const externalGateway = new Gateway({
   metadata: {
     name: "traefik-external",
     annotations: {
-      "external-dns.kubernetes.io/target": cloudflareTunnelTarget,
+      "external-dns.kubernetes.io/target": tunnelTarget,
     },
   },
   spec: {

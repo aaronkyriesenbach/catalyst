@@ -114,7 +114,30 @@ export type Catalog = {
   onCluster(cluster: string): AppConfig[];
 };
 
-export type DeriveContext = { catalog: Catalog; cluster: string };
+export type DeriveContext = { catalog: Catalog; cluster: Cluster };
+
+export type UnmirroredChartImage = {
+  release: string;
+  repository: string;
+  reason: string;
+};
+
+export type Cluster = {
+  name: string;
+  kind: "standalone";
+  network: {
+    podCidr: string;
+    serviceCidr: string;
+    vips: { api: string; gateway: string };
+  };
+  edge: { cloudflareTunnelId: string };
+  gitops: {
+    projects: Record<Project, ProjectSpec>;
+    adoptedHelmNamespaces: Record<string, string>;
+    unmanagedNamespaces: readonly string[];
+    unmirroredChartImages: readonly UnmirroredChartImage[];
+  };
+};
 
 type DerivedHelm = { helmReleases?: HelmRelease[] };
 

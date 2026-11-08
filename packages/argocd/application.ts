@@ -2,9 +2,13 @@ import {
   Application,
   AppProject,
 } from "@kubernetes-models/argo-cd/argoproj.io/v1alpha1";
-import { helmReleaseNamespaces } from "@catalyst/core/constants";
 import { appNamespace } from "@catalyst/core/apps";
-import type { AppConfig, HelmRelease, ProjectSpec } from "@catalyst/core/types";
+import type {
+  AppConfig,
+  Cluster,
+  HelmRelease,
+  ProjectSpec,
+} from "@catalyst/core/types";
 import { helmCharts, type HelmChartEntry } from "@catalyst/versions/versions";
 
 const REPO_URL = "https://github.com/aaronkyriesenbach/catalyst";
@@ -65,9 +69,10 @@ function hasCmpContent(config: AppConfig): boolean {
 function assertHelmReleaseNamespaces(
   config: AppConfig,
   destinationNamespace: string,
+  adopted: Cluster["gitops"]["adoptedHelmNamespaces"],
 ): void {
   for (const { releaseName } of config.helmReleases ?? []) {
-    const pinned = helmReleaseNamespaces[releaseName];
+    const pinned = adopted[releaseName];
 
     if (pinned !== undefined && pinned !== destinationNamespace) {
       throw new Error(
@@ -77,11 +82,18 @@ function assertHelmReleaseNamespaces(
   }
 }
 
-export function buildApplication(config: AppConfig): Application {
+export function buildApplication(
+  config: AppConfig,
+  cluster: Cluster,
+): Application {
   const { name, project, helmReleases, ignoreDifferences, autoSync } = config;
   const destinationNamespace = appNamespace(config);
 
-  assertHelmReleaseNamespaces(config, destinationNamespace);
+  assertHelmReleaseNamespaces(
+    config,
+    destinationNamespace,
+    cluster.gitops.adoptedHelmNamespaces,
+  );
 
   const cmpSource: ApplicationSource = {
     repoURL: REPO_URL,

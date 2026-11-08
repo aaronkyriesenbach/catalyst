@@ -1,4 +1,5 @@
-import { Project, projectDefinitions } from "@catalyst/core/constants";
+import { cluster } from "@catalyst/core/cluster";
+import { Project } from "@catalyst/core/constants";
 import { buildApplication, buildProject } from "@catalyst/argocd/application";
 import { loadAppConfig } from "@catalyst/core/apps";
 import { toYaml } from "@catalyst/core/yaml";
@@ -28,15 +29,15 @@ if (arg1 === "argo") {
   if (kind === "project") {
     if (!isKnownProject(name)) {
       console.error(
-        `Unknown project '${name}'. Known projects: ${Object.keys(projectDefinitions).join(", ")}`,
+        `Unknown project '${name}'. Known projects: ${Object.keys(cluster.gitops.projects).join(", ")}`,
       );
       process.exit(1);
     }
 
-    console.log(toYaml(buildProject(name, projectDefinitions[name])));
+    console.log(toYaml(buildProject(name, cluster.gitops.projects[name])));
   } else {
     const appConfig = await loadAppConfig(moduleName(name));
-    console.log(toYaml(buildApplication(appConfig)));
+    console.log(toYaml(buildApplication(appConfig, cluster)));
   }
 } else {
   if (!arg1) {

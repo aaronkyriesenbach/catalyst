@@ -1,5 +1,6 @@
 import { stringify } from "yaml";
-import { cloudflareTunnelId, Project } from "@catalyst/core/constants";
+import { cluster } from "@catalyst/core/cluster";
+import { Project } from "@catalyst/core/constants";
 import { httpCheck, readiness } from "@catalyst/k8s/probes";
 import type { StaticApp } from "@catalyst/core/types";
 import { awsRemoteKey, buildAwsExternalSecret } from "@catalyst/k8s/secrets";
@@ -13,7 +14,7 @@ const metricsPort = 2000;
 const traefikOrigin = "https://traefik.traefik.svc.cluster.local:443";
 
 const tunnelConfig = {
-  tunnel: cloudflareTunnelId,
+  tunnel: cluster.edge.cloudflareTunnelId,
   "credentials-file": "/etc/cloudflared/credentials/credentials.json",
   metrics: `0.0.0.0:${metricsPort}`,
   // Traefik picks its certificate by SNI, so SNI has to follow the requested host rather than the Service name.

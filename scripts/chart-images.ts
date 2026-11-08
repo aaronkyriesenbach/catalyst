@@ -1,12 +1,9 @@
 import { parseAllDocuments } from "yaml";
-import {
-  MIRROR_HOST,
-  mirrorPrefixes,
-  unmirroredChartImages,
-} from "@catalyst/core/constants";
+import { cluster } from "@catalyst/core/cluster";
+import { site } from "@catalyst/site";
 
 // Also catches refs in args/env, which an `image:` field scan would miss.
-const hostPattern = Object.keys(mirrorPrefixes)
+const hostPattern = Object.keys(site.mirror.prefixes)
   .map((host) => host.replaceAll(".", "\\."))
   .join("|");
 const embeddedRef = new RegExp(
@@ -93,7 +90,7 @@ function findUnmirroredImages(release: string, manifests: string): string[] {
     }
   }
 
-  const allowed = unmirroredChartImages.filter(
+  const allowed = cluster.gitops.unmirroredChartImages.filter(
     (entry) => entry.release === release,
   );
 
@@ -102,7 +99,7 @@ function findUnmirroredImages(release: string, manifests: string): string[] {
       const repository = repositoryOf(ref);
 
       return (
-        !repository.startsWith(`${MIRROR_HOST}/`) &&
+        !repository.startsWith(`${site.mirror.host}/`) &&
         !allowed.some((entry) => repository.startsWith(entry.repository))
       );
     })
@@ -117,9 +114,9 @@ export function assertChartImagesMirrored(
 
   if (unmirrored.length > 0) {
     throw new Error(
-      `Release '${release}' renders images that do not use ${MIRROR_HOST}:\n` +
+      `Release '${release}' renders images that do not use ${site.mirror.host}:\n` +
         unmirrored.map((ref) => `  - ${ref}`).join("\n") +
-        "\nMirror them with `parameters` or add them to unmirroredChartImages in packages/core/constants.ts.",
+        "\nMirror them with `parameters` or add them to gitops.unmirroredChartImages in the cluster's cluster.ts.",
     );
   }
 }

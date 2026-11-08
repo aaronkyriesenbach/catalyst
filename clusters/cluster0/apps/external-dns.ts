@@ -1,4 +1,5 @@
-import { cloudflareZoneId, Project } from "@catalyst/core/constants";
+import { Project } from "@catalyst/core/constants";
+import { site } from "@catalyst/site";
 import { appHostname } from "@catalyst/platform/hostnames";
 import {
   dnsTarget,
@@ -61,7 +62,7 @@ const config: StaticApp = {
       releaseName: "external-dns-ext",
       skipCrds: true,
       parameters: {
-        "extraArgs.zone-id-filter": cloudflareZoneId,
+        "extraArgs.zone-id-filter": site.cloudflareZoneId,
         "image.repository": mirrorRepository(
           "registry.k8s.io/external-dns/external-dns",
         ),

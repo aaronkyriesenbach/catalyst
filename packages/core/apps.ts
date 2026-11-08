@@ -1,40 +1,11 @@
 import { readdirSync } from "node:fs";
-import { fileURLToPath } from "node:url";
+import {
+  CLUSTERS_DIR,
+  currentCluster,
+  listClusters,
+  loadCluster,
+} from "./clusters";
 import type { AppConfig, Catalog, CatalogEntry, DeriveContext } from "./types";
-
-const CLUSTERS_DIR = fileURLToPath(new URL("../../clusters/", import.meta.url));
-
-export function listClusters(): string[] {
-  return readdirSync(CLUSTERS_DIR, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => entry.name)
-    .sort((a, b) => a.localeCompare(b));
-}
-
-export function currentCluster(): string {
-  const requested = process.env.ARGOCD_ENV_CLUSTER;
-  const clusters = listClusters();
-
-  if (requested !== undefined && requested !== "") {
-    if (!clusters.includes(requested)) {
-      throw new Error(
-        `Unknown cluster '${requested}'. Known clusters: ${clusters.join(", ")}`,
-      );
-    }
-
-    return requested;
-  }
-
-  const [only, ...others] = clusters;
-
-  if (only === undefined || others.length > 0) {
-    throw new Error(
-      `Set ARGOCD_ENV_CLUSTER to one of: ${clusters.join(", ") || "(none)"}`,
-    );
-  }
-
-  return only;
-}
 
 export function clusterAppsDir(cluster: string = currentCluster()): string {
   return `${CLUSTERS_DIR}${cluster}/apps/`;
@@ -131,7 +102,10 @@ async function loadResolved(cluster: string, file: string): Promise<AppConfig> {
     return config;
   }
 
-  return resolveApp(config, { catalog: await loadCatalog(), cluster });
+  return resolveApp(config, {
+    catalog: await loadCatalog(),
+    cluster: await loadCluster(cluster),
+  });
 }
 
 export function loadAppConfig(file: string): Promise<AppConfig> {

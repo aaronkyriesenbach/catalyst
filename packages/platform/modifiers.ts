@@ -32,6 +32,7 @@ import { buildIscsiPvc, buildIscsiPvcTemplate } from "@catalyst/k8s/storage";
 import { postgresImage } from "@catalyst/versions/images";
 import type { PostgresMajor } from "@catalyst/versions/versions";
 import type { WafOptions } from "./waf";
+import { site } from "@catalyst/site";
 
 export type NasMountConfig = {
   [containerName: string]: { mountPath: string; subPath?: string }[];
@@ -40,13 +41,11 @@ export type NasMountConfig = {
 export type WorkloadModifier = (app: WorkloadApp) => WorkloadApp;
 
 const NAS_VOLUME_NAME = "nas";
-const NAS_SERVER = "192.168.53.120";
-const NAS_PATH = "/mnt/tank/data";
 
 export function nasVolume(): IVolume {
   return {
     name: NAS_VOLUME_NAME,
-    nfs: { server: NAS_SERVER, path: NAS_PATH },
+    nfs: { server: site.nas.ip, path: site.nas.path },
   };
 }
 
