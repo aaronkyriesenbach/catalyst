@@ -16,7 +16,7 @@ if (appName) {
   }
 
   for (const appConfig of await loadAllAppConfigs()) {
-    resources.push(toYaml(buildApplication(appConfig, cluster)));
+    resources.push(toYaml(buildApplication(appConfig)));
   }
 
   console.log(resources.join("\n---\n"));

@@ -37,7 +37,7 @@ if (arg1 === "argo") {
     console.log(toYaml(buildProject(name, cluster.gitops.projects[name])));
   } else {
     const appConfig = await loadAppConfig(moduleName(name));
-    console.log(toYaml(buildApplication(appConfig, cluster)));
+    console.log(toYaml(buildApplication(appConfig)));
   }
 } else {
   if (!arg1) {

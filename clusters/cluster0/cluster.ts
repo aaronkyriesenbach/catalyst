@@ -21,16 +21,6 @@ const cluster: Cluster = {
         clusterResourceWhitelist: [{ group: "*", kind: "*" }],
       },
     },
-    adoptedHelmNamespaces: {
-      reloader: "reloader",
-      volsync: "volsync-system",
-      "external-dns-int": "external-dns",
-      "external-dns-ext": "external-dns",
-      "cert-manager": "cert-manager",
-      "trust-manager": "cert-manager",
-      "external-secrets": "external-secrets",
-      immich: "immich",
-    },
     unmanagedNamespaces: ["argocd", "default", "kube-system"],
     unmirroredChartImages: [
       {
