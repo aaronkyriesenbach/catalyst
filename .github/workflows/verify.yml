@@ -74,7 +74,7 @@ jobs:
           git worktree add --detach "$RUNNER_TEMP/base" HEAD^1
           cd "$RUNNER_TEMP/base"
           bun install --frozen-lockfile
-          bun run "$GITHUB_WORKSPACE/scripts/render-all.ts" \
+          bun run "$GITHUB_WORKSPACE/tools/render-all.ts" \
             "$BASE_RENDER_DIR"
 
       # continue-on-error keeps the PR comment posting; the last step fails.
@@ -91,7 +91,7 @@ jobs:
         continue-on-error: true
         working-directory: ${{ runner.temp }}/base
         run: |
-          bun run "$GITHUB_WORKSPACE/scripts/render-charts.ts" \
+          bun run "$GITHUB_WORKSPACE/tools/render-charts.ts" \
             "$BASE_CHARTS_DIR"
 
       - name: Diff renders
