@@ -183,6 +183,10 @@ function deriveWorkloadTargets(
 export function resolveStatusTargets(config: AppConfig): StatusTarget[] {
   const declaration = config.status;
 
+  if (config.autoSync === false) {
+    return [];
+  }
+
   if (declaration !== undefined && "exempt" in declaration) {
     return [];
   }

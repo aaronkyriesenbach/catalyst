@@ -12,8 +12,13 @@ export const notifierKey = gatusName;
 
 const KEY_SEPARATORS = /[ /_,.#+&]/g;
 
-export function heartbeatKey(name: string): string {
-  const sanitize = (part: string) => part.replace(KEY_SEPARATORS, "-");
+const sanitizeKeyPart = (part: string) =>
+  part.trim().toLowerCase().replace(KEY_SEPARATORS, "-");
 
-  return `${sanitize(StatusGroup.Certificates)}_${sanitize(name)}`;
+export function endpointKey(group: string, name: string): string {
+  return `${sanitizeKeyPart(group)}_${sanitizeKeyPart(name)}`;
+}
+
+export function heartbeatKey(name: string): string {
+  return endpointKey(StatusGroup.Certificates, name);
 }

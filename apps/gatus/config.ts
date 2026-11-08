@@ -1,6 +1,6 @@
 import { StatusGroup, type StatusTarget } from "../../status";
 import { customAlert } from "./alerting";
-import { gatusPort, heartbeatTokenEnv } from "./common";
+import { endpointKey, gatusPort, heartbeatTokenEnv } from "./common";
 
 export type Heartbeat = {
   name: string;
@@ -54,7 +54,7 @@ function assertUniqueKeys(targets: readonly StatusTarget[]): void {
   const seen = new Set<string>();
 
   for (const { group, name } of targets) {
-    const key = `${group}/${name}`;
+    const key = endpointKey(group, name);
 
     if (seen.has(key)) {
       throw new Error(`Duplicate status check '${key}'`);

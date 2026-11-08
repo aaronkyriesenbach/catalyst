@@ -5,12 +5,14 @@ import {
   withNasMounts,
 } from "../modifiers";
 import { readiness, startup, tcpCheck } from "../probes";
+import { StatusGroup } from "../status";
 import type { WorkloadApp } from "../types";
 import { image } from "../utils";
 
 const base: WorkloadApp = {
   kind: "workload",
   name: "qbittorrent",
+  status: { group: StatusGroup.Media, title: "qBittorrent (etree)" },
   podSpec: {
     containers: [
       {
