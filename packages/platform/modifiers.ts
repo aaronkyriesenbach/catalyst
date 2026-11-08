@@ -302,6 +302,21 @@ export function withOidcClient(options: OidcClientOptions): WorkloadModifier {
   };
 }
 
+export function withOidcPublicClient(options: {
+  redirectPaths: readonly `/${string}`[];
+}): WorkloadModifier {
+  return (app) => {
+    if (!app.webPort) {
+      throw new Error(`App '${app.name}' needs a webPort for an OIDC client`);
+    }
+
+    return {
+      ...app,
+      oidc: { kind: "oauth2-public", redirectPaths: options.redirectPaths },
+    };
+  };
+}
+
 export function withWaf(options: WafOptions): WorkloadModifier {
   return (app) => ({ ...app, waf: options });
 }
@@ -316,6 +331,7 @@ export type IscsiVolumeMount = {
   storageRequest?: StorageQuantity;
   backup?: boolean;
   backupSchedule?: CronExpression;
+  backupOwner?: number;
 };
 
 export type IscsiVolumesConfig = {
@@ -392,6 +408,9 @@ export function withIscsiVolumes(config: IscsiVolumesConfig): WorkloadModifier {
               `${app.name}-${mount.name}`,
               {
                 schedule: mount.backupSchedule,
+                runAsUser: mount.backupOwner,
+                runAsGroup: mount.backupOwner,
+                fsGroup: mount.backupOwner,
               },
             ),
           ),

@@ -145,7 +145,7 @@ function providerEntry(app: OidcApp): Entry {
     identifiers: { name },
     attrs: {
       ...common,
-      client_type: "confidential",
+      client_type: oidc.kind === "oauth2" ? "confidential" : "public",
       client_id: name,
       // A blueprint-created provider allows no grant at all (the UI preselects every one).
       grant_types: ["authorization_code", "refresh_token"],
@@ -276,7 +276,7 @@ export function buildAppsBlueprint(
   users: readonly DeclaredUser[],
   extraGroups: readonly string[],
 ): string {
-  const needsScopes = apps.some((app) => app.oidc.kind === "oauth2");
+  const needsScopes = apps.some((app) => app.oidc.kind !== "proxy");
   const taken = [...apps.map((app) => app.name), ...RESERVED_GROUPS];
   const clashing = extraGroups.filter((group) => taken.includes(group));
 
