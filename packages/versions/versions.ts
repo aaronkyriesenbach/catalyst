@@ -141,6 +141,16 @@ export const images = {
     tag: "0.42.0",
     mirrored: true,
   },
+  stalwart: {
+    name: "ghcr.io/stalwartlabs/stalwart",
+    tag: "v1.0.3",
+    mirrored: true,
+  },
+  stalwartCli: {
+    name: "ghcr.io/stalwartlabs/cli",
+    tag: "1.0.14",
+    mirrored: true,
+  },
   forscore: {
     name: "ghcr.io/aaronkyriesenbach/forscoreviewer",
     tag: "0.3.0",

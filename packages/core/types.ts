@@ -43,7 +43,13 @@ export type OAuth2OidcDeclaration = {
   rotate: string | false;
 };
 
-export type OidcDeclaration = ProxyOidcDeclaration | OAuth2OidcDeclaration;
+export type PublicOidcDeclaration = {
+  kind: "oauth2-public";
+  redirectPaths: readonly `/${string}`[];
+};
+
+export type OidcDeclaration =
+  ProxyOidcDeclaration | OAuth2OidcDeclaration | PublicOidcDeclaration;
 
 /** One more authentik application for an app that serves several hostnames (e.g. a media stack). */
 export type AdditionalOidcApp = {
