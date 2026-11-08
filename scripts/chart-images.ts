@@ -3,7 +3,7 @@ import {
   MIRROR_HOST,
   mirrorPrefixes,
   unmirroredChartImages,
-} from "../constants";
+} from "@catalyst/core/constants";
 
 // Also catches refs in args/env, which an `image:` field scan would miss.
 const hostPattern = Object.keys(mirrorPrefixes)
@@ -119,7 +119,7 @@ export function assertChartImagesMirrored(
     throw new Error(
       `Release '${release}' renders images that do not use ${MIRROR_HOST}:\n` +
         unmirrored.map((ref) => `  - ${ref}`).join("\n") +
-        "\nMirror them with `parameters` or add them to unmirroredChartImages in constants.ts.",
+        "\nMirror them with `parameters` or add them to unmirroredChartImages in packages/core/constants.ts.",
     );
   }
 }

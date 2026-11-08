@@ -1,7 +1,9 @@
-import { Project } from "../constants";
-import { StatusGroup, tcpTarget } from "../status";
-import type { StaticApp } from "../types";
-import { mergeValues, mirrorRepository, readYaml } from "../utils";
+import { Project } from "@catalyst/core/constants";
+import { StatusGroup, tcpTarget } from "@catalyst/platform/status";
+import type { StaticApp } from "@catalyst/core/types";
+import { mergeValues } from "@catalyst/core/yaml";
+import { mirrorRepository } from "@catalyst/versions/images";
+import { readYaml } from "@catalyst/core/files";
 import { buildScrapeConfig, scrapeTargets } from "./otel-collector/targets";
 import {
   monitoringNamespace,

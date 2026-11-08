@@ -1,5 +1,5 @@
 import { stringify } from "yaml";
-import { appUrl } from "../../hostnames";
+import { appUrl } from "@catalyst/platform/hostnames";
 import { jellyfinName, jellyfinUrl } from "./common";
 
 const config = {

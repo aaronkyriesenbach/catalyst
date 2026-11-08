@@ -3,11 +3,12 @@ import {
   withNasMounts,
   withOidcClient,
   withPostgres,
-} from "../modifiers";
-import { oidcIssuer } from "../auth";
-import type { WorkloadApp } from "../types";
-import { buildGeneratedSecret, image } from "../utils";
-import { httpCheck, readiness } from "../probes";
+} from "@catalyst/platform/modifiers";
+import { oidcIssuer } from "@catalyst/platform/auth";
+import type { WorkloadApp } from "@catalyst/core/types";
+import { buildGeneratedSecret } from "@catalyst/k8s/secrets";
+import { image } from "@catalyst/versions/images";
+import { httpCheck, readiness } from "@catalyst/k8s/probes";
 
 const name = "shakedown";
 const oidcCredentialsSecret = `${name}-oidc-credentials`;

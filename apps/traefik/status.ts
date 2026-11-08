@@ -6,7 +6,7 @@ import {
   tcpTarget,
   titleCase,
   type StatusTarget,
-} from "../../status";
+} from "@catalyst/platform/status";
 import { externalApps } from "./externalApps.config";
 
 const NFS_PORT = 2049;

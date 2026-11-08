@@ -1,7 +1,7 @@
-import type { WorkloadApp } from "../types";
-import { image } from "../utils";
-import { httpCheck, readiness } from "../probes";
-import { applyModifiers, withIscsiVolumes } from "../modifiers";
+import type { WorkloadApp } from "@catalyst/core/types";
+import { image } from "@catalyst/versions/images";
+import { httpCheck, readiness } from "@catalyst/k8s/probes";
+import { applyModifiers, withIscsiVolumes } from "@catalyst/platform/modifiers";
 
 const base: WorkloadApp = {
   kind: "workload",

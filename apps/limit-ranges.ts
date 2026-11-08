@@ -3,9 +3,9 @@ import {
   defaultContainerResources,
   Project,
   unmanagedNamespaces,
-} from "../constants";
-import type { StaticApp } from "../types";
-import { appNamespace, loadAllAppConfigs } from "../utils";
+} from "@catalyst/core/constants";
+import type { StaticApp } from "@catalyst/core/types";
+import { appNamespace, loadAllAppConfigs } from "@catalyst/core/apps";
 
 const name = "limit-ranges";
 

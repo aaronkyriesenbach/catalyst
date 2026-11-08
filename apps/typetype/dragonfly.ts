@@ -1,6 +1,7 @@
-import type { ResourceLike } from "../../types";
-import { buildDeployment, buildService, image } from "../../utils";
-import { execCheck, readiness } from "../../probes";
+import type { ResourceLike } from "@catalyst/core/types";
+import { buildDeployment, buildService } from "@catalyst/k8s/workload";
+import { image } from "@catalyst/versions/images";
+import { execCheck, readiness } from "@catalyst/k8s/probes";
 
 export const DRAGONFLY_NAME = "dragonfly";
 export const DRAGONFLY_PORT = 6379;

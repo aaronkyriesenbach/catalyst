@@ -1,6 +1,6 @@
-import { Project } from "../constants";
-import type { StaticApp } from "../types";
-import { readYaml } from "../utils";
+import { Project } from "@catalyst/core/constants";
+import type { StaticApp } from "@catalyst/core/types";
+import { readYaml } from "@catalyst/core/files";
 import { certs } from "./traefik/certs";
 import { externalAppResources } from "./traefik/externalApps";
 import { externalGateway, internalGateway } from "./traefik/gateway";

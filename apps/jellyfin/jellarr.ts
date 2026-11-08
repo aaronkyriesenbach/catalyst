@@ -1,11 +1,8 @@
 import { CronJob } from "kubernetes-models/batch/v1";
-import type { ResourceLike } from "../../types";
-import {
-  awsRemoteKey,
-  buildAwsExternalSecret,
-  buildFileConfigMap,
-  image,
-} from "../../utils";
+import type { ResourceLike } from "@catalyst/core/types";
+import { awsRemoteKey, buildAwsExternalSecret } from "@catalyst/k8s/secrets";
+import { buildFileConfigMap } from "@catalyst/k8s/workload";
+import { image } from "@catalyst/versions/images";
 import { restrictedContainer } from "../arr/common";
 import { jellyfinName } from "./common";
 import { buildJellarrYaml } from "./jellarr.config";

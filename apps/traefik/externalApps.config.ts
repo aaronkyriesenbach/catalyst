@@ -1,4 +1,4 @@
-import type { ExternalApp } from "../../types";
+import type { ExternalApp } from "@catalyst/core/types";
 
 export const externalApps: ExternalApp[] = [
   {

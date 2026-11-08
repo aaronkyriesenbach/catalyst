@@ -1,7 +1,8 @@
-import type { ResourceLike } from "../../types";
-import { buildDeployment, buildService, image } from "../../utils";
+import type { ResourceLike } from "@catalyst/core/types";
+import { buildDeployment, buildService } from "@catalyst/k8s/workload";
+import { image } from "@catalyst/versions/images";
 import { YOUTUBE_REMOTE_LOGIN_TOKEN_SECRET } from "./secrets";
-import { httpCheck, readiness, startup } from "../../probes";
+import { httpCheck, readiness, startup } from "@catalyst/k8s/probes";
 
 export const TOKEN_NAME = "typetype-token";
 export const TOKEN_PORT = 8081;

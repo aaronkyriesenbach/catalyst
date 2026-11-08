@@ -1,7 +1,9 @@
-import { applyModifiers, withNasMounts } from "../modifiers";
-import type { WorkloadApp } from "../types";
-import { buildGeneratedSecret, readFile, image } from "../utils";
-import { httpCheck, readiness } from "../probes";
+import { applyModifiers, withNasMounts } from "@catalyst/platform/modifiers";
+import type { WorkloadApp } from "@catalyst/core/types";
+import { buildGeneratedSecret } from "@catalyst/k8s/secrets";
+import { readFile } from "@catalyst/core/files";
+import { image } from "@catalyst/versions/images";
+import { httpCheck, readiness } from "@catalyst/k8s/probes";
 
 const name = "radicale";
 const usersSecretName = `${name}-users`;

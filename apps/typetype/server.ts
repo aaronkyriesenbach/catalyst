@@ -1,6 +1,7 @@
-import type { ResourceLike } from "../../types";
-import { oidcIssuer } from "../../auth";
-import { buildDeployment, buildService, image } from "../../utils";
+import type { ResourceLike } from "@catalyst/core/types";
+import { oidcIssuer } from "@catalyst/platform/auth";
+import { buildDeployment, buildService } from "@catalyst/k8s/workload";
+import { image } from "@catalyst/versions/images";
 import { DRAGONFLY_NAME, DRAGONFLY_PORT } from "./dragonfly";
 import { DOWNLOADER_NAME, DOWNLOADER_PORT } from "./downloader";
 import { TOKEN_NAME, TOKEN_PORT } from "./token";
@@ -8,7 +9,7 @@ import {
   YOUTUBE_REMOTE_LOGIN_TOKEN_SECRET,
   YOUTUBE_SESSION_ENCRYPTION_KEY_SECRET,
 } from "./secrets";
-import { httpCheck, readiness, startup } from "../../probes";
+import { httpCheck, readiness, startup } from "@catalyst/k8s/probes";
 
 export const SERVER_NAME = "typetype-server";
 export const SERVER_PORT = 8080;

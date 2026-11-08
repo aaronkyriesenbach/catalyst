@@ -1,14 +1,11 @@
 import type { IResourceRequirements } from "kubernetes-models/v1";
-import { httpCheck, readiness, startup } from "../../probes";
-import type { ResourceLike, StorageQuantity } from "../../types";
-import {
-  buildDeployment,
-  buildGeneratedSecret,
-  buildIscsiPvc,
-  buildService,
-  image,
-} from "../../utils";
-import type { ImageKey } from "../../versions";
+import { httpCheck, readiness, startup } from "@catalyst/k8s/probes";
+import type { ResourceLike, StorageQuantity } from "@catalyst/core/types";
+import { buildDeployment, buildService } from "@catalyst/k8s/workload";
+import { buildGeneratedSecret } from "@catalyst/k8s/secrets";
+import { buildIscsiPvc } from "@catalyst/k8s/storage";
+import { image } from "@catalyst/versions/images";
+import type { ImageKey } from "@catalyst/versions/versions";
 import {
   arrNamespace,
   mediaMount,

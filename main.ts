@@ -1,12 +1,8 @@
-import { projectDefinitions } from "./constants";
-import {
-  buildApplication,
-  buildProject,
-  loadAllAppConfigs,
-  loadAppConfig,
-  renderAppFromConfig,
-  toYaml,
-} from "./utils";
+import { projectDefinitions } from "@catalyst/core/constants";
+import { buildApplication, buildProject } from "@catalyst/argocd/application";
+import { loadAllAppConfigs, loadAppConfig } from "@catalyst/core/apps";
+import { renderAppFromConfig } from "@catalyst/core/render";
+import { toYaml } from "@catalyst/core/yaml";
 
 const appName = process.env.ARGOCD_ENV_APP;
 

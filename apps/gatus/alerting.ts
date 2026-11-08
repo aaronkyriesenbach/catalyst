@@ -1,5 +1,5 @@
-import { type Severity } from "../../notifications";
-import { StatusGroup } from "../../status";
+import { type Severity } from "@catalyst/platform/notifications";
+import { StatusGroup } from "@catalyst/platform/status";
 import { appriseUrl } from "../apprise";
 import { notifierKey } from "./common";
 

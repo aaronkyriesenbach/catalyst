@@ -1,14 +1,14 @@
 import { Service } from "kubernetes-models/v1";
-import { Project } from "../constants";
-import { StatusGroup, tcpTarget } from "../status";
-import type { StaticApp } from "../types";
+import { Project } from "@catalyst/core/constants";
+import { StatusGroup, tcpTarget } from "@catalyst/platform/status";
+import type { StaticApp } from "@catalyst/core/types";
 import {
   awsRemoteKey,
   buildAwsExternalSecret,
   buildGeneratedSecret,
-  mirrorRepository,
-  readYaml,
-} from "../utils";
+} from "@catalyst/k8s/secrets";
+import { mirrorRepository } from "@catalyst/versions/images";
+import { readYaml } from "@catalyst/core/files";
 import {
   bouncerKeyName,
   bouncerKeySecretName,
@@ -17,7 +17,7 @@ import {
   crowdsecNamespace,
   wafAppsecServiceName,
   wafProfiles,
-} from "../waf";
+} from "@catalyst/platform/waf";
 
 const profiles = Object.entries(wafProfiles);
 

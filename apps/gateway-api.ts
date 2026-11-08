@@ -1,5 +1,5 @@
-import { Project } from "../constants";
-import type { StaticApp } from "../types";
+import { Project } from "@catalyst/core/constants";
+import type { StaticApp } from "@catalyst/core/types";
 
 const VERSION = "v1.6.3";
 

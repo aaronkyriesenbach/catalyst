@@ -1,8 +1,8 @@
-import { Project } from "../constants";
+import { Project } from "@catalyst/core/constants";
 import { Bundle } from "@kubernetes-models/cert-manager/trust.cert-manager.io/v1alpha1";
-import { StatusGroup, tcpTarget } from "../status";
-import type { StaticApp } from "../types";
-import { mirrorRepository } from "../utils";
+import { StatusGroup, tcpTarget } from "@catalyst/platform/status";
+import type { StaticApp } from "@catalyst/core/types";
+import { mirrorRepository } from "@catalyst/versions/images";
 import { certManagerNamespace } from "./cert-manager";
 
 const internalRootCaBundle = new Bundle({

@@ -3,11 +3,12 @@ import {
   withIscsiVolumes,
   withOidcClient,
   withPostgres,
-} from "../modifiers";
-import { oidcDiscoveryUrl } from "../auth";
-import type { WorkloadApp } from "../types";
-import { buildGeneratedSecret, image } from "../utils";
-import { httpCheck, readiness, startup } from "../probes";
+} from "@catalyst/platform/modifiers";
+import { oidcDiscoveryUrl } from "@catalyst/platform/auth";
+import type { WorkloadApp } from "@catalyst/core/types";
+import { buildGeneratedSecret } from "@catalyst/k8s/secrets";
+import { image } from "@catalyst/versions/images";
+import { httpCheck, readiness, startup } from "@catalyst/k8s/probes";
 
 const name = "linkwarden";
 const oidcCredentialsSecret = `${name}-oidc-credentials`;

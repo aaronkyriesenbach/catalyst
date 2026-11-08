@@ -1,6 +1,6 @@
 import type { IContainer, IProbe } from "kubernetes-models/v1";
 import { appHostname, type HostOptions } from "./hostnames";
-import type { AppConfig, WorkloadApp } from "./types";
+import type { AppConfig, WorkloadApp } from "@catalyst/core/types";
 
 export enum StatusGroup {
   Apps = "Apps",

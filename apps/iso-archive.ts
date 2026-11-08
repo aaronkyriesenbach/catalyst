@@ -1,8 +1,9 @@
 import { CronJob } from "kubernetes-models/batch/v1";
-import { weeklyOn } from "../cron";
-import { nasVolume, nasVolumeMounts } from "../modifiers";
-import type { StaticApp } from "../types";
-import { buildFileConfigMap, readFile } from "../utils";
+import { weeklyOn } from "@catalyst/k8s/cron";
+import { nasVolume, nasVolumeMounts } from "@catalyst/platform/modifiers";
+import type { StaticApp } from "@catalyst/core/types";
+import { buildFileConfigMap } from "@catalyst/k8s/workload";
+import { readFile } from "@catalyst/core/files";
 
 const name = "iso-archive";
 const scriptsConfigMapName = `${name}-scripts`;

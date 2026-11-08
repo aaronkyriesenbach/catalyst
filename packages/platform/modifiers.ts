@@ -12,27 +12,25 @@ import {
   oidcIssuer,
   oidcSecretName,
 } from "./auth";
-import { buildBackupResources } from "./backup";
-import type { CronExpression } from "./cron";
-import { postgresProbes } from "./probes";
+import { buildBackupResources } from "@catalyst/k8s/backup";
+import type { CronExpression } from "@catalyst/k8s/cron";
+import { postgresProbes } from "@catalyst/k8s/probes";
 import type {
   OAuth2OidcDeclaration,
   ResourceLike,
   StorageQuantity,
   WorkloadApp,
-} from "./types";
+} from "@catalyst/core/types";
 import {
   AWS_STORE,
   awsRemoteKey,
-  buildHeadlessService,
-  buildIscsiPvc,
-  buildIscsiPvcTemplate,
-  buildStatefulSet,
-  postgresImage,
   ROTATING_CONSUMER_REFRESH_INTERVAL,
   STATIC_CONSUMER_REFRESH_INTERVAL,
-} from "./utils";
-import type { PostgresMajor } from "./versions";
+} from "@catalyst/k8s/secrets";
+import { buildHeadlessService, buildStatefulSet } from "@catalyst/k8s/workload";
+import { buildIscsiPvc, buildIscsiPvcTemplate } from "@catalyst/k8s/storage";
+import { postgresImage } from "@catalyst/versions/images";
+import type { PostgresMajor } from "@catalyst/versions/versions";
 import type { WafOptions } from "./waf";
 
 export type NasMountConfig = {

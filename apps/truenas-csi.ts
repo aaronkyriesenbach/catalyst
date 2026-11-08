@@ -1,8 +1,8 @@
 import { StorageClass } from "kubernetes-models/storage.k8s.io/v1";
 import { parseAllDocuments } from "yaml";
-import { Project } from "../constants";
-import type { ResourceLike, StaticApp } from "../types";
-import { readFile } from "../utils";
+import { Project } from "@catalyst/core/constants";
+import type { ResourceLike, StaticApp } from "@catalyst/core/types";
+import { readFile } from "@catalyst/core/files";
 
 const deployYaml = await readFile("./truenas-csi/deploy.yaml", import.meta.url);
 

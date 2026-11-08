@@ -1,6 +1,7 @@
 import { HTTPRoute } from "@kubernetes-models/gateway-api/gateway.networking.k8s.io/v1";
 import { Middleware } from "@kubernetes-models/traefik/traefik.io/v1alpha1/Middleware";
-import { appHostname, extensionRefFilter } from "../../utils";
+import { appHostname } from "@catalyst/platform/hostnames";
+import { extensionRefFilter } from "@catalyst/k8s/route";
 
 const namespace = "kyoo";
 

@@ -1,7 +1,7 @@
-import { Project } from "../constants";
-import { StatusGroup, tcpTarget } from "../status";
-import type { StaticApp } from "../types";
-import { awsRemoteKey, buildAwsExternalSecret } from "../utils";
+import { Project } from "@catalyst/core/constants";
+import { StatusGroup, tcpTarget } from "@catalyst/platform/status";
+import type { StaticApp } from "@catalyst/core/types";
+import { awsRemoteKey, buildAwsExternalSecret } from "@catalyst/k8s/secrets";
 import { internalCaResources } from "./cert-manager/internal-ca";
 import { issuers } from "./cert-manager/issuers";
 

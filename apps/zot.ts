@@ -1,8 +1,10 @@
-import { Project } from "../constants";
-import { applyModifiers, withIscsiVolumes } from "../modifiers";
-import { httpCheck, readiness, startup } from "../probes";
-import type { WorkloadApp } from "../types";
-import { buildFileConfigMap, image, readFile } from "../utils";
+import { Project } from "@catalyst/core/constants";
+import { applyModifiers, withIscsiVolumes } from "@catalyst/platform/modifiers";
+import { httpCheck, readiness, startup } from "@catalyst/k8s/probes";
+import type { WorkloadApp } from "@catalyst/core/types";
+import { buildFileConfigMap } from "@catalyst/k8s/workload";
+import { image } from "@catalyst/versions/images";
+import { readFile } from "@catalyst/core/files";
 
 const name = "zot";
 const configConfigMapName = `${name}-config`;

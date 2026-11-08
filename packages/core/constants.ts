@@ -1,5 +1,5 @@
 import type { ProjectSpec } from "./types";
-import type { ImageRegistry } from "./versions";
+import type { ImageRegistry } from "@catalyst/versions/versions";
 
 export const MIRROR_HOST = "zot.int.lab53.net";
 

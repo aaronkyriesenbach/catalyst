@@ -3,7 +3,7 @@ import {
   alertSeverities,
   alertSeverityOverrides,
   type Severity,
-} from "../../notifications";
+} from "@catalyst/platform/notifications";
 
 // Must be listed in `appriseNotifiers`.
 export const notifierKey = "victoria-metrics";

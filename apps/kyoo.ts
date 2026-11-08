@@ -1,14 +1,19 @@
-import { oidcEndpointUrl } from "../auth";
-import { buildPostgresResources, defineOidcClient } from "../modifiers";
+import { oidcEndpointUrl } from "@catalyst/platform/auth";
+import {
+  buildPostgresResources,
+  defineOidcClient,
+} from "@catalyst/platform/modifiers";
 import {
   httpTarget,
   routeTargets,
   serviceUrl,
   StatusGroup,
   tcpTarget,
-} from "../status";
-import type { StaticApp } from "../types";
-import { buildGeneratedSecret, mirrorRepository, readYaml } from "../utils";
+} from "@catalyst/platform/status";
+import type { StaticApp } from "@catalyst/core/types";
+import { buildGeneratedSecret } from "@catalyst/k8s/secrets";
+import { mirrorRepository } from "@catalyst/versions/images";
+import { readYaml } from "@catalyst/core/files";
 import { middlewares, route } from "./kyoo/routes";
 
 const name = "kyoo";

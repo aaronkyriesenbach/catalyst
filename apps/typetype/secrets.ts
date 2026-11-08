@@ -1,5 +1,5 @@
-import type { ResourceLike } from "../../types";
-import { buildGeneratedSecret } from "../../utils";
+import type { ResourceLike } from "@catalyst/core/types";
+import { buildGeneratedSecret } from "@catalyst/k8s/secrets";
 
 export const YOUTUBE_REMOTE_LOGIN_TOKEN_SECRET = "typetype-youtube-login-token";
 export const YOUTUBE_SESSION_ENCRYPTION_KEY_SECRET =
