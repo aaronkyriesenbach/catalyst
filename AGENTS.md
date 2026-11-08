@@ -32,7 +32,7 @@ catalyst/
 bun run render <app-name>                    # Render single app to stdout YAML (verify changes)
 bun run sync-external-certs [--dry-run]      # Pull TLS certs from cluster via kubectl
 bun run typecheck                            # tsc --noEmit
-bun run validate                             # Check the app catalog: unique hostnames
+bun run validate                             # Render every app and fail on a hostname served by two HTTPRoutes (remote resources and Helm charts are not rendered)
 bun run secrets [--json]                     # List every AWS Secrets Manager key the cluster uses (generated vs external)
 bun run render-all <outdir>                  # Render every app + project + enumerate-all into <outdir> (what CI runs)
 bun run render-charts <outdir>               # render-chart for every app with helmReleases (needs helm)

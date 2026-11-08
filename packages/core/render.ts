@@ -116,10 +116,13 @@ function withAnnotations(
   };
 }
 
-async function renderStatic(config: StaticApp): Promise<string[]> {
+async function renderStatic(
+  config: StaticApp,
+  fetchRemote: boolean,
+): Promise<string[]> {
   const results = config.resources?.map((r) => toYaml(r)) ?? [];
 
-  for (const url of config.remoteResources ?? []) {
+  for (const url of fetchRemote ? (config.remoteResources ?? []) : []) {
     const response = await fetch(url);
 
     if (!response.ok) {
@@ -143,17 +146,18 @@ async function renderStatic(config: StaticApp): Promise<string[]> {
   return results;
 }
 
-export async function renderAppFromConfig(config: AppConfig) {
-  let resources: string[];
-
+export async function renderApp(
+  config: AppConfig,
+  options: { fetchRemote?: boolean } = {},
+): Promise<string[]> {
   switch (config.kind) {
     case "workload":
-      resources = renderWorkload(config);
-      break;
+      return renderWorkload(config);
     case "static":
-      resources = await renderStatic(config);
-      break;
+      return renderStatic(config, options.fetchRemote ?? true);
   }
+}
 
-  console.log(resources.join("\n---\n"));
+export async function renderAppFromConfig(config: AppConfig) {
+  console.log((await renderApp(config)).join("\n---\n"));
 }
