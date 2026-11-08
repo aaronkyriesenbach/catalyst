@@ -11,7 +11,13 @@ import {
   image,
 } from "../utils";
 import { appriseNotifiers, appriseUrl } from "./apprise";
-import { healthchecksUrl } from "./healthchecks";
+import {
+  gatusName,
+  gatusUrl,
+  heartbeatKey,
+  heartbeatSecretKey,
+  heartbeatSecretName,
+} from "./gatus/common";
 import { traefikNamespace } from "./traefik";
 import {
   externalAppBackendCertSecretName,
@@ -27,7 +33,7 @@ type DeployApp = ExternalApp & {
 const scriptConfigMapName = "external-cert-deployer-script";
 const scriptFileName = "deploy-external-certs.ts";
 const appName = "external-cert-deployer";
-const pingKeySecretName = "healthchecks-ping-key";
+
 const awsStoreName = "aws-secrets-manager";
 const imageRef = image("bun");
 
@@ -70,19 +76,18 @@ function credentialEnv(app: DeployApp): IEnvVar[] {
   }
 }
 
-// Created after Healthchecks is up; until then the optional env skips pings.
-const pingKeySecret = new ExternalSecret({
-  metadata: { name: pingKeySecretName },
+const heartbeatSecret = new ExternalSecret({
+  metadata: { name: heartbeatSecretName },
   spec: {
     refreshInterval: "1h",
     secretStoreRef: AWS_STORE,
-    target: { name: pingKeySecretName },
+    target: { name: heartbeatSecretName },
     data: [
       {
-        secretKey: "ping-key",
+        secretKey: heartbeatSecretKey,
         remoteRef: {
-          key: awsRemoteKey(traefikNamespace, pingKeySecretName),
-          property: "ping-key",
+          key: awsRemoteKey(gatusName, heartbeatSecretName),
+          property: heartbeatSecretKey,
         },
       },
     ],
@@ -97,14 +102,14 @@ function notifyEnv(app: DeployApp): IEnvVar[] {
   return [
     { name: "APPRISE_URL", value: appriseUrl },
     { name: "APPRISE_KEY", value: appName },
-    { name: "HEALTHCHECK_URL", value: `${healthchecksUrl}/ping` },
-    { name: "HEALTHCHECK_SLUG", value: cronJobName(app) },
+    { name: "GATUS_URL", value: gatusUrl },
+    { name: "GATUS_ENDPOINT_KEY", value: heartbeatKey(cronJobName(app)) },
     {
-      name: "HEALTHCHECK_PING_KEY",
+      name: "GATUS_TOKEN",
       valueFrom: {
         secretKeyRef: {
-          name: pingKeySecretName,
-          key: "ping-key",
+          name: heartbeatSecretName,
+          key: heartbeatSecretKey,
           optional: true,
         },
       },
@@ -210,7 +215,7 @@ function buildCronJob(app: DeployApp, schedule: string): CronJob {
 
 const resources: ResourceLike[] = [
   scriptConfigMap,
-  pingKeySecret,
+  heartbeatSecret,
   ...deployApps.flatMap((app, index) => [
     buildCredentialsSecret(app),
     buildCronJob(app, schedules[index % schedules.length] ?? "0 * * * *"),
@@ -219,6 +224,9 @@ const resources: ResourceLike[] = [
 
 const config: StaticApp = {
   kind: "static",
+  status: {
+    exempt: "Pushes heartbeats to Gatus instead; see apps/gatus.ts",
+  },
   name: appName,
   namespace: traefikNamespace,
   project: Project.SYSTEM,

@@ -241,7 +241,7 @@ fallback is a `unifi-ssh` strategy on a small custom image, scoped to UniFi only
    strategies added to the three entries in `externalApps.config.ts`.
 3. ✅ `scripts/deploy-external-certs.ts` — self-contained Bun deploy script
    (TLS-probe → SHA-256 compare → per-strategy deploy), with no-op `notify()`
-   (Apprise) + Healthchecks ping hooks gated on env.
+   (Apprise) + Gatus heartbeat push gated on env.
 4. ✅ `apps/external-cert-deployer.ts` — `StaticApp` (namespace `traefik`)
    rendering the script ConfigMap + one ExternalSecret + one staggered CronJob
    per appliance. Verified via `bun run render`.
@@ -343,7 +343,7 @@ cert-deploy CronJob ─(on failure)───────────────
                                     ntfy (self-host) ──push──> phone (iOS/Android)
                                                           AWS SES ──> inbox
 
-cert-deploy CronJob ──(on success) ping──> Healthchecks ──(missed ping)──> Apprise
+cert-deploy CronJob ──(on every run) heartbeat──> Gatus ──(missed or failed)──> Apprise
 ```
 
 **1. Apprise API — the universal gateway (the reusable layer).**
@@ -372,20 +372,21 @@ SMTP creds pulled from AWS Secrets Manager via ESO.) Note **SES sandbox** — a
 verified domain/sender and likely a production-access request are needed to email
 arbitrary recipients.
 
-**4. Healthchecks — dead-man-switch for "the job never ran".**
-`healthchecks/healthchecks` self-hosted. The cert-deploy CronJobs **ping on
-success**; Healthchecks alerts when a ping is _missed_. This catches the failure
+**4. Gatus — dead-man-switch for "the job never ran".**
+Self-hosted Gatus (`apps/gatus.ts`). Each cert-deploy CronJob **pushes its result**
+to a Gatus external endpoint; Gatus alerts when a push fails or no push arrives
+within the heartbeat interval. This catches the failure
 modes in-script notification cannot — pod crash-before-script, image-pull
-failure, the CronJob never being scheduled. Its own alerts route to email and/or
-the Apprise webhook.
+failure, the CronJob never being scheduled. Its alerts route to Apprise as
+`critical` (email only).
 
 ### How the cert-deploy jobs use it
 
 - **Handled failure** (probe/deploy threw) → the script POSTs to Apprise with
-  `tag=critical` → push + email immediately. Include appliance, error, cert
+  `tag=critical` → email immediately. Include appliance, error, cert
   fingerprints.
-- **Success** → `curl` ping to the job's Healthchecks check.
-- **Never ran / crashed** → Healthchecks notices the missing ping and alerts.
+- **Every run** → heartbeat push to the job's Gatus endpoint (success or failure).
+- **Never ran / crashed** → Gatus notices the missing heartbeat and alerts.
 
 This two-layer approach (in-script notify + dead-man-switch) is the right weight
 for a 3-appliance homelab. **Prometheus/Alertmanager is intentionally skipped** —
@@ -402,8 +403,8 @@ alerting is later desired.
    config defining `push`/`email`/`critical` tag routing to ntfy + `ses://`.
 3. Set up AWS SES: verify a sender/domain, request production access, and grant
    the Apprise pod an IRSA role with `ses:SendEmail` (no static creds).
-4. `apps/healthchecks.ts` — self-hosted Healthchecks; create a check per
-   cert-deploy CronJob.
+4. `apps/gatus.ts` — self-hosted Gatus; one heartbeat endpoint per
+   cert-deploy CronJob, generated from `externalApps`.
 5. Wire the cert-deploy script: done in `apps/external-cert-deployer.ts` (see
    the Notifications section of `AGENTS.md`).
 
@@ -419,5 +420,5 @@ shared notification control plane** observability will plug into. When the metri
 stack lands, **Alertmanager routes to Apprise via webhook** → same push/email and
 tag routing, zero rework. To keep that seam clean, the Apprise tag taxonomy
 (`severity:info|warn|critical` + a domain tag) should be fixed up front so future
-Alertmanager routes map onto it directly. Until then, Healthchecks covers the
+Alertmanager routes map onto it directly. Until then, Gatus covers the
 cron dead-man-switch coverage you'd otherwise need `kube_job_failed` for.

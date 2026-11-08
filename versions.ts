@@ -151,9 +151,9 @@ export const images = {
     tag: "2.0.2",
     mirrored: true,
   },
-  healthchecks: {
-    name: "docker.io/healthchecks/healthchecks",
-    tag: "v4.4",
+  gatus: {
+    name: "ghcr.io/twin/gatus",
+    tag: "v5.38.0",
     mirrored: true,
   },
   cloudflared: {

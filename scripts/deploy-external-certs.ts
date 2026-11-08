@@ -72,21 +72,30 @@ async function notify(
   }
 }
 
-async function pingHealthcheck(ok: boolean): Promise<void> {
-  const baseUrl = process.env.HEALTHCHECK_URL;
-  const pingKey = process.env.HEALTHCHECK_PING_KEY;
-  const slug = process.env.HEALTHCHECK_SLUG;
+async function pushHeartbeat(ok: boolean): Promise<void> {
+  const baseUrl = process.env.GATUS_URL;
+  const key = process.env.GATUS_ENDPOINT_KEY;
+  const token = process.env.GATUS_TOKEN;
 
-  if (!baseUrl || !pingKey || !slug) {
+  if (!baseUrl || !key || !token) {
     return;
   }
 
-  const base = `${baseUrl}/${pingKey}/${slug}`;
+  const query = ok
+    ? "success=true"
+    : "success=false&error=cert%20deploy%20failed";
 
   try {
-    await fetch(ok ? base : `${base}/fail`, { method: "GET" });
+    const response = await fetch(
+      `${baseUrl}/api/v1/endpoints/${key}/external?${query}`,
+      { method: "POST", headers: { Authorization: `Bearer ${token}` } },
+    );
+
+    if (!response.ok) {
+      console.error(`heartbeat rejected: ${response.status}`);
+    }
   } catch (error) {
-    console.error("healthcheck ping failed:", error);
+    console.error("heartbeat push failed:", error);
   }
 }
 
@@ -621,7 +630,7 @@ async function main(): Promise<void> {
     );
   }
 
-  await pingHealthcheck(true);
+  await pushHeartbeat(true);
 }
 
 try {
@@ -629,7 +638,7 @@ try {
 } catch (error) {
   const message = errorMessage(error);
   await notify("failure", "Cert deploy FAILED", message);
-  await pingHealthcheck(false);
+  await pushHeartbeat(false);
   console.error(message);
   process.exit(1);
 }
