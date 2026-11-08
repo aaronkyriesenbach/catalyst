@@ -39,7 +39,7 @@ async function buildCatalog(): Promise<Catalog> {
 
   for (const cluster of listClusters()) {
     for (const file of listAppFiles(cluster)) {
-      entries.push({ cluster, config: await importApp(cluster, file) });
+      entries.push({ cluster, file, config: await importApp(cluster, file) });
     }
   }
 

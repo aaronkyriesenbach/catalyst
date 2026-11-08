@@ -15,7 +15,7 @@ export type WorkloadStrategy = Pick<IDeploymentStrategy, "type">;
 export type ProjectSpec = IAppProject["spec"];
 
 export type ResourceLike =
-  Model<unknown> | { toJSON(): unknown } | Record<string, unknown>;
+  Model<object> | { toJSON(): object } | Record<string, unknown>;
 
 /** Kubernetes binary storage quantity, e.g. "10Gi", "1Ti". */
 export type StorageQuantity = `${number}${"Ki" | "Mi" | "Gi" | "Ti" | "Pi"}`;
@@ -107,7 +107,11 @@ export type StaticApp = BaseApp & {
 
 export type AppConfig = WorkloadApp | StaticApp;
 
-export type CatalogEntry = { cluster: string; config: AppConfig };
+export type CatalogEntry = {
+  cluster: string;
+  file: string;
+  config: AppConfig;
+};
 
 export type Catalog = {
   readonly entries: readonly CatalogEntry[];
