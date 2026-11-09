@@ -351,7 +351,7 @@ export const helmCharts = {
   omni: {
     kind: "oci",
     chart: "oci://ghcr.io/siderolabs/charts/omni",
-    version: "2.13.1",
+    version: "2.13.3",
   },
 } as const satisfies Record<string, HelmChartEntry>;
 
