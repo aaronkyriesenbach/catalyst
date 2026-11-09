@@ -12,7 +12,8 @@ catalyst/
 │   └── cluster0/            # One directory per cluster; everything about that cluster lives here
 │       ├── cluster.ts       # Cluster definition: network, VIPs, tunnel, Argo projects
 │       ├── apps/            # Each top-level *.ts exports default AppConfig (apps/<name>/ holds its values, scripts, helpers)
-│       ├── bootstrap/       # Applied by hand: ArgoCD Helm values, root Application
+│       ├── infra/           # Infrastructure that can be applied by an infrastructure tool like Pulumi or OpenTofu
+│       ├── bootstrap/       # Manually-applied config/infra, if there is any. An IaC tool (above) should always be used if possible.
 │       ├── tools/           # Cluster-specific CLIs (sync-external-certs)
 │       └── AGENTS.md        # Services and wiring specific to this cluster
 ├── packages/                # Libraries, imported as @catalyst/<package>/<module>; never import from clusters/
