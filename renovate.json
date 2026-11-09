@@ -54,6 +54,16 @@
       "datasourceTemplate": "docker",
       "versioningTemplate": "semver",
       "depTypeTemplate": "helm-chart"
+    },
+    {
+      "description": "Infrastructure pins in versions.ts (infraVersions): Talos, Kubernetes, Gateway API CRDs and standalone manifests, looked up as GitHub releases.",
+      "customType": "regex",
+      "managerFilePatterns": ["/^packages\\/versions\\/versions\\.ts$/"],
+      "matchStrings": [
+        "source:\\s*\"github-releases\",\\s*name:\\s*\"(?<depName>[^\"]+)\",\\s*version:\\s*\"(?<currentValue>[^\"]+)\""
+      ],
+      "datasourceTemplate": "github-releases",
+      "depTypeTemplate": "infra"
     }
   ],
   "helm-values": {
@@ -161,6 +171,26 @@
       "description": "linuxserver also publishes Ubuntu-style tags such as 20.04.1 that look like a major update; only accept plain x.y.z app versions.",
       "matchPackageNames": ["docker.io/linuxserver/qbittorrent"],
       "allowedVersions": "/^[1-9]\\.\\d+\\.\\d+$/"
+    },
+    {
+      "description": "Denylist, never auto-merge (minors included): Talos upgrades reboot every node of the Omni cluster, and Kubernetes must stay inside the range that Talos release supports.",
+      "matchPackageNames": ["siderolabs/talos", "kubernetes/kubernetes"],
+      "automerge": false
+    },
+    {
+      "description": "Cilium 1.20 supports Gateway API v1.6.x; raise the CRDs together with Cilium, never ahead of it.",
+      "matchPackageNames": ["kubernetes-sigs/gateway-api"],
+      "allowedVersions": "/^v1\\.6\\./",
+      "automerge": false
+    },
+    {
+      "description": "Denylist, never auto-merge (minors included): the CNI and the Omni release of the root-of-trust cluster, plus its Proxmox infra provider.",
+      "matchPackageNames": [
+        "cilium",
+        "ghcr.io/siderolabs/charts/omni",
+        "ghcr.io/siderolabs/omni-infra-provider-proxmox"
+      ],
+      "automerge": false
     },
     {
       "description": "Disabled: floating or compound tags Renovate cannot order, and Postgres majors (see docs/postgres-migration.md).",

@@ -1,0 +1,8 @@
+config:
+  omni-platform:clusterStack: PLACEHOLDER-ORG/omni-cluster/prod
+  omni-platform:acmeEmail: aaron@lab53.net
+  omni-platform:omniEnabled: "false"
+  aws:profile: PLACEHOLDER
+  aws:region: us-east-1
+  unifi:apiUrl: https://192.168.1.1
+  unifi:allowInsecure: "true"

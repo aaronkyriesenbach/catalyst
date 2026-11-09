@@ -1,10 +1,11 @@
 import {
   helmCharts,
   images,
+  infraVersions,
   postgresImages,
 } from "@catalyst/versions/versions";
 
-type Datasource = "docker" | "helm";
+type Datasource = "docker" | "helm" | "github-releases";
 
 type CustomManager = {
   managerFilePatterns: string[];
@@ -84,6 +85,12 @@ const checks: Check[] = [
     datasource: "docker",
     depType: "helm-chart",
     expected: helmEntries.filter((entry) => entry.kind === "oci").length,
+  },
+  {
+    label: "infra versions",
+    datasource: "github-releases",
+    depType: "infra",
+    expected: Object.keys(infraVersions).length,
   },
 ];
 

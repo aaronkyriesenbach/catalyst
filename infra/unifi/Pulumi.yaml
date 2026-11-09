@@ -1,0 +1,3 @@
+name: lab-unifi
+description: Lab VLANs, firewall zones and inter-zone policies for UniFi.
+runtime: bun

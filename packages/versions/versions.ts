@@ -226,6 +226,21 @@ export const images = {
     tag: "1.39.1",
     mirrored: true,
   },
+  omniInfraProviderProxmox: {
+    name: "ghcr.io/siderolabs/omni-infra-provider-proxmox",
+    tag: "v0.3.0",
+    mirrored: false,
+  },
+  etcd: {
+    name: "quay.io/coreos/etcd",
+    tag: "v3.7.3",
+    mirrored: false,
+  },
+  awsCli: {
+    name: "docker.io/amazon/aws-cli",
+    tag: "2.39.6",
+    mirrored: false,
+  },
 } as const satisfies Record<string, ImageEntry>;
 
 export const postgresImages = {
@@ -321,7 +336,53 @@ export const helmCharts = {
     chart: "opentelemetry-collector",
     version: "0.178.1",
   },
+  cilium: {
+    kind: "repo",
+    repo: "https://helm.cilium.io",
+    chart: "cilium",
+    version: "1.20.4",
+  },
+  dex: {
+    kind: "repo",
+    repo: "https://charts.dexidp.io",
+    chart: "dex",
+    version: "0.26.0",
+  },
+  omni: {
+    kind: "oci",
+    chart: "oci://ghcr.io/siderolabs/charts/omni",
+    version: "2.13.1",
+  },
 } as const satisfies Record<string, HelmChartEntry>;
+
+export type InfraVersionEntry = {
+  readonly source: "github-releases";
+  readonly name: string;
+  readonly version: string;
+};
+
+export const infraVersions = {
+  talos: {
+    source: "github-releases",
+    name: "siderolabs/talos",
+    version: "v1.14.5",
+  },
+  kubernetes: {
+    source: "github-releases",
+    name: "kubernetes/kubernetes",
+    version: "v1.37.1",
+  },
+  gatewayApiCrds: {
+    source: "github-releases",
+    name: "kubernetes-sigs/gateway-api",
+    version: "v1.6.3",
+  },
+  kubeletServingCertApprover: {
+    source: "github-releases",
+    name: "alex1989hu/kubelet-serving-cert-approver",
+    version: "v0.12.1",
+  },
+} as const satisfies Record<string, InfraVersionEntry>;
 
 export type ImageKey = keyof typeof images;
 export type PostgresMajor = keyof typeof postgresImages;

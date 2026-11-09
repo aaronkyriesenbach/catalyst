@@ -9,7 +9,11 @@ export function appsDirectory(root: string = process.cwd()): string {
   }
 
   const clusters = readdirSync(clustersDir, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
+    .filter(
+      (entry) =>
+        entry.isDirectory() &&
+        existsSync(join(clustersDir, entry.name, "apps")),
+    )
     .map((entry) => entry.name);
   const requested = process.env.ARGOCD_ENV_CLUSTER;
   const cluster = requested

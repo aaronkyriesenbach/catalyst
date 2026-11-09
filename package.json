@@ -20,12 +20,25 @@
     "@kubernetes-models/external-secrets": "^2.0.0",
     "@kubernetes-models/gateway-api": "^2.0.0",
     "@kubernetes-models/traefik": "^2.0.0",
+    "@muhlba91/pulumi-proxmoxve": "8.6.0",
+    "@pulumi/aws": "7.54.0",
+    "@pulumi/command": "1.3.0",
+    "@pulumi/kubernetes": "4.34.3",
+    "@pulumi/pulumi": "3.274.1",
+    "@pulumi/random": "4.21.6",
+    "@pulumi/tls": "5.6.3",
+    "@pulumiverse/talos": "0.8.1",
+    "@pulumiverse/unifi": "0.3.1",
     "kubernetes-models": "5.1.0",
-    "yaml": "^2.7.0"
+    "yaml": "^2.7.0",
+    "@pulumi/omni": "file:clusters/omni/infra/config/sdks/omni"
   },
   "devDependencies": {
     "bun-types": "^1.3.11",
     "prettier": "^3.9.6",
     "typescript": "^7.0.2"
-  }
+  },
+  "trustedDependencies": [
+    "@pulumi/omni"
+  ]
 }

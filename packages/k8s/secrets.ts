@@ -12,6 +12,7 @@ import {
   type IPasswordSpec,
 } from "@kubernetes-models/external-secrets/generators.external-secrets.io/v1alpha1";
 import { cluster } from "@catalyst/core/cluster";
+import { site } from "@catalyst/site";
 import { awsSecretStoreRef, clusterGeneratorRef } from "./external-secrets";
 
 export type PasswordEncoding =
@@ -42,7 +43,7 @@ type GeneratedSecretOptions = {
 export const ROTATING_CONSUMER_REFRESH_INTERVAL = "1m";
 export const STATIC_CONSUMER_REFRESH_INTERVAL = "1h";
 
-const PUSH_SECRET_PREFIX = `lab53/${cluster.name}`;
+const PUSH_SECRET_PREFIX = `${site.awsSecretsPrefix}/${cluster.name}`;
 
 export function awsRemoteKey(namespace: string, name: string): string {
   return `${PUSH_SECRET_PREFIX}/${namespace}/${name}`;

@@ -1,0 +1,5 @@
+config:
+  omni-cluster:insecure: "true"
+  omni-cluster:sshUser: root
+  unifi:apiUrl: https://192.168.1.1
+  unifi:allowInsecure: "true"

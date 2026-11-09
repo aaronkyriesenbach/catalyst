@@ -1,0 +1,4 @@
+config:
+  lab-proxmox:insecure: "true"
+  lab-proxmox:sshUser: root
+  lab-proxmox:enableFirewall: "false"

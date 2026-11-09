@@ -1,4 +1,4 @@
-import { readdirSync } from "node:fs";
+import { existsSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import type { Cluster, ClusterDefinition } from "./types";
 
@@ -6,9 +6,13 @@ export const CLUSTERS_DIR = fileURLToPath(
   new URL("../../clusters/", import.meta.url),
 );
 
+// A directory without apps/ (clusters/omni) is Pulumi-only, not a catalyst cluster.
 export function listClusters(): string[] {
   return readdirSync(CLUSTERS_DIR, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
+    .filter(
+      (entry) =>
+        entry.isDirectory() && existsSync(`${CLUSTERS_DIR}${entry.name}/apps`),
+    )
     .map((entry) => entry.name)
     .sort((a, b) => a.localeCompare(b));
 }

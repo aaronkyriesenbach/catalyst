@@ -1,0 +1,3 @@
+name: lab-proxmox
+description: Lab-wide Proxmox VE configuration.
+runtime: bun

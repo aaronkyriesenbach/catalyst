@@ -1,0 +1,3 @@
+config:
+  omni-config:clusterStack: PLACEHOLDER-ORG/omni-cluster/prod
+  omni-config:proxmoxStack: PLACEHOLDER-ORG/lab-proxmox/prod

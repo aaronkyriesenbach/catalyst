@@ -7,8 +7,9 @@ Kubernetes infrastructure-as-TypeScript repo. Defines cluster apps as typed conf
 ```text
 catalyst/
 ├── main.ts                  # CMP entrypoint: single app (ARGOCD_ENV_APP = file name) or enumerate every app of the target cluster
-├── site.ts                  # Site-wide facts shared by every cluster: domain, NAS, mirror, Cloudflare zone, LimitRange defaults
+├── site.ts                  # Site-wide facts shared by every cluster: domain, NAS, mirror, Cloudflare zone, LimitRange defaults, and the typed IPAM (VLANs, allocations, PVE nodes)
 ├── clusters/
+│   ├── omni/                # Talos cluster that runs Omni; Pulumi only, no apps/ (see clusters/omni/AGENTS.md)
 │   └── cluster0/            # One directory per cluster; everything about that cluster lives here
 │       ├── cluster.ts       # Cluster definition: network, VIPs, tunnel, Argo projects
 │       ├── apps/            # Each top-level *.ts exports default AppConfig (apps/<name>/ holds its values, scripts, helpers)
@@ -16,8 +17,10 @@ catalyst/
 │       ├── bootstrap/       # Manually-applied config/infra, if there is any. An IaC tool (above) should always be used if possible.
 │       ├── tools/           # Cluster-specific CLIs (sync-external-certs)
 │       └── AGENTS.md        # Services and wiring specific to this cluster
+├── infra/                   # Lab-wide Pulumi projects: proxmox (PVE config, bootstrap/) and unifi (VLANs, zones, policies)
 ├── packages/                # Libraries, imported as @catalyst/<package>/<module>; never import from clusters/
-│   ├── core/                # types, app loader and catalog, render pipeline, validation, cluster selection
+│   ├── core/                # types, app loader and catalog, render pipeline, validation, cluster selection, network (typed IPAM)
+│   ├── infra/               # Reusable Pulumi modules: Talos cluster and patches, Proxmox VM, Helm release, locked-down namespace
 │   ├── k8s/                 # Builders: workload, route, secrets, storage, probes, cron, backup
 │   ├── argocd/              # Application and AppProject builders
 │   ├── platform/            # auth (authentik), waf, status, notifications, hostnames, modifiers
@@ -51,6 +54,8 @@ bunx prettier --write .                      # Format the repo (config: .prettie
 
 - **One directory per cluster** under `clusters/`. The target cluster is `ARGOCD_ENV_CLUSTER`; with a single cluster directory it defaults to that one. `import { cluster } from "@catalyst/core/cluster"` gives the target cluster's definition, and `cluster.name` is the directory name (`cluster.ts` does not declare it).
 - **`site.ts` vs `cluster.ts`**: `site.ts` holds facts that are the same for every cluster (domain, NAS, mirror, Cloudflare zone). `cluster.ts` holds what varies per cluster (pod and service CIDRs, VIPs, tunnel id, Argo projects, unmanaged namespaces, unmirrored chart images). Values another toolchain (OpenTofu, Omni) also needs belong in a plain YAML file both can read, not in either TS file.
+- **Addressing is typed, not validated**: every lab VLAN and address lives in `site.network` (`site.ts`), shaped by `packages/core/network.ts`. VLANs and host octets are object keys drawn from literal unions, so a duplicate VLAN or address, an octet outside its block, or an address in the wrong VLAN fails `bun run typecheck`. Read addresses with `ipOf`/`allocationsOf` instead of typing them; do not add a runtime validator.
+- **Pulumi projects** (`infra/*`, `clusters/<name>/infra/*`) are TypeScript on the Bun runtime with one stack, `prod`, on Pulumi Cloud. Chart, image and Talos/Kubernetes versions come from `versions.ts` (`helmCharts`, `images`, `infraVersions`), never from the project. Run Pulumi as `mise x pulumi@3.274.1 -- pulumi ...` until it is in the global mise config. The runbook is `clusters/omni/infra/README.md`.
 - **Packages never import from `clusters/`**. They read the target cluster through `@catalyst/core/cluster`; an app reads the same singleton.
 - **Placement is the directory**: an app runs on the cluster whose `apps/` directory contains it. There is no `cluster` field and no registry.
 
