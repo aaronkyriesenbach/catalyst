@@ -334,7 +334,7 @@ export const helmCharts = {
     kind: "repo",
     repo: "https://open-telemetry.github.io/opentelemetry-helm-charts",
     chart: "opentelemetry-collector",
-    version: "0.178.1",
+    version: "0.178.2",
   },
   cilium: {
     kind: "repo",
