@@ -88,7 +88,7 @@ export const images = {
   },
   homeAssistant: {
     name: "ghcr.io/home-assistant/home-assistant",
-    tag: "2026.11.0",
+    tag: "2026.11.1",
     mirrored: true,
   },
   dragonfly: {
