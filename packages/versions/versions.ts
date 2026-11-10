@@ -316,7 +316,7 @@ export const helmCharts = {
     kind: "repo",
     repo: "https://traefik.github.io/charts",
     chart: "traefik",
-    version: "42.2.0",
+    version: "42.3.0",
   },
   authentik: {
     kind: "repo",
