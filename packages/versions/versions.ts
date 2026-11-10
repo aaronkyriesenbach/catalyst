@@ -43,7 +43,7 @@ export const images = {
   },
   linkwarden: {
     name: "ghcr.io/linkwarden/linkwarden",
-    tag: "v2.16.3",
+    tag: "v2.17.0",
     mirrored: true,
   },
   trilium: {
