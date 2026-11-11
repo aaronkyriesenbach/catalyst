@@ -3,13 +3,6 @@ import {
   buildPostgresResources,
   defineOidcClient,
 } from "@catalyst/platform/modifiers";
-import {
-  httpTarget,
-  routeTargets,
-  serviceUrl,
-  StatusGroup,
-  tcpTarget,
-} from "@catalyst/platform/status";
 import type { StaticApp } from "@catalyst/core/types";
 import { buildGeneratedSecret } from "@catalyst/k8s/secrets";
 import { mirrorRepository } from "@catalyst/versions/images";
@@ -28,17 +21,7 @@ const config: StaticApp = {
   kind: "static",
   name,
   oidc: oidcClient.oidc,
-  status: {
-    targets: [
-      tcpTarget("Kyoo API", StatusGroup.Media, `${name}-api.${name}.svc`, 3567),
-      httpTarget(
-        "Kyoo",
-        StatusGroup.Media,
-        serviceUrl(`${name}-front`, name, 8901),
-      ),
-      ...routeTargets("Kyoo", name, {}),
-    ],
-  },
+  status: { exempt: "Scaled to 0 replicas" },
   resources: [
     ...buildPostgresResources(name, name, 17, { backup: true }),
     // Scanner and auth both read this key, so it has to survive a re-sync.

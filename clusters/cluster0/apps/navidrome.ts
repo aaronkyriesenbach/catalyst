@@ -10,6 +10,8 @@ import { httpCheck, readiness } from "@catalyst/k8s/probes";
 const base: WorkloadApp = {
   kind: "workload",
   name: "navidrome",
+  replicas: 0,
+  status: { exempt: "Scaled to 0 replicas" },
   subDomain: "music",
   externallyAccessible: true,
   podSpec: {

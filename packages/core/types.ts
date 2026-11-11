@@ -92,6 +92,7 @@ export type WorkloadApp = BaseApp & {
   extraResources?: ResourceLike[];
   derive?: (context: DeriveContext) => WorkloadDerived;
   strategy?: WorkloadStrategy;
+  replicas?: number;
   /** Seconds a rollout may go without progress before Argo reports it Degraded. */
   progressDeadlineSeconds?: number;
   /** Why no container has a readiness probe; required when none does. */

@@ -57,6 +57,7 @@ function renderWorkload(config: WorkloadApp): string[] {
     toYaml(
       buildDeployment(name, podSpec, {
         strategy: app.strategy,
+        replicas: app.replicas,
         progressDeadlineSeconds: app.progressDeadlineSeconds,
         probeExempt: app.probeExempt,
       }),

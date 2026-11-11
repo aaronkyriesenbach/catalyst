@@ -47,6 +47,7 @@ media:
   baseMountPath: /media
 
 api:
+  replicaCount: 0
   kyoo_api:
     resources:
       requests:
@@ -58,6 +59,7 @@ api:
     storageClass: truenas-iscsi
     size: 10Gi
 auth:
+  replicaCount: 0
   deploymentAnnotations:
     reloader.stakater.com/auto: "true"
   kyoo_auth:
@@ -74,6 +76,7 @@ auth:
   persistence:
     storageClass: truenas-iscsi
 transcoder:
+  replicaCount: 0
   kyoo_transcoder:
     resources:
       requests:
@@ -86,6 +89,7 @@ transcoder:
     storageClass: truenas-iscsi
 
 front:
+  replicaCount: 0
   kyoo_front:
     resources:
       requests:
@@ -95,6 +99,7 @@ front:
         cpu: 500m
         memory: 128Mi
 scanner:
+  replicaCount: 0
   kyoo_scanner:
     resources:
       requests:

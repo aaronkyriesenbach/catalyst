@@ -10,6 +10,8 @@ import { image } from "@catalyst/versions/images";
 const base: WorkloadApp = {
   kind: "workload",
   name: "forscore",
+  replicas: 0,
+  status: { exempt: "Scaled to 0 replicas" },
   podSpec: {
     containers: [
       {

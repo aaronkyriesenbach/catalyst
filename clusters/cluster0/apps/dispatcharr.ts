@@ -6,6 +6,8 @@ import { applyModifiers, withIscsiVolumes } from "@catalyst/platform/modifiers";
 const base: WorkloadApp = {
   kind: "workload",
   name: "dispatcharr",
+  replicas: 0,
+  status: { exempt: "Scaled to 0 replicas" },
   podSpec: {
     containers: [
       {
