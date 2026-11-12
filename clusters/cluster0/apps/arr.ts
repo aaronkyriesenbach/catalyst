@@ -62,7 +62,7 @@ const servarrDefinitions: ServarrApp[] = [
 
 const servarrApps: ServarrSpec[] = servarrDefinitions.map((app) => ({
   ...app,
-  configStorage: "2Gi",
+  configStorage: "5Gi",
   mountsMedia: app.name !== "prowlarr",
   mediaClaim,
 }));

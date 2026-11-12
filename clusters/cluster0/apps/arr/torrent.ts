@@ -150,7 +150,7 @@ export const torrentResources: ResourceLike[] = [
     },
   ]),
   initScript,
-  buildIscsiPvc(pvcName, "2Gi"),
+  buildIscsiPvc(pvcName, "5Gi"),
   deployment,
   buildService(torrentName, [{ port: torrentPort, name: "http" }]),
 ];

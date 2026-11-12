@@ -88,7 +88,7 @@ export const sabnzbdResources: ResourceLike[] = [
     })),
   ),
   initScript,
-  buildIscsiPvc(pvcName, "2Gi"),
+  buildIscsiPvc(pvcName, "5Gi"),
   buildDeployment(
     sabnzbdName,
     {
