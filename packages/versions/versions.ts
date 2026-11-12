@@ -305,7 +305,7 @@ export const helmCharts = {
     kind: "repo",
     repo: "https://crowdsecurity.github.io/helm-charts",
     chart: "crowdsec",
-    version: "0.24.2",
+    version: "0.24.3",
   },
   kyoo: {
     kind: "oci",
