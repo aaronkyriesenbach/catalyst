@@ -1,6 +1,6 @@
 # Cluster Setup
 
-This directory contains only what bootstraps ArgoCD: its Helm values and the root Application, both applied by hand. Everything else, including kube-vip and Traefik, is an ArgoCD app defined under `apps/`.
+This directory contains what bootstraps the cluster: the k3s server config (`k3s/`, installed on the nodes by `k3s/deploy.sh`) and ArgoCD's Helm values and root Application, both applied by hand. Everything else, including kube-vip and Traefik, is an ArgoCD app defined under `apps/`.
 
 ## Prerequisites
 
@@ -9,22 +9,25 @@ This directory contains only what bootstraps ArgoCD: its Helm values and the roo
 
 ## k3s Server Config
 
-On each server node, create/update `/etc/rancher/k3s/config.yaml`:
+The server config lives in `k3s/` and is installed by `k3s/deploy.sh`; never edit it on a node by hand. The script copies the files over, restarts k3s on one node at a time and waits for the node to be Ready:
 
-```yaml
-cluster-init: true # node 1 only
-tls-san:
-  - 192.168.53.200
-disable:
-  - servicelb
-  - traefik
+```sh
+clusters/cluster0/bootstrap/k3s/deploy.sh node2 node1   # add --no-restart to install only
 ```
+
+| File                              | Installed as                                                         |
+| --------------------------------- | -------------------------------------------------------------------- |
+| `k3s/config.yaml`                 | `/etc/rancher/k3s/config.yaml` (`tls-san`, `disable`)                |
+| `k3s/config.yaml.d/*.yaml`        | `/etc/rancher/k3s/config.yaml.d/` on every node                      |
+| `k3s/<node>/config.yaml.d/*.yaml` | the same directory, on that node only (`node1/` sets `cluster-init`) |
+| `k3s/systemd/memory-low.conf`     | `/etc/systemd/system/k3s.service.d/memory-low.conf`                  |
 
 - `tls-san` adds the kube-vip control plane VIP to the API server's TLS certificate
 - `disable: servicelb` removes k3s's built-in ServiceLB (Klipper) since kube-vip handles LoadBalancer services
 - `disable: traefik` removes k3s's bundled Traefik; the official chart is deployed by the `traefik` ArgoCD app instead (see [Traefik](#traefik)). Set it on **every** server before restarting any of them: a node that still has it enabled restages `traefik.yaml` on startup, and helm-controller then reinstalls (or uninstalls) the bundled chart over Argo's resources.
 
-Restart k3s after updating: `sudo systemctl restart k3s`
+- `config.yaml.d/20-kubelet.yaml` reserves memory for k3s, etcd and the OS (`kube-reserved`, `system-reserved`) and evicts pods before a node thrashes. Without a reservation the pods' cgroup may use all RAM, the k3s and etcd page cache is evicted, etcd reads take minutes and quorum drops. Setting `eviction-hard` replaces every default threshold, so the disk thresholds are repeated in the file.
+- `systemd/memory-low.conf` sets `MemoryLow=1G` on `k3s.service` so the kernel reclaims from pods before it reclaims the k3s and etcd working set.
 
 When restarting a multi-node cluster, restart one server at a time and verify it rejoins before restarting the next. With only two servers, etcd has no quorum while one is down: the API server is unavailable until it rejoins (running workloads keep serving, but kube-vip loses its leases and the VIPs flap).
 
