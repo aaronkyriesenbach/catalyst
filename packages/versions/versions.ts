@@ -143,7 +143,7 @@ export const images = {
   },
   stalwart: {
     name: "ghcr.io/stalwartlabs/stalwart",
-    tag: "v1.0.3",
+    tag: "v1.1.0",
     mirrored: true,
   },
   stalwartCli: {
