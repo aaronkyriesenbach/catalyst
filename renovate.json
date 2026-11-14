@@ -136,15 +136,6 @@
       "automerge": false
     },
     {
-      "description": "Denylist, never auto-merge (minors included): the server owns calendar data in RocksDB and its upgrade guide lists checks before each release. The CLI that applies the declared config follows the server.",
-      "matchPackageNames": [
-        "ghcr.io/stalwartlabs/stalwart",
-        "ghcr.io/stalwartlabs/cli"
-      ],
-      "groupName": "stalwart",
-      "automerge": false
-    },
-    {
       "description": "immich chart and server image move together.",
       "matchPackageNames": [
         "ghcr.io/immich-app/immich-charts/immich",
