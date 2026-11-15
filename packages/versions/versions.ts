@@ -370,7 +370,7 @@ export const infraVersions = {
   kubernetes: {
     source: "github-releases",
     name: "kubernetes/kubernetes",
-    version: "v1.37.1",
+    version: "v1.37.2",
   },
   gatewayApiCrds: {
     source: "github-releases",
