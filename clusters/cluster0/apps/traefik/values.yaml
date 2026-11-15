@@ -47,6 +47,7 @@ providers:
     publishedService:
       enabled: true
 experimental:
+  abortOnPluginFailure: true
   plugins:
     crowdsec-bouncer:
       moduleName: github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin
