@@ -133,7 +133,7 @@ export const images = {
   },
   qbittorrent: {
     name: "docker.io/linuxserver/qbittorrent",
-    tag: "5.2.4",
+    tag: "5.3.0",
     mirrored: true,
   },
   calino: {
