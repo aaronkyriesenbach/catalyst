@@ -158,7 +158,7 @@ export const images = {
   },
   apprise: {
     name: "docker.io/caronc/apprise",
-    tag: "2.0.2",
+    tag: "2.1.0",
     mirrored: true,
   },
   gatus: {
