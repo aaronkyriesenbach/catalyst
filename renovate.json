@@ -164,8 +164,8 @@
       "allowedVersions": "/^[1-9]\\.\\d+\\.\\d+$/"
     },
     {
-      "description": "Denylist, never auto-merge (minors included): Talos upgrades reboot every node of the Omni cluster, and Kubernetes must stay inside the range that Talos release supports.",
-      "matchPackageNames": ["siderolabs/talos", "kubernetes/kubernetes"],
+      "description": "Denylist, never auto-merge (minors included): Talos upgrades reboot every node of the Omni cluster. TODO: check whether a talosVersion bump replaces the VMs (it feeds the image file ID) or upgrades in place; if in place, drop this rule.",
+      "matchPackageNames": ["siderolabs/talos"],
       "automerge": false
     },
     {
