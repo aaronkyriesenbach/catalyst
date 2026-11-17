@@ -148,7 +148,7 @@ export const images = {
   },
   stalwartCli: {
     name: "ghcr.io/stalwartlabs/cli",
-    tag: "1.0.14",
+    tag: "2.0.0",
     mirrored: true,
   },
   forscore: {
