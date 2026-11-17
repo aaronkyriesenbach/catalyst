@@ -203,7 +203,7 @@ export const images = {
   },
   prowlarr: {
     name: "ghcr.io/home-operations/prowlarr",
-    tag: "2.7.0.5723",
+    tag: "3.0.2.5780",
     mirrored: true,
   },
   sabnzbd: {
