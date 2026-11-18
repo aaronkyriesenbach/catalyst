@@ -183,7 +183,7 @@ export const images = {
   },
   dispatcharr: {
     name: "ghcr.io/dispatcharr/dispatcharr",
-    tag: "0.34.0",
+    tag: "0.34.1",
     mirrored: true,
   },
   radarr: {
