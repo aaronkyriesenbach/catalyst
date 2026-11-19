@@ -233,7 +233,7 @@ export const images = {
   },
   etcd: {
     name: "quay.io/coreos/etcd",
-    tag: "v3.7.3",
+    tag: "v3.7.4",
     mirrored: false,
   },
   awsCli: {
