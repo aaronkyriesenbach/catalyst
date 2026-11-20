@@ -173,7 +173,7 @@ export const images = {
   },
   kubeVip: {
     name: "ghcr.io/kube-vip/kube-vip",
-    tag: "v1.3.1",
+    tag: "v1.3.2",
     mirrored: false,
   },
   zot: {
