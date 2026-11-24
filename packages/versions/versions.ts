@@ -238,7 +238,7 @@ export const images = {
   },
   awsCli: {
     name: "docker.io/amazon/aws-cli",
-    tag: "2.40.3",
+    tag: "2.40.4",
     mirrored: false,
   },
 } as const satisfies Record<string, ImageEntry>;
