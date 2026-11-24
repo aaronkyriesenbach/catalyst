@@ -340,7 +340,7 @@ export const helmCharts = {
     kind: "repo",
     repo: "https://helm.cilium.io",
     chart: "cilium",
-    version: "1.20.4",
+    version: "1.20.5",
   },
   dex: {
     kind: "repo",
