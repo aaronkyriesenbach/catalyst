@@ -365,7 +365,7 @@ export const infraVersions = {
   talos: {
     source: "github-releases",
     name: "siderolabs/talos",
-    version: "v1.14.5",
+    version: "v1.14.6",
   },
   kubernetes: {
     source: "github-releases",
