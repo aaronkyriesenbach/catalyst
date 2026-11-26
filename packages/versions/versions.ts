@@ -138,7 +138,7 @@ export const images = {
   },
   calino: {
     name: "ghcr.io/ivan-malinovski/calino",
-    tag: "0.42.0",
+    tag: "0.43.0",
     mirrored: true,
   },
   stalwart: {
