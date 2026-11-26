@@ -223,7 +223,7 @@ export const images = {
   },
   configarr: {
     name: "ghcr.io/raydak-labs/configarr",
-    tag: "1.39.2",
+    tag: "1.40.0",
     mirrored: true,
   },
   omniInfraProviderProxmox: {
