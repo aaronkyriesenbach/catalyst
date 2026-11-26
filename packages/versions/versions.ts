@@ -68,7 +68,7 @@ export const images = {
   },
   radicale: {
     name: "docker.io/11notes/radicale",
-    tag: "3.9.1",
+    tag: "3.9.2",
     mirrored: true,
   },
   bun: {
