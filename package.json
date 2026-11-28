@@ -20,7 +20,7 @@
     "@kubernetes-models/external-secrets": "^2.0.0",
     "@kubernetes-models/gateway-api": "^2.0.0",
     "@kubernetes-models/traefik": "^2.0.0",
-    "@muhlba91/pulumi-proxmoxve": "8.6.0",
+    "@muhlba91/pulumi-proxmoxve": "8.7.0",
     "@pulumi/aws": "7.55.0",
     "@pulumi/command": "1.3.0",
     "@pulumi/kubernetes": "4.34.3",
