@@ -228,7 +228,7 @@ export const images = {
   },
   omniInfraProviderProxmox: {
     name: "ghcr.io/siderolabs/omni-infra-provider-proxmox",
-    tag: "v0.3.0",
+    tag: "v0.4.0",
     mirrored: false,
   },
   etcd: {
